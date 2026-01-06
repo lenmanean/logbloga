@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { Suspense } from "react";
 
 export default function MarketingLayout({
   children,
@@ -8,7 +9,9 @@ export default function MarketingLayout({
 }) {
   return (
     <div className="flex min-h-screen flex-col">
-      <Header />
+      <Suspense fallback={<div className="h-16 border-b" />}>
+        <Header />
+      </Suspense>
       <main className="flex-1">{children}</main>
       <Footer />
     </div>
