@@ -30,7 +30,7 @@ export async function generateMetadata({
       title: product.name,
       description: product.description || undefined,
       images: product.image_url ? [product.image_url] : [],
-      type: "product",
+      type: "website",
     },
   };
 }
