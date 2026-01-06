@@ -98,7 +98,9 @@ export default async function HomePage() {
               </div>
               <Button variant="outline" asChild>
                 <Link href="/products">
-                  View All <ArrowRight className="ml-2 h-4 w-4" />
+                  <span className="inline-flex items-center gap-2">
+                    View All <ArrowRight className="h-4 w-4" />
+                  </span>
                 </Link>
               </Button>
             </div>
@@ -149,7 +151,9 @@ export default async function HomePage() {
               </div>
               <Button variant="outline" asChild>
                 <Link href="/blog">
-                  View All <ArrowRight className="ml-2 h-4 w-4" />
+                  <span className="inline-flex items-center gap-2">
+                    View All <ArrowRight className="h-4 w-4" />
+                  </span>
                 </Link>
               </Button>
             </div>
