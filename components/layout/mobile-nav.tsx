@@ -67,10 +67,10 @@ export function MobileNav({ open, user, onSignOut }: MobileNavProps) {
         ) : (
           <div className="flex flex-col space-y-2">
             <Button variant="outline" asChild>
-              <Link href="/login">Login</Link>
+              <Link href="/login"><span>Login</span></Link>
             </Button>
             <Button asChild>
-              <Link href="/signup">Sign Up</Link>
+              <Link href="/signup"><span>Sign Up</span></Link>
             </Button>
           </div>
         )}

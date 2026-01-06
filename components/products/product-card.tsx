@@ -52,7 +52,7 @@ export function ProductCard({ product }: ProductCardProps) {
           {formatAmountForDisplay(product.price)}
         </span>
         <Button asChild>
-          <Link href={`/products/${product.slug}`}>View Details</Link>
+          <Link href={`/products/${product.slug}`}><span>View Details</span></Link>
         </Button>
       </CardFooter>
     </Card>

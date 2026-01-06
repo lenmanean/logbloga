@@ -149,10 +149,10 @@ export function Header() {
           ) : (
             <div className="hidden md:flex items-center gap-2">
               <Button variant="ghost" asChild>
-                <Link href="/login">Login</Link>
+                <Link href="/login"><span>Login</span></Link>
               </Button>
               <Button asChild>
-                <Link href="/signup">Sign Up</Link>
+                <Link href="/signup"><span>Sign Up</span></Link>
               </Button>
             </div>
           )}

@@ -39,7 +39,7 @@ export function OrderCard({ order }: OrderCardProps) {
             <span className="text-lg font-bold">{formatPrice(order.total_amount)}</span>
           </div>
           <Button variant="outline" size="sm" asChild className="w-full mt-4">
-            <Link href={`/account/orders?order=${order.id}`}>View Details</Link>
+            <Link href={`/account/orders?order=${order.id}`}><span>View Details</span></Link>
           </Button>
         </div>
       </CardContent>

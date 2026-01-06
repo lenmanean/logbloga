@@ -37,7 +37,7 @@ export function EmptyState({
       )}
       {action && (
         <Button asChild>
-          <Link href={action.href}>{action.label}</Link>
+          <Link href={action.href}><span>{action.label}</span></Link>
         </Button>
       )}
     </div>
