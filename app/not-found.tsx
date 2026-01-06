@@ -1,11 +1,10 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Container } from "@/components/layout/container";
 import { Home, ArrowLeft } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <Container className="py-24 text-center">
+    <div className="container mx-auto px-4 py-24 text-center">
       <div className="mx-auto max-w-md space-y-6">
         <div>
           <h1 className="text-6xl font-bold">404</h1>
@@ -30,7 +29,7 @@ export default function NotFound() {
           </Button>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
 
