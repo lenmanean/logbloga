@@ -61,7 +61,9 @@ function Button({
   children,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? Slot : "button";
+  // When asChild is true and loading is true, we can't use Slot (which requires single child)
+  // So we disable asChild when loading
+  const Comp = asChild && !loading ? Slot : "button";
 
   return (
     <Comp
