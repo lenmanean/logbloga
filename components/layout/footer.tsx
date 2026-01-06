@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect } from "react";
 import { NewsletterForm } from "@/components/ui/newsletter-form";
-import { getBlogPosts } from "@/lib/db/blog";
 import { Twitter, Github, Linkedin } from "lucide-react";
 
 export function Footer() {
