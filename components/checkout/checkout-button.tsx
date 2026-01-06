@@ -45,10 +45,13 @@ export function CheckoutButton({ productId }: CheckoutButtonProps) {
       onClick={handleCheckout}
       disabled={isLoading}
       size="lg"
+      variant="buy-now"
+      loading={isLoading}
+      loadingText="Processing..."
       className="w-full sm:w-auto"
     >
       <ShoppingCart className="mr-2 h-4 w-4" />
-      {isLoading ? "Processing..." : "Buy Now"}
+      Buy Now
     </Button>
   );
 }

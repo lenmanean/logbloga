@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { Menu, X, User } from "lucide-react";
+import { Menu, X, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -11,12 +11,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { SearchInput } from "@/components/ui/search-input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { MobileNav } from "./mobile-nav";
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState<any>(null);
   const router = useRouter();
   const supabase = createClient();
@@ -40,6 +44,14 @@ export function Header() {
     await supabase.auth.signOut();
     router.push("/");
     router.refresh();
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim()) {
+      router.push(`/products?search=${encodeURIComponent(query.trim())}`);
+      setSearchOpen(false);
+    }
   };
 
   return (
@@ -72,6 +84,45 @@ export function Header() {
         </div>
 
         <div className="flex items-center gap-4">
+          {/* Search - Desktop */}
+          <div className="hidden md:block w-64">
+            <SearchInput
+              placeholder="Search products..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(searchQuery);
+                }
+              }}
+              onClear={() => setSearchQuery("")}
+            />
+          </div>
+
+          {/* Search - Mobile */}
+          <Sheet open={searchOpen} onOpenChange={setSearchOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Search className="h-5 w-5" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="top">
+              <div className="mt-8">
+                <SearchInput
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleSearch(searchQuery);
+                    }
+                  }}
+                  onClear={() => setSearchQuery("")}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -111,6 +162,7 @@ export function Header() {
             size="icon"
             className="md:hidden"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" />

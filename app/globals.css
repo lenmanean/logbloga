@@ -37,6 +37,26 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  
+  /* Brand colors */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-secondary: var(--brand-secondary);
+  --color-brand-accent: var(--brand-accent);
+  --color-product-action: var(--product-action);
+  --color-product-action-hover: var(--product-action-hover);
+  --color-product-badge: var(--product-badge);
+  --color-product-featured: var(--product-featured);
+  --color-content-link: var(--content-link);
+  --color-content-link-hover: var(--content-link-hover);
+  --color-content-accent: var(--content-accent);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  
+  /* Border radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -44,6 +64,25 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  
+  /* Container widths */
+  --container-sm: 640px;
+  --container-md: 768px;
+  --container-lg: 1024px;
+  --container-xl: 1280px;
+  --container-2xl: 1400px;
+  --container-content: 768px;
+  --container-product: 1200px;
+  
+  /* Spacing scale (extended) */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  --spacing-4xl: 6rem;
 }
 
 :root {
@@ -66,6 +105,35 @@
   --border: oklch(0.929 0.013 255.508);
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
+  
+  /* Brand Colors - LogBloga */
+  --brand-primary: oklch(0.45 0.15 260);
+  --brand-secondary: oklch(0.55 0.12 180);
+  --brand-accent: oklch(0.65 0.18 40);
+  
+  /* Product-specific colors */
+  --product-action: oklch(0.5 0.2 145);
+  --product-action-hover: oklch(0.45 0.2 145);
+  --product-badge: oklch(0.75 0.15 85);
+  --product-featured: oklch(0.7 0.15 320);
+  
+  /* Content-specific colors */
+  --content-link: oklch(0.5 0.15 240);
+  --content-link-hover: oklch(0.45 0.15 240);
+  --content-accent: oklch(0.65 0.12 200);
+  
+  /* Status colors */
+  --success: oklch(0.6 0.15 150);
+  --success-foreground: oklch(0.98 0 0);
+  --warning: oklch(0.75 0.15 85);
+  --warning-foreground: oklch(0.15 0.05 85);
+  --info: oklch(0.6 0.12 240);
+  --info-foreground: oklch(0.98 0 0);
+  
+  /* Gradient utilities */
+  --gradient-primary: linear-gradient(135deg, oklch(0.5 0.15 260) 0%, oklch(0.6 0.12 240) 100%);
+  --gradient-hero: linear-gradient(135deg, oklch(0.98 0 0) 0%, oklch(0.95 0.01 260) 100%);
+  --gradient-accent: linear-gradient(135deg, oklch(0.65 0.18 40) 0%, oklch(0.55 0.15 180) 100%);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
@@ -120,6 +188,121 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+  
+  /* Typography scale */
+  h1 {
+    @apply text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl;
+  }
+  h2 {
+    @apply text-3xl font-bold tracking-tight md:text-4xl;
+  }
+  h3 {
+    @apply text-2xl font-semibold tracking-tight md:text-3xl;
+  }
+  h4 {
+    @apply text-xl font-semibold tracking-tight;
+  }
+  h5 {
+    @apply text-lg font-semibold;
+  }
+  h6 {
+    @apply text-base font-semibold;
+  }
+  
+  /* Content prose styles for blog */
+  .prose {
+    @apply max-w-none;
+  }
+  .prose h1 {
+    @apply text-4xl font-bold mt-8 mb-4;
+  }
+  .prose h2 {
+    @apply text-3xl font-bold mt-6 mb-3;
+  }
+  .prose h3 {
+    @apply text-2xl font-semibold mt-4 mb-2;
+  }
+  .prose p {
+    @apply my-4 leading-7;
+  }
+  .prose ul, .prose ol {
+    @apply my-4 ml-6 space-y-2;
+  }
+  .prose ul {
+    @apply list-disc;
+  }
+  .prose ol {
+    @apply list-decimal;
+  }
+  .prose li {
+    @apply ml-4;
+  }
+  .prose blockquote {
+    @apply border-l-4 border-primary pl-4 my-4 italic;
+  }
+  .prose a {
+    @apply text-content-link hover:text-content-link-hover underline;
+  }
+  .prose code {
+    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
+  }
+  .prose pre {
+    @apply bg-muted p-4 rounded-lg overflow-x-auto my-4;
+  }
+  .prose pre code {
+    @apply bg-transparent p-0;
+  }
+  .prose img {
+    @apply rounded-lg my-4;
+  }
+  
+  /* Smooth transitions for hover effects */
+  * {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+  }
+}
+
+@layer utilities {
+  /* Container utilities */
+  .container-content {
+    @apply mx-auto max-w-[768px] px-4;
+  }
+  .container-product {
+    @apply mx-auto max-w-[1200px] px-4;
+  }
+  
+  /* Gradient utilities */
+  .gradient-primary {
+    background: var(--gradient-primary);
+  }
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+  
+  /* Text gradients */
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+  
+  /* Smooth animations */
+  .transition-smooth {
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+  }
+  
+  /* Card hover effects */
+  .card-hover {
+    @apply transition-all duration-200 ease-out;
+  }
+  .card-hover:hover {
+    @apply -translate-y-1 shadow-lg;
   }
 }

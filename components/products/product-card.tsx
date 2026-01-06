@@ -12,7 +12,7 @@ interface ProductCardProps {
 
 export function ProductCard({ product }: ProductCardProps) {
   return (
-    <Card className="group flex flex-col overflow-hidden transition-shadow hover:shadow-lg">
+    <Card className="group flex flex-col overflow-hidden card-hover" hover interactive>
       <Link href={`/products/${product.slug}`}>
         <div className="relative aspect-video w-full overflow-hidden bg-muted">
           {product.image_url ? (

@@ -1,10 +1,10 @@
 import Link from "next/link";
 import Image from "next/image";
-import { formatDate } from "@/lib/utils";
+import { formatDate, formatReadingTime, calculateReadingTime } from "@/lib/utils";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BlogPost } from "@/types/blog";
-import { Calendar, User } from "lucide-react";
+import { Calendar, User, Clock } from "lucide-react";
 
 interface BlogCardProps {
   post: BlogPost;
@@ -12,7 +12,7 @@ interface BlogCardProps {
 
 export function BlogCard({ post }: BlogCardProps) {
   return (
-    <Card className="group flex flex-col overflow-hidden transition-shadow hover:shadow-lg">
+    <Card className="group flex flex-col overflow-hidden card-hover" hover interactive>
       <Link href={`/blog/${post.slug}`}>
         {post.featured_image && (
           <div className="relative aspect-video w-full overflow-hidden bg-muted">
@@ -48,7 +48,7 @@ export function BlogCard({ post }: BlogCardProps) {
           </div>
         )}
       </CardContent>
-      <CardFooter className="flex items-center gap-4 text-sm text-muted-foreground">
+      <CardFooter className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
         <div className="flex items-center gap-1">
           <User className="h-4 w-4" />
           {post.author}
@@ -57,6 +57,12 @@ export function BlogCard({ post }: BlogCardProps) {
           <div className="flex items-center gap-1">
             <Calendar className="h-4 w-4" />
             {formatDate(post.published_at)}
+          </div>
+        )}
+        {post.mdx_file_path && (
+          <div className="flex items-center gap-1">
+            <Clock className="h-4 w-4" />
+            {formatReadingTime(5)} {/* Placeholder - will calculate from content */}
           </div>
         )}
       </CardFooter>

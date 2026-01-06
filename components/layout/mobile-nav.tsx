@@ -12,27 +12,29 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ open, user, onSignOut }: MobileNavProps) {
-  if (!open) return null;
-
   return (
-    <div className="md:hidden border-t bg-background">
+    <div
+      className={`md:hidden border-t bg-background overflow-hidden transition-all duration-300 ease-out ${
+        open ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
+      }`}
+    >
       <div className="container px-4 py-4 space-y-4">
         <nav className="flex flex-col space-y-2">
           <Link
             href="/products"
-            className="text-sm font-medium transition-colors hover:text-primary py-2"
+            className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
           >
             Products
           </Link>
           <Link
             href="/blog"
-            className="text-sm font-medium transition-colors hover:text-primary py-2"
+            className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
           >
             Blog
           </Link>
           <Link
             href="/about"
-            className="text-sm font-medium transition-colors hover:text-primary py-2"
+            className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
           >
             About
           </Link>
@@ -42,19 +44,19 @@ export function MobileNav({ open, user, onSignOut }: MobileNavProps) {
           <div className="flex flex-col space-y-2">
             <Link
               href="/account"
-              className="text-sm font-medium transition-colors hover:text-primary py-2"
+              className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
             >
               Account
             </Link>
             <Link
               href="/account/orders"
-              className="text-sm font-medium transition-colors hover:text-primary py-2"
+              className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
             >
               Orders
             </Link>
             <Link
               href="/account/downloads"
-              className="text-sm font-medium transition-colors hover:text-primary py-2"
+              className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
             >
               Downloads
             </Link>

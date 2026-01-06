@@ -5,6 +5,9 @@ export async function getBlogPosts(options?: {
   published?: boolean;
   limit?: number;
   tag?: string;
+  author?: string;
+  search?: string;
+  dateFilter?: string;
 }): Promise<BlogPost[]> {
   const supabase = await createClient();
   let query = supabase.from("blog_posts").select("*");
@@ -15,6 +18,36 @@ export async function getBlogPosts(options?: {
 
   if (options?.tag) {
     query = query.contains("tags", [options.tag]);
+  }
+
+  if (options?.author) {
+    query = query.eq("author", options.author);
+  }
+
+  if (options?.search) {
+    query = query.or(
+      `title.ilike.%${options.search}%,excerpt.ilike.%${options.search}%`
+    );
+  }
+
+  // Date filtering
+  if (options?.dateFilter && options.dateFilter !== "all") {
+    const now = new Date();
+    let dateFrom: Date;
+    switch (options.dateFilter) {
+      case "week":
+        dateFrom = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case "month":
+        dateFrom = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      case "year":
+        dateFrom = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        dateFrom = new Date(0);
+    }
+    query = query.gte("published_at", dateFrom.toISOString());
   }
 
   if (options?.limit) {

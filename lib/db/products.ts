@@ -6,6 +6,9 @@ export async function getProducts(options?: {
   featured?: boolean;
   category?: string;
   limit?: number;
+  search?: string;
+  maxPrice?: number;
+  sort?: string;
 }): Promise<Product[]> {
   const supabase = await createClient();
   let query = supabase.from("products").select("*");
@@ -22,11 +25,37 @@ export async function getProducts(options?: {
     query = query.eq("category", options.category);
   }
 
+  if (options?.search) {
+    query = query.or(
+      `name.ilike.%${options.search}%,description.ilike.%${options.search}%`
+    );
+  }
+
+  if (options?.maxPrice) {
+    query = query.lte("price", options.maxPrice);
+  }
+
+  // Sorting
+  switch (options?.sort) {
+    case "price-low":
+      query = query.order("price", { ascending: true });
+      break;
+    case "price-high":
+      query = query.order("price", { ascending: false });
+      break;
+    case "name":
+      query = query.order("name", { ascending: true });
+      break;
+    case "oldest":
+      query = query.order("created_at", { ascending: true });
+      break;
+    default:
+      query = query.order("created_at", { ascending: false });
+  }
+
   if (options?.limit) {
     query = query.limit(options.limit);
   }
-
-  query = query.order("created_at", { ascending: false });
 
   const { data, error } = await query;
 
