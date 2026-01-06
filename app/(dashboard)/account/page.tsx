@@ -146,7 +146,9 @@ export default async function AccountPage() {
           <CardContent>
             <Button variant="outline" size="sm" asChild>
               <Link href="/account/downloads">
-                View Downloads <ArrowRight className="ml-2 h-4 w-4" />
+                <span className="inline-flex items-center gap-2">
+                  View Downloads <ArrowRight className="h-4 w-4" />
+                </span>
               </Link>
             </Button>
           </CardContent>
@@ -160,7 +162,9 @@ export default async function AccountPage() {
             <h2 className="text-2xl font-bold">Recent Orders</h2>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/account/orders">
-                View All <ArrowRight className="ml-2 h-4 w-4" />
+                <span className="inline-flex items-center gap-2">
+                  View All <ArrowRight className="h-4 w-4" />
+                </span>
               </Link>
             </Button>
           </div>

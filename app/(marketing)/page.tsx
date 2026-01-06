@@ -34,7 +34,9 @@ export default async function HomePage() {
             <div className="mt-10 flex items-center justify-center gap-x-6 flex-wrap gap-y-4">
               <Button asChild size="lg" variant="buy-now">
                 <Link href="/products">
-                  Explore Products <ArrowRight className="ml-2 h-4 w-4" />
+                  <span className="inline-flex items-center gap-2">
+                    Explore Products <ArrowRight className="h-4 w-4" />
+                  </span>
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
