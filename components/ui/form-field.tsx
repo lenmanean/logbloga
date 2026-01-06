@@ -9,7 +9,7 @@ interface FormFieldProps {
   error?: string;
   hint?: string;
   required?: boolean;
-  children: React.ReactElement;
+  children: React.ReactElement<{ id?: string; className?: string; [key: string]: any }>;
 }
 
 export function FormField({
@@ -19,7 +19,7 @@ export function FormField({
   required,
   children,
 }: FormFieldProps) {
-  const id = children.props.id || React.useId();
+  const id = (children.props as { id?: string }).id || React.useId();
   const hasError = !!error;
 
   return (
