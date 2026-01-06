@@ -132,13 +132,13 @@ export function Header() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link href="/account">Account</Link>
+                  <Link href="/account"><span>Account</span></Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/account/orders">Orders</Link>
+                  <Link href="/account/orders"><span>Orders</span></Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/account/downloads">Downloads</Link>
+                  <Link href="/account/downloads"><span>Downloads</span></Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut}>
