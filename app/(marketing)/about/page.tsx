@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { Container } from "@/components/layout/container";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -8,8 +7,8 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <Container variant="content" className="py-12">
-      <div className="max-w-3xl">
+    <div className="py-12 px-4">
+      <div className="mx-auto max-w-3xl">
         <h1 className="text-4xl font-bold mb-6">About LogBloga</h1>
         <div className="prose prose-slate dark:prose-invert max-w-none">
           <p className="text-lg text-muted-foreground">
@@ -42,7 +41,7 @@ export default function AboutPage() {
           </ul>
         </div>
       </div>
-    </Container>
+    </div>
   );
 }
 
