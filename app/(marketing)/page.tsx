@@ -18,8 +18,8 @@ export default async function HomePage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <Section padding="xl" className="gradient-hero">
-        <Container className="text-center">
-          <div className="mx-auto max-w-3xl">
+        <div className="container mx-auto px-4">
+          <div className="mx-auto max-w-4xl text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6">
               Welcome to{" "}
               <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-primary to-brand-accent">
@@ -40,11 +40,11 @@ export default async function HomePage() {
                 </Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/blog">Read Blog</Link>
+                <Link href="/blog"><span>Read Blog</span></Link>
               </Button>
             </div>
           </div>
-        </Container>
+        </div>
       </Section>
 
       {/* Features Section */}
