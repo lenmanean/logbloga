@@ -18,7 +18,7 @@ export default async function HomePage() {
     <div className="flex flex-col">
       {/* Hero Section */}
       <Section padding="xl" className="gradient-hero">
-        <div className="container mx-auto px-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6">
               Welcome to{" "}
@@ -26,7 +26,7 @@ export default async function HomePage() {
                 LogBloga
               </span>
             </h1>
-            <p className="mt-6 text-xl leading-8 text-muted-foreground max-w-2xl mx-auto">
+            <p className="mt-6 text-lg sm:text-xl leading-7 sm:leading-8 text-muted-foreground max-w-[42rem] mx-auto">
               Your destination for digital products, technology insights, AI
               tutorials, and productivity tips. Discover innovative tools and
               resources to accelerate your journey.
