@@ -6,7 +6,7 @@ import { ProductGrid } from "@/components/products/product-grid";
 import { BlogGrid } from "@/components/blog/blog-grid";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { ArrowRight, ShoppingBag, Book, Sparkles, TrendingUp, Shield } from "lucide-react";
+import { ArrowRight, ShoppingBag, Book, Sparkles } from "lucide-react";
 
 export default async function HomePage() {
   const [featuredProducts, recentPosts] = await Promise.all([
@@ -106,35 +106,6 @@ export default async function HomePage() {
           </Container>
         </Section>
       )}
-
-      {/* Trust Indicators */}
-      <Section variant="muted" padding="md">
-        <Container>
-          <div className="grid gap-6 md:grid-cols-3 text-center">
-            <div>
-              <Shield className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Secure Payments</h4>
-              <p className="text-sm text-muted-foreground">
-                Powered by Stripe
-              </p>
-            </div>
-            <div>
-              <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Instant Access</h4>
-              <p className="text-sm text-muted-foreground">
-                Download immediately after purchase
-              </p>
-            </div>
-            <div>
-              <Sparkles className="h-8 w-8 mx-auto mb-2 text-primary" />
-              <h4 className="font-semibold mb-1">Quality Content</h4>
-              <p className="text-sm text-muted-foreground">
-                Curated by experts
-              </p>
-            </div>
-          </div>
-        </Container>
-      </Section>
 
       {/* Recent Blog Posts */}
       {recentPosts.length > 0 && (

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Menu, X, User, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -59,7 +60,14 @@ export function Header() {
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-xl font-bold">LogBloga</span>
+            <Image
+              src="/logo.png"
+              alt="LogBloga"
+              width={120}
+              height={32}
+              className="h-8 w-auto"
+              priority
+            />
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <Link
