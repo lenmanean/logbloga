@@ -82,12 +82,6 @@ export function Header() {
             >
               Blog
             </Link>
-            <Link
-              href="/about"
-              className="text-sm font-medium transition-colors hover:text-primary"
-            >
-              About
-            </Link>
           </nav>
         </div>
 

@@ -32,12 +32,6 @@ export function MobileNav({ open, user, onSignOut }: MobileNavProps) {
           >
             Blog
           </Link>
-          <Link
-            href="/about"
-            className="text-sm font-medium transition-colors hover:text-primary py-2 rounded-md px-2 hover:bg-muted"
-          >
-            About
-          </Link>
         </nav>
         <Separator />
         {user ? (
