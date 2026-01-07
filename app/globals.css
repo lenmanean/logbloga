@@ -94,8 +94,8 @@
   --card-foreground: oklch(0.95 0.01 0);
   --popover: oklch(0.20 0.01 260);
   --popover-foreground: oklch(0.95 0.01 0);
-  /* NVIDIA Green primary */
-  --primary: oklch(0.65 0.18 150);
+  /* Brand Green primary - #39f400 */
+  --primary: #39f400;
   --primary-foreground: oklch(0.15 0.01 260);
   --secondary: oklch(0.25 0.01 260);
   --secondary-foreground: oklch(0.95 0.01 0);
@@ -106,49 +106,49 @@
   --destructive: oklch(0.65 0.20 25);
   --border: oklch(0.25 0.01 260);
   --input: oklch(0.25 0.01 260);
-  --ring: oklch(0.65 0.18 150);
+  --ring: #39f400;
   
-  /* Brand Colors - NVIDIA Green */
-  --brand-primary: oklch(0.65 0.18 150);
-  --brand-secondary: oklch(0.55 0.16 150);
-  --brand-accent: oklch(0.75 0.18 150);
+  /* Brand Colors - #39f400 */
+  --brand-primary: #39f400;
+  --brand-secondary: #39f400;
+  --brand-accent: #39f400;
   
-  /* Product-specific colors - NVIDIA Green */
-  --product-action: oklch(0.65 0.18 150);
-  --product-action-hover: oklch(0.70 0.18 150);
-  --product-badge: oklch(0.60 0.18 150);
-  --product-featured: oklch(0.70 0.18 150);
+  /* Product-specific colors - #39f400 */
+  --product-action: #39f400;
+  --product-action-hover: #2dd400;
+  --product-badge: #39f400;
+  --product-featured: #39f400;
   
-  /* Content-specific colors - NVIDIA Green */
-  --content-link: oklch(0.65 0.18 150);
-  --content-link-hover: oklch(0.70 0.18 150);
-  --content-accent: oklch(0.65 0.18 150);
+  /* Content-specific colors - #39f400 */
+  --content-link: #39f400;
+  --content-link-hover: #2dd400;
+  --content-accent: #39f400;
   
   /* Status colors */
-  --success: oklch(0.65 0.18 150);
+  --success: #39f400;
   --success-foreground: oklch(0.15 0.01 260);
   --warning: oklch(0.75 0.18 85);
   --warning-foreground: oklch(0.15 0.01 260);
-  --info: oklch(0.65 0.18 150);
+  --info: #39f400;
   --info-foreground: oklch(0.15 0.01 260);
   
-  /* Gradient utilities - NVIDIA Green tones */
-  --gradient-primary: linear-gradient(135deg, oklch(0.60 0.18 150) 0%, oklch(0.70 0.18 150) 100%);
+  /* Gradient utilities - #39f400 tones */
+  --gradient-primary: linear-gradient(135deg, #2dd400 0%, #39f400 100%);
   --gradient-hero: linear-gradient(135deg, oklch(0.15 0.01 260) 0%, oklch(0.18 0.01 260) 100%);
-  --gradient-accent: linear-gradient(135deg, oklch(0.65 0.18 150) 0%, oklch(0.70 0.18 150) 100%);
-  --chart-1: oklch(0.65 0.18 150);
-  --chart-2: oklch(0.60 0.18 150);
-  --chart-3: oklch(0.70 0.18 150);
-  --chart-4: oklch(0.55 0.18 150);
-  --chart-5: oklch(0.75 0.18 150);
+  --gradient-accent: linear-gradient(135deg, #2dd400 0%, #39f400 100%);
+  --chart-1: #39f400;
+  --chart-2: #2dd400;
+  --chart-3: #39f400;
+  --chart-4: #2dd400;
+  --chart-5: #39f400;
   --sidebar: oklch(0.20 0.01 260);
   --sidebar-foreground: oklch(0.95 0.01 0);
-  --sidebar-primary: oklch(0.65 0.18 150);
+  --sidebar-primary: #39f400;
   --sidebar-primary-foreground: oklch(0.15 0.01 260);
   --sidebar-accent: oklch(0.25 0.01 260);
   --sidebar-accent-foreground: oklch(0.95 0.01 0);
   --sidebar-border: oklch(0.25 0.01 260);
-  --sidebar-ring: oklch(0.65 0.18 150);
+  --sidebar-ring: #39f400;
 }
 
 /* Dark theme is now the default - removed .dark class */
