@@ -22,7 +22,7 @@ export default async function HomePage() {
       <Section padding="xl" className="gradient-hero">
         <div className="text-center px-4">
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-12" style={{ color: '#39f400' }}>
-            <TypingAnimation text="logbloga" speed={120} />
+            <TypingAnimation text="log(b)log(a)" speed={120} />
           </h1>
           
           {/* Glassmorphic Panels */}
