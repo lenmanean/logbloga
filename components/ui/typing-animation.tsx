@@ -53,12 +53,13 @@ export function TypingAnimation({
     <span className={cn("inline-block", className)}>
       {displayedText}
       {showCursor && (
-        <span className={cn(
-          "inline-block w-0.5 h-[1em] bg-current ml-0.5 align-middle",
-          showBlink ? "opacity-100" : "opacity-0"
-        )}>
-          |
-        </span>
+        <span
+          className={cn(
+            "inline-block w-[2px] h-[1em] bg-current ml-1 align-middle",
+            showBlink ? "opacity-100" : "opacity-0"
+          )}
+          style={{ width: "2px" }}
+        />
       )}
     </span>
   );
