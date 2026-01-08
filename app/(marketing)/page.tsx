@@ -8,7 +8,7 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { GlassPanel } from "@/components/ui/glass-panel";
-import { ArrowRight, ShoppingBag, BookOpen, Sparkles, Code, Rocket, TrendingUp } from "lucide-react";
+import { ArrowRight, ShoppingBag, BookOpen } from "lucide-react";
 
 export default async function HomePage() {
   // Fetch featured products and all recent posts
