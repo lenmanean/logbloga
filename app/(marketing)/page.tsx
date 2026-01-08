@@ -8,13 +8,27 @@ import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { TypingAnimation } from "@/components/ui/typing-animation";
 import { GlassPanel } from "@/components/ui/glass-panel";
-import { ArrowRight, ShoppingBag, BookOpen } from "lucide-react";
+import { ArrowRight, ShoppingBag, BookOpen, Sparkles, Code, Rocket, TrendingUp } from "lucide-react";
 
 export default async function HomePage() {
-  const [featuredProducts, recentPosts] = await Promise.all([
-    getProducts({ published: true, featured: true, limit: 6 }),
-    getBlogPosts({ published: true, limit: 3 }),
+  // Fetch featured products and all recent posts
+  const [featuredProducts, allRecentPosts] = await Promise.all([
+    getProducts({ published: true, featured: true, limit: 4 }),
+    getBlogPosts({ published: true, limit: 10 }), // Get more to filter out DOER posts
   ]);
+
+  // Try to fetch DOER posts by tag first, then fall back to search
+  let doerPosts = await getBlogPosts({ published: true, tag: "doer", limit: 3 });
+  if (doerPosts.length === 0) {
+    // Fall back to search if tag filtering returns no results
+    doerPosts = await getBlogPosts({ published: true, search: "DOER", limit: 3 });
+  }
+
+  // Filter out DOER posts from general blog posts
+  const doerPostIds = new Set(doerPosts.map((post) => post.id));
+  const generalPosts = allRecentPosts
+    .filter((post) => !doerPostIds.has(post.id))
+    .slice(0, 3);
 
   return (
     <div className="flex flex-col">
@@ -45,9 +59,58 @@ export default async function HomePage() {
         </div>
       </Section>
 
+      {/* Value Proposition */}
+      <Section padding="md" className="animate-in fade-in duration-500">
+        <Container>
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="bg-background/30 backdrop-blur-lg border border-white/20 rounded-xl p-8 hover:border-[#39f400]/30 transition-all duration-300">
+              <p className="text-xl sm:text-2xl text-foreground" style={{ color: '#39f400' }}>
+                Premium digital products & productivity insights
+              </p>
+            </div>
+          </div>
+        </Container>
+      </Section>
+
+      {/* Quick Categories */}
+      <Section padding="lg" className="animate-in fade-in duration-500 delay-100">
+        <Container>
+          <div className="mb-8 text-center">
+            <h2 className="text-3xl font-bold mb-2">Browse by Category</h2>
+            <p className="text-muted-foreground">Explore our curated collections</p>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <GlassPanel
+              title="AI Products"
+              description="AI tools & guides"
+              href="/products?category=ai"
+              icon={<Sparkles className="h-8 w-8" />}
+            />
+            <GlassPanel
+              title="Development"
+              description="Dev tools & resources"
+              href="/products?category=development"
+              icon={<Code className="h-8 w-8" />}
+            />
+            <GlassPanel
+              title="DOER Posts"
+              description="Latest on DOER"
+              href="/blog?tag=doer"
+              icon={<Rocket className="h-8 w-8" />}
+            />
+            <GlassPanel
+              title="Productivity"
+              description="Guides & tips"
+              href="/products?category=productivity"
+              icon={<TrendingUp className="h-8 w-8" />}
+            />
+          </div>
+        </Container>
+      </Section>
+
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
-        <Section padding="lg">
+        <Section padding="lg" className="animate-in fade-in duration-500 delay-200">
           <Container>
             <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
               <div>
@@ -69,9 +132,33 @@ export default async function HomePage() {
         </Section>
       )}
 
+      {/* DOER Blog Section */}
+      {doerPosts.length > 0 && (
+        <Section variant="muted" padding="lg" className="animate-in fade-in duration-500 delay-300">
+          <Container>
+            <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
+              <div>
+                <h2 className="text-3xl font-bold">Latest on DOER</h2>
+                <p className="mt-2 text-muted-foreground">
+                  Productivity insights and DOER app updates
+                </p>
+              </div>
+              <Button variant="outline" asChild>
+                <Link href="/blog?tag=doer">
+                  <span className="inline-flex items-center gap-2">
+                    View All DOER Posts <ArrowRight className="h-4 w-4" />
+                  </span>
+                </Link>
+              </Button>
+            </div>
+            <BlogGrid posts={doerPosts} />
+          </Container>
+        </Section>
+      )}
+
       {/* Recent Blog Posts */}
-      {recentPosts.length > 0 && (
-        <Section variant="default" padding="lg">
+      {generalPosts.length > 0 && (
+        <Section variant="default" padding="lg" className="animate-in fade-in duration-500 delay-400">
           <Container>
             <div className="mb-8 flex items-center justify-between flex-wrap gap-4">
               <div>
@@ -88,7 +175,7 @@ export default async function HomePage() {
                 </Link>
               </Button>
             </div>
-            <BlogGrid posts={recentPosts} />
+            <BlogGrid posts={generalPosts} />
           </Container>
         </Section>
       )}
