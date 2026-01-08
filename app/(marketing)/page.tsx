@@ -61,18 +61,23 @@ export default async function HomePage() {
 
       {/* Value Proposition */}
       <Section padding="md" className="animate-in fade-in duration-500">
-        <Container>
-          <div className="max-w-4xl mx-auto w-full">
-            <div className="bg-background/30 backdrop-blur-lg border border-white/20 rounded-xl p-8 hover:border-[#39f400]/30 transition-all duration-300">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-background/30 backdrop-blur-lg border border-white/20 rounded-xl p-6 sm:p-8 hover:border-[#39f400]/30 transition-all duration-300">
               <p 
-                className="text-xl sm:text-2xl leading-relaxed text-center" 
-                style={{ color: '#39f400', width: '100%', display: 'block' }}
+                className="text-lg sm:text-xl md:text-2xl font-medium text-center leading-normal"
+                style={{ 
+                  color: '#39f400',
+                  wordWrap: 'break-word',
+                  overflowWrap: 'break-word',
+                  whiteSpace: 'normal'
+                }}
               >
                 Premium digital products & productivity insights
               </p>
             </div>
           </div>
-        </Container>
+        </div>
       </Section>
 
       {/* Quick Categories */}
