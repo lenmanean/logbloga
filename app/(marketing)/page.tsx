@@ -59,42 +59,6 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      {/* Quick Categories */}
-      <Section padding="lg" className="animate-in fade-in duration-500 delay-100">
-        <Container>
-          <div className="mb-8 text-center">
-            <h2 className="text-3xl font-bold mb-2">Browse by Category</h2>
-            <p className="text-muted-foreground">Explore our curated collections</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <GlassPanel
-              title="AI Products"
-              description="AI tools & guides"
-              href="/products?category=ai"
-              icon={<Sparkles className="h-8 w-8" />}
-            />
-            <GlassPanel
-              title="Development"
-              description="Dev tools & resources"
-              href="/products?category=development"
-              icon={<Code className="h-8 w-8" />}
-            />
-            <GlassPanel
-              title="DOER Posts"
-              description="Latest on DOER"
-              href="/blog?tag=doer"
-              icon={<Rocket className="h-8 w-8" />}
-            />
-            <GlassPanel
-              title="Productivity"
-              description="Guides & tips"
-              href="/products?category=productivity"
-              icon={<TrendingUp className="h-8 w-8" />}
-            />
-          </div>
-        </Container>
-      </Section>
-
       {/* Featured Products */}
       {featuredProducts.length > 0 && (
         <Section padding="lg" className="animate-in fade-in duration-500 delay-200">
