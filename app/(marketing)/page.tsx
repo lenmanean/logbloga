@@ -23,23 +23,6 @@ export default async function HomePage() {
           <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6" style={{ color: '#39f400' }}>
             <TypingAnimation text="logbloga" speed={120} />
           </h1>
-          <p className="mt-6 text-lg sm:text-xl leading-7 sm:leading-8 text-muted-foreground mx-auto" style={{ maxWidth: '42rem' }}>
-            Your destination for digital products, technology insights, AI
-            tutorials, and productivity tips. Discover innovative tools and
-            resources to accelerate your journey.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6 flex-wrap gap-y-4">
-            <Button asChild size="lg" variant="buy-now">
-              <Link href="/products">
-                <span className="inline-flex items-center gap-2">
-                  Explore Products <ArrowRight className="h-4 w-4" />
-                </span>
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link href="/blog"><span>Read Blog</span></Link>
-            </Button>
-          </div>
         </div>
       </Section>
 

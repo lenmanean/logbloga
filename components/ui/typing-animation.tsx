@@ -36,28 +36,23 @@ export function TypingAnimation({
       if (onComplete) {
         onComplete();
       }
-      // Hide cursor after a delay
-      const cursorTimeout = setTimeout(() => {
-        setShowBlink(false);
-      }, 1000);
-      return () => clearTimeout(cursorTimeout);
     }
   }, [currentIndex, text, speed, isComplete, onComplete]);
 
-  // Blinking cursor effect
+  // Blinking cursor effect - continues indefinitely
   useEffect(() => {
-    if (!isComplete && showCursor) {
+    if (showCursor) {
       const blinkInterval = setInterval(() => {
         setShowBlink((prev) => !prev);
       }, 530);
       return () => clearInterval(blinkInterval);
     }
-  }, [isComplete, showCursor]);
+  }, [showCursor]);
 
   return (
     <span className={cn("inline-block", className)}>
       {displayedText}
-      {showCursor && !isComplete && (
+      {showCursor && (
         <span className={cn(
           "inline-block w-0.5 h-[1em] bg-current ml-0.5 align-middle",
           showBlink ? "opacity-100" : "opacity-0"
