@@ -3,11 +3,11 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "LogBloga | Digital Products & Technology Blog",
-    template: "%s | LogBloga",
+    default: "Logbloga | Digital Products & Technology Blog",
+    template: "%s | Logbloga",
   },
   description:
-    "LogBloga - Your destination for digital products, technology insights, AI tutorials, and productivity tips. Discover innovative tools and resources.",
+    "Logbloga - Your destination for digital products, technology insights, AI tutorials, and productivity tips. Discover innovative tools and resources.",
   keywords: [
     "digital products",
     "technology blog",
@@ -16,20 +16,20 @@ export const metadata: Metadata = {
     "software development",
     "web development",
   ],
-  authors: [{ name: "LogBloga Team" }],
-  creator: "LogBloga",
+  authors: [{ name: "Logbloga Team" }],
+  creator: "Logbloga",
   openGraph: {
     type: "website",
     locale: "en_US",
     url: process.env.NEXT_PUBLIC_APP_URL || "https://logbloga.com",
-    siteName: "LogBloga",
-    title: "LogBloga | Digital Products & Technology Blog",
+    siteName: "Logbloga",
+    title: "Logbloga | Digital Products & Technology Blog",
     description:
       "Your destination for digital products, technology insights, AI tutorials, and productivity tips.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "LogBloga | Digital Products & Technology Blog",
+    title: "Logbloga | Digital Products & Technology Blog",
     description:
       "Your destination for digital products, technology insights, AI tutorials, and productivity tips.",
     creator: "@logbloga",

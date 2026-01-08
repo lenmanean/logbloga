@@ -12,7 +12,7 @@ export function Footer() {
       <div className="container px-4 py-12 md:py-16">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-5">
           <div className="space-y-4 lg:col-span-2">
-            <h3 className="text-lg font-semibold">LogBloga</h3>
+            <h3 className="text-lg font-semibold">Logbloga</h3>
             <p className="text-sm text-muted-foreground">
               Your destination for digital products, technology insights, and
               productivity tools.
@@ -116,7 +116,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <p>© {currentYear} LogBloga. All rights reserved.</p>
+          <p>© {currentYear} Logbloga. All rights reserved.</p>
           <Link
             href="#top"
             className="hover:text-foreground transition-colors"
