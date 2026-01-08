@@ -6,7 +6,8 @@ import { ProductGrid } from "@/components/products/product-grid";
 import { BlogGrid } from "@/components/blog/blog-grid";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
-import { ArrowRight, ShoppingBag, Book, Sparkles } from "lucide-react";
+import { TypingAnimation } from "@/components/ui/typing-animation";
+import { ArrowRight } from "lucide-react";
 
 export default async function HomePage() {
   const [featuredProducts, recentPosts] = await Promise.all([
@@ -19,11 +20,8 @@ export default async function HomePage() {
       {/* Hero Section */}
       <Section padding="xl" className="gradient-hero">
         <div className="text-center px-4">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6">
-            Welcome to{" "}
-            <span className="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-primary to-brand-accent">
-              LogBloga
-            </span>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6" style={{ color: '#39f400' }}>
+            <TypingAnimation text="logbloga" speed={120} />
           </h1>
           <p className="mt-6 text-lg sm:text-xl leading-7 sm:leading-8 text-muted-foreground mx-auto" style={{ maxWidth: '42rem' }}>
             Your destination for digital products, technology insights, AI
@@ -43,44 +41,6 @@ export default async function HomePage() {
             </Button>
           </div>
         </div>
-      </Section>
-
-      {/* Features Section */}
-      <Section variant="muted" padding="lg">
-        <Container>
-          <div className="grid gap-8 md:grid-cols-3">
-            <div className="text-center group">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                <ShoppingBag className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Digital Products</h3>
-              <p className="text-muted-foreground">
-                Premium digital products including guides, templates, and tools
-                to help you succeed.
-              </p>
-            </div>
-            <div className="text-center group">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                <Book className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">Tech Blog</h3>
-              <p className="text-muted-foreground">
-                Stay updated with the latest technology trends, AI insights, and
-                productivity tips.
-              </p>
-            </div>
-            <div className="text-center group">
-              <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                <Sparkles className="h-6 w-6 text-primary" />
-              </div>
-              <h3 className="mb-2 text-xl font-semibold">AI & Productivity</h3>
-              <p className="text-muted-foreground">
-                Learn about AI tools, automation, and strategies to boost your
-                productivity.
-              </p>
-            </div>
-          </div>
-        </Container>
       </Section>
 
       {/* Featured Products */}
