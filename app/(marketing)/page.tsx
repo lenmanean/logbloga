@@ -7,7 +7,8 @@ import { BlogGrid } from "@/components/blog/blog-grid";
 import { Container } from "@/components/layout/container";
 import { Section } from "@/components/layout/section";
 import { TypingAnimation } from "@/components/ui/typing-animation";
-import { ArrowRight } from "lucide-react";
+import { GlassPanel } from "@/components/ui/glass-panel";
+import { ArrowRight, ShoppingBag, BookOpen } from "lucide-react";
 
 export default async function HomePage() {
   const [featuredProducts, recentPosts] = await Promise.all([
@@ -20,9 +21,27 @@ export default async function HomePage() {
       {/* Hero Section */}
       <Section padding="xl" className="gradient-hero">
         <div className="text-center px-4">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-6" style={{ color: '#39f400' }}>
+          <h1 className="text-4xl font-bold tracking-tight sm:text-6xl md:text-7xl mb-12" style={{ color: '#39f400' }}>
             <TypingAnimation text="logbloga" speed={120} />
           </h1>
+          
+          {/* Glassmorphic Panels */}
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 max-w-2xl mx-auto">
+            <GlassPanel
+              title="Shop"
+              description="Browse our digital products"
+              href="/products"
+              icon={<ShoppingBag className="h-8 w-8" />}
+              className="flex-1 min-w-[200px]"
+            />
+            <GlassPanel
+              title="Blog"
+              description="Read our latest articles"
+              href="/blog"
+              icon={<BookOpen className="h-8 w-8" />}
+              className="flex-1 min-w-[200px]"
+            />
+          </div>
         </div>
       </Section>
 
