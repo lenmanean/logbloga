@@ -1,182 +1,97 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import Image from "next/image";
-import { useState, useEffect } from "react";
-import { Menu, X, User, Search } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { SearchInput } from "@/components/ui/search-input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import { MobileNav } from "./mobile-nav";
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Menu } from 'lucide-react';
+import { useState } from 'react';
 
 export function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [user, setUser] = useState<any>(null);
-  const router = useRouter();
-  const supabase = createClient();
-
-  // Check auth status
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-
-    return () => subscription.unsubscribe();
-  }, [supabase.auth]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push("/");
-    router.refresh();
-  };
-
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    if (query.trim()) {
-      router.push(`/products?search=${encodeURIComponent(query.trim())}`);
-      setSearchOpen(false);
-    }
-  };
+  const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-16 items-center justify-between px-4">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center space-x-2">
-            <Image
-              src="/logo.png"
-              alt="LogBloga"
-              width={120}
-              height={32}
-              className="h-8 w-auto"
-              priority
-            />
+    <div className="w-full pt-4 px-4">
+      <header className="mx-auto max-w-7xl rounded-full border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg transition-all duration-300 hover:shadow-xl">
+        <div className="flex h-16 items-center justify-between px-6 md:px-8">
+          {/* Logo/Brand */}
+          <Link href="/" className="flex items-center space-x-2 transition-transform hover:scale-105">
+            <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+              LogBloga
+            </span>
           </Link>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link
-              href="/products"
-              className="text-sm font-medium transition-colors hover:text-primary"
+
+          {/* Navigation Links - Desktop */}
+          <nav className="hidden md:flex items-center space-x-8">
+            <Link 
+              href="/products" 
+              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
             >
               Products
             </Link>
-            <Link
-              href="/blog"
-              className="text-sm font-medium transition-colors hover:text-primary"
+            <Link 
+              href="/blog" 
+              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
             >
               Blog
             </Link>
           </nav>
-        </div>
 
-        <div className="flex items-center gap-4">
-          {/* Search - Desktop */}
-          <div className="hidden md:block w-64">
-            <SearchInput
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleSearch(searchQuery);
-                }
-              }}
-              onClear={() => setSearchQuery("")}
-            />
+          {/* Auth Buttons - Desktop */}
+          <div className="hidden md:flex items-center space-x-3">
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="rounded-full">
+                Login
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow">
+                Sign Up
+              </Button>
+            </Link>
           </div>
 
-          {/* Search - Mobile */}
-          <Sheet open={searchOpen} onOpenChange={setSearchOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="md:hidden">
-                <Search className="h-5 w-5" />
+          {/* Mobile Menu */}
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon" className="rounded-full">
+                <Menu className="h-5 w-5" />
+                <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="top">
-              <div className="mt-8">
-                <SearchInput
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleSearch(searchQuery);
-                    }
-                  }}
-                  onClear={() => setSearchQuery("")}
-                />
-              </div>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <nav className="flex flex-col space-y-4 mt-8">
+                <Link
+                  href="/products"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium transition-colors hover:text-primary py-2"
+                >
+                  Products
+                </Link>
+                <Link
+                  href="/blog"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium transition-colors hover:text-primary py-2"
+                >
+                  Blog
+                </Link>
+                <div className="flex flex-col space-y-3 pt-4 border-t">
+                  <Link href="/login" onClick={() => setOpen(false)}>
+                    <Button variant="outline" className="w-full rounded-full">
+                      Login
+                    </Button>
+                  </Link>
+                  <Link href="/signup" onClick={() => setOpen(false)}>
+                    <Button className="w-full rounded-full">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              </nav>
             </SheetContent>
           </Sheet>
-
-          {user ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon">
-                  <User className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href="/account"><span>Account</span></Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/account/orders"><span>Orders</span></Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/account/downloads"><span>Downloads</span></Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut}>
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <div className="hidden md:flex items-center gap-2">
-              <Button variant="ghost" asChild>
-                <Link href="/login"><span>Login</span></Link>
-              </Button>
-              <Button asChild>
-                <Link href="/signup"><span>Sign Up</span></Link>
-              </Button>
-            </div>
-          )}
-
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileMenuOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </Button>
         </div>
-      </div>
-
-      <MobileNav open={mobileMenuOpen} user={user} onSignOut={handleSignOut} />
-    </header>
+      </header>
+    </div>
   );
 }
 
