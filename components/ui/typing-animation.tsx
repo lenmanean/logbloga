@@ -40,31 +40,48 @@ export function TypingAnimation({
   onComplete
 }: TypingAnimationProps) {
   const [displayedText, setDisplayedText] = useState('');
-  const currentIndexRef = useRef(0);
-  const hasCalledOnCompleteRef = useRef(false);
+  const onCompleteRef = useRef(onComplete);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Update the ref when onComplete changes, but don't trigger re-run
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   useEffect(() => {
-    currentIndexRef.current = 0;
+    // Reset state
     setDisplayedText('');
-    hasCalledOnCompleteRef.current = false;
+    let currentIndex = 0;
+    let hasCompleted = false;
 
-    const typingEffect = setInterval(() => {
-      if (currentIndexRef.current < text.length) {
-        setDisplayedText((prev) => prev + text.charAt(currentIndexRef.current));
-        currentIndexRef.current++;
+    // Clear any existing interval
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+    }
+
+    intervalRef.current = setInterval(() => {
+      if (currentIndex < text.length) {
+        setDisplayedText(text.substring(0, currentIndex + 1));
+        currentIndex++;
       } else {
-        clearInterval(typingEffect);
-        if (!hasCalledOnCompleteRef.current && onComplete) {
-          hasCalledOnCompleteRef.current = true;
-          onComplete();
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
+        if (!hasCompleted && onCompleteRef.current) {
+          hasCompleted = true;
+          onCompleteRef.current();
         }
       }
     }, duration);
 
     return () => {
-      clearInterval(typingEffect);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
     };
-  }, [duration, text, onComplete]);
+  }, [duration, text]);
 
   return (
     <h1 className={className}>

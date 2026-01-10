@@ -4,12 +4,16 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
+
+  const handleTypingComplete = useCallback(() => {
+    setTypingComplete(true);
+  }, []);
 
   return (
     <div className="w-full pt-4 px-4">
@@ -21,7 +25,7 @@ export function Header() {
               text="log(b)log(a)" 
               duration={50}
               className="text-xl md:text-2xl font-bold"
-              onComplete={() => setTypingComplete(true)}
+              onComplete={handleTypingComplete}
             />
           </Link>
 
