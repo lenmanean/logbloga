@@ -30,7 +30,7 @@ export function Header() {
           </Link>
 
           {/* Navigation Links - Desktop */}
-          <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-500 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <Link 
               href="/products" 
               className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
