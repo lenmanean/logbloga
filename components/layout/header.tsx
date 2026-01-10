@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
@@ -15,9 +16,14 @@ export function Header() {
         <div className="flex h-16 items-center justify-between px-6 md:px-8">
           {/* Logo/Brand */}
           <Link href="/" className="flex items-center space-x-2 transition-transform hover:scale-105">
-            <span className="text-xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              LogBloga
-            </span>
+            <Image 
+              src="/logo.png" 
+              alt="LogBloga" 
+              width={120} 
+              height={40}
+              className="h-8 w-auto"
+              priority
+            />
           </Link>
 
           {/* Navigation Links - Desktop */}
