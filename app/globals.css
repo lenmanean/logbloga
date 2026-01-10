@@ -6,8 +6,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: "Courier New", Courier, Monaco, "Lucida Console", monospace;
-  --font-mono: "Courier New", Courier, Monaco, "Lucida Console", monospace;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -37,26 +37,6 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
-  
-  /* Brand colors */
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-secondary: var(--brand-secondary);
-  --color-brand-accent: var(--brand-accent);
-  --color-product-action: var(--product-action);
-  --color-product-action-hover: var(--product-action-hover);
-  --color-product-badge: var(--product-badge);
-  --color-product-featured: var(--product-featured);
-  --color-content-link: var(--content-link);
-  --color-content-link-hover: var(--content-link-hover);
-  --color-content-accent: var(--content-accent);
-  --color-success: var(--success);
-  --color-success-foreground: var(--success-foreground);
-  --color-warning: var(--warning);
-  --color-warning-foreground: var(--warning-foreground);
-  --color-info: var(--info);
-  --color-info-foreground: var(--info-foreground);
-  
-  /* Border radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -64,253 +44,82 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
-  
-  /* Container widths */
-  --container-sm: 640px;
-  --container-md: 768px;
-  --container-lg: 1024px;
-  --container-xl: 1280px;
-  --container-2xl: 1400px;
-  --container-content: 768px;
-  --container-product: 1200px;
-  
-  /* Spacing scale (extended) */
-  --spacing-xs: 0.25rem;
-  --spacing-sm: 0.5rem;
-  --spacing-md: 1rem;
-  --spacing-lg: 1.5rem;
-  --spacing-xl: 2rem;
-  --spacing-2xl: 3rem;
-  --spacing-3xl: 4rem;
-  --spacing-4xl: 6rem;
 }
 
 :root {
   --radius: 0.625rem;
-  /* Dark grey slate theme - default */
-  --background: oklch(0.15 0.01 260);
-  --foreground: oklch(0.95 0.01 0);
-  --card: oklch(0.20 0.01 260);
-  --card-foreground: oklch(0.95 0.01 0);
-  --popover: oklch(0.20 0.01 260);
-  --popover-foreground: oklch(0.95 0.01 0);
-  /* Brand Green primary - #39f400 */
-  --primary: #39f400;
-  --primary-foreground: oklch(0.15 0.01 260);
-  --secondary: oklch(0.25 0.01 260);
-  --secondary-foreground: oklch(0.95 0.01 0);
-  --muted: oklch(0.25 0.01 260);
-  --muted-foreground: oklch(0.70 0.04 260);
-  --accent: oklch(0.25 0.01 260);
-  --accent-foreground: oklch(0.95 0.01 0);
-  --destructive: oklch(0.65 0.20 25);
-  --border: oklch(0.25 0.01 260);
-  --input: oklch(0.25 0.01 260);
-  --ring: #39f400;
-  
-  /* Brand Colors - #39f400 */
-  --brand-primary: #39f400;
-  --brand-secondary: #39f400;
-  --brand-accent: #39f400;
-  
-  /* Product-specific colors - #39f400 */
-  --product-action: #39f400;
-  --product-action-hover: #2dd400;
-  --product-badge: #39f400;
-  --product-featured: #39f400;
-  
-  /* Content-specific colors - #39f400 */
-  --content-link: #39f400;
-  --content-link-hover: #2dd400;
-  --content-accent: #39f400;
-  
-  /* Status colors */
-  --success: #39f400;
-  --success-foreground: oklch(0.15 0.01 260);
-  --warning: oklch(0.75 0.18 85);
-  --warning-foreground: oklch(0.15 0.01 260);
-  --info: #39f400;
-  --info-foreground: oklch(0.15 0.01 260);
-  
-  /* Gradient utilities - #39f400 tones */
-  --gradient-primary: linear-gradient(135deg, #2dd400 0%, #39f400 100%);
-  --gradient-hero: linear-gradient(135deg, oklch(0.15 0.01 260) 0%, oklch(0.18 0.01 260) 100%);
-  --gradient-accent: linear-gradient(135deg, #2dd400 0%, #39f400 100%);
-  --chart-1: #39f400;
-  --chart-2: #2dd400;
-  --chart-3: #39f400;
-  --chart-4: #2dd400;
-  --chart-5: #39f400;
-  --sidebar: oklch(0.20 0.01 260);
-  --sidebar-foreground: oklch(0.95 0.01 0);
-  --sidebar-primary: #39f400;
-  --sidebar-primary-foreground: oklch(0.15 0.01 260);
-  --sidebar-accent: oklch(0.25 0.01 260);
-  --sidebar-accent-foreground: oklch(0.95 0.01 0);
-  --sidebar-border: oklch(0.25 0.01 260);
-  --sidebar-ring: #39f400;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.129 0.042 264.695);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.129 0.042 264.695);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.129 0.042 264.695);
+  --primary: oklch(0.208 0.042 265.755);
+  --primary-foreground: oklch(0.984 0.003 247.858);
+  --secondary: oklch(0.968 0.007 247.896);
+  --secondary-foreground: oklch(0.208 0.042 265.755);
+  --muted: oklch(0.968 0.007 247.896);
+  --muted-foreground: oklch(0.554 0.046 257.417);
+  --accent: oklch(0.968 0.007 247.896);
+  --accent-foreground: oklch(0.208 0.042 265.755);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.929 0.013 255.508);
+  --input: oklch(0.929 0.013 255.508);
+  --ring: oklch(0.704 0.04 256.788);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(0.984 0.003 247.858);
+  --sidebar-foreground: oklch(0.129 0.042 264.695);
+  --sidebar-primary: oklch(0.208 0.042 265.755);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.968 0.007 247.896);
+  --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
+  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
-/* Dark theme is now the default - removed .dark class */
+.dark {
+  --background: oklch(0.129 0.042 264.695);
+  --foreground: oklch(0.984 0.003 247.858);
+  --card: oklch(0.208 0.042 265.755);
+  --card-foreground: oklch(0.984 0.003 247.858);
+  --popover: oklch(0.208 0.042 265.755);
+  --popover-foreground: oklch(0.984 0.003 247.858);
+  --primary: oklch(0.929 0.013 255.508);
+  --primary-foreground: oklch(0.208 0.042 265.755);
+  --secondary: oklch(0.279 0.041 260.031);
+  --secondary-foreground: oklch(0.984 0.003 247.858);
+  --muted: oklch(0.279 0.041 260.031);
+  --muted-foreground: oklch(0.704 0.04 256.788);
+  --accent: oklch(0.279 0.041 260.031);
+  --accent-foreground: oklch(0.984 0.003 247.858);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.551 0.027 264.364);
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.208 0.042 265.755);
+  --sidebar-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-accent: oklch(0.279 0.041 260.031);
+  --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.551 0.027 264.364);
+}
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased;
-    font-family: var(--font-sans);
-  }
-  
-  /* Typography scale */
-  h1 {
-    @apply text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl;
-  }
-  h2 {
-    @apply text-3xl font-bold tracking-tight md:text-4xl;
-  }
-  h3 {
-    @apply text-2xl font-semibold tracking-tight md:text-3xl;
-  }
-  h4 {
-    @apply text-xl font-semibold tracking-tight;
-  }
-  h5 {
-    @apply text-lg font-semibold;
-  }
-  h6 {
-    @apply text-base font-semibold;
-  }
-  
-  /* Content prose styles for blog */
-  .prose {
-    @apply max-w-none;
-  }
-  .prose h1 {
-    @apply text-4xl font-bold mt-8 mb-4;
-  }
-  .prose h2 {
-    @apply text-3xl font-bold mt-6 mb-3;
-  }
-  .prose h3 {
-    @apply text-2xl font-semibold mt-4 mb-2;
-  }
-  .prose p {
-    @apply my-4 leading-7;
-  }
-  .prose ul, .prose ol {
-    @apply my-4 ml-6 space-y-2;
-  }
-  .prose ul {
-    @apply list-disc;
-  }
-  .prose ol {
-    @apply list-decimal;
-  }
-  .prose li {
-    @apply ml-4;
-  }
-  .prose blockquote {
-    @apply border-l-4 border-primary pl-4 my-4 italic;
-  }
-  .prose a {
-    @apply text-content-link hover:text-content-link-hover underline;
-  }
-  .prose code {
-    @apply bg-muted px-1.5 py-0.5 rounded text-sm font-mono;
-  }
-  .prose pre {
-    @apply bg-muted p-4 rounded-lg overflow-x-auto my-4;
-  }
-  .prose pre code {
-    @apply bg-transparent p-0;
-  }
-  .prose img {
-    @apply rounded-lg my-4;
-  }
-  
-  /* Smooth transitions for hover effects */
-  * {
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-  }
-}
-
-@layer utilities {
-  /* Container utilities */
-  .container-content {
-    @apply mx-auto max-w-[768px] px-4;
-  }
-  .container-product {
-    @apply mx-auto max-w-[1200px] px-4;
-  }
-  
-  /* Gradient utilities */
-  .gradient-primary {
-    background: var(--gradient-primary);
-  }
-  .gradient-hero {
-    background: var(--gradient-hero);
-  }
-  .gradient-accent {
-    background: var(--gradient-accent);
-  }
-  
-  /* Text gradients */
-  .text-gradient {
-    @apply bg-clip-text text-transparent;
-    background-image: var(--gradient-primary);
-  }
-  
-  /* Smooth animations */
-  .transition-smooth {
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 200ms;
-  }
-  
-  /* Card hover effects */
-  .card-hover {
-    @apply transition-all duration-200 ease-out;
-  }
-  .card-hover:hover {
-    @apply -translate-y-1 shadow-lg;
-  }
-
-  /* Fade-in animations */
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .animate-in {
-    animation: fadeIn 0.5s ease-out forwards;
-    opacity: 0;
-  }
-
-  .fade-in {
-    animation: fadeIn 0.5s ease-out forwards;
-  }
-
-  .delay-100 {
-    animation-delay: 100ms;
-  }
-
-  .delay-200 {
-    animation-delay: 200ms;
-  }
-
-  .delay-300 {
-    animation-delay: 300ms;
-  }
-
-  .delay-400 {
-    animation-delay: 400ms;
+    @apply bg-background text-foreground;
   }
 }
