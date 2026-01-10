@@ -9,6 +9,7 @@ import { TypingAnimation } from '@/components/ui/typing-animation';
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const [typingComplete, setTypingComplete] = useState(false);
 
   return (
     <div className="w-full pt-4 px-4">
@@ -18,13 +19,14 @@ export function Header() {
           <Link href="/" className="flex items-center transition-transform hover:scale-105">
             <TypingAnimation 
               text="log(b)log(a)" 
-              duration={150}
+              duration={50}
               className="text-xl md:text-2xl font-bold"
+              onComplete={() => setTypingComplete(true)}
             />
           </Link>
 
           {/* Navigation Links - Desktop */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-500 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <Link 
               href="/products" 
               className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"

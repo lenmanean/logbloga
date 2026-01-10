@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface TypingAnimationProps {
   text: string;
   duration?: number;
   className?: string;
+  onComplete?: () => void;
 }
 
 // Helper function to get color class for a character at a given index
@@ -35,25 +36,35 @@ function getColorClass(text: string, index: number): string {
 export function TypingAnimation({ 
   text, 
   duration = 200, 
-  className = '' 
+  className = '',
+  onComplete
 }: TypingAnimationProps) {
   const [displayedText, setDisplayedText] = useState('');
-  const [i, setI] = useState(0);
+  const currentIndexRef = useRef(0);
+  const hasCalledOnCompleteRef = useRef(false);
 
   useEffect(() => {
+    currentIndexRef.current = 0;
+    setDisplayedText('');
+    hasCalledOnCompleteRef.current = false;
+
     const typingEffect = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText((prev) => prev + text.charAt(i));
-        setI(i + 1);
+      if (currentIndexRef.current < text.length) {
+        setDisplayedText((prev) => prev + text.charAt(currentIndexRef.current));
+        currentIndexRef.current++;
       } else {
         clearInterval(typingEffect);
+        if (!hasCalledOnCompleteRef.current && onComplete) {
+          hasCalledOnCompleteRef.current = true;
+          onComplete();
+        }
       }
     }, duration);
 
     return () => {
       clearInterval(typingEffect);
     };
-  }, [duration, i, text]);
+  }, [duration, text, onComplete]);
 
   return (
     <h1 className={className}>
