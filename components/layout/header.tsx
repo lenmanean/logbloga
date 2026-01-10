@@ -1,11 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { useState } from 'react';
+import { TypingAnimation } from '@/components/ui/typing-animation';
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -15,14 +15,11 @@ export function Header() {
       <header className="mx-auto max-w-7xl rounded-full border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg transition-all duration-300 hover:shadow-xl">
         <div className="flex h-16 items-center justify-between px-6 md:px-8">
           {/* Logo/Brand */}
-          <Link href="/" className="flex items-center space-x-2 transition-transform hover:scale-105">
-            <Image 
-              src="/logo.png" 
-              alt="LogBloga" 
-              width={120} 
-              height={40}
-              className="h-8 w-auto"
-              priority
+          <Link href="/" className="flex items-center transition-transform hover:scale-105">
+            <TypingAnimation 
+              text="log(b)log(a)" 
+              duration={150}
+              className="text-xl md:text-2xl font-bold"
             />
           </Link>
 
