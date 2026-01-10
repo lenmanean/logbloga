@@ -48,24 +48,24 @@
 
 :root {
   --radius: 0.625rem;
-  /* Dark grey background with neon green accents */
-  --background: #0a0a0a;
-  --foreground: #e5e5e5;
-  --card: #1a1a1a;
-  --card-foreground: #e5e5e5;
-  --popover: #1a1a1a;
-  --popover-foreground: #e5e5e5;
+  /* Off-white background with neon green accents */
+  --background: #fafafa;
+  --foreground: #1a1a1a;
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
   --primary: #39ff14;
   --primary-foreground: #0a0a0a;
-  --secondary: #262626;
-  --secondary-foreground: #e5e5e5;
-  --muted: #262626;
+  --secondary: #f5f5f5;
+  --secondary-foreground: #1a1a1a;
+  --muted: #f5f5f5;
   --muted-foreground: #737373;
   --accent: #39ff14;
   --accent-foreground: #0a0a0a;
   --destructive: #ef4444;
-  --border: #262626;
-  --input: #262626;
+  --border: #e5e5e5;
+  --input: #ffffff;
   --ring: #39ff14;
   --chart-1: #39ff14;
   --chart-2: #22c55e;

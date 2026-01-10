@@ -47,7 +47,7 @@ export function Header() {
               </Button>
             </Link>
             <Link href="/signup">
-              <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow">
+              <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow bg-red-500 text-white hover:bg-red-600">
                 Sign Up
               </Button>
             </Link>
@@ -84,7 +84,7 @@ export function Header() {
                     </Button>
                   </Link>
                   <Link href="/signup" onClick={() => setOpen(false)}>
-                    <Button className="w-full rounded-full">
+                    <Button className="w-full rounded-full bg-red-500 text-white hover:bg-red-600">
                       Sign Up
                     </Button>
                   </Link>
