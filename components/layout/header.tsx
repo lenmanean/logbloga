@@ -57,11 +57,40 @@ export function Header() {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none">
+                Resources
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem asChild>
+                  <Link href="/resources/guides">Guides</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/resources/case-studies">Case Studies</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/resources/tools">Tools & Templates</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/resources/faq">FAQ</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/resources/community">Community Forum</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link 
               href="/blog" 
               className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
             >
               Blog
+            </Link>
+            <Link 
+              href="/pricing" 
+              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+            >
+              Pricing
             </Link>
           </nav>
 
@@ -122,12 +151,59 @@ export function Header() {
                     </Link>
                   </div>
                 </div>
+                <div className="flex flex-col">
+                  <div className="text-lg font-medium py-2">Resources</div>
+                  <div className="flex flex-col pl-4 space-y-2">
+                    <Link
+                      href="/resources/guides"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Guides
+                    </Link>
+                    <Link
+                      href="/resources/case-studies"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Case Studies
+                    </Link>
+                    <Link
+                      href="/resources/tools"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Tools & Templates
+                    </Link>
+                    <Link
+                      href="/resources/faq"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      FAQ
+                    </Link>
+                    <Link
+                      href="/resources/community"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Community Forum
+                    </Link>
+                  </div>
+                </div>
                 <Link
                   href="/blog"
                   onClick={() => setOpen(false)}
                   className="text-lg font-medium transition-colors hover:text-primary py-2"
                 >
                   Blog
+                </Link>
+                <Link
+                  href="/pricing"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium transition-colors hover:text-primary py-2"
+                >
+                  Pricing
                 </Link>
                 <div className="flex flex-col space-y-3 pt-4 border-t">
                   <Link href="/login" onClick={() => setOpen(false)}>
