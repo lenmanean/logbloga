@@ -86,12 +86,6 @@ export function Header() {
             >
               Blog
             </Link>
-            <Link 
-              href="/pricing" 
-              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
-            >
-              Pricing
-            </Link>
           </nav>
 
           {/* Auth Buttons - Desktop */}
@@ -197,13 +191,6 @@ export function Header() {
                   className="text-lg font-medium transition-colors hover:text-primary py-2"
                 >
                   Blog
-                </Link>
-                <Link
-                  href="/pricing"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary py-2"
-                >
-                  Pricing
                 </Link>
                 <div className="flex flex-col space-y-3 pt-4 border-t">
                   <Link href="/login" onClick={() => setOpen(false)}>
