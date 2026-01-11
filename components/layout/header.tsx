@@ -15,6 +15,13 @@ export function Header() {
     setTypingComplete(true);
   }, []);
 
+  // TODO: Implement state-aware navigation
+  // Marketing mode (logged out): AI to USD, Bundles, Blog
+  // Usage mode (logged in with products): Library, Continue Track, Progress
+  // These will be replaced with actual authentication state management
+  const isLoggedIn = false; // Placeholder - will be replaced with auth state
+  const hasProducts = false; // Placeholder - will be replaced with user product check
+
   return (
     <div className="w-full pt-4 px-4">
       <header className="mx-auto max-w-7xl rounded-full border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg transition-all duration-300 hover:shadow-xl">
@@ -30,33 +37,72 @@ export function Header() {
           </Link>
 
           {/* Navigation Links - Desktop */}
+          {/* Marketing mode: AI to USD, Bundles, Blog */}
+          {/* TODO: Add dropdown to AI to USD exposing Tracks and Bundles */}
+          {/* Usage mode (when logged in with products): Library, Continue Track, Progress */}
           <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <Link 
-              href="/products" 
-              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
-            >
-              Products
-            </Link>
-            <Link 
-              href="/blog" 
-              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
-            >
-              Blog
-            </Link>
+            {!isLoggedIn || !hasProducts ? (
+              <>
+                <Link 
+                  href="/ai-to-usd" 
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+                >
+                  AI to USD
+                </Link>
+                <Link 
+                  href="/bundles" 
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+                >
+                  Bundles
+                </Link>
+                <Link 
+                  href="/blog" 
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+                >
+                  Blog
+                </Link>
+              </>
+            ) : (
+              <>
+                {/* Usage mode navigation - to be implemented when logged in state is ready */}
+                <Link 
+                  href="/library" 
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+                >
+                  Library
+                </Link>
+                <Link 
+                  href="/continue" 
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+                >
+                  Continue Track
+                </Link>
+                <Link 
+                  href="/progress" 
+                  className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
+                >
+                  Progress
+                </Link>
+              </>
+            )}
           </nav>
 
-          {/* Auth Buttons - Desktop */}
+          {/* Auth/User Actions - Desktop */}
+          {/* TODO: When logged in, show Dashboard or Library instead of Login/Sign Up */}
           <div className="hidden md:flex items-center space-x-3">
-            <Link href="/login">
-              <Button variant="ghost" size="sm" className="rounded-full">
-                Login
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow bg-red-500 text-white hover:bg-red-600">
-                Sign Up
-              </Button>
-            </Link>
+            {!isLoggedIn ? (
+              <Link href="/signup">
+                <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow bg-red-500 text-white hover:bg-red-600">
+                  Start with AI to USD
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/dashboard">
+                <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow bg-red-500 text-white hover:bg-red-600">
+                  Dashboard
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -69,31 +115,69 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col space-y-4 mt-8">
-                <Link
-                  href="/products"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary py-2"
-                >
-                  Products
-                </Link>
-                <Link
-                  href="/blog"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary py-2"
-                >
-                  Blog
-                </Link>
+                {!isLoggedIn || !hasProducts ? (
+                  <>
+                    <Link
+                      href="/ai-to-usd"
+                      onClick={() => setOpen(false)}
+                      className="text-lg font-medium transition-colors hover:text-primary py-2"
+                    >
+                      AI to USD
+                    </Link>
+                    <Link
+                      href="/bundles"
+                      onClick={() => setOpen(false)}
+                      className="text-lg font-medium transition-colors hover:text-primary py-2"
+                    >
+                      Bundles
+                    </Link>
+                    <Link
+                      href="/blog"
+                      onClick={() => setOpen(false)}
+                      className="text-lg font-medium transition-colors hover:text-primary py-2"
+                    >
+                      Blog
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/library"
+                      onClick={() => setOpen(false)}
+                      className="text-lg font-medium transition-colors hover:text-primary py-2"
+                    >
+                      Library
+                    </Link>
+                    <Link
+                      href="/continue"
+                      onClick={() => setOpen(false)}
+                      className="text-lg font-medium transition-colors hover:text-primary py-2"
+                    >
+                      Continue Track
+                    </Link>
+                    <Link
+                      href="/progress"
+                      onClick={() => setOpen(false)}
+                      className="text-lg font-medium transition-colors hover:text-primary py-2"
+                    >
+                      Progress
+                    </Link>
+                  </>
+                )}
                 <div className="flex flex-col space-y-3 pt-4 border-t">
-                  <Link href="/login" onClick={() => setOpen(false)}>
-                    <Button variant="outline" className="w-full rounded-full">
-                      Login
-                    </Button>
-                  </Link>
-                  <Link href="/signup" onClick={() => setOpen(false)}>
-                    <Button className="w-full rounded-full bg-red-500 text-white hover:bg-red-600">
-                      Sign Up
-                    </Button>
-                  </Link>
+                  {!isLoggedIn ? (
+                    <Link href="/signup" onClick={() => setOpen(false)}>
+                      <Button className="w-full rounded-full bg-red-500 text-white hover:bg-red-600">
+                        Start with AI to USD
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link href="/dashboard" onClick={() => setOpen(false)}>
+                      <Button className="w-full rounded-full bg-red-500 text-white hover:bg-red-600">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </nav>
             </SheetContent>
