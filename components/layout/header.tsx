@@ -3,9 +3,15 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
+import { Menu, ChevronDown } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -31,12 +37,26 @@ export function Header() {
 
           {/* Navigation Links - Desktop */}
           <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <Link 
-              href="/products" 
-              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
-            >
-              Products
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none">
+                AI to USD
+                <ChevronDown className="h-4 w-4" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem asChild>
+                  <Link href="/ai-to-usd/web-apps">Web Apps</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/ai-to-usd/social-media">Social Media</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/ai-to-usd/agency">Agency</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/ai-to-usd/freelancing">Freelancing</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link 
               href="/blog" 
               className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
@@ -69,13 +89,39 @@ export function Header() {
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col space-y-4 mt-8">
-                <Link
-                  href="/products"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary py-2"
-                >
-                  Products
-                </Link>
+                <div className="flex flex-col">
+                  <div className="text-lg font-medium py-2">AI to USD</div>
+                  <div className="flex flex-col pl-4 space-y-2">
+                    <Link
+                      href="/ai-to-usd/web-apps"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Web Apps
+                    </Link>
+                    <Link
+                      href="/ai-to-usd/social-media"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Social Media
+                    </Link>
+                    <Link
+                      href="/ai-to-usd/agency"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Agency
+                    </Link>
+                    <Link
+                      href="/ai-to-usd/freelancing"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Freelancing
+                    </Link>
+                  </div>
+                </div>
                 <Link
                   href="/blog"
                   onClick={() => setOpen(false)}
