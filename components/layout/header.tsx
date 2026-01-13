@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, ChevronDown } from 'lucide-react';
@@ -14,8 +15,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 export function Header() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
+  const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
+  const [resourcesOpen, setResourcesOpen] = useState(false);
 
   const handleTypingComplete = useCallback(() => {
     setTypingComplete(true);
@@ -37,49 +41,77 @@ export function Header() {
 
           {/* Navigation Links - Desktop */}
           <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none">
-                AI to USD
-                <ChevronDown className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem asChild>
-                  <Link href="/ai-to-usd/web-apps">Web Apps</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/ai-to-usd/social-media">Social Media</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/ai-to-usd/agency">Agency</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/ai-to-usd/freelancing">Freelancing</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none">
-                Resources
-                <ChevronDown className="h-4 w-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem asChild>
-                  <Link href="/resources/guides">Guides</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/resources/case-studies">Case Studies</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/resources/tools">Tools & Templates</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/resources/faq">FAQ</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/resources/community">Community Forum</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <div
+              onMouseEnter={() => setAiToUsdOpen(true)}
+              onMouseLeave={() => setAiToUsdOpen(false)}
+              className="relative"
+            >
+              <DropdownMenu open={aiToUsdOpen} onOpenChange={setAiToUsdOpen}>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      router.push('/products');
+                    }}
+                  >
+                    AI to USD
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" onMouseEnter={() => setAiToUsdOpen(true)} onMouseLeave={() => setAiToUsdOpen(false)}>
+                  <DropdownMenuItem asChild>
+                    <Link href="/ai-to-usd/web-apps">Web Apps</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/ai-to-usd/social-media">Social Media</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/ai-to-usd/agency">Agency</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/ai-to-usd/freelancing">Freelancing</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+            <div
+              onMouseEnter={() => setResourcesOpen(true)}
+              onMouseLeave={() => setResourcesOpen(false)}
+              className="relative"
+            >
+              <DropdownMenu open={resourcesOpen} onOpenChange={setResourcesOpen}>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      router.push('/resources');
+                    }}
+                  >
+                    Resources
+                    <ChevronDown className="h-4 w-4" />
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" onMouseEnter={() => setResourcesOpen(true)} onMouseLeave={() => setResourcesOpen(false)}>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resources/guides">Guides</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resources/case-studies">Case Studies</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resources/tools">Tools & Templates</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resources/faq">FAQ</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/resources/community">Community Forum</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Link 
               href="/blog" 
               className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
