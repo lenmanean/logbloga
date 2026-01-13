@@ -113,10 +113,10 @@ export function Header() {
           <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <NavDropdown
               label="AI to USD"
-              href="/products"
+              href="/ai-to-usd"
               isOpen={aiToUsdOpen}
               onOpenChange={setAiToUsdOpen}
-              onNavigate={() => router.push('/products')}
+              onNavigate={() => router.push('/ai-to-usd')}
             >
               <DropdownMenuItem asChild>
                 <Link href="/ai-to-usd/web-apps">Web Apps</Link>
@@ -129,6 +129,9 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/ai-to-usd/freelancing">Freelancing</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/products">All Products</Link>
               </DropdownMenuItem>
             </NavDropdown>
             <NavDropdown
@@ -187,7 +190,13 @@ export function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <nav className="flex flex-col space-y-4 mt-8">
                 <div className="flex flex-col">
-                  <div className="text-lg font-medium py-2">AI to USD</div>
+                  <Link
+                    href="/ai-to-usd"
+                    onClick={() => setOpen(false)}
+                    className="text-lg font-medium transition-colors hover:text-primary py-2"
+                  >
+                    AI to USD
+                  </Link>
                   <div className="flex flex-col pl-4 space-y-2">
                     <Link
                       href="/ai-to-usd/web-apps"
@@ -216,6 +225,13 @@ export function Header() {
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Freelancing
+                    </Link>
+                    <Link
+                      href="/products"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      All Products
                     </Link>
                   </div>
                 </div>
