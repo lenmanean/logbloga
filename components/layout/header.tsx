@@ -96,7 +96,7 @@ export function Header() {
   }, []);
 
   return (
-    <div className="w-full pt-4 px-4">
+    <div className="w-full pt-4 px-4 sticky top-0 z-50 bg-background/80 backdrop-blur-sm supports-[backdrop-filter]:bg-background/60">
       <header className="mx-auto max-w-7xl rounded-full border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg transition-all duration-300 hover:shadow-xl">
         <div className="flex h-16 items-center justify-between px-6 md:px-8">
           {/* Logo/Brand */}
@@ -135,7 +135,7 @@ export function Header() {
               </DropdownMenuItem>
             </NavDropdown>
             <NavDropdown
-              label="Resources"
+              label="Explore Courses"
               href="/resources"
               isOpen={resourcesOpen}
               onOpenChange={setResourcesOpen}
@@ -236,7 +236,7 @@ export function Header() {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <div className="text-lg font-medium py-2">Resources</div>
+                  <div className="text-lg font-medium py-2">Explore Courses</div>
                   <div className="flex flex-col pl-4 space-y-2">
                     <Link
                       href="/resources/guides"
