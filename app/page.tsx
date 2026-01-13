@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 
 export default function HomePage() {
@@ -24,9 +25,16 @@ export default function HomePage() {
                 </Link>
               </div>
             </div>
-            {/* Right side - Empty for future image */}
-            <div className="hidden md:block animate-fade-in-delay-400">
-              {/* Image placeholder - will be added later */}
+            {/* Right side - Product packages image */}
+            <div className="hidden md:flex items-center justify-center animate-fade-in-delay-400">
+              <Image
+                src="/productpackages.png"
+                alt="AI to USD product packages - Social Media, Web Apps, and Agency"
+                width={600}
+                height={800}
+                className="w-full h-auto object-contain"
+                priority
+              />
             </div>
           </div>
         </div>
