@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, ChevronDown } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 import {
   DropdownMenu,
@@ -24,19 +24,48 @@ interface NavDropdownProps {
 }
 
 function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }: NavDropdownProps) {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    onOpenChange(true);
+  }, [onOpenChange]);
+
+  const handleMouseLeave = useCallback(() => {
+    // Small delay to allow moving from trigger to content
+    timeoutRef.current = setTimeout(() => {
+      onOpenChange(false);
+    }, 200);
+  }, [onOpenChange]);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div
-      onMouseEnter={() => onOpenChange(true)}
-      onMouseLeave={() => onOpenChange(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       className="relative"
     >
-      <DropdownMenu open={isOpen} onOpenChange={onOpenChange}>
+      <DropdownMenu open={isOpen} onOpenChange={() => {}} modal={false}>
         <DropdownMenuTrigger asChild>
           <button
             className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none"
             onClick={(e) => {
               e.preventDefault();
               onNavigate();
+            }}
+            onMouseDown={(e) => {
+              // Prevent dropdown from opening on click
+              e.preventDefault();
             }}
           >
             {label}
@@ -45,8 +74,8 @@ function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }
         </DropdownMenuTrigger>
         <DropdownMenuContent 
           align="start"
-          onMouseEnter={() => onOpenChange(true)}
-          onMouseLeave={() => onOpenChange(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           {children}
         </DropdownMenuContent>
