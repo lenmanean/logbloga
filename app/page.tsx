@@ -6,8 +6,17 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-background">
       {/* Hero Section - AI to USD */}
-      <section className="bg-red-500 text-white mt-[58px] mb-[58px] py-[41px] px-[33px] animate-fade-in">
-        <div className="max-w-7xl mx-auto">
+      <section className="bg-red-500 text-white mt-[58px] mb-[58px] py-[41px] px-[33px] animate-fade-in relative overflow-hidden">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="bg-animated-orb bg-animated-orb-1"></div>
+          <div className="bg-animated-orb bg-animated-orb-2"></div>
+          <div className="bg-animated-orb bg-animated-orb-3"></div>
+          <div className="bg-animated-shape bg-animated-shape-1"></div>
+          <div className="bg-animated-shape bg-animated-shape-2"></div>
+          <div className="bg-animated-shape bg-animated-shape-3"></div>
+        </div>
+        <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
             {/* Left side - Text content */}
             <div className="space-y-6">
