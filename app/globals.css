@@ -135,120 +135,160 @@
   @keyframes float {
     0%, 100% {
       transform: translate(0, 0) scale(1);
-      opacity: 0.5;
+      opacity: 0.7;
     }
-    33% {
-      transform: translate(50px, -50px) scale(1.15);
-      opacity: 0.6;
+    25% {
+      transform: translate(150px, -150px) scale(1.4);
+      opacity: 0.9;
     }
-    66% {
-      transform: translate(-40px, 40px) scale(0.9);
-      opacity: 0.55;
+    50% {
+      transform: translate(-120px, 120px) scale(0.8);
+      opacity: 0.8;
+    }
+    75% {
+      transform: translate(100px, 100px) scale(1.3);
+      opacity: 0.85;
     }
   }
 
   @keyframes floatReverse {
     0%, 100% {
       transform: translate(0, 0) scale(1);
-      opacity: 0.45;
+      opacity: 0.65;
     }
-    33% {
-      transform: translate(-45px, 45px) scale(0.95);
-      opacity: 0.55;
+    25% {
+      transform: translate(-130px, 130px) scale(0.85);
+      opacity: 0.85;
     }
-    66% {
-      transform: translate(55px, -55px) scale(1.1);
-      opacity: 0.5;
+    50% {
+      transform: translate(160px, -160px) scale(1.35);
+      opacity: 0.8;
+    }
+    75% {
+      transform: translate(-110px, -110px) scale(1.2);
+      opacity: 0.75;
     }
   }
 
   @keyframes pulse {
     0%, 100% {
-      opacity: 0.4;
+      opacity: 0.6;
       transform: scale(1);
     }
     50% {
-      opacity: 0.65;
-      transform: scale(1.2);
+      opacity: 0.95;
+      transform: scale(1.5);
     }
   }
 
   @keyframes drift {
     0% {
       transform: translate(0, 0) rotate(0deg);
-      opacity: 0.4;
+      opacity: 0.7;
+    }
+    25% {
+      transform: translate(180px, -180px) rotate(90deg);
+      opacity: 0.85;
     }
     50% {
-      transform: translate(60px, -60px) rotate(180deg);
-      opacity: 0.6;
+      transform: translate(-170px, 170px) rotate(180deg);
+      opacity: 0.8;
+    }
+    75% {
+      transform: translate(120px, 120px) rotate(270deg);
+      opacity: 0.75;
     }
     100% {
       transform: translate(0, 0) rotate(360deg);
-      opacity: 0.4;
+      opacity: 0.7;
     }
   }
 
   @keyframes wave {
     0%, 100% {
       transform: translateX(0) translateY(0);
-      opacity: 0.5;
+      opacity: 0.7;
     }
     25% {
-      transform: translateX(30px) translateY(-30px);
-      opacity: 0.6;
+      transform: translateX(100px) translateY(-100px);
+      opacity: 0.9;
     }
     50% {
-      transform: translateX(0) translateY(-60px);
-      opacity: 0.55;
+      transform: translateX(0) translateY(-180px);
+      opacity: 0.85;
     }
     75% {
-      transform: translateX(-30px) translateY(-30px);
-      opacity: 0.6;
+      transform: translateX(-100px) translateY(-100px);
+      opacity: 0.9;
+    }
+  }
+
+  @keyframes slide {
+    0%, 100% {
+      transform: translateX(0) translateY(0) scale(1);
+      opacity: 0.7;
+    }
+    33% {
+      transform: translateX(250px) translateY(-120px) scale(1.3);
+      opacity: 0.9;
+    }
+    66% {
+      transform: translateX(-220px) translateY(150px) scale(0.9);
+      opacity: 0.8;
     }
   }
 
   .bg-animated-orb {
     position: absolute;
     border-radius: 50%;
-    filter: blur(40px);
+    filter: blur(25px);
     pointer-events: none;
     will-change: transform, opacity;
   }
 
   .bg-animated-orb-1 {
-    width: 400px;
-    height: 400px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(239, 68, 68, 0.2) 50%, transparent 100%);
-    top: 10%;
-    left: 5%;
-    animation: float 12s ease-in-out infinite;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(239, 68, 68, 0.45) 50%, rgba(239, 68, 68, 0.2) 100%);
+    top: 5%;
+    left: 0%;
+    animation: float 6s ease-in-out infinite;
   }
 
   .bg-animated-orb-2 {
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle, rgba(248, 113, 113, 0.35) 0%, rgba(239, 68, 68, 0.15) 50%, transparent 100%);
-    bottom: 10%;
-    right: 10%;
-    animation: floatReverse 15s ease-in-out infinite;
+    width: 450px;
+    height: 450px;
+    background: radial-gradient(circle, rgba(248, 113, 113, 0.65) 0%, rgba(239, 68, 68, 0.4) 50%, rgba(239, 68, 68, 0.2) 100%);
+    bottom: 5%;
+    right: 5%;
+    animation: floatReverse 8s ease-in-out infinite;
   }
 
   .bg-animated-orb-3 {
-    width: 300px;
-    height: 300px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, rgba(220, 38, 38, 0.2) 50%, transparent 100%);
-    top: 50%;
-    right: 15%;
-    animation: pulse 8s ease-in-out infinite;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, rgba(220, 38, 38, 0.45) 50%, rgba(220, 38, 38, 0.2) 100%);
+    top: 45%;
+    right: 10%;
+    animation: pulse 5s ease-in-out infinite;
   }
 
   .bg-animated-orb-4 {
-    width: 250px;
-    height: 250px;
-    background: radial-gradient(circle, rgba(254, 202, 202, 0.3) 0%, rgba(239, 68, 68, 0.15) 50%, transparent 100%);
-    top: 30%;
-    left: 50%;
-    animation: drift 18s ease-in-out infinite;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(circle, rgba(254, 202, 202, 0.6) 0%, rgba(239, 68, 68, 0.4) 50%, rgba(239, 68, 68, 0.2) 100%);
+    top: 25%;
+    left: 45%;
+    animation: drift 10s ease-in-out infinite;
+  }
+
+  .bg-animated-orb-5 {
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(248, 113, 113, 0.4) 50%, transparent 100%);
+    bottom: 20%;
+    left: 20%;
+    animation: slide 7s ease-in-out infinite;
   }
 
   .bg-animated-shape {
@@ -258,46 +298,57 @@
   }
 
   .bg-animated-shape-1 {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(239, 68, 68, 0.2) 100%);
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(239, 68, 68, 0.5) 100%);
     border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    top: 15%;
-    left: 8%;
-    animation: float 14s ease-in-out infinite;
-    filter: blur(20px);
-  }
-
-  .bg-animated-shape-2 {
-    width: 180px;
-    height: 180px;
-    background: linear-gradient(45deg, rgba(248, 113, 113, 0.25) 0%, rgba(255, 255, 255, 0.2) 100%);
-    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    bottom: 20%;
-    left: 12%;
-    animation: floatReverse 16s ease-in-out infinite;
-    filter: blur(20px);
-  }
-
-  .bg-animated-shape-3 {
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, rgba(239, 68, 68, 0.15) 70%, transparent 100%);
-    border-radius: 50%;
-    top: 55%;
-    right: 12%;
-    animation: pulse 10s ease-in-out infinite;
+    top: 10%;
+    left: 5%;
+    animation: float 5s ease-in-out infinite;
     filter: blur(15px);
   }
 
+  .bg-animated-shape-2 {
+    width: 280px;
+    height: 280px;
+    background: linear-gradient(45deg, rgba(248, 113, 113, 0.55) 0%, rgba(255, 255, 255, 0.45) 100%);
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    bottom: 15%;
+    left: 8%;
+    animation: floatReverse 7s ease-in-out infinite;
+    filter: blur(15px);
+  }
+
+  .bg-animated-shape-3 {
+    width: 250px;
+    height: 250px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.6) 0%, rgba(239, 68, 68, 0.4) 70%, transparent 100%);
+    border-radius: 50%;
+    top: 50%;
+    right: 8%;
+    animation: pulse 6s ease-in-out infinite;
+    filter: blur(12px);
+  }
+
   .bg-animated-shape-4 {
-    width: 120px;
-    height: 120px;
-    background: linear-gradient(90deg, rgba(254, 202, 202, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
+    width: 220px;
+    height: 220px;
+    background: linear-gradient(90deg, rgba(254, 202, 202, 0.6) 0%, rgba(255, 255, 255, 0.5) 100%);
     border-radius: 40% 60% 60% 40% / 60% 30% 70% 40%;
-    top: 70%;
-    right: 25%;
-    animation: wave 12s ease-in-out infinite;
-    filter: blur(18px);
+    top: 65%;
+    right: 20%;
+    animation: wave 6s ease-in-out infinite;
+    filter: blur(12px);
+  }
+
+  .bg-animated-shape-5 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(248, 113, 113, 0.45) 100%);
+    border-radius: 50% 50% 30% 70% / 70% 30% 50% 50%;
+    top: 30%;
+    right: 30%;
+    animation: slide 8s ease-in-out infinite;
+    filter: blur(10px);
   }
 }

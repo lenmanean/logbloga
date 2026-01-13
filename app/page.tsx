@@ -13,10 +13,12 @@ export default function HomePage() {
           <div className="bg-animated-orb bg-animated-orb-2"></div>
           <div className="bg-animated-orb bg-animated-orb-3"></div>
           <div className="bg-animated-orb bg-animated-orb-4"></div>
+          <div className="bg-animated-orb bg-animated-orb-5"></div>
           <div className="bg-animated-shape bg-animated-shape-1"></div>
           <div className="bg-animated-shape bg-animated-shape-2"></div>
           <div className="bg-animated-shape bg-animated-shape-3"></div>
           <div className="bg-animated-shape bg-animated-shape-4"></div>
+          <div className="bg-animated-shape bg-animated-shape-5"></div>
         </div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
