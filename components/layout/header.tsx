@@ -89,7 +89,7 @@ export function Header() {
           </nav>
 
           {/* Auth Buttons - Desktop */}
-          <div className="hidden md:flex items-center space-x-3">
+          <div className={`hidden md:flex items-center space-x-3 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <Link href="/login">
               <Button variant="ghost" size="sm" className="rounded-full">
                 Login
@@ -104,7 +104,7 @@ export function Header() {
 
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild className="md:hidden">
+            <SheetTrigger asChild className={`md:hidden transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
               <Button variant="ghost" size="icon" className="rounded-full">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
