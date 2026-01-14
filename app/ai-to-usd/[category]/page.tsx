@@ -3,9 +3,9 @@ import { ProductCard } from '@/components/ui/product-card';
 import { sampleProducts, ProductCategory, categories } from '@/lib/products';
 
 interface CategoryPageProps {
-  params: {
+  params: Promise<{
     category: string;
-  };
+  }>;
 }
 
 function getCategoryName(categoryId: ProductCategory): string {
@@ -13,21 +13,22 @@ function getCategoryName(categoryId: ProductCategory): string {
   return category?.name || categoryId;
 }
 
-export default function CategoryPage({ params }: CategoryPageProps) {
-  const categoryId = params.category as ProductCategory;
+export default async function CategoryPage({ params }: CategoryPageProps) {
+  const { category: categoryId } = await params;
+  const typedCategoryId = categoryId as ProductCategory;
   
   // Validate category
   const validCategories: ProductCategory[] = ['web-apps', 'social-media', 'agency', 'freelancing'];
-  if (!validCategories.includes(categoryId)) {
+  if (!validCategories.includes(typedCategoryId)) {
     notFound();
   }
 
   // Filter products by category
   const categoryProducts = sampleProducts.filter(
-    product => product.category === categoryId
+    product => product.category === typedCategoryId
   );
 
-  const categoryName = getCategoryName(categoryId);
+  const categoryName = getCategoryName(typedCategoryId);
 
   return (
     <main className="min-h-screen bg-background">

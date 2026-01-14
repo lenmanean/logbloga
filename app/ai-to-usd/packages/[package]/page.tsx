@@ -10,13 +10,13 @@ import { packageProducts } from '@/lib/products';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
 
 interface PackagePageProps {
-  params: {
+  params: Promise<{
     package: string;
-  };
+  }>;
 }
 
-export default function PackagePage({ params }: PackagePageProps) {
-  const packageSlug = params.package;
+export default async function PackagePage({ params }: PackagePageProps) {
+  const { package: packageSlug } = await params;
   const packageData = packageProducts.find(pkg => pkg.slug === packageSlug);
 
   if (!packageData) {
