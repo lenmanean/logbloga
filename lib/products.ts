@@ -13,6 +13,29 @@ export interface Product {
   duration?: string;
 }
 
+export interface PackageModule {
+  title: string;
+  description: string;
+  hours: string;
+  items: string[];
+}
+
+export interface PackageResource {
+  category: string;
+  items: string[];
+}
+
+export interface PackageProduct extends Product {
+  packageImage: string;
+  tagline: string;
+  modules: PackageModule[];
+  resources: PackageResource[];
+  bonusAssets: string[];
+  pricingJustification: string;
+  contentHours: string;
+  slug: string;
+}
+
 export interface Category {
   id: ProductCategory;
   name: string;
@@ -29,7 +52,7 @@ export const categories: Category[] = [
     description: 'Build powerful web applications with AI assistance',
     icon: 'Globe',
     productCount: 12,
-    href: '/ai-to-usd/web-apps',
+    href: '/ai-to-usd/packages/web-apps',
   },
   {
     id: 'social-media',
@@ -37,7 +60,7 @@ export const categories: Category[] = [
     description: 'Grow your social media presence and engagement',
     icon: 'Share2',
     productCount: 8,
-    href: '/ai-to-usd/social-media',
+    href: '/ai-to-usd/packages/social-media',
   },
   {
     id: 'agency',
@@ -45,7 +68,7 @@ export const categories: Category[] = [
     description: 'Scale your agency with AI-powered solutions',
     icon: 'Building2',
     productCount: 10,
-    href: '/ai-to-usd/agency',
+    href: '/ai-to-usd/packages/agency',
   },
   {
     id: 'freelancing',
@@ -53,7 +76,7 @@ export const categories: Category[] = [
     description: 'Boost your freelancing career and income',
     icon: 'Briefcase',
     productCount: 15,
-    href: '/ai-to-usd/freelancing',
+    href: '/ai-to-usd/packages/freelancing',
   },
 ];
 
@@ -182,5 +205,416 @@ export const sampleProducts: Product[] = [
     difficulty: 'beginner',
     duration: '3 weeks',
   },
+];
+
+export const packageProducts: PackageProduct[] = [
+  {
+    id: 'web-apps-package',
+    slug: 'web-apps',
+    title: 'Web Apps Package',
+    description: 'Build powerful web applications with AI assistance. Transform your skills into profitable web development projects.',
+    tagline: 'Convert powerful AI solutions into profitable web applications that generate USD revenue',
+    category: 'web-apps',
+    price: 1997,
+    originalPrice: 2997,
+    featured: true,
+    packageImage: '/package-2.png',
+    difficulty: 'intermediate',
+    duration: 'Self-paced',
+    contentHours: '40+ hours',
+    modules: [
+      {
+        title: 'AI-Powered Development Fundamentals',
+        description: 'Master the fundamentals of building web apps with AI assistance',
+        hours: '6-8 hours',
+        items: [
+          'Building web apps with AI assistance (ChatGPT, GitHub Copilot, Cursor)',
+          'AI-powered debugging and code optimization',
+          'Prompt engineering for development tasks'
+        ]
+      },
+      {
+        title: 'Full-Stack Web Application Course',
+        description: 'Complete guide to building full-stack applications',
+        hours: '15-20 hours',
+        items: [
+          'Modern frameworks (Next.js, React, Node.js) with AI enhancement',
+          'Database integration with AI-assisted schema design',
+          'API development and integration strategies'
+        ]
+      },
+      {
+        title: 'AI Integration Mastery',
+        description: 'Learn to integrate AI APIs and build custom AI features',
+        hours: '8-10 hours',
+        items: [
+          'Integrating AI APIs (OpenAI, Anthropic, etc.)',
+          'Building custom AI features (chatbots, recommendation systems)',
+          'Real-time AI processing and optimization'
+        ]
+      },
+      {
+        title: 'Deployment & Scaling',
+        description: 'Deploy and scale your applications effectively',
+        hours: '5-6 hours',
+        items: [
+          'CI/CD with AI assistance',
+          'Performance optimization',
+          'Security best practices'
+        ]
+      }
+    ],
+    resources: [
+      {
+        category: 'Code Templates',
+        items: [
+          '20+ production-ready code templates',
+          '15+ starter project templates',
+          'AI prompt library (200+ developer prompts)'
+        ]
+      },
+      {
+        category: 'Deployment Guides',
+        items: [
+          'Deployment guides for Vercel, AWS, etc.',
+          'Database templates and schemas'
+        ]
+      },
+      {
+        category: 'Business Resources',
+        items: [
+          'Pricing strategies guide',
+          'Client acquisition templates',
+          'Proposal templates',
+          'Contract templates',
+          'Portfolio optimization guide'
+        ]
+      }
+    ],
+    bonusAssets: [
+      'Access to private Discord community',
+      'Monthly Q&A sessions (6 months)',
+      'Code review sessions',
+      'Lifetime updates',
+      'Certificate of completion'
+    ],
+    pricingJustification: 'Comprehensive full-stack development course with production-ready templates and resources. Comparable to bootcamps priced at $2,000-$6,000+. Total content: 40+ hours of structured learning with immediate ROI through templates and tools.'
+  },
+  {
+    id: 'social-media-package',
+    slug: 'social-media',
+    title: 'Social Media Package',
+    description: 'Monetize your AI-driven content by creating profitable social media automation tools. Grow your presence and engagement.',
+    tagline: 'Monetize your AI-driven content by creating profitable social media automation tools',
+    category: 'social-media',
+    price: 997,
+    originalPrice: 1497,
+    featured: true,
+    packageImage: '/package-1.png',
+    difficulty: 'beginner',
+    duration: 'Self-paced',
+    contentHours: '30+ hours',
+    modules: [
+      {
+        title: 'AI Content Creation Mastery',
+        description: 'Master creating engaging content with AI tools',
+        hours: '8-10 hours',
+        items: [
+          'Writing engaging copy with AI',
+          'Image/video generation workflows',
+          'Brand voice consistency with AI tools'
+        ]
+      },
+      {
+        title: 'Multi-Platform Strategy',
+        description: 'Develop strategies for all major social platforms',
+        hours: '10-12 hours',
+        items: [
+          'Platform-specific strategies (Instagram, TikTok, LinkedIn, Twitter)',
+          'Content calendars and automation',
+          'Algorithm optimization'
+        ]
+      },
+      {
+        title: 'Growth & Engagement Systems',
+        description: 'Build systems for sustainable growth',
+        hours: '6-8 hours',
+        items: [
+          'AI-powered audience analysis',
+          'Engagement optimization',
+          'Community management automation'
+        ]
+      },
+      {
+        title: 'Monetization & Analytics',
+        description: 'Turn your social media into a revenue stream',
+        hours: '5-6 hours',
+        items: [
+          'Influencer partnerships',
+          'Affiliate marketing with AI',
+          'Analytics and ROI tracking'
+        ]
+      }
+    ],
+    resources: [
+      {
+        category: 'Content Templates',
+        items: [
+          '500+ AI-generated content templates',
+          '50+ ready-to-use caption templates',
+          '30-day content calendar templates',
+          'Brand voice guides (multiple industries)',
+          'Hashtag research tools and databases',
+          'Analytics dashboard templates'
+        ]
+      },
+      {
+        category: 'Automation Tools',
+        items: [
+          'Social media automation workflows',
+          'Content scheduling setups',
+          'Engagement bot configurations',
+          'AI prompt library (300+ social media prompts)'
+        ]
+      },
+      {
+        category: 'Business Assets',
+        items: [
+          'Pricing guide for social media services',
+          'Client onboarding templates',
+          'Reporting templates',
+          'Service package templates'
+        ]
+      }
+    ],
+    bonusAssets: [
+      'Private community access',
+      'Monthly strategy sessions (6 months)',
+      'Content feedback sessions',
+      'Trend alerts and updates',
+      'Lifetime access to updates'
+    ],
+    pricingJustification: 'Complete social media mastery with 500+ templates and automation systems. Comparable to agency services at $500-$2,000/month. Total content: 30+ hours of video training with immediate value through templates and automation setups that save 10+ hours/week.'
+  },
+  {
+    id: 'agency-package',
+    slug: 'agency',
+    title: 'Agency Package',
+    description: 'Build a profitable agency selling AI-powered services to business clients. Scale your operations with proven systems.',
+    tagline: 'Build a profitable agency selling AI-powered services to business clients',
+    category: 'agency',
+    price: 2997,
+    originalPrice: 4497,
+    featured: true,
+    packageImage: '/package-3.png',
+    difficulty: 'intermediate',
+    duration: 'Self-paced',
+    contentHours: '40+ hours',
+    modules: [
+      {
+        title: 'Agency Foundation & Systems',
+        description: 'Build a solid foundation for your agency',
+        hours: '8-10 hours',
+        items: [
+          'Agency business models',
+          'Pricing and service packages',
+          'Operations and workflows'
+        ]
+      },
+      {
+        title: 'AI-Powered Service Delivery',
+        description: 'Deliver exceptional services using AI tools',
+        hours: '12-15 hours',
+        items: [
+          'AI tools for each service (SEO, content, ads, web dev)',
+          'Scalable service delivery systems',
+          'Quality control with AI assistance'
+        ]
+      },
+      {
+        title: 'Client Acquisition & Retention',
+        description: 'Build a pipeline of high-value clients',
+        hours: '8-10 hours',
+        items: [
+          'AI-powered lead generation',
+          'Sales processes and proposals',
+          'Client onboarding and retention'
+        ]
+      },
+      {
+        title: 'Scaling & Team Management',
+        description: 'Scale your agency operations effectively',
+        hours: '6-8 hours',
+        items: [
+          'Hiring and training with AI',
+          'Standard operating procedures',
+          'Scaling operations'
+        ]
+      },
+      {
+        title: 'Financial Management',
+        description: 'Optimize your agency\'s financial performance',
+        hours: '4-5 hours',
+        items: [
+          'Pricing strategies',
+          'Profit optimization',
+          'Financial tracking and forecasting'
+        ]
+      }
+    ],
+    resources: [
+      {
+        category: 'Business Resources',
+        items: [
+          'Complete agency SOP library (50+ documents)',
+          'Service package templates (20+ variations)',
+          'Proposal templates ($10K-$100K+ projects)',
+          'Contract templates',
+          'Onboarding system templates',
+          'Client reporting templates (monthly/quarterly)'
+        ]
+      },
+      {
+        category: 'Operational Tools',
+        items: [
+          'AI workflow automations',
+          'Client management system setup',
+          'Project management templates',
+          'Team training materials',
+          'Quality assurance checklists'
+        ]
+      },
+      {
+        category: 'Sales & Marketing',
+        items: [
+          'Sales script library',
+          'Email sequences (cold outreach, follow-ups)',
+          'Case study templates',
+          'Testimonial collection systems',
+          'Pricing calculator tools'
+        ]
+      }
+    ],
+    bonusAssets: [
+      'Private mastermind community',
+      'Monthly group coaching calls (12 months)',
+      '1-on-1 strategy session',
+      'Access to agency case studies',
+      'Legal document templates',
+      'Lifetime updates and new content'
+    ],
+    pricingJustification: 'Complete agency scaling system with comprehensive SOP library and templates. Comparable to agency coaching programs at $2,000-$10,000+. Total content: 40+ hours of training with immediate implementation through templates. ROI potential: $10K-$50K+ monthly revenue increase.'
+  },
+  {
+    id: 'freelancing-package',
+    slug: 'freelancing',
+    title: 'Freelancing Package',
+    description: 'Offer your AI expertise as a freelancer to turn automated solutions into USD earnings. Build a successful freelancing career.',
+    tagline: 'Offer your AI expertise as a freelancer to turn automated solutions into USD earnings',
+    category: 'freelancing',
+    price: 497,
+    originalPrice: 797,
+    featured: true,
+    packageImage: '/package-4.png',
+    difficulty: 'beginner',
+    duration: 'Self-paced',
+    contentHours: '35+ hours',
+    modules: [
+      {
+        title: 'Freelancing Fundamentals',
+        description: 'Start your freelancing journey on the right foot',
+        hours: '6-8 hours',
+        items: [
+          'Starting and positioning',
+          'Niche selection with AI insights',
+          'Portfolio development'
+        ]
+      },
+      {
+        title: 'AI Tools for Freelancers',
+        description: 'Leverage AI to boost productivity and quality',
+        hours: '10-12 hours',
+        items: [
+          'Productivity tools (ChatGPT, Claude, etc.)',
+          'Project management automation',
+          'Time tracking and optimization'
+        ]
+      },
+      {
+        title: 'Client Acquisition Systems',
+        description: 'Build systems to attract high-paying clients',
+        hours: '8-10 hours',
+        items: [
+          'AI-powered outreach',
+          'Proposal writing with AI',
+          'Negotiation strategies',
+          'Building referral systems'
+        ]
+      },
+      {
+        title: 'Service Delivery & Quality',
+        description: 'Deliver exceptional work efficiently',
+        hours: '6-8 hours',
+        items: [
+          'Delivering high-quality work efficiently',
+          'Client communication automation',
+          'Project management workflows'
+        ]
+      },
+      {
+        title: 'Pricing & Financial Growth',
+        description: 'Price your services for maximum income',
+        hours: '5-6 hours',
+        items: [
+          'Pricing strategies ($50-$500+/hour)',
+          'Contract negotiation',
+          'Financial management',
+          'Scaling from freelancer to agency'
+        ]
+      }
+    ],
+    resources: [
+      {
+        category: 'Business Templates',
+        items: [
+          '100+ proposal templates (various services)',
+          '50+ contract templates',
+          'Invoice templates and systems',
+          'Client onboarding templates',
+          'Portfolio website templates',
+          'Email template library (100+ templates)'
+        ]
+      },
+      {
+        category: 'Business Tools',
+        items: [
+          'Rate calculator tool',
+          'Project scope template library',
+          'Client questionnaire templates',
+          'Time tracking setups',
+          'Automated follow-up sequences'
+        ]
+      },
+      {
+        category: 'Industry Guides',
+        items: [
+          'Writing/Content creation',
+          'Web development',
+          'Design',
+          'Marketing',
+          'Consulting'
+        ]
+      }
+    ],
+    bonusAssets: [
+      'Private freelancer community',
+      'Monthly group calls (6 months)',
+      'Q&A sessions',
+      'Job board access',
+      'Lifetime updates',
+      'Certificate of completion'
+    ],
+    pricingJustification: 'Complete freelancer business toolkit with comprehensive templates and guides. Total content: 35+ hours of training with immediate value through templates. ROI potential: $1K-$10K+ monthly income increase. Accessible pricing for individual freelancers with can pay for itself with 1-2 projects.'
+  }
 ];
 
