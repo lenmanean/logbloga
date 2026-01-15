@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, ChevronDown } from 'lucide-react';
+import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 import {
@@ -12,7 +12,10 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface NavDropdownProps {
   label: string;
@@ -119,16 +122,16 @@ export function Header() {
               onNavigate={() => router.push('/ai-to-usd')}
             >
               <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/web-apps">Web Apps</Link>
+                <Link href="/ai-to-usd/packages/web-apps">Web Apps</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/social-media">Social Media</Link>
+                <Link href="/ai-to-usd/packages/social-media">Social Media</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/agency">Agency</Link>
+                <Link href="/ai-to-usd/packages/agency">Agency</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/freelancing">Freelancing</Link>
+                <Link href="/ai-to-usd/packages/freelancing">Freelancing</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/products">All Products</Link>
@@ -165,18 +168,63 @@ export function Header() {
             </Link>
           </nav>
 
-          {/* Auth Buttons - Desktop */}
+          {/* Cart & Profile - Desktop */}
           <div className={`hidden md:flex items-center space-x-3 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            <Link href="/login">
-              <Button variant="ghost" size="sm" className="rounded-full">
-                Login
+            {/* Cart Button */}
+            <Link href="/checkout">
+              <Button variant="ghost" size="icon" className="rounded-full relative">
+                <ShoppingCart className="h-5 w-5" />
+                <span className="sr-only">Shopping cart</span>
               </Button>
             </Link>
-            <Link href="/signup">
-              <Button size="sm" className="rounded-full shadow-sm hover:shadow-md transition-shadow bg-red-500 text-white hover:bg-red-600">
-                Sign Up
-              </Button>
-            </Link>
+
+            {/* Profile Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Avatar className="h-8 w-8">
+                    <AvatarFallback className="bg-red-500 text-white">
+                      <User className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="sr-only">Account menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/account/profile" className="flex items-center">
+                    <UserCircle className="mr-2 h-4 w-4" />
+                    Profile
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/account/settings" className="flex items-center">
+                    <Settings className="mr-2 h-4 w-4" />
+                    Settings
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href="/login" className="flex items-center">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign In
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/signup" className="flex items-center">
+                    <LogIn className="mr-2 h-4 w-4" />
+                    Sign Up
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem className="text-destructive focus:text-destructive">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {/* Mobile Menu */}
@@ -199,28 +247,28 @@ export function Header() {
                   </Link>
                   <div className="flex flex-col pl-4 space-y-2">
                     <Link
-                      href="/ai-to-usd/web-apps"
+                      href="/ai-to-usd/packages/web-apps"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Web Apps
                     </Link>
                     <Link
-                      href="/ai-to-usd/social-media"
+                      href="/ai-to-usd/packages/social-media"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Social Media
                     </Link>
                     <Link
-                      href="/ai-to-usd/agency"
+                      href="/ai-to-usd/packages/agency"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Agency
                     </Link>
                     <Link
-                      href="/ai-to-usd/freelancing"
+                      href="/ai-to-usd/packages/freelancing"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
                     >
@@ -283,16 +331,34 @@ export function Header() {
                   Blog
                 </Link>
                 <div className="flex flex-col space-y-3 pt-4 border-t">
-                  <Link href="/login" onClick={() => setOpen(false)}>
-                    <Button variant="outline" className="w-full rounded-full">
-                      Login
+                  <Link href="/checkout" onClick={() => setOpen(false)}>
+                    <Button variant="outline" className="w-full rounded-full flex items-center justify-center gap-2">
+                      <ShoppingCart className="h-4 w-4" />
+                      Cart
                     </Button>
                   </Link>
-                  <Link href="/signup" onClick={() => setOpen(false)}>
-                    <Button className="w-full rounded-full bg-red-500 text-white hover:bg-red-600">
+                  <div className="flex flex-col space-y-2">
+                    <Link href="/account/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                      <UserCircle className="h-4 w-4" />
+                      Profile
+                    </Link>
+                    <Link href="/account/settings" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                      <Settings className="h-4 w-4" />
+                      Settings
+                    </Link>
+                    <Link href="/login" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                      <LogIn className="h-4 w-4" />
+                      Sign In
+                    </Link>
+                    <Link href="/signup" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                      <LogIn className="h-4 w-4" />
                       Sign Up
-                    </Button>
-                  </Link>
+                    </Link>
+                    <button onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-destructive text-destructive py-1 text-left">
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </button>
+                  </div>
                 </div>
               </nav>
             </SheetContent>
