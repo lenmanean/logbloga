@@ -15,7 +15,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuLabel,
 } from '@/components/ui/dropdown-menu';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useAuth } from '@/hooks/useAuth';
 
 interface NavDropdownProps {
   label: string;
@@ -89,10 +90,33 @@ function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }
 
 export function Header() {
   const router = useRouter();
+  const { user, isAuthenticated, isLoading } = useAuth();
   const [open, setOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
   const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+
+  // Get user initials for avatar fallback
+  const getUserInitials = (name?: string, email?: string) => {
+    if (name) {
+      return name
+        .split(' ')
+        .map(n => n[0])
+        .join('')
+        .toUpperCase()
+        .slice(0, 2);
+    }
+    if (email) {
+      return email[0].toUpperCase();
+    }
+    return 'U';
+  };
+
+  const handleSignOut = () => {
+    // TODO: Implement actual sign out logic when auth is added
+    // Example: await signOut();
+    router.push('/');
+  };
 
   const handleTypingComplete = useCallback(() => {
     setTypingComplete(true);
@@ -183,46 +207,75 @@ export function Header() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="rounded-full">
                   <Avatar className="h-8 w-8">
+                    {isAuthenticated && user?.image && (
+                      <AvatarImage src={user.image} alt={user.name || user.email || 'User'} />
+                    )}
                     <AvatarFallback className="bg-red-500 text-white">
-                      <User className="h-4 w-4" />
+                      {isAuthenticated && user ? (
+                        getUserInitials(user.name, user.email)
+                      ) : (
+                        <User className="h-4 w-4" />
+                      )}
                     </AvatarFallback>
                   </Avatar>
                   <span className="sr-only">Account menu</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/account/profile" className="flex items-center">
-                    <UserCircle className="mr-2 h-4 w-4" />
-                    Profile
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/account/settings" className="flex items-center">
-                    <Settings className="mr-2 h-4 w-4" />
-                    Settings
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href="/login" className="flex items-center">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Sign In
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/signup" className="flex items-center">
-                    <LogIn className="mr-2 h-4 w-4" />
-                    Sign Up
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem className="text-destructive focus:text-destructive">
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign Out
-                </DropdownMenuItem>
+                {isAuthenticated && user ? (
+                  <>
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {user.name || 'Account'}
+                        </p>
+                        {user.email && (
+                          <p className="text-xs leading-none text-muted-foreground">
+                            {user.email}
+                          </p>
+                        )}
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/profile" className="flex items-center">
+                        <UserCircle className="mr-2 h-4 w-4" />
+                        Profile
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/settings" className="flex items-center">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      className="text-destructive focus:text-destructive cursor-pointer"
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuLabel>Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/login" className="flex items-center">
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Sign In
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/signup" className="flex items-center">
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Sign Up
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -337,28 +390,45 @@ export function Header() {
                       Cart
                     </Button>
                   </Link>
-                  <div className="flex flex-col space-y-2">
-                    <Link href="/account/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
-                      <UserCircle className="h-4 w-4" />
-                      Profile
-                    </Link>
-                    <Link href="/account/settings" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
-                      <Settings className="h-4 w-4" />
-                      Settings
-                    </Link>
-                    <Link href="/login" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
-                      <LogIn className="h-4 w-4" />
-                      Sign In
-                    </Link>
-                    <Link href="/signup" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
-                      <LogIn className="h-4 w-4" />
-                      Sign Up
-                    </Link>
-                    <button onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-destructive text-destructive py-1 text-left">
-                      <LogOut className="h-4 w-4" />
-                      Sign Out
-                    </button>
-                  </div>
+                  {isAuthenticated && user ? (
+                    <div className="flex flex-col space-y-2">
+                      <div className="px-2 py-1 border-b mb-2">
+                        <p className="text-sm font-medium">{user.name || 'Account'}</p>
+                        {user.email && (
+                          <p className="text-xs text-muted-foreground">{user.email}</p>
+                        )}
+                      </div>
+                      <Link href="/account/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                        <UserCircle className="h-4 w-4" />
+                        Profile
+                      </Link>
+                      <Link href="/account/settings" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                        <Settings className="h-4 w-4" />
+                        Settings
+                      </Link>
+                      <button 
+                        onClick={() => {
+                          handleSignOut();
+                          setOpen(false);
+                        }} 
+                        className="flex items-center gap-2 text-base transition-colors hover:text-destructive text-destructive py-1 text-left"
+                      >
+                        <LogOut className="h-4 w-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col space-y-2">
+                      <Link href="/login" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                        <LogIn className="h-4 w-4" />
+                        Sign In
+                      </Link>
+                      <Link href="/signup" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                        <LogIn className="h-4 w-4" />
+                        Sign Up
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </nav>
             </SheetContent>
