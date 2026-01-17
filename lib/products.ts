@@ -25,8 +25,17 @@ export interface PackageResource {
   items: string[];
 }
 
+export interface PackageVariant {
+  id: string;
+  name: string;
+  description?: string;
+  price: number;
+  originalPrice?: number;
+}
+
 export interface PackageProduct extends Product {
   packageImage: string;
+  images?: string[]; // Array for multiple product images
   tagline: string;
   modules: PackageModule[];
   resources: PackageResource[];
@@ -34,6 +43,9 @@ export interface PackageProduct extends Product {
   pricingJustification: string;
   contentHours: string;
   slug: string;
+  variants?: PackageVariant[]; // For future package variations
+  rating?: number; // 0-5 rating
+  reviewCount?: number; // Number of reviews
 }
 
 export interface Category {
@@ -219,6 +231,9 @@ export const packageProducts: PackageProduct[] = [
     originalPrice: 2997,
     featured: true,
     packageImage: '/package-2.png',
+    images: ['/package-2.png'],
+    rating: 4.8,
+    reviewCount: 127,
     difficulty: 'intermediate',
     duration: 'Self-paced',
     contentHours: '40+ hours',
@@ -311,6 +326,9 @@ export const packageProducts: PackageProduct[] = [
     originalPrice: 1497,
     featured: true,
     packageImage: '/package-1.png',
+    images: ['/package-1.png'],
+    rating: 4.9,
+    reviewCount: 203,
     difficulty: 'beginner',
     duration: 'Self-paced',
     contentHours: '30+ hours',
@@ -407,6 +425,9 @@ export const packageProducts: PackageProduct[] = [
     originalPrice: 4497,
     featured: true,
     packageImage: '/package-3.png',
+    images: ['/package-3.png'],
+    rating: 4.7,
+    reviewCount: 89,
     difficulty: 'intermediate',
     duration: 'Self-paced',
     contentHours: '40+ hours',
@@ -516,6 +537,9 @@ export const packageProducts: PackageProduct[] = [
     originalPrice: 797,
     featured: true,
     packageImage: '/package-4.png',
+    images: ['/package-4.png'],
+    rating: 4.6,
+    reviewCount: 156,
     difficulty: 'beginner',
     duration: 'Self-paced',
     contentHours: '35+ hours',

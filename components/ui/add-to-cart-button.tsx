@@ -9,24 +9,26 @@ import { cn } from '@/lib/utils';
 interface AddToCartButtonProps {
   packageId: string;
   price: number;
+  quantity?: number;
   className?: string;
   size?: 'default' | 'sm' | 'lg';
 }
 
-export function AddToCartButton({ packageId, price, className, size = 'lg' }: AddToCartButtonProps) {
+export function AddToCartButton({ packageId, price, quantity = 1, className, size = 'lg' }: AddToCartButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleAddToCart = async () => {
     setIsLoading(true);
     try {
-      // Store package ID in sessionStorage for checkout
+      // Store package ID and quantity in sessionStorage for checkout
       if (typeof window !== 'undefined') {
         sessionStorage.setItem('selectedPackage', packageId);
+        sessionStorage.setItem('selectedQuantity', quantity.toString());
       }
       
       // Redirect to checkout page
-      router.push(`/checkout?package=${packageId}`);
+      router.push(`/checkout?package=${packageId}&quantity=${quantity}`);
     } catch (error) {
       console.error('Error adding to cart:', error);
       setIsLoading(false);
@@ -39,7 +41,7 @@ export function AddToCartButton({ packageId, price, className, size = 'lg' }: Ad
       disabled={isLoading}
       size={size}
       className={cn(
-        'bg-red-500 hover:bg-red-600 text-white font-semibold',
+        'bg-red-500 hover:bg-red-600 text-white font-semibold touch-manipulation',
         className
       )}
     >

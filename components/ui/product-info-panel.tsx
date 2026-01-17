@@ -1,0 +1,184 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { PackageProduct } from '@/lib/products';
+import { ReviewsSection } from '@/components/ui/reviews-section';
+import { QuantitySelector } from '@/components/ui/quantity-selector';
+import { AddToCartButton } from '@/components/ui/add-to-cart-button';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/hooks/useAuth';
+import { cn } from '@/lib/utils';
+
+interface ProductInfoPanelProps {
+  package: PackageProduct;
+  className?: string;
+  onQuantityChange?: (quantity: number) => void;
+}
+
+export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: ProductInfoPanelProps) {
+  const [quantity, setQuantity] = useState(1);
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(
+    pkg.variants && pkg.variants.length > 0 ? pkg.variants[0].id : null
+  );
+  const { isAuthenticated } = useAuth();
+
+  const currentVariant = pkg.variants?.find(v => v.id === selectedVariant);
+  const displayPrice = currentVariant?.price ?? pkg.price;
+  const displayOriginalPrice = currentVariant?.originalPrice ?? pkg.originalPrice;
+
+  const handleQuantityChange = (newQuantity: number) => {
+    setQuantity(newQuantity);
+    onQuantityChange?.(newQuantity);
+  };
+
+  const finalPrice = displayPrice * quantity;
+
+  const difficultyColors: Record<string, string> = {
+    beginner: 'bg-green-100 text-green-800 border-green-200',
+    intermediate: 'bg-blue-100 text-blue-800 border-blue-200',
+    advanced: 'bg-purple-100 text-purple-800 border-purple-200',
+  };
+
+  return (
+    <div className={cn('space-y-6', className)}>
+      {/* Category & Difficulty Badges */}
+      <div className="flex flex-wrap items-center gap-2">
+        <Badge variant="outline" className="text-xs">
+          {pkg.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+        </Badge>
+        {pkg.difficulty && (
+          <Badge variant="outline" className={cn('text-xs', difficultyColors[pkg.difficulty])}>
+            {pkg.difficulty}
+          </Badge>
+        )}
+        <Badge variant="outline" className="text-xs">
+          {pkg.contentHours}
+        </Badge>
+      </div>
+
+      {/* Product Title */}
+      <div className="mb-4">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight">
+          {pkg.title}
+        </h1>
+      </div>
+
+      {/* Price */}
+      <div className="space-y-2 mb-4">
+        <div className="flex items-baseline gap-3">
+          <span className="text-4xl md:text-5xl font-bold">${displayPrice.toLocaleString()}</span>
+          {displayOriginalPrice && (
+            <span className="text-xl text-muted-foreground line-through">
+              ${displayOriginalPrice.toLocaleString()}
+            </span>
+          )}
+        </div>
+        {displayOriginalPrice && (
+          <p className="text-sm text-muted-foreground">
+            Save ${(displayOriginalPrice - displayPrice).toLocaleString()} 
+            ({Math.round((1 - displayPrice / displayOriginalPrice) * 100)}% off)
+          </p>
+        )}
+        {pkg.duration && (
+          <p className="text-sm text-muted-foreground">
+            {pkg.duration} • Lifetime access
+          </p>
+        )}
+      </div>
+
+      {/* Reviews */}
+      {pkg.rating && pkg.reviewCount !== undefined && (
+        <div className="mb-6">
+          <ReviewsSection rating={pkg.rating} reviewCount={pkg.reviewCount} />
+        </div>
+      )}
+
+      {/* Description */}
+      <div className="mb-6">
+        <p className="text-base leading-relaxed text-muted-foreground">
+          {pkg.description}
+        </p>
+      </div>
+
+      {/* Variant Selector (if variants exist) */}
+      {pkg.variants && pkg.variants.length > 0 && (
+        <div className="space-y-2 mb-6">
+          <label htmlFor="variant-select" className="text-sm font-medium block">
+            Package Option
+          </label>
+          <Select value={selectedVariant || undefined} onValueChange={setSelectedVariant}>
+            <SelectTrigger id="variant-select" className="w-full h-11">
+              <SelectValue placeholder="Select package option" />
+            </SelectTrigger>
+            <SelectContent>
+              {pkg.variants.map((variant) => (
+                <SelectItem key={variant.id} value={variant.id}>
+                  {variant.name} - ${variant.price.toLocaleString()}
+                  {variant.description && ` (${variant.description})`}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      {/* Quantity Selector */}
+      <div className="mb-6">
+        <QuantitySelector
+          min={1}
+          max={10}
+          defaultValue={1}
+          onChange={handleQuantityChange}
+        />
+      </div>
+
+      {/* Add to Cart Button */}
+      <div className="mb-6">
+        <AddToCartButton
+          packageId={pkg.id}
+          price={finalPrice}
+          quantity={quantity}
+          size="lg"
+          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
+        />
+      </div>
+
+      {/* Membership Offer Banner (if not authenticated) */}
+      {!isAuthenticated && (
+        <div className="bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-900 rounded-md p-4 mb-6">
+          <p className="text-sm text-teal-900 dark:text-teal-100">
+            <span className="font-medium">Members save 20%!</span>{' '}
+            <Link href="/login" className="text-teal-600 dark:text-teal-400 hover:underline font-medium">
+              Login
+            </Link>
+            {' or '}
+            <Link href="/signup" className="text-teal-600 dark:text-teal-400 hover:underline font-medium">
+              Join Today
+            </Link>
+          </p>
+        </div>
+      )}
+
+      {/* Trust Indicators */}
+      <div className="grid grid-cols-2 gap-6 pt-6 border-t border-border">
+        <div>
+          <p className="font-semibold text-sm mb-1">Lifetime Access</p>
+          <p className="text-muted-foreground text-xs">One-time purchase</p>
+        </div>
+        <div>
+          <p className="font-semibold text-sm mb-1">Instant Download</p>
+          <p className="text-muted-foreground text-xs">Access immediately</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
