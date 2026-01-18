@@ -1,15 +1,64 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle2, ShoppingBag, Package } from 'lucide-react';
+import { CheckCircle2, ShoppingBag, Package, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 
+interface OrderData {
+  orderNumber: string;
+  status: string;
+}
+
 export function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
-  const orderNumber = searchParams.get('orderNumber');
+  const sessionId = searchParams.get('session_id');
+  const orderNumberParam = searchParams.get('orderNumber');
+  const [orderData, setOrderData] = useState<OrderData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function fetchOrderData() {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        // If we have a session_id, fetch order from Stripe session
+        if (sessionId) {
+          const response = await fetch(`/api/stripe/get-order-by-session?session_id=${sessionId}`);
+          if (!response.ok) {
+            throw new Error('Failed to fetch order information');
+          }
+          const data = await response.json();
+          setOrderData({
+            orderNumber: data.orderNumber || 'N/A',
+            status: data.status || 'processing',
+          });
+        } else if (orderNumberParam) {
+          // Fallback to order number if provided
+          setOrderData({
+            orderNumber: orderNumberParam,
+            status: 'pending',
+          });
+        } else {
+          setError('No order information found');
+        }
+      } catch (err) {
+        console.error('Error fetching order data:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load order information');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchOrderData();
+  }, [sessionId, orderNumberParam]);
+
+  const orderNumber = orderData?.orderNumber || orderNumberParam || 'N/A';
 
   return (
     <div className="space-y-6">
@@ -46,41 +95,54 @@ export function CheckoutSuccessContent() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          {/* Order Number */}
-          <div>
-            <p className="text-sm text-muted-foreground mb-1">Order Number</p>
-            <p className="text-lg font-semibold font-mono">
-              {orderNumber || 'N/A'}
-            </p>
-          </div>
+          {isLoading ? (
+            <div className="flex items-center justify-center py-8">
+              <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+              <span className="ml-2 text-sm text-muted-foreground">Loading order information...</span>
+            </div>
+          ) : error ? (
+            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+              {error}
+            </div>
+          ) : (
+            <>
+              {/* Order Number */}
+              <div>
+                <p className="text-sm text-muted-foreground mb-1">Order Number</p>
+                <p className="text-lg font-semibold font-mono">
+                  {orderNumber}
+                </p>
+              </div>
 
-          <Separator />
+              <Separator />
 
-          {/* What Happens Next */}
-          <div>
-            <h3 className="font-semibold mb-3 flex items-center gap-2">
-              <Package className="h-4 w-4" />
-              What Happens Next?
-            </h3>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Payment will be processed in the next step (Stripe integration coming in Phase 5)</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Once payment is confirmed, you'll receive a confirmation email with your order details</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>Your digital products will be available in your account library after payment confirmation</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
-                <span>License keys and download links will be generated automatically</span>
-              </li>
-            </ul>
-          </div>
+              {/* What Happens Next */}
+              <div>
+                <h3 className="font-semibold mb-3 flex items-center gap-2">
+                  <Package className="h-4 w-4" />
+                  What Happens Next?
+                </h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>Your payment has been processed successfully</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>You'll receive a confirmation email with your order details</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>Your digital products will be available in your account library</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span>License keys and download links will be generated automatically</span>
+                  </li>
+                </ul>
+              </div>
+            </>
+          )}
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 pt-4">

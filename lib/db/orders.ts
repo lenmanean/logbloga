@@ -58,6 +58,49 @@ export async function getOrderById(orderId: string): Promise<Order | null> {
 }
 
 /**
+ * Get order with items by ID
+ * Fetches order and associated order items
+ */
+export async function getOrderWithItems(orderId: string): Promise<OrderWithItems | null> {
+  const supabase = await createServiceRoleClient();
+
+  // Fetch order
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('id', orderId)
+    .single();
+
+  if (orderError) {
+    if (orderError.code === 'PGRST116') {
+      return null;
+    }
+    console.error('Error fetching order:', orderError);
+    throw new Error(`Failed to fetch order: ${orderError.message}`);
+  }
+
+  if (!order) {
+    return null;
+  }
+
+  // Fetch order items
+  const { data: orderItems, error: itemsError } = await supabase
+    .from('order_items')
+    .select('*')
+    .eq('order_id', orderId);
+
+  if (itemsError) {
+    console.error('Error fetching order items:', itemsError);
+    throw new Error(`Failed to fetch order items: ${itemsError.message}`);
+  }
+
+  return {
+    ...order,
+    items: orderItems || [],
+  } as OrderWithItems;
+}
+
+/**
  * Get order by order number
  * TODO: Implement in Phase 6
  */
@@ -286,6 +329,74 @@ export async function updateOrderStatus(
   if (error) {
     console.error('Error updating order:', error);
     throw new Error(`Failed to update order: ${error.message}`);
+  }
+
+  return data;
+}
+
+/**
+ * Update order with Stripe payment information
+ * Used after successful payment processing
+ */
+export async function updateOrderWithPaymentInfo(
+  orderId: string,
+  paymentInfo: {
+    stripeCheckoutSessionId?: string;
+    stripePaymentIntentId?: string;
+    status?: Order['status'];
+  }
+): Promise<Order> {
+  const supabase = await createServiceRoleClient();
+
+  const updateData: any = {};
+
+  if (paymentInfo.stripeCheckoutSessionId) {
+    updateData.stripe_checkout_session_id = paymentInfo.stripeCheckoutSessionId;
+  }
+
+  if (paymentInfo.stripePaymentIntentId) {
+    updateData.stripe_payment_intent_id = paymentInfo.stripePaymentIntentId;
+  }
+
+  if (paymentInfo.status) {
+    updateData.status = paymentInfo.status;
+  }
+
+  const { data, error } = await supabase
+    .from('orders')
+    .update(updateData)
+    .eq('id', orderId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating order with payment info:', error);
+    throw new Error(`Failed to update order: ${error.message}`);
+  }
+
+  return data;
+}
+
+/**
+ * Get order by Stripe checkout session ID
+ */
+export async function getOrderByStripeSessionId(
+  sessionId: string
+): Promise<Order | null> {
+  const supabase = await createServiceRoleClient();
+
+  const { data, error } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('stripe_checkout_session_id', sessionId)
+    .single();
+
+  if (error) {
+    if (error.code === 'PGRST116') {
+      return null;
+    }
+    console.error('Error fetching order by session ID:', error);
+    throw new Error(`Failed to fetch order: ${error.message}`);
   }
 
   return data;

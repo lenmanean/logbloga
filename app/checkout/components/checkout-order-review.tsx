@@ -28,7 +28,8 @@ export function CheckoutOrderReview() {
     setError(null);
 
     try {
-      const response = await fetch('/api/orders/create', {
+      // Step 1: Create order
+      const orderResponse = await fetch('/api/orders/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -37,15 +38,35 @@ export function CheckoutOrderReview() {
         }),
       });
 
-      if (!response.ok) {
-        const data = await response.json();
+      if (!orderResponse.ok) {
+        const data = await orderResponse.json();
         throw new Error(data.error || 'Failed to create order');
       }
 
-      const order = await response.json();
-      
-      // Redirect to success page with order ID
-      router.push(`/checkout/success?orderId=${order.id}&orderNumber=${order.order_number}`);
+      const order = await orderResponse.json();
+
+      // Step 2: Create Stripe Checkout Session
+      const sessionResponse = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderId: order.id,
+        }),
+      });
+
+      if (!sessionResponse.ok) {
+        const data = await sessionResponse.json();
+        throw new Error(data.error || 'Failed to create payment session');
+      }
+
+      const sessionData = await sessionResponse.json();
+
+      // Step 3: Redirect to Stripe Checkout
+      if (sessionData.url) {
+        window.location.href = sessionData.url;
+      } else {
+        throw new Error('No checkout URL returned from payment provider');
+      }
     } catch (err) {
       console.error('Error placing order:', err);
       setError(err instanceof Error ? err.message : 'Failed to place order. Please try again.');
@@ -169,7 +190,7 @@ export function CheckoutOrderReview() {
           <div className="rounded-md bg-muted/50 p-4 text-sm">
             <p className="text-muted-foreground">
               By placing this order, you agree to our terms and conditions. 
-              Payment will be processed in the next step after order confirmation.
+              You will be redirected to our secure payment provider to complete your purchase.
             </p>
           </div>
 
