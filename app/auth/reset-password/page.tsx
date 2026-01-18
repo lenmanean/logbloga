@@ -1,0 +1,15 @@
+import { ResetPasswordForm } from '@/components/auth/reset-password-form';
+
+export const metadata = {
+  title: 'Reset Password | LogBloga',
+  description: 'Reset your LogBloga account password',
+};
+
+export default function ResetPasswordPage() {
+  return (
+    <main className="flex min-h-screen items-center justify-center bg-background px-4 py-12">
+      <ResetPasswordForm />
+    </main>
+  );
+}
+

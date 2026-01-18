@@ -90,7 +90,7 @@ function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }
 
 export function Header() {
   const router = useRouter();
-  const { user, isAuthenticated, isLoading } = useAuth();
+  const { user, isAuthenticated, isLoading, signOut } = useAuth();
   const [open, setOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
   const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
@@ -112,10 +112,10 @@ export function Header() {
     return 'U';
   };
 
-  const handleSignOut = () => {
-    // TODO: Implement actual sign out logic when auth is added
-    // Example: await signOut();
+  const handleSignOut = async () => {
+    await signOut();
     router.push('/');
+    router.refresh();
   };
 
   const handleTypingComplete = useCallback(() => {
@@ -263,13 +263,13 @@ export function Header() {
                     <DropdownMenuLabel>Account</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/login" className="flex items-center">
+                      <Link href="/auth/signin" className="flex items-center">
                         <LogIn className="mr-2 h-4 w-4" />
                         Sign In
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/signup" className="flex items-center">
+                      <Link href="/auth/signup" className="flex items-center">
                         <LogIn className="mr-2 h-4 w-4" />
                         Sign Up
                       </Link>
@@ -419,11 +419,11 @@ export function Header() {
                     </div>
                   ) : (
                     <div className="flex flex-col space-y-2">
-                      <Link href="/login" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                      <Link href="/auth/signin" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
                         <LogIn className="h-4 w-4" />
                         Sign In
                       </Link>
-                      <Link href="/signup" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                      <Link href="/auth/signup" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
                         <LogIn className="h-4 w-4" />
                         Sign Up
                       </Link>
