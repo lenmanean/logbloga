@@ -144,3 +144,24 @@ function SignInFormContent() {
   );
 }
 
+export function SignInForm() {
+  return (
+    <Suspense fallback={
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Sign In</CardTitle>
+          <CardDescription>Enter your credentials to access your account</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="h-10 bg-muted animate-pulse rounded-md" />
+            <div className="h-10 bg-muted animate-pulse rounded-md" />
+          </div>
+        </CardContent>
+      </Card>
+    }>
+      <SignInFormContent />
+    </Suspense>
+  );
+}
+
