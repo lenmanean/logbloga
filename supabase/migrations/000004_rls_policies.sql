@@ -36,10 +36,24 @@ CREATE POLICY "Users can insert own profile"
 -- PRODUCTS POLICIES
 -- ============================================================================
 
--- Everyone can read active products
-CREATE POLICY "Products are viewable by everyone"
-  ON products FOR SELECT
-  USING (active = true);
+-- Everyone can read active products (handle both old and new table structure)
+DO $$
+BEGIN
+  -- Drop policy if it exists
+  DROP POLICY IF EXISTS "Products are viewable by everyone" ON products;
+  
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'products' AND column_name = 'active') THEN
+    -- New structure with 'active' column
+    CREATE POLICY "Products are viewable by everyone"
+      ON products FOR SELECT
+      USING (active = true);
+  ELSE
+    -- Old structure without 'active' column - show all products
+    CREATE POLICY "Products are viewable by everyone"
+      ON products FOR SELECT
+      USING (true);
+  END IF;
+END $$;
 
 -- Only authenticated users with admin role can modify products
 -- Note: Admin role check would need to be implemented in user metadata or separate table
@@ -51,15 +65,26 @@ CREATE POLICY "Products are viewable by everyone"
 -- ============================================================================
 
 -- Everyone can read product variants for active products
-CREATE POLICY "Product variants are viewable by everyone"
-  ON product_variants FOR SELECT
-  USING (
-    EXISTS (
-      SELECT 1 FROM products
-      WHERE products.id = product_variants.product_id
-      AND products.active = true
-    )
-  );
+DO $$
+BEGIN
+  DROP POLICY IF EXISTS "Product variants are viewable by everyone" ON product_variants;
+  
+  IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'products' AND column_name = 'active') THEN
+    CREATE POLICY "Product variants are viewable by everyone"
+      ON product_variants FOR SELECT
+      USING (
+        EXISTS (
+          SELECT 1 FROM products
+          WHERE products.id = product_variants.product_id
+          AND products.active = true
+        )
+      );
+  ELSE
+    CREATE POLICY "Product variants are viewable by everyone"
+      ON product_variants FOR SELECT
+      USING (true);
+  END IF;
+END $$;
 
 -- ============================================================================
 -- CART ITEMS POLICIES
