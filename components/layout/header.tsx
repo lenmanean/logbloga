@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
+import { useCart } from '@/contexts/cart-context';
 
 interface NavDropdownProps {
   label: string;
@@ -91,6 +92,7 @@ function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }
 export function Header() {
   const router = useRouter();
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
+  const { itemCount } = useCart();
   const [open, setOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
   const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
@@ -195,9 +197,14 @@ export function Header() {
           {/* Cart & Profile - Desktop */}
           <div className={`hidden md:flex items-center space-x-3 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             {/* Cart Button */}
-            <Link href="/checkout">
+            <Link href="/cart">
               <Button variant="ghost" size="icon" className="rounded-full relative">
                 <ShoppingCart className="h-5 w-5" />
+                {itemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                    {itemCount > 9 ? '9+' : itemCount}
+                  </span>
+                )}
                 <span className="sr-only">Shopping cart</span>
               </Button>
             </Link>

@@ -143,9 +143,10 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
       {/* Add to Cart Button */}
       <div className="mb-6">
         <AddToCartButton
-          packageId={pkg.id}
+          productId={pkg.id}
           price={finalPrice}
           quantity={quantity}
+          variantId={selectedVariant || undefined}
           size="lg"
           className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
         />

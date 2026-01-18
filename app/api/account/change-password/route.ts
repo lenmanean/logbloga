@@ -1,4 +1,4 @@
-import { requireAuth, getServerSupabaseUser } from '@/lib/auth/utils';
+import { requireAuth } from '@/lib/auth/utils';
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 

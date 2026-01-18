@@ -1,23 +1,27 @@
 /**
- * Shopping cart database operations
- * 
- * NOTE: This file contains stubs for future implementation.
- * Cart functionality will be implemented in Phase 3.
+ * Cart database operations
+ * Provides type-safe functions for managing shopping cart items in Supabase
  */
 
 import { createClient } from '@/lib/supabase/server';
-import type { CartItem } from '@/lib/types/database';
+import type { CartItem, Product } from '@/lib/types/database';
+
+export interface CartItemWithProduct extends CartItem {
+  product?: Product;
+}
 
 /**
- * Get user's cart items
- * TODO: Implement in Phase 3
+ * Get all cart items for a user with product details
  */
-export async function getCartItems(userId: string): Promise<CartItem[]> {
+export async function getUserCartItems(userId: string): Promise<CartItemWithProduct[]> {
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('cart_items')
-    .select('*')
+    .select(`
+      *,
+      product:products(*)
+    `)
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
 
@@ -26,75 +30,111 @@ export async function getCartItems(userId: string): Promise<CartItem[]> {
     throw new Error(`Failed to fetch cart items: ${error.message}`);
   }
 
-  return data || [];
+  // Map the data to our type structure
+  return (data || []).map((item: any) => ({
+    ...item,
+    product: item.product || undefined,
+  })) as CartItemWithProduct[];
 }
 
 /**
- * Add item to cart
- * TODO: Implement in Phase 3
+ * Add item to cart (or update quantity if item already exists)
  */
-export async function addToCart(
+export async function addCartItem(
   userId: string,
   productId: string,
-  quantity: number = 1,
+  quantity: number,
   variantId?: string
-): Promise<CartItem> {
+): Promise<CartItemWithProduct> {
   const supabase = await createClient();
+
+  // Validate product exists and is active
+  const { data: product, error: productError } = await supabase
+    .from('products')
+    .select('id, active, price')
+    .eq('id', productId)
+    .single();
+
+  if (productError || !product) {
+    throw new Error('Product not found');
+  }
+
+  if (!product.active) {
+    throw new Error('Product is no longer available');
+  }
+
+  // Check if item already exists in cart
+  let query = supabase
+    .from('cart_items')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('product_id', productId);
   
+  if (variantId) {
+    query = query.eq('variant_id', variantId);
+  } else {
+    query = query.is('variant_id', null);
+  }
+  
+  const { data: existingItem } = await query.single();
+
+  if (existingItem) {
+    // Update quantity (add to existing, max 10)
+    const newQuantity = Math.min(existingItem.quantity + quantity, 10);
+    return updateCartItem(existingItem.id, newQuantity);
+  }
+
+  // Create new cart item
   const { data, error } = await supabase
     .from('cart_items')
-    .upsert({
+    .insert({
       user_id: userId,
       product_id: productId,
       variant_id: variantId || null,
       quantity,
-    }, {
-      onConflict: 'user_id,product_id,variant_id'
     })
-    .select()
+    .select(`
+      *,
+      product:products(*)
+    `)
     .single();
 
   if (error) {
-    console.error('Error adding to cart:', error);
-    throw new Error(`Failed to add to cart: ${error.message}`);
+    console.error('Error adding cart item:', error);
+    throw new Error(`Failed to add item to cart: ${error.message}`);
   }
 
-  return data;
-}
-
-/**
- * Remove item from cart
- * TODO: Implement in Phase 3
- */
-export async function removeFromCart(cartItemId: string): Promise<void> {
-  const supabase = await createClient();
-  
-  const { error } = await supabase
-    .from('cart_items')
-    .delete()
-    .eq('id', cartItemId);
-
-  if (error) {
-    console.error('Error removing from cart:', error);
-    throw new Error(`Failed to remove from cart: ${error.message}`);
-  }
+  return {
+    ...data,
+    product: (data as any).product || undefined,
+  } as CartItemWithProduct;
 }
 
 /**
  * Update cart item quantity
- * TODO: Implement in Phase 3
  */
-export async function updateCartItemQuantity(
+export async function updateCartItem(
   cartItemId: string,
   quantity: number
-): Promise<CartItem> {
+): Promise<CartItemWithProduct> {
+  if (quantity <= 0) {
+    throw new Error('Quantity must be greater than 0');
+  }
+
+  if (quantity > 10) {
+    throw new Error('Maximum quantity is 10 per item');
+  }
+
   const supabase = await createClient();
-  
+
   const { data, error } = await supabase
     .from('cart_items')
     .update({ quantity })
     .eq('id', cartItemId)
-    .select()
+    .select(`
+      *,
+      product:products(*)
+    `)
     .single();
 
   if (error) {
@@ -102,16 +142,35 @@ export async function updateCartItemQuantity(
     throw new Error(`Failed to update cart item: ${error.message}`);
   }
 
-  return data;
+  return {
+    ...data,
+    product: (data as any).product || undefined,
+  } as CartItemWithProduct;
 }
 
 /**
- * Clear user's cart
- * TODO: Implement in Phase 3
+ * Remove item from cart
  */
-export async function clearCart(userId: string): Promise<void> {
+export async function removeCartItem(cartItemId: string): Promise<void> {
   const supabase = await createClient();
-  
+
+  const { error } = await supabase
+    .from('cart_items')
+    .delete()
+    .eq('id', cartItemId);
+
+  if (error) {
+    console.error('Error removing cart item:', error);
+    throw new Error(`Failed to remove cart item: ${error.message}`);
+  }
+}
+
+/**
+ * Clear all cart items for a user
+ */
+export async function clearUserCart(userId: string): Promise<void> {
+  const supabase = await createClient();
+
   const { error } = await supabase
     .from('cart_items')
     .delete()
@@ -123,3 +182,21 @@ export async function clearCart(userId: string): Promise<void> {
   }
 }
 
+/**
+ * Get total item count (sum of quantities) for a user's cart
+ */
+export async function getCartItemCount(userId: string): Promise<number> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('cart_items')
+    .select('quantity')
+    .eq('user_id', userId);
+
+  if (error) {
+    console.error('Error getting cart count:', error);
+    return 0;
+  }
+
+  return (data || []).reduce((sum, item) => sum + (item.quantity || 0), 0);
+}

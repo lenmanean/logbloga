@@ -63,9 +63,9 @@ export async function middleware(request: NextRequest) {
   // Refresh session
   const { data: { user } } = await supabase.auth.getUser();
 
-  // Protected routes that require authentication
-  const protectedPaths = ['/account', '/checkout'];
-  const apiProtectedPaths = ['/api/account'];
+      // Protected routes that require authentication
+      const protectedPaths = ['/account', '/checkout'];
+      const apiProtectedPaths = ['/api/account', '/api/cart'];
 
   const { pathname } = request.nextUrl;
 
