@@ -5,10 +5,19 @@
  * beyond what's generated in supabase.ts
  */
 
-import type { Product, Profile, CartItem, Order, License } from './supabase';
+import type { Database } from './supabase';
 
-// Re-export main types for convenience
-export type { Product, Profile, CartItem, Order, License };
+// Helper types for common table rows
+export type Product = Database['public']['Tables']['products']['Row'];
+export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type CartItem = Database['public']['Tables']['cart_items']['Row'];
+export type Order = Database['public']['Tables']['orders']['Row'];
+export type OrderItem = Database['public']['Tables']['order_items']['Row'];
+export type License = Database['public']['Tables']['licenses']['Row'];
+export type ProductVariant = Database['public']['Tables']['product_variants']['Row'];
+export type Coupon = Database['public']['Tables']['coupons']['Row'];
+export type Review = Database['public']['Tables']['reviews']['Row'];
+export type ProductRecommendation = Database['public']['Tables']['product_recommendations']['Row'];
 
 // Product category type
 export type ProductCategory = 'web-apps' | 'social-media' | 'agency' | 'freelancing';
