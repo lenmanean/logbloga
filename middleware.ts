@@ -65,7 +65,7 @@ export async function middleware(request: NextRequest) {
 
       // Protected routes that require authentication
       const protectedPaths = ['/account', '/checkout'];
-      const apiProtectedPaths = ['/api/account', '/api/cart'];
+      const apiProtectedPaths = ['/api/account', '/api/cart', '/api/coupons', '/api/orders'];
 
   const { pathname } = request.nextUrl;
 
