@@ -158,3 +158,24 @@ export async function searchProducts(searchTerm: string, limit = 10): Promise<Pr
   return getAllProducts({ search: searchTerm, limit });
 }
 
+/**
+ * Convert database Product to frontend Product format
+ * Handles nullable fields from database schema
+ */
+import type { Product as FrontendProduct } from '@/lib/products';
+
+export function convertDbProductToFrontendProduct(dbProduct: Product): FrontendProduct {
+  return {
+    id: dbProduct.id,
+    title: dbProduct.title || dbProduct.name || 'Untitled Product',
+    description: dbProduct.description || '',
+    category: (dbProduct.category || 'web-apps') as FrontendProduct['category'],
+    price: typeof dbProduct.price === 'number' ? dbProduct.price : parseFloat(String(dbProduct.price || 0)),
+    originalPrice: dbProduct.original_price ? (typeof dbProduct.original_price === 'number' ? dbProduct.original_price : parseFloat(String(dbProduct.original_price))) : undefined,
+    featured: dbProduct.featured || false,
+    image: dbProduct.package_image || (dbProduct.images as any)?.[0] || dbProduct.image_url || undefined,
+    difficulty: dbProduct.difficulty as FrontendProduct['difficulty'] | undefined,
+    duration: dbProduct.duration || undefined,
+  };
+}
+

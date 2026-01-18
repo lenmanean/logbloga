@@ -47,7 +47,18 @@ export interface PackageResource {
   items: string[];
 }
 
-export interface ExtendedProduct extends Product {
+export interface ExtendedProduct {
+  // All Product fields but with proper types
+  id: string;
+  title: string | null;
+  description: string | null;
+  category: string | null;
+  price: number;
+  original_price: number | null;
+  featured: boolean | null;
+  difficulty: string | null;
+  duration: string | null;
+  // Extended fields
   modules: PackageModule[];
   resources: PackageResource[];
   bonusAssets: string[];

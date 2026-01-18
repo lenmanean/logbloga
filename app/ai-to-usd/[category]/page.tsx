@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { ProductCard } from '@/components/ui/product-card';
 import { ProductCategory, categories } from '@/lib/products';
-import { getProductsByCategory } from '@/lib/db/products';
+import { getProductsByCategory, convertDbProductToFrontendProduct } from '@/lib/db/products';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -25,7 +25,10 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
   }
 
   // Fetch products from database by category
-  const categoryProducts = await getProductsByCategory(typedCategoryId);
+  const dbProducts = await getProductsByCategory(typedCategoryId);
+  
+  // Convert database products to frontend Product format
+  const categoryProducts = dbProducts.map(convertDbProductToFrontendProduct);
 
   const categoryName = getCategoryName(typedCategoryId);
 

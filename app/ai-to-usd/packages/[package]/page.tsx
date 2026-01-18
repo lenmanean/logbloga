@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { getProductBySlug } from '@/lib/db/products';
+import { PackageProduct } from '@/lib/products';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
 
 interface PackagePageProps {
@@ -26,16 +27,28 @@ export default async function PackagePage({ params }: PackagePageProps) {
   }
 
   // Convert database product to PackageProduct format expected by components
-  const packageProduct = {
-    ...packageData,
+  const packageProduct: PackageProduct = {
+    id: packageData.id,
+    title: packageData.title || packageData.name || 'Untitled Product',
+    description: packageData.description || '',
+    category: (packageData.category || 'web-apps') as PackageProduct['category'],
+    price: typeof packageData.price === 'number' ? packageData.price : parseFloat(String(packageData.price || 0)),
+    originalPrice: packageData.original_price ? (typeof packageData.original_price === 'number' ? packageData.original_price : parseFloat(String(packageData.original_price))) : undefined,
+    featured: packageData.featured || false,
+    image: packageData.package_image || (packageData.images as any)?.[0] || packageData.image_url || undefined,
+    difficulty: (packageData.difficulty as PackageProduct['difficulty']) || undefined,
+    duration: packageData.duration || undefined,
     packageImage: packageData.package_image || '',
     images: (packageData.images as string[]) || [packageData.package_image || ''],
+    tagline: packageData.tagline || '',
     modules: (packageData.modules as any) || [],
     resources: (packageData.resources as any) || [],
     bonusAssets: (packageData.bonus_assets as any) || [],
     pricingJustification: packageData.pricing_justification || '',
     contentHours: packageData.content_hours || '',
-    originalPrice: packageData.original_price || undefined,
+    slug: packageData.slug,
+    rating: packageData.rating ? (typeof packageData.rating === 'number' ? packageData.rating : parseFloat(String(packageData.rating))) : undefined,
+    reviewCount: packageData.review_count || 0,
   };
 
   const categoryLabels: Record<string, string> = {
@@ -66,7 +79,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
           <div className="w-full order-1 lg:order-1">
             <ProductImageGallery 
               images={productImages}
-              alt={packageData.title}
+              alt={packageProduct.title}
             />
           </div>
 
@@ -151,13 +164,13 @@ export default async function PackagePage({ params }: PackagePageProps) {
           </div>
         )}
 
-        {/* Related Links */}
-        <div className="flex flex-wrap gap-4 justify-center">
-          <Link href={`/ai-to-usd/${packageProduct.category}`}>
-            <Button variant="outline">
-              View {categoryLabels[packageProduct.category]} Products
-            </Button>
-          </Link>
+            {/* Related Links */}
+            <div className="flex flex-wrap gap-4 justify-center">
+              <Link href={`/ai-to-usd/${packageProduct.category}`}>
+                <Button variant="outline">
+                  View {categoryLabels[packageProduct.category] || 'Products'} Products
+                </Button>
+              </Link>
           <Link href="/ai-to-usd">
             <Button variant="outline">
               View All Packages
