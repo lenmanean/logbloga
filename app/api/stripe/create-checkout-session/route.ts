@@ -72,16 +72,23 @@ export async function POST(request: Request) {
     // Create Stripe Checkout Session
     const stripe = getStripeClient();
 
+    // Prepare metadata with proper type handling (Stripe metadata only accepts strings)
+    const metadata: Record<string, string> = {
+      orderId: order.id,
+      orderNumber: order.order_number || '',
+    };
+    
+    // Only add userId if it exists (metadata values must be strings)
+    if (order.user_id) {
+      metadata.userId = order.user_id;
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: lineItems,
-      customer_email: order.customer_email,
-      metadata: {
-        orderId: order.id,
-        orderNumber: order.order_number,
-        userId: order.user_id || '',
-      },
+      customer_email: order.customer_email || undefined,
+      metadata,
       success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/checkout?error=payment_cancelled`,
       // Allow promotion codes
