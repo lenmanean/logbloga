@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { ProductCard } from '@/components/ui/product-card';
-import { sampleProducts, ProductCategory, categories } from '@/lib/products';
+import { ProductCategory, categories } from '@/lib/products';
+import { getProductsByCategory } from '@/lib/db/products';
 
 interface CategoryPageProps {
   params: Promise<{
@@ -23,10 +24,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  // Filter products by category
-  const categoryProducts = sampleProducts.filter(
-    product => product.category === typedCategoryId
-  );
+  // Fetch products from database by category
+  const categoryProducts = await getProductsByCategory(typedCategoryId);
 
   const categoryName = getCategoryName(typedCategoryId);
 

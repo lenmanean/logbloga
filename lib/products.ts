@@ -92,6 +92,11 @@ export const categories: Category[] = [
   },
 ];
 
+/**
+ * NOTE: This data is now fallback data for backward compatibility.
+ * The application now fetches products from the database.
+ * This array will be removed after full migration verification.
+ */
 export const sampleProducts: Product[] = [
   {
     id: '1',
@@ -219,6 +224,11 @@ export const sampleProducts: Product[] = [
   },
 ];
 
+/**
+ * NOTE: This data is now fallback data for backward compatibility.
+ * The application now fetches package products from the database using getPackageProducts().
+ * This array will be removed after full migration verification.
+ */
 export const packageProducts: PackageProduct[] = [
   {
     id: 'web-apps-package',

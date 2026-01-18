@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:types": "supabase gen types typescript --local > lib/types/supabase.ts",
+    "db:types:remote": "supabase gen types typescript --project-id <project-ref> > lib/types/supabase.ts",
+    "db:migrate": "supabase db push",
+    "db:migrate:status": "supabase migration list",
+    "db:reset": "supabase db reset",
+    "db:seed": "supabase db seed"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -1,0 +1,85 @@
+/**
+ * Database type helpers and utilities
+ * 
+ * This file provides additional type utilities for database operations
+ * beyond what's generated in supabase.ts
+ */
+
+import type { Product, Profile, CartItem, Order, License } from './supabase';
+
+// Re-export main types for convenience
+export type { Product, Profile, CartItem, Order, License };
+
+// Product category type
+export type ProductCategory = 'web-apps' | 'social-media' | 'agency' | 'freelancing';
+
+// Product difficulty type
+export type ProductDifficulty = 'beginner' | 'intermediate' | 'advanced';
+
+// Order status type
+export type OrderStatus = 'pending' | 'processing' | 'completed' | 'cancelled' | 'refunded';
+
+// License status type
+export type LicenseStatus = 'active' | 'inactive' | 'revoked';
+
+// Review status type
+export type ReviewStatus = 'pending' | 'approved' | 'rejected';
+
+// Extended Product type with JSON fields parsed
+export interface PackageModule {
+  title: string;
+  description: string;
+  hours: string;
+  items: string[];
+}
+
+export interface PackageResource {
+  category: string;
+  items: string[];
+}
+
+export interface ExtendedProduct extends Product {
+  modules: PackageModule[];
+  resources: PackageResource[];
+  bonusAssets: string[];
+  images: string[];
+}
+
+// Database query result types
+export interface ProductWithRelations extends Product {
+  // Future: Add relations like reviews, variants, etc.
+}
+
+export interface CartItemWithProduct extends CartItem {
+  product?: Product;
+}
+
+export interface OrderWithItems extends Order {
+  items?: Array<{
+    id: string;
+    product_id: string | null;
+    product_name: string;
+    quantity: number;
+    unit_price: number;
+    total_price: number;
+  }>;
+}
+
+export interface LicenseWithProduct extends License {
+  product?: Product;
+}
+
+// Database operation result types
+export interface DatabaseResult<T> {
+  data: T | null;
+  error: Error | null;
+}
+
+export interface PaginatedResult<T> {
+  data: T[];
+  total: number;
+  page: number;
+  pageSize: number;
+  hasMore: boolean;
+}
+

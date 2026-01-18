@@ -1,0 +1,12 @@
+# Supabase local development files
+.branches
+.temp
+db.dump
+config.toml.bak
+
+# Supabase CLI files
+.seed.local
+
+# Logs
+*.log
+

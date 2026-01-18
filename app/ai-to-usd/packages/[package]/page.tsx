@@ -6,7 +6,7 @@ import { WhatsIncluded } from '@/components/ui/whats-included';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { packageProducts } from '@/lib/products';
+import { getProductBySlug } from '@/lib/db/products';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
 
 interface PackagePageProps {
@@ -17,11 +17,26 @@ interface PackagePageProps {
 
 export default async function PackagePage({ params }: PackagePageProps) {
   const { package: packageSlug } = await params;
-  const packageData = packageProducts.find(pkg => pkg.slug === packageSlug);
+  
+  // Fetch package from database
+  const packageData = await getProductBySlug(packageSlug);
 
   if (!packageData) {
     notFound();
   }
+
+  // Convert database product to PackageProduct format expected by components
+  const packageProduct = {
+    ...packageData,
+    packageImage: packageData.package_image || '',
+    images: (packageData.images as string[]) || [packageData.package_image || ''],
+    modules: (packageData.modules as any) || [],
+    resources: (packageData.resources as any) || [],
+    bonusAssets: (packageData.bonus_assets as any) || [],
+    pricingJustification: packageData.pricing_justification || '',
+    contentHours: packageData.content_hours || '',
+    originalPrice: packageData.original_price || undefined,
+  };
 
   const categoryLabels: Record<string, string> = {
     'web-apps': 'Web Apps',
@@ -30,7 +45,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
     'freelancing': 'Freelancing',
   };
 
-  const productImages = packageData.images || [packageData.packageImage];
+  const productImages = packageProduct.images || [packageProduct.packageImage];
 
   return (
     <main className="min-h-screen bg-background">
@@ -57,7 +72,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
 
           {/* Right Side - Product Information & Purchase */}
           <div className="w-full order-2 lg:order-2">
-            <ProductInfoPanel package={packageData} />
+            <ProductInfoPanel package={packageProduct} />
           </div>
         </div>
 
@@ -71,7 +86,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
             </CardHeader>
             <CardContent>
               <p className="text-base leading-relaxed text-muted-foreground mb-6">
-                {packageData.description}
+                {packageProduct.description}
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div className="flex items-start gap-3">
@@ -117,29 +132,30 @@ export default async function PackagePage({ params }: PackagePageProps) {
 
         {/* What's Included Section */}
         <div className="mb-12">
-          <WhatsIncluded package={packageData} />
+          <WhatsIncluded package={packageProduct} />
         </div>
 
         {/* Pricing Justification */}
-        <div className="mb-12">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Why This Price?</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground leading-relaxed">
-                {packageData.pricingJustification}
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
+        {packageProduct.pricingJustification && (
+          <div className="mb-12">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-2xl">Why This Price?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground leading-relaxed">
+                  {packageProduct.pricingJustification}
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        )}
 
         {/* Related Links */}
         <div className="flex flex-wrap gap-4 justify-center">
-          <Link href={`/ai-to-usd/${packageData.category}`}>
+          <Link href={`/ai-to-usd/${packageProduct.category}`}>
             <Button variant="outline">
-              View {categoryLabels[packageData.category]} Products
+              View {categoryLabels[packageProduct.category]} Products
             </Button>
           </Link>
           <Link href="/ai-to-usd">
