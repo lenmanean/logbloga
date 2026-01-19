@@ -48,30 +48,18 @@ export async function GET(
       );
     }
 
-    // For now, return a placeholder response
-    // In production, this would:
-    // 1. Get file from Supabase Storage (bucket: 'products')
-    // 2. Generate signed URL or stream file
-    // 3. Track download history (optional)
+    // Get file from Supabase Storage (bucket: 'digital-products')
+    const supabase = await createServiceRoleClient();
+    const filePath = `${productId}/${filename}`;
     
-    // TODO: Implement actual file download from Supabase Storage
-    // Example:
-    // const supabase = createServiceRoleClient();
-    // const { data, error } = await supabase.storage
-    //   .from('products')
-    //   .download(`${productId}/${filename}`);
-    
-    // For now, return error indicating feature not implemented
-    return NextResponse.json(
-      { error: 'Download feature is not yet implemented. Files will be available soon.' },
-      { status: 501 }
-    );
+    const { data, error } = await supabase.storage
+      .from('digital-products')
+      .download(filePath);
 
-    // When implemented, return file like this:
-    /*
     if (error || !data) {
+      console.error('Error downloading file from storage:', error);
       return NextResponse.json(
-        { error: 'File not found' },
+        { error: 'File not found or could not be downloaded' },
         { status: 404 }
       );
     }
@@ -79,14 +67,27 @@ export async function GET(
     // Convert blob to buffer for response
     const buffer = Buffer.from(await data.arrayBuffer());
 
+    // Determine content type based on file extension
+    const getContentType = (filename: string): string => {
+      const ext = filename.split('.').pop()?.toLowerCase();
+      const contentTypes: Record<string, string> = {
+        pdf: 'application/pdf',
+        zip: 'application/zip',
+        rar: 'application/x-rar-compressed',
+        '7z': 'application/x-7z-compressed',
+        txt: 'text/plain',
+        json: 'application/json',
+      };
+      return contentTypes[ext || ''] || 'application/octet-stream';
+    };
+
     return new NextResponse(buffer, {
       headers: {
-        'Content-Type': 'application/octet-stream',
+        'Content-Type': getContentType(filename),
         'Content-Disposition': `attachment; filename="${filename}"`,
         'Content-Length': buffer.length.toString(),
       },
     });
-    */
   } catch (error) {
     console.error('Error downloading file:', error);
 
