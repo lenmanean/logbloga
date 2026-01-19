@@ -4,7 +4,7 @@ import { DataTable, Column } from './data-table';
 import { OrderStatusBadge } from '@/components/orders/order-status-badge';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
-import type { Order } from '@/lib/types/database';
+import type { Order, OrderStatus } from '@/lib/types/database';
 
 interface OrderTableProps {
   orders: Order[];
@@ -36,7 +36,7 @@ export function OrderTable({ orders }: OrderTableProps) {
     {
       id: 'status',
       header: 'Status',
-      accessor: (order) => <OrderStatusBadge status={order.status} />,
+      accessor: (order) => <OrderStatusBadge status={(order.status || 'pending') as OrderStatus} />,
       sortable: true,
     },
     {
