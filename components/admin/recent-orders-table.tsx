@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import type { Order } from '@/lib/types/database';
+import type { Order, OrderStatus } from '@/lib/types/database';
 import { formatDistanceToNow } from 'date-fns';
 import { OrderStatusBadge } from '@/components/orders/order-status-badge';
 
@@ -48,7 +48,7 @@ export function RecentOrdersTable({ orders, limit = 10 }: RecentOrdersTableProps
                       >
                         {order.order_number}
                       </Link>
-                      <OrderStatusBadge status={order.status} />
+                      <OrderStatusBadge status={(order.status || 'pending') as OrderStatus} />
                     </div>
                     <p className="text-sm text-muted-foreground">
                       {order.customer_email} • {formatDistanceToNow(new Date(order.created_at || ''), { addSuffix: true })}
