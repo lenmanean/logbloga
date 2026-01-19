@@ -94,9 +94,18 @@ export async function getOrderWithItems(orderId: string): Promise<OrderWithItems
     throw new Error(`Failed to fetch order items: ${itemsError.message}`);
   }
 
+  // Return order with items mapped to expected structure
   return {
     ...order,
-    items: orderItems || [],
+    items: (orderItems || []).map(item => ({
+      id: item.id,
+      product_id: item.product_id,
+      product_name: item.product_name,
+      product_sku: item.product_sku || null,
+      quantity: item.quantity,
+      unit_price: item.unit_price,
+      total_price: item.total_price,
+    })),
   } as OrderWithItems;
 }
 
