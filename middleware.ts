@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { Database } from '@/lib/types/supabase';
+import { protectAdminRoute } from '@/lib/admin/middleware';
 
 /**
  * Middleware for session management and route protection
@@ -68,6 +69,14 @@ export async function middleware(request: NextRequest) {
       const apiProtectedPaths = ['/api/account', '/api/cart', '/api/coupons', '/api/orders'];
 
   const { pathname } = request.nextUrl;
+
+  // Protect admin routes
+  if (pathname.startsWith('/admin') || pathname.startsWith('/api/admin')) {
+    const adminRedirect = await protectAdminRoute(request);
+    if (adminRedirect) {
+      return adminRedirect;
+    }
+  }
 
   // Check if path is protected
   const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path));

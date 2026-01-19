@@ -575,6 +575,7 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
+          role: string
           stripe_customer_id: string | null
           updated_at: string | null
         }
@@ -584,6 +585,7 @@ export type Database = {
           email: string
           full_name?: string | null
           id: string
+          role?: string
           stripe_customer_id?: string | null
           updated_at?: string | null
         }
@@ -591,6 +593,7 @@ export type Database = {
           avatar_url?: string | null
           created_at?: string | null
           email?: string
+          role?: string
           stripe_customer_id?: string | null
           full_name?: string | null
           id?: string
