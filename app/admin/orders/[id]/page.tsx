@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
+import type { OrderStatus } from '@/lib/types/database';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +44,7 @@ export default async function AdminOrderDetailsPage({ params }: OrderDetailsPage
           <h1 className="text-3xl font-bold mt-2">Order {order.order_number}</h1>
         </div>
         <div className="flex gap-2">
-          <OrderStatusSelector orderId={order.id} currentStatus={order.status || 'pending'} />
+          <OrderStatusSelector orderId={order.id} currentStatus={(order.status || 'pending') as OrderStatus} />
           {order.status === 'completed' && order.stripe_payment_intent_id && (
             <RefundButton orderId={order.id} paymentIntentId={order.stripe_payment_intent_id} />
           )}
@@ -59,7 +60,7 @@ export default async function AdminOrderDetailsPage({ params }: OrderDetailsPage
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-2">
-            <OrderStatusSelector orderId={order.id} currentStatus={order.status || 'pending'} />
+            <OrderStatusSelector orderId={order.id} currentStatus={(order.status || 'pending') as OrderStatus} />
             {order.status === 'completed' && order.stripe_payment_intent_id && (
               <RefundButton orderId={order.id} paymentIntentId={order.stripe_payment_intent_id} />
             )}
