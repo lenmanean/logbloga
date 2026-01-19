@@ -1,5 +1,7 @@
 import { SignInForm } from '@/components/auth/signin-form';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Sign In | LogBloga',
   description: 'Sign in to your LogBloga account',

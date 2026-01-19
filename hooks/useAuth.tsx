@@ -59,10 +59,26 @@ function mapSupabaseUser(supabaseUser: SupabaseUser | null): User | null {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const supabase = createClient();
+  const supabase = React.useMemo(() => {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+    try {
+      return createClient();
+    } catch (error) {
+      // During static generation, env vars might not be available
+      return null;
+    }
+  }, []) as ReturnType<typeof createClient> | null;
 
   // Initialize auth state and set up listener
   useEffect(() => {
+    // Only run on client-side
+    if (typeof window === 'undefined' || !supabase) {
+      setIsLoading(false);
+      return;
+    }
+
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(mapSupabaseUser(session?.user ?? null));
@@ -90,12 +106,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => {
       subscription.unsubscribe();
     };
-  }, [supabase.auth]);
+  }, [supabase]);
 
   /**
    * Sign in with email and password
    */
   const signIn = async (email: string, password: string) => {
+    if (!supabase) {
+      return { error: new Error('Supabase client not initialized') };
+    }
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email,
@@ -116,6 +135,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * Sign up with email and password
    */
   const signUp = async (email: string, password: string, metadata?: { full_name?: string }) => {
+    if (!supabase) {
+      return { error: new Error('Supabase client not initialized') };
+    }
     try {
       const { error } = await supabase.auth.signUp({
         email,
@@ -140,6 +162,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * Sign out current user
    */
   const signOut = async () => {
+    if (!supabase) {
+      return { error: new Error('Supabase client not initialized') };
+    }
     try {
       const { error } = await supabase.auth.signOut();
 
@@ -158,6 +183,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * Reset password (send reset email)
    */
   const resetPassword = async (email: string) => {
+    if (!supabase) {
+      return { error: new Error('Supabase client not initialized') };
+    }
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
         redirectTo: `${window.location.origin}/auth/reset-password?token=reset_token`,
@@ -177,6 +205,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * Update user profile
    */
   const updateUser = async (updates: { email?: string; password?: string; data?: Record<string, any> }) => {
+    if (!supabase) {
+      return { error: new Error('Supabase client not initialized') };
+    }
     try {
       const updateData: any = {};
 
@@ -208,6 +239,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
    * Refresh the current session
    */
   const refreshSession = async () => {
+    if (!supabase) {
+      return;
+    }
     try {
       const { data: { session } } = await supabase.auth.refreshSession();
       setUser(mapSupabaseUser(session?.user ?? null));

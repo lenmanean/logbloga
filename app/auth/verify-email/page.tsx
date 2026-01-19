@@ -1,5 +1,7 @@
 import { EmailVerification } from '@/components/auth/email-verification';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
   title: 'Verify Email | LogBloga',
   description: 'Verify your email address',
