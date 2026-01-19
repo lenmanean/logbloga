@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package, BookOpen, Key } from 'lucide-react';
+import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package, BookOpen, Key, LayoutDashboard, Heart } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 import {
@@ -18,6 +18,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/contexts/cart-context';
+import { WishlistBadge } from '@/components/wishlist/wishlist-badge';
 
 interface NavDropdownProps {
   label: string;
@@ -208,6 +209,7 @@ export function Header() {
                 <span className="sr-only">Shopping cart</span>
               </Button>
             </Link>
+            {isAuthenticated && <WishlistBadge />}
 
             {/* Profile Dropdown */}
             <DropdownMenu>
@@ -244,6 +246,12 @@ export function Header() {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/account" className="flex items-center">
+                        <LayoutDashboard className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/account/profile" className="flex items-center">
                         <UserCircle className="mr-2 h-4 w-4" />

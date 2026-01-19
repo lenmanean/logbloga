@@ -575,6 +575,7 @@ export type Database = {
           email: string
           full_name: string | null
           id: string
+          stripe_customer_id: string | null
           updated_at: string | null
         }
         Insert: {
@@ -583,12 +584,14 @@ export type Database = {
           email: string
           full_name?: string | null
           id: string
+          stripe_customer_id?: string | null
           updated_at?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string | null
           email?: string
+          stripe_customer_id?: string | null
           full_name?: string | null
           id?: string
           updated_at?: string | null

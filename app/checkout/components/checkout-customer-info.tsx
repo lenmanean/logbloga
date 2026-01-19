@@ -11,11 +11,15 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { AddressSelector } from '@/components/addresses/address-selector';
+import type { SavedAddress } from '@/lib/db/addresses';
 
 export function CheckoutCustomerInfo() {
   const { customerInfo, setCustomerInfo, setCurrentStep } = useCheckout();
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [selectedBillingAddressId, setSelectedBillingAddressId] = useState<string | null>(null);
 
   const {
     register,
@@ -37,6 +41,49 @@ export function CheckoutCustomerInfo() {
       setValue('email', user.email);
     }
   }, [user?.email, customerInfo?.email, setValue]);
+
+  // Fetch saved addresses if authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetch('/api/addresses')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.addresses) {
+            setSavedAddresses(data.addresses);
+            // Auto-select default billing address if available
+            const defaultBilling = data.addresses.find(
+              (addr: SavedAddress) => addr.is_default_billing && (addr.type === 'billing' || addr.type === 'both')
+            );
+            if (defaultBilling) {
+              handleAddressSelect(defaultBilling.id);
+            }
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching addresses:', error);
+        });
+    }
+  }, [isAuthenticated]);
+
+  const handleAddressSelect = (addressId: string | null) => {
+    setSelectedBillingAddressId(addressId);
+    if (addressId) {
+      const address = savedAddresses.find((addr) => addr.id === addressId);
+      if (address) {
+        setValue('billingAddress.street', address.street || '');
+        setValue('billingAddress.city', address.city || '');
+        setValue('billingAddress.state', address.state || '');
+        setValue('billingAddress.zipCode', address.zip_code || '');
+        setValue('billingAddress.country', address.country || 'United States');
+        if (address.full_name) {
+          setValue('name', address.full_name);
+        }
+        if (address.phone) {
+          setValue('phone', address.phone);
+        }
+      }
+    }
+  };
 
   const onSubmit = async (data: CustomerInfo) => {
     setIsLoading(true);
@@ -123,6 +170,22 @@ export function CheckoutCustomerInfo() {
                 Required for some payment methods and invoices
               </p>
             </div>
+
+            {/* Saved Address Selector (if authenticated) */}
+            {isAuthenticated && savedAddresses.length > 0 && (
+              <div className="space-y-2">
+                <AddressSelector
+                  addresses={savedAddresses}
+                  selectedAddressId={selectedBillingAddressId || undefined}
+                  onSelect={handleAddressSelect}
+                  type="billing"
+                  label="Use Saved Address"
+                />
+                <p className="text-xs text-muted-foreground">
+                  Or fill in the form below to use a different address
+                </p>
+              </div>
+            )}
 
             <div className="space-y-2">
               <Label htmlFor="street">Street Address</Label>

@@ -6,6 +6,7 @@ import { PackageProduct } from '@/lib/products';
 import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
+import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
 import {
   Select,
   SelectContent,
@@ -151,6 +152,18 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
           className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
         />
       </div>
+
+      {/* Add to Wishlist Button */}
+      {isAuthenticated && (
+        <div className="mb-6">
+          <AddToWishlistButton
+            productId={pkg.id}
+            variant="outline"
+            size="lg"
+            className="w-full"
+          />
+        </div>
+      )}
 
       {/* Membership Offer Banner (if not authenticated) */}
       {!isAuthenticated && (
