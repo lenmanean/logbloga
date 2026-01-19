@@ -302,6 +302,7 @@ export async function createOrderWithItems(
       id: item.id,
       product_id: item.product_id,
       product_name: item.product_name,
+      product_sku: item.product_sku || null,
       quantity: item.quantity,
       unit_price: item.unit_price,
       total_price: item.total_price,

@@ -11,6 +11,7 @@ import Link from 'next/link';
 interface OrderData {
   orderNumber: string;
   status: string;
+  orderId?: string;
 }
 
 export function CheckoutSuccessContent() {
@@ -37,6 +38,7 @@ export function CheckoutSuccessContent() {
           setOrderData({
             orderNumber: data.orderNumber || 'N/A',
             status: data.status || 'processing',
+            orderId: data.orderId,
           });
         } else if (orderNumberParam) {
           // Fallback to order number if provided
@@ -151,11 +153,19 @@ export function CheckoutSuccessContent() {
                 Continue Shopping
               </Button>
             </Link>
-            <Link href="/account/orders" className="flex-1">
-              <Button className="w-full">
-                View Order History
-              </Button>
-            </Link>
+            {orderData?.orderId ? (
+              <Link href={`/account/orders/${orderData.orderId}`} className="flex-1">
+                <Button className="w-full">
+                  View Order Details
+                </Button>
+              </Link>
+            ) : (
+              <Link href="/account/orders" className="flex-1">
+                <Button className="w-full">
+                  View Order History
+                </Button>
+              </Link>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle } from 'lucide-react';
+import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 import {
@@ -251,6 +251,12 @@ export function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
+                      <Link href="/account/orders" className="flex items-center">
+                        <Package className="mr-2 h-4 w-4" />
+                        Orders
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
                       <Link href="/account/settings" className="flex items-center">
                         <Settings className="mr-2 h-4 w-4" />
                         Settings
@@ -408,6 +414,10 @@ export function Header() {
                       <Link href="/account/profile" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
                         <UserCircle className="h-4 w-4" />
                         Profile
+                      </Link>
+                      <Link href="/account/orders" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
+                        <Package className="h-4 w-4" />
+                        Orders
                       </Link>
                       <Link href="/account/settings" onClick={() => setOpen(false)} className="flex items-center gap-2 text-base transition-colors hover:text-primary py-1">
                         <Settings className="h-4 w-4" />
