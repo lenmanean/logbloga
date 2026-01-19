@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CheckCircle2, ShoppingBag, Package, Loader2 } from 'lucide-react';
+import { CheckCircle2, ShoppingBag, Package, Loader2, BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -12,6 +12,7 @@ interface OrderData {
   orderNumber: string;
   status: string;
   orderId?: string;
+  productIds?: string[];
 }
 
 export function CheckoutSuccessContent() {

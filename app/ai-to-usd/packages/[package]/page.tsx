@@ -6,6 +6,9 @@ import { WhatsIncluded } from '@/components/ui/whats-included';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
+import { UpsellBanner } from '@/components/recommendations/upsell-banner';
+import { CrossSellGrid } from '@/components/recommendations/cross-sell-grid';
+import { BundleOffer } from '@/components/recommendations/bundle-offer';
 import { getProductBySlug } from '@/lib/db/products';
 import { PackageProduct } from '@/lib/products';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
@@ -146,6 +149,30 @@ export default async function PackagePage({ params }: PackagePageProps) {
         {/* What's Included Section */}
         <div className="mb-12">
           <WhatsIncluded package={packageProduct} />
+        </div>
+
+        {/* Upsell Banner */}
+        <div className="mb-12">
+          <UpsellBanner productId={packageData.id} />
+        </div>
+
+        {/* Cross-sell Recommendations */}
+        <div className="mb-12">
+          <CrossSellGrid
+            productId={packageData.id}
+            title="You May Also Like"
+            limit={4}
+            excludeProductIds={[packageData.id]}
+          />
+        </div>
+
+        {/* Bundle Offer */}
+        <div className="mb-12">
+          <BundleOffer
+            productId={packageData.id}
+            title="Complete Your Collection"
+            limit={3}
+          />
         </div>
 
         {/* Pricing Justification */}

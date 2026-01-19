@@ -1,0 +1,73 @@
+[1mdiff --git a/app/api/library/[product-id]/download/route.ts b/app/api/library/[product-id]/download/route.ts[m
+[1mindex ecc5ac3..68ec62c 100644[m
+[1m--- a/app/api/library/[product-id]/download/route.ts[m
+[1m+++ b/app/api/library/[product-id]/download/route.ts[m
+[36m@@ -48,30 +48,18 @@[m [mexport async function GET([m
+       );[m
+     }[m
+ [m
+[31m-    // For now, return a placeholder response[m
+[31m-    // In production, this would:[m
+[31m-    // 1. Get file from Supabase Storage (bucket: 'products')[m
+[31m-    // 2. Generate signed URL or stream file[m
+[31m-    // 3. Track download history (optional)[m
+[32m+[m[32m    // Get file from Supabase Storage (bucket: 'digital-products')[m
+[32m+[m[32m    const supabase = await createServiceRoleClient();[m
+[32m+[m[32m    const filePath = `${productId}/${filename}`;[m
+     [m
+[31m-    // TODO: Implement actual file download from Supabase Storage[m
+[31m-    // Example:[m
+[31m-    // const supabase = createServiceRoleClient();[m
+[31m-    // const { data, error } = await supabase.storage[m
+[31m-    //   .from('products')[m
+[31m-    //   .download(`${productId}/${filename}`);[m
+[31m-    [m
+[31m-    // For now, return error indicating feature not implemented[m
+[31m-    return NextResponse.json([m
+[31m-      { error: 'Download feature is not yet implemented. Files will be available soon.' },[m
+[31m-      { status: 501 }[m
+[31m-    );[m
+[32m+[m[32m    const { data, error } = await supabase.storage[m
+[32m+[m[32m      .from('digital-products')[m
+[32m+[m[32m      .download(filePath);[m
+ [m
+[31m-    // When implemented, return file like this:[m
+[31m-    /*[m
+     if (error || !data) {[m
+[32m+[m[32m      console.error('Error downloading file from storage:', error);[m
+       return NextResponse.json([m
+[31m-        { error: 'File not found' },[m
+[32m+[m[32m        { error: 'File not found or could not be downloaded' },[m
+         { status: 404 }[m
+       );[m
+     }[m
+[36m@@ -79,14 +67,27 @@[m [mexport async function GET([m
+     // Convert blob to buffer for response[m
+     const buffer = Buffer.from(await data.arrayBuffer());[m
+ [m
+[32m+[m[32m    // Determine content type based on file extension[m
+[32m+[m[32m    const getContentType = (filename: string): string => {[m
+[32m+[m[32m      const ext = filename.split('.').pop()?.toLowerCase();[m
+[32m+[m[32m      const contentTypes: Record<string, string> = {[m
+[32m+[m[32m        pdf: 'application/pdf',[m
+[32m+[m[32m        zip: 'application/zip',[m
+[32m+[m[32m        rar: 'application/x-rar-compressed',[m
+[32m+[m[32m        '7z': 'application/x-7z-compressed',[m
+[32m+[m[32m        txt: 'text/plain',[m
+[32m+[m[32m        json: 'application/json',[m
+[32m+[m[32m      };[m
+[32m+[m[32m      return contentTypes[ext || ''] || 'application/octet-stream';[m
+[32m+[m[32m    };[m
+[32m+[m
+     return new NextResponse(buffer, {[m
+       headers: {[m
+[31m-        'Content-Type': 'application/octet-stream',[m
+[32m+[m[32m        'Content-Type': getContentType(filename),[m
+         'Content-Disposition': `attachment; filename="${filename}"`,[m
+         'Content-Length': buffer.length.toString(),[m
+       },[m
+     });[m
+[31m-    */[m
+   } catch (error) {[m
+     console.error('Error downloading file:', error);[m
+ [m
