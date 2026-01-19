@@ -75,11 +75,15 @@ export async function getCouponByIdAdmin(id: string): Promise<Coupon | null> {
 export async function createCouponAdmin(couponData: Partial<Coupon>): Promise<Coupon> {
   const supabase = await createServiceRoleClient();
 
+  if (!couponData.code) {
+    throw new Error('Coupon code is required');
+  }
+
   const { data, error } = await supabase
     .from('coupons')
     .insert({
       ...couponData,
-      code: couponData.code?.toUpperCase().trim(),
+      code: couponData.code.toUpperCase().trim(),
       created_at: new Date().toISOString(),
     })
     .select()
