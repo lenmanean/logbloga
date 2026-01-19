@@ -78,12 +78,27 @@ export async function createCouponAdmin(couponData: Partial<Coupon>): Promise<Co
   if (!couponData.code) {
     throw new Error('Coupon code is required');
   }
+  if (!couponData.type) {
+    throw new Error('Coupon type is required');
+  }
+  if (couponData.value === undefined || couponData.value === null) {
+    throw new Error('Coupon value is required');
+  }
 
   const { data, error } = await supabase
     .from('coupons')
     .insert({
-      ...couponData,
       code: couponData.code.toUpperCase().trim(),
+      type: couponData.type,
+      value: couponData.value,
+      active: couponData.active ?? true,
+      applies_to: couponData.applies_to ?? null,
+      maximum_discount: couponData.maximum_discount ?? null,
+      minimum_purchase: couponData.minimum_purchase ?? null,
+      usage_limit: couponData.usage_limit ?? null,
+      usage_count: couponData.usage_count ?? 0,
+      valid_from: couponData.valid_from ?? null,
+      valid_until: couponData.valid_until ?? null,
       created_at: new Date().toISOString(),
     })
     .select()
