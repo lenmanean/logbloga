@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { OrderStatusBadge } from '@/components/orders/order-status-badge';
 import { format } from 'date-fns';
-import type { OrderWithItems } from '@/lib/types/database';
+import type { OrderWithItems, OrderStatus } from '@/lib/types/database';
 
 interface OrderDetailsProps {
   order: OrderWithItems;
@@ -34,7 +34,7 @@ export function OrderDetails({ order }: OrderDetailsProps) {
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Status</span>
-            <OrderStatusBadge status={order.status} />
+            <OrderStatusBadge status={(order.status || 'pending') as OrderStatus} />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-sm text-muted-foreground">Order Number</span>
