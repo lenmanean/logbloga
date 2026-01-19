@@ -43,7 +43,7 @@ export default async function AdminOrderDetailsPage({ params }: OrderDetailsPage
           <h1 className="text-3xl font-bold mt-2">Order {order.order_number}</h1>
         </div>
         <div className="flex gap-2">
-          <OrderStatusSelector orderId={order.id} currentStatus={order.status} />
+          <OrderStatusSelector orderId={order.id} currentStatus={order.status || 'pending'} />
           {order.status === 'completed' && order.stripe_payment_intent_id && (
             <RefundButton orderId={order.id} paymentIntentId={order.stripe_payment_intent_id} />
           )}
@@ -59,7 +59,7 @@ export default async function AdminOrderDetailsPage({ params }: OrderDetailsPage
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex gap-2">
-            <OrderStatusSelector orderId={order.id} currentStatus={order.status} />
+            <OrderStatusSelector orderId={order.id} currentStatus={order.status || 'pending'} />
             {order.status === 'completed' && order.stripe_payment_intent_id && (
               <RefundButton orderId={order.id} paymentIntentId={order.stripe_payment_intent_id} />
             )}
