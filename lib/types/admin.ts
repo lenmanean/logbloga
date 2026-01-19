@@ -20,7 +20,7 @@ export interface AdminStats {
 
 export interface AdminFilters {
   search?: string;
-  status?: string;
+  status?: string | null;
   dateFrom?: string;
   dateTo?: string;
   category?: string;
@@ -33,7 +33,7 @@ export interface BulkAction {
   payload?: Record<string, unknown>;
 }
 
-export interface AdminOrderFilters extends AdminFilters {
+export interface AdminOrderFilters extends Omit<AdminFilters, 'status'> {
   status?: Order['status'];
   userId?: string;
 }
