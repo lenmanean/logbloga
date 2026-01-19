@@ -5,6 +5,7 @@ import { validateCoupon } from '@/lib/db/coupons';
 import { calculateOrderTotals } from '@/lib/checkout/calculations';
 import { NextResponse } from 'next/server';
 import type { CustomerInfo } from '@/lib/checkout/validation';
+import { createNotification } from '@/lib/db/notifications-db';
 
 /**
  * POST /api/orders/create
@@ -80,6 +81,52 @@ export async function POST(request: Request) {
     } catch (error) {
       console.error('Error clearing cart after order creation:', error);
       // Don't fail the order creation if cart clearing fails
+    }
+
+    // Create order confirmation notification (non-blocking)
+    try {
+      await createNotification({
+        user_id: user.id,
+        type: 'order_confirmation',
+        title: 'Order Placed',
+        message: `Your order #${order.order_number || 'N/A'} has been placed successfully.`,
+        link: `/account/orders/${order.id}`,
+        metadata: { orderId: order.id },
+      });
+    } catch (error) {
+      console.error('Error creating order confirmation notification:', error);
+    }
+
+    // Send order confirmation email (non-blocking)
+    try {
+      const { sendOrderConfirmation } = await import('@/lib/email/senders');
+      if (order.customer_email) {
+        const emailData = {
+          order: {
+            id: order.id,
+            orderNumber: order.order_number || '',
+            status: order.status || 'pending',
+            totalAmount: parseFloat(String(order.total_amount)),
+            subtotal: parseFloat(String(order.subtotal)),
+            taxAmount: order.tax_amount ? parseFloat(String(order.tax_amount)) : null,
+            discountAmount: order.discount_amount ? parseFloat(String(order.discount_amount)) : null,
+            currency: order.currency || 'USD',
+            createdAt: order.created_at || new Date().toISOString(),
+            customerEmail: order.customer_email,
+            customerName: order.customer_name,
+          },
+          items: (order.items || []).map(item => ({
+            productName: item.product_name,
+            quantity: item.quantity,
+            unitPrice: parseFloat(String(item.unit_price)),
+            total: parseFloat(String(item.total_price)),
+          })),
+        };
+        await sendOrderConfirmation(user.id, emailData);
+      }
+    } catch (error) {
+      // Log error but don't fail the order creation
+      console.error('Error sending order confirmation email:', error);
     }
 
     return NextResponse.json(order, { status: 201 });

@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/contexts/cart-context';
 import { WishlistBadge } from '@/components/wishlist/wishlist-badge';
+import { NotificationCenter } from '@/components/notifications/notification-center';
 
 interface NavDropdownProps {
   label: string;
@@ -210,6 +211,7 @@ export function Header() {
               </Button>
             </Link>
             {isAuthenticated && <WishlistBadge />}
+            {isAuthenticated && <NotificationCenter />}
 
             {/* Profile Dropdown */}
             <DropdownMenu>

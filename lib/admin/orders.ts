@@ -5,6 +5,7 @@
 
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import type { Order, OrderWithItems } from '@/lib/types/database';
+import { createNotification } from '@/lib/db/notifications-db';
 
 export interface AdminOrderFilters {
   status?: Order['status'];
@@ -115,6 +116,13 @@ export async function updateOrderStatus(
 ): Promise<Order> {
   const supabase = await createServiceRoleClient();
 
+  // Get order before update to check user_id and previous status
+  const { data: existingOrder } = await supabase
+    .from('orders')
+    .select('user_id, order_number, status')
+    .eq('id', orderId)
+    .single();
+
   const { data, error } = await supabase
     .from('orders')
     .update({ status, updated_at: new Date().toISOString() })
@@ -129,6 +137,22 @@ export async function updateOrderStatus(
 
   if (!data) {
     throw new Error('Failed to update order status: No data returned');
+  }
+
+  // Create notification for status change (non-blocking)
+  if (existingOrder?.user_id && existingOrder.status !== status) {
+    try {
+      await createNotification({
+        user_id: existingOrder.user_id,
+        type: 'order_status_update',
+        title: 'Order Status Updated',
+        message: `Your order #${existingOrder.order_number || 'N/A'} status has been updated to ${status}.`,
+        link: `/account/orders/${orderId}`,
+        metadata: { orderId, previousStatus: existingOrder.status, newStatus: status },
+      });
+    } catch (error) {
+      console.error('Error creating order status update notification:', error);
+    }
   }
 
   return data;

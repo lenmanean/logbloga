@@ -7,6 +7,7 @@ import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import type { License, LicenseStatus, LicenseWithProduct } from '@/lib/types/database';
 import { generateUniqueLicenseKey, validateLicenseKeyFormat } from '@/lib/licenses/generator';
 import { getOrderWithItems } from './orders';
+import { createNotification } from './notifications-db';
 
 /**
  * Generate a unique license key that doesn't exist in the database
@@ -155,6 +156,22 @@ export async function createLicensesForOrder(orderId: string): Promise<License[]
     } catch (error) {
       console.error(`Error creating license for product ${item.product_id}:`, error);
       // Continue with other products even if one fails
+    }
+  }
+
+  // Create license delivery notification (non-blocking)
+  if (licenses.length > 0) {
+    try {
+      await createNotification({
+        user_id: order.user_id,
+        type: 'license_delivered',
+        title: 'License Keys Generated',
+        message: `${licenses.length} license key${licenses.length > 1 ? 's' : ''} ${licenses.length > 1 ? 'have' : 'has'} been generated for your order.`,
+        link: '/account/library',
+        metadata: { orderId, licenseCount: licenses.length },
+      });
+    } catch (error) {
+      console.error('Error creating license delivery notification:', error);
     }
   }
 

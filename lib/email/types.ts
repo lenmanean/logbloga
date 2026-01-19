@@ -1,0 +1,113 @@
+/**
+ * Email type definitions
+ */
+
+export type EmailTemplate =
+  | 'order-confirmation'
+  | 'payment-receipt'
+  | 'license-delivery'
+  | 'welcome'
+  | 'password-reset'
+  | 'email-verification'
+  | 'abandoned-cart'
+  | 'order-status-update'
+  | 'product-update';
+
+export interface EmailOptions {
+  to: string | string[];
+  subject: string;
+  from?: string;
+  replyTo?: string;
+  cc?: string | string[];
+  bcc?: string | string[];
+  tags?: Array<{ name: string; value: string }>;
+  metadata?: Record<string, string>;
+}
+
+export interface EmailResult {
+  success: boolean;
+  messageId?: string;
+  error?: string;
+}
+
+export interface OrderEmailData {
+  order: {
+    id: string;
+    orderNumber: string;
+    status: string;
+    totalAmount: number;
+    subtotal: number;
+    taxAmount: number | null;
+    discountAmount: number | null;
+    currency: string;
+    createdAt: string;
+    customerEmail: string;
+    customerName: string | null;
+  };
+  items: Array<{
+    productName: string;
+    quantity: number;
+    unitPrice: number;
+    total: number;
+  }>;
+}
+
+export interface LicenseEmailData {
+  order: {
+    id: string;
+    orderNumber: string;
+    customerEmail: string;
+    customerName: string | null;
+  };
+  licenses: Array<{
+    id: string;
+    licenseKey: string;
+    productName: string;
+    productSlug: string;
+  }>;
+}
+
+export interface WelcomeEmailData {
+  user: {
+    email: string;
+    name: string | null;
+  };
+}
+
+export interface AbandonedCartEmailData {
+  user: {
+    email: string;
+    name: string | null;
+  };
+  cartItems: Array<{
+    productName: string;
+    productSlug: string;
+    quantity: number;
+    price: number;
+  }>;
+  discountCode?: string;
+}
+
+export interface OrderStatusUpdateEmailData {
+  order: {
+    id: string;
+    orderNumber: string;
+    status: string;
+    customerEmail: string;
+    customerName: string | null;
+  };
+  previousStatus?: string;
+}
+
+export interface ProductUpdateEmailData {
+  user: {
+    email: string;
+    name: string | null;
+  };
+  product: {
+    id: string;
+    name: string;
+    slug: string;
+    description: string | null;
+  };
+}
