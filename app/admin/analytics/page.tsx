@@ -72,7 +72,14 @@ export default async function AdminAnalyticsPage() {
 
       {/* Charts */}
       <div className="grid gap-6 lg:grid-cols-2">
-        <SalesChart data={orderTrends.daily.slice(-7)} period="daily" />
+        <SalesChart 
+          data={orderTrends.daily.slice(-7).map(item => ({
+            period: item.date,
+            revenue: item.revenue,
+            orders: item.count,
+          }))} 
+          period="daily" 
+        />
         <TopProducts products={productPerformance.topProducts} limit={10} />
       </div>
     </div>
