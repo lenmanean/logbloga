@@ -80,10 +80,47 @@ export async function getProductByIdAdmin(id: string): Promise<Product | null> {
 export async function createProductAdmin(productData: Partial<Product>): Promise<Product> {
   const supabase = await createServiceRoleClient();
 
+  // Validate required fields
+  if (!productData.name && !productData.title) {
+    throw new Error('Product name or title is required');
+  }
+  if (!productData.category) {
+    throw new Error('Product category is required');
+  }
+  if (productData.price === undefined || productData.price === null) {
+    throw new Error('Product price is required');
+  }
+  if (!productData.slug) {
+    throw new Error('Product slug is required');
+  }
+
   const { data, error } = await supabase
     .from('products')
     .insert({
-      ...productData,
+      name: productData.name || productData.title || '',
+      title: productData.title || productData.name || null,
+      slug: productData.slug,
+      description: productData.description ?? null,
+      category: productData.category,
+      price: productData.price,
+      original_price: productData.original_price ?? null,
+      difficulty: productData.difficulty ?? null,
+      duration: productData.duration ?? null,
+      content_hours: productData.content_hours ?? null,
+      package_image: productData.package_image ?? null,
+      image_url: productData.image_url ?? null,
+      images: productData.images ?? null,
+      tagline: productData.tagline ?? null,
+      modules: productData.modules ?? null,
+      resources: productData.resources ?? null,
+      bonus_assets: productData.bonus_assets ?? null,
+      pricing_justification: productData.pricing_justification ?? null,
+      rating: productData.rating ?? null,
+      review_count: productData.review_count ?? 0,
+      featured: productData.featured ?? false,
+      active: productData.active ?? true,
+      file_path: productData.file_path ?? null,
+      file_size: productData.file_size ?? null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     })
