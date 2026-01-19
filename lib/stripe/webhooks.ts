@@ -8,6 +8,7 @@ import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { stripeStatusToOrderStatus } from './utils';
 import type { Order } from '@/lib/types/database';
+import { createLicensesForOrder } from '@/lib/db/licenses';
 
 /**
  * Handle checkout.session.completed event
@@ -57,6 +58,16 @@ export async function handlePaymentIntentSucceeded(
   });
 
   console.log(`Order ${order.id} updated: payment succeeded, status changed to completed`);
+
+  // Generate licenses for the completed order
+  try {
+    const licenses = await createLicensesForOrder(order.id);
+    console.log(`Generated ${licenses.length} license(s) for order ${order.id}`);
+  } catch (error) {
+    // Log error but don't fail the webhook (order is already completed)
+    // This allows for manual license generation if needed
+    console.error(`Error generating licenses for order ${order.id}:`, error);
+  }
 }
 
 /**

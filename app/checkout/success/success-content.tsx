@@ -154,17 +154,31 @@ export function CheckoutSuccessContent() {
               </Button>
             </Link>
             {orderData?.orderId ? (
-              <Link href={`/account/orders/${orderData.orderId}`} className="flex-1">
-                <Button className="w-full">
-                  View Order Details
-                </Button>
-              </Link>
+              <>
+                <Link href={`/account/orders/${orderData.orderId}`} className="flex-1">
+                  <Button variant="outline" className="w-full">
+                    View Order Details
+                  </Button>
+                </Link>
+                <Link href="/account/library" className="flex-1">
+                  <Button className="w-full">
+                    Access Your Library
+                  </Button>
+                </Link>
+              </>
             ) : (
-              <Link href="/account/orders" className="flex-1">
-                <Button className="w-full">
-                  View Order History
-                </Button>
-              </Link>
+              <>
+                <Link href="/account/orders" className="flex-1">
+                  <Button variant="outline" className="w-full">
+                    View Order History
+                  </Button>
+                </Link>
+                <Link href="/account/library" className="flex-1">
+                  <Button className="w-full">
+                    Access Your Library
+                  </Button>
+                </Link>
+              </>
             )}
           </div>
         </CardContent>
