@@ -53,7 +53,7 @@ export async function storeAnalyticsEvents(
 
   // Batch insert events
   const { data, error } = await supabase
-    .from('recommendation_analytics' as any)
+    .from('recommendation_analytics')
     .insert(eventsToInsert)
     .select('id');
 
@@ -79,7 +79,7 @@ export async function getProductAnalytics(
   const supabase = await createServiceRoleClient();
 
   const { data, error } = await supabase
-    .from('recommendation_analytics' as any)
+    .from('recommendation_analytics')
     .select('*')
     .eq('product_id', productId)
     .order('timestamp', { ascending: false })
@@ -90,7 +90,7 @@ export async function getProductAnalytics(
     throw new Error(`Failed to fetch product analytics: ${error.message}`);
   }
 
-  return (data || []) as unknown as RecommendationAnalytics[];
+  return (data || []) as RecommendationAnalytics[];
 }
 
 /**
@@ -107,7 +107,7 @@ export async function getRecommendedProductAnalytics(
   const supabase = await createServiceRoleClient();
 
   const { data, error } = await supabase
-    .from('recommendation_analytics' as any)
+    .from('recommendation_analytics')
     .select('*')
     .eq('recommended_product_id', recommendedProductId)
     .order('timestamp', { ascending: false })
@@ -118,7 +118,7 @@ export async function getRecommendedProductAnalytics(
     throw new Error(`Failed to fetch recommended product analytics: ${error.message}`);
   }
 
-  return (data || []) as unknown as RecommendationAnalytics[];
+  return (data || []) as RecommendationAnalytics[];
 }
 
 /**
@@ -135,7 +135,7 @@ export async function getUserAnalytics(
   const supabase = await createServiceRoleClient();
 
   const { data, error } = await supabase
-    .from('recommendation_analytics' as any)
+    .from('recommendation_analytics')
     .select('*')
     .eq('user_id', userId)
     .order('timestamp', { ascending: false })
@@ -146,7 +146,7 @@ export async function getUserAnalytics(
     throw new Error(`Failed to fetch user analytics: ${error.message}`);
   }
 
-  return (data || []) as unknown as RecommendationAnalytics[];
+  return (data || []) as RecommendationAnalytics[];
 }
 
 /**
@@ -168,7 +168,7 @@ export async function getRecommendationConversionMetrics(
   const supabase = await createServiceRoleClient();
 
   const { data, error } = await supabase
-    .from('recommendation_analytics' as any)
+    .from('recommendation_analytics')
     .select('event')
     .eq('recommendation_id', recommendationId);
 
@@ -177,9 +177,9 @@ export async function getRecommendationConversionMetrics(
     throw new Error(`Failed to fetch conversion metrics: ${error.message}`);
   }
 
-  const views = (data as any[])?.filter((e: any) => e.event === 'view').length || 0;
-  const clicks = (data as any[])?.filter((e: any) => e.event === 'click').length || 0;
-  const purchases = (data as any[])?.filter((e: any) => e.event === 'purchase').length || 0;
+  const views = data?.filter((e) => e.event === 'view').length || 0;
+  const clicks = data?.filter((e) => e.event === 'click').length || 0;
+  const purchases = data?.filter((e) => e.event === 'purchase').length || 0;
 
   const clickThroughRate = views > 0 ? (clicks / views) * 100 : 0;
   const conversionRate = clicks > 0 ? (purchases / clicks) * 100 : 0;

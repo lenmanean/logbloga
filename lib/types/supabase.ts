@@ -769,6 +769,105 @@ export type Database = {
         }
         Relationships: []
       }
+      recently_viewed_products: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: string
+          session_id: string | null
+          user_id: string | null
+          viewed_at: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id: string
+          session_id?: string | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: string
+          session_id?: string | null
+          user_id?: string | null
+          viewed_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recently_viewed_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      recommendation_analytics: {
+        Row: {
+          created_at: string | null
+          event: string
+          id: string
+          metadata: Json | null
+          product_id: string
+          recommendation_id: string | null
+          recommended_product_id: string
+          session_id: string | null
+          timestamp: string
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event: string
+          id?: string
+          metadata?: Json | null
+          product_id: string
+          recommendation_id?: string | null
+          recommended_product_id: string
+          session_id?: string | null
+          timestamp?: string
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event?: string
+          id?: string
+          metadata?: Json | null
+          product_id?: string
+          recommendation_id?: string | null
+          recommended_product_id?: string
+          session_id?: string | null
+          timestamp?: string
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_analytics_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_analytics_recommendation_id_fkey"
+            columns: ["recommendation_id"]
+            isOneToOne: false
+            referencedRelation: "product_recommendations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "recommendation_analytics_recommended_product_id_fkey"
+            columns: ["recommended_product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       reviews: {
         Row: {
           content: string | null
