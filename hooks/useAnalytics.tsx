@@ -7,6 +7,8 @@ import { initAnalytics, trackPageView } from '@/lib/analytics/client';
 /**
  * Analytics hook
  * Tracks page views and initializes analytics on mount
+ * Note: This hook uses useSearchParams which requires Suspense boundary
+ * The AnalyticsProvider component handles this
  */
 export function useAnalytics() {
   const pathname = usePathname();
