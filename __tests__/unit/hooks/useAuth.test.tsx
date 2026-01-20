@@ -3,21 +3,29 @@ import { renderHook, waitFor } from '@testing-library/react';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { createTestUser, createTestSession } from '@/__tests__/utils/fixtures/users';
 
+// Create a shared mock client
+const mockAuth = {
+  getSession: vi.fn().mockResolvedValue({
+    data: { session: null },
+    error: null,
+  }),
+  onAuthStateChange: vi.fn(() => ({
+    data: { subscription: { unsubscribe: vi.fn() } },
+  })),
+  signInWithPassword: vi.fn(),
+  signUp: vi.fn(),
+  signOut: vi.fn(),
+  resetPasswordForEmail: vi.fn(),
+  updateUser: vi.fn(),
+};
+
+const mockClient = {
+  auth: mockAuth,
+};
+
 // Mock Supabase client
 vi.mock('@/lib/supabase/client', () => ({
-  createClient: vi.fn(() => ({
-    auth: {
-      getSession: vi.fn(),
-      onAuthStateChange: vi.fn(() => ({
-        data: { subscription: { unsubscribe: vi.fn() } },
-      })),
-      signInWithPassword: vi.fn(),
-      signUp: vi.fn(),
-      signOut: vi.fn(),
-      resetPasswordForEmail: vi.fn(),
-      updateUser: vi.fn(),
-    },
-  })),
+  createClient: vi.fn(() => mockClient),
 }));
 
 describe('useAuth', () => {
@@ -25,26 +33,37 @@ describe('useAuth', () => {
     vi.clearAllMocks();
   });
 
-  it('should provide initial loading state', () => {
+  it('should provide initial loading state', async () => {
+    // Reset getSession mock
+    mockAuth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
+
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <AuthProvider>{children}</AuthProvider>
     );
 
     const { result } = renderHook(() => useAuth(), { wrapper });
     
-    // Initially loading
-    expect(result.current.isLoading).toBe(true);
+    // Initially loading, then should finish
+    await waitFor(() => {
+      expect(result.current.isLoading).toBe(false);
+    });
     expect(result.current.user).toBeNull();
     expect(result.current.isAuthenticated).toBe(false);
   });
 
   it('should handle sign in', async () => {
-    const { createClient } = await import('@/lib/supabase/client');
-    const mockClient = createClient() as any;
     const testUser = createTestUser();
     const testSession = createTestSession(testUser);
 
-    mockClient.auth.signInWithPassword.mockResolvedValue({
+    mockAuth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
+
+    mockAuth.signInWithPassword.mockResolvedValue({
       data: { user: testUser, session: testSession },
       error: null,
     });
@@ -64,10 +83,12 @@ describe('useAuth', () => {
   });
 
   it('should handle sign in error', async () => {
-    const { createClient } = await import('@/lib/supabase/client');
-    const mockClient = createClient() as any;
+    mockAuth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
 
-    mockClient.auth.signInWithPassword.mockResolvedValue({
+    mockAuth.signInWithPassword.mockResolvedValue({
       data: { user: null, session: null },
       error: { message: 'Invalid credentials' },
     });
@@ -87,10 +108,12 @@ describe('useAuth', () => {
   });
 
   it('should handle sign out', async () => {
-    const { createClient } = await import('@/lib/supabase/client');
-    const mockClient = createClient() as any;
+    mockAuth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
 
-    mockClient.auth.signOut.mockResolvedValue({ error: null });
+    mockAuth.signOut.mockResolvedValue({ error: null });
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <AuthProvider>{children}</AuthProvider>
@@ -107,10 +130,12 @@ describe('useAuth', () => {
   });
 
   it('should handle password reset', async () => {
-    const { createClient } = await import('@/lib/supabase/client');
-    const mockClient = createClient() as any;
+    mockAuth.getSession.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
 
-    mockClient.auth.resetPasswordForEmail.mockResolvedValue({ error: null });
+    mockAuth.resetPasswordForEmail.mockResolvedValue({ error: null });
 
     const wrapper = ({ children }: { children: React.ReactNode }) => (
       <AuthProvider>{children}</AuthProvider>

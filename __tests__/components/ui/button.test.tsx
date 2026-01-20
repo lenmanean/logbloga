@@ -29,12 +29,14 @@ describe('Button Component', () => {
   it('should apply variant classes', () => {
     const { container } = render(<Button variant="destructive">Delete</Button>);
     const button = container.querySelector('button');
+    // Check for destructive variant styles
     expect(button?.className).toContain('destructive');
   });
 
   it('should apply size classes', () => {
     const { container } = render(<Button size="lg">Large Button</Button>);
     const button = container.querySelector('button');
-    expect(button?.className).toContain('lg');
+    // Size "lg" applies h-10 class, not "lg" class name
+    expect(button?.className).toContain('h-10');
   });
 });

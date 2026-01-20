@@ -3,15 +3,27 @@ import { POST } from '@/app/api/stripe/webhook/route';
 import { NextRequest } from 'next/server';
 import { createMockStripeWebhookEvent } from '@/__tests__/utils/mocks/stripe';
 
+// Mock Next.js headers
+vi.mock('next/headers', async () => {
+  const headers = vi.fn(async () => {
+    const h = new Headers();
+    h.set('stripe-signature', 'test-signature');
+    return h;
+  });
+  return {
+    headers,
+  };
+});
+
 // Mock Stripe
+const mockConstructEvent = vi.fn();
 vi.mock('@/lib/stripe/client', () => ({
   getStripeClient: vi.fn(() => ({
     webhooks: {
-      constructEvent: vi.fn((payload, signature, secret) => {
-        return JSON.parse(payload.toString());
-      }),
+      constructEvent: mockConstructEvent,
     },
   })),
+  getStripeWebhookSecret: vi.fn(() => 'test-secret'),
 }));
 
 // Mock Supabase
@@ -32,6 +44,17 @@ vi.mock('@/lib/supabase/server', () => ({
 }));
 
 describe('Stripe API Routes', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Mock webhook handlers
+    vi.mock('@/lib/stripe/webhooks', () => ({
+      handleCheckoutSessionCompleted: vi.fn(() => Promise.resolve()),
+      handlePaymentIntentSucceeded: vi.fn(() => Promise.resolve()),
+      handlePaymentIntentFailed: vi.fn(() => Promise.resolve()),
+      handleChargeRefunded: vi.fn(() => Promise.resolve()),
+    }));
+  });
+
   describe('POST /api/stripe/webhook', () => {
     it('should handle checkout.session.completed event', async () => {
       const event = createMockStripeWebhookEvent('checkout.session.completed', {
@@ -43,11 +66,10 @@ describe('Stripe API Routes', () => {
         },
       });
 
+      mockConstructEvent.mockReturnValue(event);
+
       const request = new NextRequest('http://localhost:3000/api/stripe/webhook', {
         method: 'POST',
-        headers: {
-          'stripe-signature': 'test-signature',
-        },
         body: JSON.stringify(event),
       });
 
@@ -56,18 +78,13 @@ describe('Stripe API Routes', () => {
     });
 
     it('should reject invalid signature', async () => {
-      const { getStripeClient } = await import('@/lib/stripe/client');
-      const mockStripe = getStripeClient() as any;
-
-      mockStripe.webhooks.constructEvent = vi.fn(() => {
+      // Make constructEvent throw an error for invalid signature
+      mockConstructEvent.mockImplementation(() => {
         throw new Error('Invalid signature');
       });
 
       const request = new NextRequest('http://localhost:3000/api/stripe/webhook', {
         method: 'POST',
-        headers: {
-          'stripe-signature': 'invalid-signature',
-        },
         body: JSON.stringify({}),
       });
 
@@ -82,11 +99,10 @@ describe('Stripe API Routes', () => {
         amount: 1000,
       });
 
+      mockConstructEvent.mockReturnValue(event);
+
       const request = new NextRequest('http://localhost:3000/api/stripe/webhook', {
         method: 'POST',
-        headers: {
-          'stripe-signature': 'test-signature',
-        },
         body: JSON.stringify(event),
       });
 

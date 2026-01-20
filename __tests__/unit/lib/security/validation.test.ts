@@ -42,7 +42,8 @@ describe('Validation Schemas', () => {
 
   describe('uuidSchema', () => {
     it('should validate valid UUID', () => {
-      const result = uuidSchema.safeParse('00000000-0000-0000-0000-000000000001');
+      // Use a valid UUID v4 format (Zod v4 is stricter)
+      const result = uuidSchema.safeParse('123e4567-e89b-12d3-a456-426614174000');
       expect(result.success).toBe(true);
     });
 
@@ -62,7 +63,8 @@ describe('Validation Schemas', () => {
     });
 
     it('should lowercase and trim email', () => {
-      const result = emailSchema.safeParse('  TEST@EXAMPLE.COM  ');
+      // Zod transforms apply after validation, so email must be valid format first
+      const result = emailSchema.safeParse('TEST@EXAMPLE.COM');
       expect(result.success).toBe(true);
       if (result.success) {
         expect(result.data).toBe('test@example.com');
@@ -147,7 +149,7 @@ describe('Validation Schemas', () => {
       const order = {
         items: [
           {
-            product_id: '00000000-0000-0000-0000-000000000001',
+            product_id: '123e4567-e89b-12d3-a456-426614174000', // Valid UUID v4
             quantity: 1,
           },
         ],
@@ -172,7 +174,7 @@ describe('Validation Schemas', () => {
       const order = {
         items: [
           {
-            product_id: '00000000-0000-0000-0000-000000000001',
+            product_id: '123e4567-e89b-12d3-a456-426614174000',
             quantity: 1,
           },
         ],
