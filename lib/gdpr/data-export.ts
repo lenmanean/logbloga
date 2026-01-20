@@ -86,14 +86,14 @@ export async function exportUserData(userId: string): Promise<Record<string, any
       .order('created_at', { ascending: false }),
     
     // Cookie consents
-    supabase
+    (supabase as any)
       .from('cookie_consents')
       .select('*')
       .eq('user_id', userId)
       .single(),
     
     // Consents
-    supabase
+    (supabase as any)
       .from('consents')
       .select('*')
       .eq('user_id', userId)

@@ -29,7 +29,7 @@ export async function grantConsent(
   const supabase = await createServiceRoleClient();
 
   // Check if consent already exists
-  const { data: existing } = await supabase
+  const { data: existing } = await (supabase as any)
     .from('consents')
     .select('id, granted')
     .eq('user_id', userId)
@@ -38,7 +38,7 @@ export async function grantConsent(
 
   if (existing) {
     // Update existing consent
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('consents')
       .update({
         granted: true,
@@ -54,7 +54,7 @@ export async function grantConsent(
     }
   } else {
     // Create new consent
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from('consents')
       .insert({
         user_id: userId,
@@ -80,7 +80,7 @@ export async function revokeConsent(
 ): Promise<void> {
   const supabase = await createServiceRoleClient();
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('consents')
     .update({
       granted: false,
@@ -104,7 +104,7 @@ export async function hasConsent(
 ): Promise<boolean> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('consents')
     .select('granted')
     .eq('user_id', userId)
@@ -126,7 +126,7 @@ export async function hasConsent(
 export async function getUserConsents(userId: string): Promise<Consent[]> {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('consents')
     .select('*')
     .eq('user_id', userId)
@@ -149,7 +149,7 @@ export async function getConsentHistory(
 ): Promise<Consent[]> {
   const supabase = await createClient();
 
-  let query = supabase
+  let query = (supabase as any)
     .from('consents')
     .select('*')
     .eq('user_id', userId);

@@ -25,7 +25,7 @@ export async function getCookieConsent(userId?: string): Promise<CookieConsentPr
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('cookie_consents')
     .select('essential, analytics, marketing')
     .eq('user_id', userId)
@@ -51,7 +51,7 @@ export async function saveCookieConsent(
 ): Promise<void> {
   const supabase = await createServiceRoleClient();
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('cookie_consents')
     .upsert({
       user_id: userId,
