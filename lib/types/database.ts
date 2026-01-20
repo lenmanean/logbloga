@@ -18,6 +18,9 @@ export type ProductVariant = Database['public']['Tables']['product_variants']['R
 export type Coupon = Database['public']['Tables']['coupons']['Row'];
 export type Review = Database['public']['Tables']['reviews']['Row'];
 export type ProductRecommendation = Database['public']['Tables']['product_recommendations']['Row'];
+export type BlogPost = Database['public']['Tables']['blog_posts']['Row'];
+export type BlogPostInsert = Database['public']['Tables']['blog_posts']['Insert'];
+export type BlogPostUpdate = Database['public']['Tables']['blog_posts']['Update'];
 
 // Product category type
 export type ProductCategory = 'web-apps' | 'social-media' | 'agency' | 'freelancing';
@@ -115,4 +118,6 @@ export interface PaginatedResult<T> {
   pageSize: number;
   hasMore: boolean;
 }
+
+export interface PaginatedBlogResult extends PaginatedResult<BlogPost> {}
 

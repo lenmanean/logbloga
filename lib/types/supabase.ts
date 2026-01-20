@@ -53,11 +53,12 @@ export type Database = {
       blog_posts: {
         Row: {
           author: string | null
+          content: string
           created_at: string | null
           excerpt: string | null
           featured_image: string | null
           id: string
-          mdx_file_path: string
+          mdx_file_path: string | null
           published: boolean | null
           published_at: string | null
           seo_description: string | null
@@ -69,11 +70,12 @@ export type Database = {
         }
         Insert: {
           author?: string | null
+          content: string
           created_at?: string | null
           excerpt?: string | null
           featured_image?: string | null
           id?: string
-          mdx_file_path: string
+          mdx_file_path?: string | null
           published?: boolean | null
           published_at?: string | null
           seo_description?: string | null
@@ -85,11 +87,12 @@ export type Database = {
         }
         Update: {
           author?: string | null
+          content?: string
           created_at?: string | null
           excerpt?: string | null
           featured_image?: string | null
           id?: string
-          mdx_file_path?: string
+          mdx_file_path?: string | null
           published?: boolean | null
           published_at?: string | null
           seo_description?: string | null
