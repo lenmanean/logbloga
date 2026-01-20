@@ -40,7 +40,27 @@ interface PackagePageProps {
  */
 export async function generateStaticParams() {
   try {
-    const products = await getAllProducts({ active: true });
+    // Check if environment variables are available
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.warn('Supabase environment variables not available during build - static params will be generated on-demand');
+      return [];
+    }
+
+    // Use service role client for build-time static generation
+    // Regular client requires cookies which aren't available during build
+    const { createServiceRoleClient } = await import('@/lib/supabase/server');
+    const supabase = await createServiceRoleClient();
+    
+    const { data: products, error } = await supabase
+      .from('products')
+      .select('slug')
+      .eq('active', true);
+    
+    if (error || !products) {
+      console.error('Error generating static params:', error);
+      return [];
+    }
+    
     return products.map((product) => ({
       package: product.slug,
     }));
