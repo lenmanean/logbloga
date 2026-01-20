@@ -102,7 +102,7 @@ export async function logAction(
     const supabase = await createServiceRoleClient();
 
     // Extract IP address and user agent from request if not provided
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from('audit_logs')
       .insert({
         user_id: entry.user_id || null,
@@ -167,7 +167,7 @@ export async function getUserAuditLogs(
 ): Promise<any[]> {
   const supabase = await createServiceRoleClient();
 
-  let query = supabase
+  let query = (supabase as any)
     .from('audit_logs')
     .select('*')
     .eq('user_id', userId)
@@ -216,7 +216,7 @@ export async function getAuditLogs(
 ): Promise<any[]> {
   const supabase = await createServiceRoleClient();
 
-  let query = supabase
+  let query = (supabase as any)
     .from('audit_logs')
     .select('*')
     .order('created_at', { ascending: false });

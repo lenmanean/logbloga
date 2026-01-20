@@ -79,7 +79,7 @@ export async function exportUserData(userId: string): Promise<Record<string, any
       .order('created_at', { ascending: false }),
     
     // Audit logs
-    supabase
+    (supabase as any)
       .from('audit_logs')
       .select('*')
       .eq('user_id', userId)
