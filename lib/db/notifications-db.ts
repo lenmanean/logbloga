@@ -6,6 +6,8 @@
  */
 
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
+import { mapSupabaseNotification, mapSupabaseNotifications } from '@/lib/types/mappers';
+import type { Database } from '@/lib/types/supabase';
 
 export type NotificationType =
   | 'order_confirmation'
@@ -53,7 +55,7 @@ export async function createNotification(
   const supabase = await createServiceRoleClient();
 
   const { data: notification, error } = await supabase
-    .from('notifications' as any)
+    .from('notifications')
     .insert({
       user_id: data.user_id,
       type: data.type,
@@ -75,7 +77,7 @@ export async function createNotification(
     throw new Error('Failed to create notification: No data returned');
   }
 
-  return notification as unknown as Notification;
+  return mapSupabaseNotification(notification);
 }
 
 /**
@@ -88,7 +90,7 @@ export async function getUserNotifications(
   const supabase = await createClient();
 
   let query = supabase
-    .from('notifications' as any)
+    .from('notifications')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
@@ -116,7 +118,7 @@ export async function getUserNotifications(
     throw new Error(`Failed to fetch notifications: ${error.message}`);
   }
 
-  return (data || []) as unknown as Notification[];
+  return mapSupabaseNotifications(data || []);
 }
 
 /**
@@ -126,7 +128,7 @@ export async function getUnreadCount(userId: string): Promise<number> {
   const supabase = await createClient();
 
   const { count, error } = await supabase
-    .from('notifications' as any)
+    .from('notifications')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId)
     .eq('read', false);
@@ -149,7 +151,7 @@ export async function markAsRead(
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('notifications' as any)
+    .from('notifications')
     .update({ read: true })
     .eq('id', notificationId)
     .eq('user_id', userId)
@@ -165,7 +167,7 @@ export async function markAsRead(
     throw new Error('Failed to mark notification as read: No data returned');
   }
 
-  return data as unknown as Notification;
+  return mapSupabaseNotification(data);
 }
 
 /**
@@ -175,7 +177,7 @@ export async function markAllAsRead(userId: string): Promise<void> {
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('notifications' as any)
+    .from('notifications')
     .update({ read: true })
     .eq('user_id', userId)
     .eq('read', false);
@@ -196,7 +198,7 @@ export async function deleteNotification(
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('notifications' as any)
+    .from('notifications')
     .delete()
     .eq('id', notificationId)
     .eq('user_id', userId);
@@ -214,7 +216,7 @@ export async function deleteAllRead(userId: string): Promise<void> {
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('notifications' as any)
+    .from('notifications')
     .delete()
     .eq('user_id', userId)
     .eq('read', true);

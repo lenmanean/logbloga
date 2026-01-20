@@ -215,19 +215,14 @@ export async function getPopularProducts(
 
 /**
  * Get recently viewed products for a user
- * Note: This requires a recently_viewed table or session storage
- * For now, returns empty array as this feature requires additional infrastructure
+ * Returns products the user has recently viewed, sorted by most recent
  */
 export async function getRecentlyViewed(
   userId: string,
   limit: number = 10
 ): Promise<Product[]> {
-  // TODO: Implement when recently_viewed tracking is added
-  // This would require either:
-  // 1. A recently_viewed table in the database
-  // 2. Session storage tracking
-  // 3. Client-side localStorage tracking
-  return [];
+  const { getRecentlyViewed: getRecentlyViewedProducts } = await import('./recently-viewed');
+  return getRecentlyViewedProducts(userId, limit);
 }
 
 /**

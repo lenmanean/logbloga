@@ -1,8 +1,7 @@
 /**
  * Order database operations
- * 
- * NOTE: This file contains stubs for future implementation.
- * Order functionality will be implemented in Phase 6.
+ * Provides type-safe functions for managing orders in Supabase
+ * Includes CRUD operations, order status management, and payment integration
  */
 
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
@@ -13,8 +12,8 @@ import type { OrderWithItems } from '@/lib/types/database';
 type OrderStatus = Order['status'];
 
 /**
- * Get user's orders
- * TODO: Implement in Phase 6
+ * Get all orders for a user
+ * Returns orders sorted by creation date (newest first)
  */
 export async function getUserOrders(userId: string): Promise<Order[]> {
   const supabase = await createClient();
@@ -34,8 +33,8 @@ export async function getUserOrders(userId: string): Promise<Order[]> {
 }
 
 /**
- * Get order by ID
- * TODO: Implement in Phase 6
+ * Get a single order by ID
+ * Returns null if order not found
  */
 export async function getOrderById(orderId: string): Promise<Order | null> {
   const supabase = await createClient();
@@ -111,7 +110,8 @@ export async function getOrderWithItems(orderId: string): Promise<OrderWithItems
 
 /**
  * Get order by order number
- * TODO: Implement in Phase 6
+ * Order numbers are unique identifiers in format ORD-YYYYMMDD-XXXXXX
+ * Returns null if order not found
  */
 export async function getOrderByOrderNumber(orderNumber: string): Promise<Order | null> {
   const supabase = await createClient();
@@ -135,7 +135,8 @@ export async function getOrderByOrderNumber(orderNumber: string): Promise<Order 
 
 /**
  * Create a new order
- * TODO: Implement in Phase 6 - Use service role client for admin operations
+ * Generates unique order number and creates order record
+ * Uses service role client to bypass RLS for order creation
  */
 export async function createOrder(orderData: {
   userId?: string;
@@ -321,7 +322,8 @@ export async function createOrderWithItems(
 
 /**
  * Update order status
- * TODO: Implement in Phase 6
+ * Validates status transitions and updates order record
+ * Uses service role client to ensure proper access control
  */
 export async function updateOrderStatus(
   orderId: string,

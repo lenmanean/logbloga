@@ -5,6 +5,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import type { WishlistItem, WishlistItemWithProduct, Product } from '@/lib/types/database';
+import { mapSupabaseWishlistItem, mapSupabaseWishlistItemWithProduct } from '@/lib/types/mappers';
 
 /**
  * Get user's wishlist with product data
@@ -13,7 +14,7 @@ export async function getUserWishlist(userId: string): Promise<WishlistItemWithP
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('wishlist_items' as any)
+    .from('wishlist_items')
     .select(`
       *,
       product:products(*)
@@ -31,15 +32,9 @@ export async function getUserWishlist(userId: string): Promise<WishlistItemWithP
   }
 
   // Filter out items without products and map to typed structure
-  return ((data as any[]) || [])
+  return (data as any[])
     .filter((item: any) => item.product)
-    .map((item: any) => ({
-      id: item.id,
-      user_id: item.user_id,
-      product_id: item.product_id,
-      created_at: item.created_at,
-      product: item.product as Product,
-    })) as unknown as WishlistItemWithProduct[];
+    .map((item: any) => mapSupabaseWishlistItemWithProduct(item));
 }
 
 /**
@@ -58,7 +53,7 @@ export async function addToWishlist(
   }
 
   const { data, error } = await supabase
-    .from('wishlist_items' as any)
+    .from('wishlist_items')
     .insert({
       user_id: userId,
       product_id: productId,
@@ -75,7 +70,7 @@ export async function addToWishlist(
     throw new Error('Failed to add to wishlist: No data returned');
   }
 
-  return data as unknown as WishlistItem;
+  return mapSupabaseWishlistItem(data);
 }
 
 /**
@@ -88,7 +83,7 @@ export async function removeFromWishlist(
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('wishlist_items' as any)
+    .from('wishlist_items')
     .delete()
     .eq('user_id', userId)
     .eq('product_id', productId);
@@ -109,7 +104,7 @@ export async function isInWishlist(
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('wishlist_items' as any)
+    .from('wishlist_items')
     .select('id')
     .eq('user_id', userId)
     .eq('product_id', productId)
@@ -134,7 +129,7 @@ export async function getWishlistCount(userId: string): Promise<number> {
   const supabase = await createClient();
 
   const { count, error } = await supabase
-    .from('wishlist_items' as any)
+    .from('wishlist_items')
     .select('*', { count: 'exact', head: true })
     .eq('user_id', userId);
 
@@ -156,7 +151,7 @@ export async function removeWishlistItemById(
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('wishlist_items' as any)
+    .from('wishlist_items')
     .delete()
     .eq('id', wishlistItemId)
     .eq('user_id', userId); // Ensure user owns the item

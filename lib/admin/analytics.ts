@@ -204,7 +204,7 @@ export async function getOrderTrends(
 export async function getProductPerformance(): Promise<ProductPerformance> {
   const supabase = await createServiceRoleClient();
 
-  // Get order items with product information
+  // Get order items with product information including category
   const { data: orderItems, error } = await supabase
     .from('order_items')
     .select(`
@@ -212,7 +212,8 @@ export async function getProductPerformance(): Promise<ProductPerformance> {
       product_name,
       quantity,
       total_price,
-      order:orders!inner(status, created_at)
+      order:orders!inner(status, created_at),
+      product:products(id, category)
     `)
     .eq('order.status', 'completed');
 
@@ -241,8 +242,15 @@ export async function getProductPerformance(): Promise<ProductPerformance> {
         revenue: productData.revenue + revenue,
       });
 
-      // Get product category (simplified - would need to join with products table)
-      // For now, we'll skip category grouping
+      // Category stats - get category from product relation
+      const product = item.product as any;
+      const category = product?.category || 'uncategorized';
+      
+      const categoryData = categoryMap.get(category) || { sales: 0, revenue: 0 };
+      categoryMap.set(category, {
+        sales: categoryData.sales + quantity,
+        revenue: categoryData.revenue + revenue,
+      });
     }
   }
 
@@ -256,8 +264,14 @@ export async function getProductPerformance(): Promise<ProductPerformance> {
     .sort((a, b) => b.revenue - a.revenue)
     .slice(0, 10);
 
-  // TODO: Implement category grouping when we have product data
-  const salesByCategory: ProductPerformance['salesByCategory'] = [];
+  // Calculate sales by category
+  const salesByCategory: ProductPerformance['salesByCategory'] = Array.from(categoryMap.entries())
+    .map(([category, data]) => ({
+      category,
+      sales: data.sales,
+      revenue: data.revenue,
+    }))
+    .sort((a, b) => b.revenue - a.revenue);
 
   return {
     topProducts,

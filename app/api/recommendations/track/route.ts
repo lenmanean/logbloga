@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import type { RecommendationAnalyticsEvent } from '@/lib/recommendations/analytics';
+import { storeAnalyticsEvents } from '@/lib/db/recommendation-analytics';
 
 export async function POST(request: Request) {
   try {
@@ -38,22 +39,27 @@ export async function POST(request: Request) {
       }
     }
 
-    // In a production environment, you would:
-    // 1. Store events in a database (e.g., recommendation_analytics table)
-    // 2. Send to analytics service (e.g., Google Analytics, Mixpanel)
-    // 3. Process for real-time recommendations optimization
+    // Store events in database
+    let storedCount = 0;
+    try {
+      storedCount = await storeAnalyticsEvents(validEvents);
+    } catch (storageError) {
+      console.error('Error storing analytics events:', storageError);
+      // Don't fail the request if storage fails - events are still logged
+      // This allows the system to continue functioning even if analytics storage is temporarily unavailable
+    }
 
-    // For now, we'll just log the events
-    // In production, implement proper storage
-    console.log('Analytics events received:', validEvents.length);
-
-    // TODO: Store in database or analytics service
+    // Optional: Send to external analytics service (e.g., Google Analytics, Mixpanel)
+    // This can be added later as an additional analytics destination
     // Example:
-    // await storeAnalyticsEvents(validEvents);
+    // if (process.env.GOOGLE_ANALYTICS_ID) {
+    //   await sendToGoogleAnalytics(validEvents);
+    // }
 
     return NextResponse.json({
       success: true,
       eventsProcessed: validEvents.length,
+      eventsStored: storedCount,
     });
   } catch (error) {
     console.error('Error tracking analytics:', error);

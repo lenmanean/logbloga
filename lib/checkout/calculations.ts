@@ -6,6 +6,7 @@
 import type { CartItemWithProduct } from '@/lib/db/cart';
 import type { Coupon } from '@/lib/types/database';
 import { calculateCartTotal } from '@/lib/cart/utils';
+import { applyCoupon } from '@/lib/db/coupons';
 
 export interface OrderTotals {
   subtotal: number;
@@ -23,39 +24,19 @@ export function calculateSubtotal(items: CartItemWithProduct[]): number {
 
 /**
  * Calculate discount amount from coupon
- * Note: This is a helper that uses the coupon's applyCoupon function logic
- * For actual discount calculation with coupon, use the coupon's applyCoupon function
+ * Delegates to applyCoupon() from lib/db/coupons.ts to avoid code duplication
+ * Returns only the discount amount (not the final total)
  */
 export function calculateDiscount(subtotal: number, coupon?: Coupon | null): number {
   if (!coupon) {
     return 0;
   }
 
-  let discountAmount = 0;
-
-  if (coupon.type === 'percentage') {
-    // Percentage discount
-    discountAmount = (subtotal * coupon.value) / 100;
-
-    // Apply maximum discount limit if specified
-    if (coupon.maximum_discount && discountAmount > coupon.maximum_discount) {
-      discountAmount = coupon.maximum_discount;
-    }
-  } else if (coupon.type === 'fixed_amount') {
-    // Fixed amount discount
-    discountAmount = coupon.value;
-
-    // Don't discount more than the subtotal
-    if (discountAmount > subtotal) {
-      discountAmount = subtotal;
-    }
-  }
-
-  // Ensure discount is not negative
-  discountAmount = Math.max(0, discountAmount);
-
-  // Round to 2 decimal places
-  return Math.round(discountAmount * 100) / 100;
+  // Use the centralized applyCoupon function
+  const result = applyCoupon(coupon, subtotal);
+  
+  // Return only the discount amount (not the final total)
+  return result.discountAmount;
 }
 
 /**

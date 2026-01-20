@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server';
+import { mapSupabaseAddress, mapSupabaseAddresses } from '@/lib/types/mappers';
 
 export type AddressType = 'billing' | 'shipping' | 'both';
 
@@ -46,7 +47,7 @@ export async function getUserAddresses(userId: string): Promise<SavedAddress[]> 
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .select('*')
     .eq('user_id', userId)
     .order('created_at', { ascending: false });
@@ -56,7 +57,7 @@ export async function getUserAddresses(userId: string): Promise<SavedAddress[]> 
     throw new Error(`Failed to fetch addresses: ${error.message}`);
   }
 
-  return (data || []) as unknown as SavedAddress[];
+  return mapSupabaseAddresses(data || []);
 }
 
 /**
@@ -71,7 +72,7 @@ export async function getDefaultAddress(
   const field = type === 'billing' ? 'is_default_billing' : 'is_default_shipping';
 
   const { data, error } = await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .select('*')
     .eq('user_id', userId)
     .eq(field, true)
@@ -86,7 +87,7 @@ export async function getDefaultAddress(
     throw new Error(`Failed to fetch default address: ${error.message}`);
   }
 
-  return data as unknown as SavedAddress | null;
+  return data ? mapSupabaseAddress(data) : null;
 }
 
 /**
@@ -101,7 +102,7 @@ export async function createAddress(
   // If setting as default, unset other defaults of the same type
   if (addressData.is_default_billing) {
     await supabase
-      .from('saved_addresses' as any)
+      .from('saved_addresses')
       .update({ is_default_billing: false })
       .eq('user_id', userId)
       .eq('is_default_billing', true);
@@ -109,14 +110,14 @@ export async function createAddress(
 
   if (addressData.is_default_shipping) {
     await supabase
-      .from('saved_addresses' as any)
+      .from('saved_addresses')
       .update({ is_default_shipping: false })
       .eq('user_id', userId)
       .eq('is_default_shipping', true);
   }
 
   const { data, error } = await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .insert({
       user_id: userId,
       ...addressData,
@@ -134,7 +135,7 @@ export async function createAddress(
     throw new Error('Failed to create address: No data returned');
   }
 
-  return data as unknown as SavedAddress;
+  return mapSupabaseAddress(data);
 }
 
 /**
@@ -150,7 +151,7 @@ export async function updateAddress(
   // If setting as default, unset other defaults of the same type
   if (updates.is_default_billing) {
     await supabase
-      .from('saved_addresses' as any)
+      .from('saved_addresses')
       .update({ is_default_billing: false })
       .eq('user_id', userId)
       .eq('is_default_billing', true)
@@ -159,7 +160,7 @@ export async function updateAddress(
 
   if (updates.is_default_shipping) {
     await supabase
-      .from('saved_addresses' as any)
+      .from('saved_addresses')
       .update({ is_default_shipping: false })
       .eq('user_id', userId)
       .eq('is_default_shipping', true)
@@ -167,7 +168,7 @@ export async function updateAddress(
   }
 
   const { data, error } = await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .update({
       ...updates,
       updated_at: new Date().toISOString(),
@@ -186,7 +187,7 @@ export async function updateAddress(
     throw new Error('Failed to update address: No data returned');
   }
 
-  return data as unknown as SavedAddress;
+  return mapSupabaseAddress(data);
 }
 
 /**
@@ -199,7 +200,7 @@ export async function deleteAddress(
   const supabase = await createClient();
 
   const { error } = await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .delete()
     .eq('id', addressId)
     .eq('user_id', userId); // Ensure user owns the address
@@ -224,7 +225,7 @@ export async function setDefaultAddress(
 
   // Unset other defaults of the same type
   await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .update({ [field]: false })
     .eq('user_id', userId)
     .eq(field, true)
@@ -232,7 +233,7 @@ export async function setDefaultAddress(
 
   // Set this address as default
   const { data, error } = await supabase
-    .from('saved_addresses' as any)
+    .from('saved_addresses')
     .update({
       [field]: true,
       updated_at: new Date().toISOString(),
@@ -251,6 +252,6 @@ export async function setDefaultAddress(
     throw new Error('Failed to set default address: No data returned');
   }
 
-  return data as unknown as SavedAddress;
+  return mapSupabaseAddress(data);
 }
 

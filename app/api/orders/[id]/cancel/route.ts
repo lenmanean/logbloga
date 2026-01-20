@@ -7,6 +7,9 @@ import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
 import { getOrderById, updateOrderStatus } from '@/lib/db/orders';
 import { canCancelOrder, isValidStatusTransition } from '@/lib/orders/status';
+import { createFullRefund, StripeRefundError } from '@/lib/stripe/refunds';
+import { logActionWithRequest, AuditActions, ResourceTypes } from '@/lib/security/audit';
+import { createNotification } from '@/lib/db/notifications-db';
 import type { OrderStatus } from '@/lib/types/database';
 
 interface RouteParams {
@@ -60,17 +63,120 @@ export async function POST(request: Request, { params }: RouteParams) {
       );
     }
 
-    // Update order status to cancelled
-    const updatedOrder = await updateOrderStatus(id, 'cancelled');
+    // If payment was processed, initiate Stripe refund before cancelling
+    let refundResult = null;
+    if (order.stripe_payment_intent_id && (order.status === 'processing' || order.status === 'completed')) {
+      try {
+        // Create full refund for the order
+        refundResult = await createFullRefund(
+          order.stripe_payment_intent_id,
+          'requested_by_customer',
+          {
+            order_id: order.id,
+            order_number: order.order_number || '',
+            cancelled_by: 'customer',
+          }
+        );
 
-    // TODO: If payment was processed, initiate Stripe refund
-    // This can be implemented later or in admin functionality
-    if (order.stripe_payment_intent_id) {
-      console.log(`Order ${id} cancelled with payment intent ${order.stripe_payment_intent_id}. Refund should be processed.`);
-      // Future: Integrate with Stripe refund API
+        // Log refund action
+        await logActionWithRequest(
+          {
+            user_id: user.id,
+            action: AuditActions.ORDER_REFUND,
+            resource_type: ResourceTypes.ORDER,
+            resource_id: order.id,
+            metadata: {
+              refund_id: refundResult.id,
+              refund_amount: refundResult.amount,
+              refund_status: refundResult.status,
+            },
+          },
+          request
+        );
+
+        // Create notification for user about refund
+        try {
+          await createNotification({
+            user_id: user.id,
+            type: 'order_status_update',
+            title: 'Order Refunded',
+            message: `Your order #${order.order_number || 'N/A'} has been cancelled and refunded. The refund amount of $${(refundResult.amount / 100).toFixed(2)} will be processed to your original payment method.`,
+            link: `/account/orders/${order.id}`,
+            metadata: {
+              orderId: order.id,
+              refundId: refundResult.id,
+              refundAmount: refundResult.amount,
+            },
+          });
+        } catch (notificationError) {
+          console.error('Error creating refund notification:', notificationError);
+          // Don't fail the cancellation if notification fails
+        }
+      } catch (refundError) {
+        // If refund fails, log error but still allow cancellation
+        // This allows manual refund processing if needed
+        console.error('Error processing refund for order cancellation:', refundError);
+        
+        // Log refund failure
+        await logActionWithRequest(
+          {
+            user_id: user.id,
+            action: AuditActions.ORDER_REFUND,
+            resource_type: ResourceTypes.ORDER,
+            resource_id: order.id,
+            metadata: {
+              refund_attempted: true,
+              refund_failed: true,
+              error: refundError instanceof Error ? refundError.message : 'Unknown error',
+            },
+          },
+          request
+        );
+
+        // Return error if refund is critical (payment was processed)
+        if (order.status === 'completed') {
+          return NextResponse.json(
+            {
+              error: 'Order cancellation failed: Unable to process refund. Please contact support.',
+              refundError: refundError instanceof StripeRefundError ? refundError.message : 'Refund processing failed',
+            },
+            { status: 500 }
+          );
+        }
+
+        // For processing orders, allow cancellation but warn about refund
+        console.warn(`Order ${id} cancelled but refund failed. Manual refund may be required.`);
+      }
     }
 
-    return NextResponse.json(updatedOrder);
+    // Update order status to cancelled (or refunded if refund was successful)
+    const newStatus: OrderStatus = refundResult ? 'refunded' : 'cancelled';
+    const updatedOrder = await updateOrderStatus(id, newStatus);
+
+    // Log order cancellation
+    await logActionWithRequest(
+      {
+        user_id: user.id,
+        action: AuditActions.ORDER_CANCEL,
+        resource_type: ResourceTypes.ORDER,
+        resource_id: order.id,
+        metadata: {
+          previous_status: order.status,
+          new_status: newStatus,
+          refund_processed: !!refundResult,
+        },
+      },
+      request
+    );
+
+    return NextResponse.json({
+      ...updatedOrder,
+      refund: refundResult ? {
+        id: refundResult.id,
+        amount: refundResult.amount,
+        status: refundResult.status,
+      } : null,
+    });
   } catch (error) {
     console.error('Error cancelling order:', error);
 

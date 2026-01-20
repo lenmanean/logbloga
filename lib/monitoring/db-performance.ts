@@ -95,7 +95,27 @@ export function trackQueryMetrics(metrics: QueryMetrics): void {
 
 /**
  * Get database connection pool metrics
- * Placeholder for future implementation with connection pooling library
+ * 
+ * **Note:** This function is not applicable for Supabase-managed connections.
+ * Supabase manages connection pooling at the platform level, and connection pool
+ * metrics are not exposed through the Supabase client API.
+ * 
+ * **When to implement:**
+ * - If migrating to direct PostgreSQL connections (not recommended for Supabase projects)
+ * - If using a connection pooling library like `pg-pool` for direct database access
+ * - For custom connection pool monitoring in non-Supabase environments
+ * 
+ * **Current behavior:**
+ * Returns zero values as Supabase connection pooling is handled transparently by the platform.
+ * Connection limits and pool management are configured in the Supabase dashboard.
+ * 
+ * **Supabase connection management:**
+ * - Connections are automatically managed by Supabase
+ * - Connection limits are set per project tier
+ * - No manual pool configuration needed
+ * - Connection pooling is optimized by Supabase infrastructure
+ * 
+ * @returns Connection pool metrics (currently returns zeros for Supabase-managed connections)
  */
 export async function getConnectionPoolMetrics(): Promise<{
   active: number;
@@ -103,9 +123,15 @@ export async function getConnectionPoolMetrics(): Promise<{
   waiting: number;
   total: number;
 }> {
-  // This would integrate with your database connection pool
-  // For Supabase, connections are managed by the platform
-  // But you could implement this for direct PostgreSQL connections
+  // Supabase manages connection pooling at the platform level
+  // Connection pool metrics are not available through the Supabase client API
+  // This function returns zeros to indicate metrics are not available
+  // 
+  // For direct PostgreSQL connections, you would implement this using:
+  // - pg-pool library: pool.totalCount, pool.idleCount, pool.waitingCount
+  // - Custom connection pool monitoring
+  // - Database system tables (pg_stat_activity, pg_stat_database)
+  
   return {
     active: 0,
     idle: 0,
