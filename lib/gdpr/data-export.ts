@@ -53,20 +53,20 @@ export async function exportUserData(userId: string): Promise<Record<string, any
       .eq('user_id', userId),
     
     // Addresses
-    supabase
+    (supabase as any)
       .from('addresses')
       .select('*')
       .eq('user_id', userId),
     
     // Notifications
-    supabase
+    (supabase as any)
       .from('notifications')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false }),
     
     // Wishlist
-    supabase
+    (supabase as any)
       .from('wishlist')
       .select('*')
       .eq('user_id', userId),
