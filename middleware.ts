@@ -104,7 +104,60 @@ export async function middleware(request: NextRequest) {
     return response;
   }
 
-  return response;
+  // HTTPS enforcement in production
+  const isProduction = process.env.NODE_ENV === 'production';
+  const protocol = request.headers.get('x-forwarded-proto') || request.nextUrl.protocol;
+  
+  if (isProduction && protocol !== 'https') {
+    const httpsUrl = request.nextUrl.clone();
+    httpsUrl.protocol = 'https';
+    return NextResponse.redirect(httpsUrl, 301);
+  }
+
+  // Add security headers
+  const headers = new Headers(response.headers);
+
+  // Content Security Policy
+  const cspDirectives = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.stripe.com https://cdn.jsdelivr.net",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "img-src 'self' data: https: blob:",
+    "font-src 'self' data: https://fonts.gstatic.com",
+    "connect-src 'self' https://*.supabase.co https://api.stripe.com https://resend.com wss://*.supabase.co",
+    "frame-src 'self' https://js.stripe.com https://hooks.stripe.com",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+    "upgrade-insecure-requests",
+  ].join('; ');
+
+  headers.set('Content-Security-Policy', cspDirectives);
+  headers.set('X-Frame-Options', 'DENY');
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  headers.set('X-XSS-Protection', '1; mode=block');
+
+  // HSTS (Strict-Transport-Security) - only in production
+  if (isProduction) {
+    headers.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+  }
+
+  // Create new response with security headers
+  const secureResponse = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  });
+
+  // Copy all headers to the response
+  headers.forEach((value, key) => {
+    secureResponse.headers.set(key, value);
+  });
+
+  return secureResponse;
 }
 
 /**
