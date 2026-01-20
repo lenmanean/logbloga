@@ -3,7 +3,7 @@
  * Provides different rate limit configurations for various endpoint types
  */
 
-import { Ratelimit } from '@upstash/ratelimit';
+import { Ratelimit, type Duration } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 
 // Initialize Redis client
@@ -20,7 +20,7 @@ export type RateLimitType = 'public' | 'authenticated' | 'auth' | 'payment' | 'a
 /**
  * Rate limit configurations
  */
-const rateLimitConfigs: Record<RateLimitType, { requests: number; window: string }> = {
+const rateLimitConfigs: Record<RateLimitType, { requests: number; window: Duration }> = {
   public: { requests: 100, window: '1 m' }, // 100 requests per minute
   authenticated: { requests: 200, window: '1 m' }, // 200 requests per minute
   auth: { requests: 5, window: '1 m' }, // 5 requests per minute (signin/signup)
