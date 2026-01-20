@@ -49,10 +49,10 @@ export async function DELETE(request: Request) {
 
     // Anonymize audit logs (keep logs but remove user association)
     try {
-      await supabase
+      await (supabase as any)
         .from('audit_logs')
         .update({
-          user_id: null as any, // Type assertion for anonymization
+          user_id: null, // Anonymize audit logs
         })
         .eq('user_id', user.id);
     } catch (error) {
