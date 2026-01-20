@@ -52,22 +52,22 @@ export async function exportUserData(userId: string): Promise<Record<string, any
       .select('*')
       .eq('user_id', userId),
     
-    // Addresses
-    (supabase as any)
-      .from('addresses')
+    // Addresses (saved_addresses table)
+    supabase
+      .from('saved_addresses')
       .select('*')
       .eq('user_id', userId),
     
     // Notifications
-    (supabase as any)
+    supabase
       .from('notifications')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false }),
     
-    // Wishlist
-    (supabase as any)
-      .from('wishlist')
+    // Wishlist (wishlist_items table)
+    supabase
+      .from('wishlist_items')
       .select('*')
       .eq('user_id', userId),
     
@@ -79,21 +79,21 @@ export async function exportUserData(userId: string): Promise<Record<string, any
       .order('created_at', { ascending: false }),
     
     // Audit logs
-    (supabase as any)
+    supabase
       .from('audit_logs')
       .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false }),
     
     // Cookie consents
-    (supabase as any)
+    supabase
       .from('cookie_consents')
       .select('*')
       .eq('user_id', userId)
       .single(),
     
     // Consents
-    (supabase as any)
+    supabase
       .from('consents')
       .select('*')
       .eq('user_id', userId)
