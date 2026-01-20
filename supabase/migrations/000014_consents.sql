@@ -1,9 +1,6 @@
--- Ensure uuid extension is enabled
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
 -- Create cookie_consents table for GDPR cookie consent tracking
 CREATE TABLE IF NOT EXISTS cookie_consents (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   essential BOOLEAN DEFAULT TRUE NOT NULL,
   analytics BOOLEAN DEFAULT FALSE NOT NULL,
@@ -15,7 +12,7 @@ CREATE TABLE IF NOT EXISTS cookie_consents (
 
 -- Create consents table for GDPR consent tracking (marketing, analytics, data processing)
 CREATE TABLE IF NOT EXISTS consents (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
   consent_type TEXT NOT NULL CHECK (consent_type IN ('marketing', 'analytics', 'data_processing', 'third_party_sharing')),
   granted BOOLEAN NOT NULL,
