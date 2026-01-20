@@ -175,7 +175,7 @@ export async function validateRequestBody<T>(
     return schema.parse(body);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const message = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      const message = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
       throw new Error(`Validation error: ${message}`);
     }
     throw error;
@@ -206,7 +206,7 @@ export function validateSearchParams<T>(
     return schema.parse(params);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      const message = error.errors.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
+      const message = error.issues.map(e => `${e.path.join('.')}: ${e.message}`).join(', ');
       throw new Error(`Validation error: ${message}`);
     }
     throw error;
