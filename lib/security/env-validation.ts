@@ -47,8 +47,8 @@ export function validateEnv(): z.infer<typeof envSchema> {
   try {
     return envSchema.parse(process.env);
   } catch (error) {
-    if (error instanceof z.ZodError && error.errors) {
-      const missingVars = error.errors.map((e) => ({
+    if (error instanceof z.ZodError) {
+      const missingVars = error.issues.map((e) => ({
         path: e.path ? e.path.join('.') : 'unknown',
         message: e.message || 'Validation error',
       }));
