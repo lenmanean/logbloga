@@ -1,3 +1,6 @@
+-- Ensure uuid extension is enabled
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
 -- Create audit_logs table for security event tracking
 CREATE TABLE IF NOT EXISTS audit_logs (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
