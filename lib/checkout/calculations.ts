@@ -6,7 +6,7 @@
 import type { CartItemWithProduct } from '@/lib/db/cart';
 import type { Coupon } from '@/lib/types/database';
 import { calculateCartTotal } from '@/lib/cart/utils';
-import { applyCoupon } from '@/lib/db/coupons';
+import { applyCoupon } from '@/lib/coupons/utils';
 
 export interface OrderTotals {
   subtotal: number;
@@ -24,7 +24,7 @@ export function calculateSubtotal(items: CartItemWithProduct[]): number {
 
 /**
  * Calculate discount amount from coupon
- * Delegates to applyCoupon() from lib/db/coupons.ts to avoid code duplication
+ * Delegates to applyCoupon() from lib/coupons/utils.ts to avoid code duplication
  * Returns only the discount amount (not the final total)
  */
 export function calculateDiscount(subtotal: number, coupon?: Coupon | null): number {

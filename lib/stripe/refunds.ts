@@ -80,9 +80,9 @@ export async function createRefund(
     return {
       id: refund.id,
       amount: refund.amount,
-      status: refund.status,
+      status: refund.status || 'pending',
       currency: refund.currency,
-      reason: refund.reason,
+      reason: refund.reason || null,
     };
   } catch (error) {
     const errorMessage = formatStripeError(error);

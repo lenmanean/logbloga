@@ -5,6 +5,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import type { Coupon } from '@/lib/types/database';
+import { applyCoupon, type CouponDiscount } from '@/lib/coupons/utils';
 
 export interface CouponValidationResult {
   valid: boolean;
@@ -12,10 +13,8 @@ export interface CouponValidationResult {
   error?: string;
 }
 
-export interface CouponDiscount {
-  discountAmount: number;
-  finalTotal: number;
-}
+// Re-export for backward compatibility
+export type { CouponDiscount };
 
 /**
  * Validate a coupon code
@@ -129,42 +128,7 @@ export async function validateCoupon(
   };
 }
 
-/**
- * Apply coupon discount to cart total
- * Calculates discount amount based on coupon type (percentage or fixed_amount)
- */
-export function applyCoupon(coupon: Coupon, cartTotal: number): CouponDiscount {
-  let discountAmount = 0;
-
-  if (coupon.type === 'percentage') {
-    // Percentage discount
-    discountAmount = (cartTotal * coupon.value) / 100;
-
-    // Apply maximum discount limit if specified
-    if (coupon.maximum_discount && discountAmount > coupon.maximum_discount) {
-      discountAmount = coupon.maximum_discount;
-    }
-  } else if (coupon.type === 'fixed_amount') {
-    // Fixed amount discount
-    discountAmount = coupon.value;
-
-    // Don't discount more than the cart total
-    if (discountAmount > cartTotal) {
-      discountAmount = cartTotal;
-    }
-  }
-
-  // Ensure discount is not negative
-  discountAmount = Math.max(0, discountAmount);
-
-  // Round to 2 decimal places
-  discountAmount = Math.round(discountAmount * 100) / 100;
-
-  const finalTotal = Math.max(0, cartTotal - discountAmount);
-
-  return {
-    discountAmount,
-    finalTotal: Math.round(finalTotal * 100) / 100,
-  };
-}
+// Re-export applyCoupon for backward compatibility
+// The actual implementation is in lib/coupons/utils.ts (client-safe)
+export { applyCoupon };
 

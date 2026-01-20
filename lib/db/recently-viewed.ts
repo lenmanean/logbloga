@@ -54,7 +54,7 @@ export async function trackProductView(
 
   // Insert (trigger will update viewed_at if duplicate exists)
   const { error } = await supabase
-    .from('recently_viewed_products')
+    .from('recently_viewed_products' as any)
     .insert(insertData);
 
   if (error) {
@@ -85,7 +85,7 @@ export async function getRecentlyViewed(
 
   // Fetch recently viewed entries
   const { data: recentlyViewed, error } = await supabase
-    .from('recently_viewed_products')
+    .from('recently_viewed_products' as any)
     .select('product_id')
     .eq('user_id', userId)
     .order('viewed_at', { ascending: false })
@@ -101,7 +101,7 @@ export async function getRecentlyViewed(
   }
 
   // Fetch product details for each recently viewed product
-  const productIds = recentlyViewed.map((entry) => entry.product_id);
+  const productIds = (recentlyViewed as any[]).map((entry: any) => entry.product_id);
   const products: Product[] = [];
 
   for (const productId of productIds) {
@@ -134,7 +134,7 @@ export async function getRecentlyViewedBySession(
 
   // Fetch recently viewed entries
   const { data: recentlyViewed, error } = await supabase
-    .from('recently_viewed_products')
+    .from('recently_viewed_products' as any)
     .select('product_id')
     .eq('session_id', sessionId)
     .order('viewed_at', { ascending: false })
@@ -150,7 +150,7 @@ export async function getRecentlyViewedBySession(
   }
 
   // Fetch product details for each recently viewed product
-  const productIds = recentlyViewed.map((entry) => entry.product_id);
+  const productIds = (recentlyViewed as any[]).map((entry: any) => entry.product_id);
   const products: Product[] = [];
 
   for (const productId of productIds) {
@@ -186,18 +186,18 @@ export async function cleanupOldRecentlyViewed(
   if (userId) {
     // Get IDs of entries to keep
     const { data: keepEntries } = await supabase
-      .from('recently_viewed_products')
+      .from('recently_viewed_products' as any)
       .select('id')
       .eq('user_id', userId)
       .order('viewed_at', { ascending: false })
       .limit(keepCount);
 
     if (keepEntries && keepEntries.length > 0) {
-      const keepIds = keepEntries.map((e) => e.id);
+      const keepIds = (keepEntries as any[]).map((e: any) => e.id);
 
       // Delete entries not in the keep list
       const { error } = await supabase
-        .from('recently_viewed_products')
+        .from('recently_viewed_products' as any)
         .delete()
         .eq('user_id', userId)
         .not('id', 'in', `(${keepIds.join(',')})`);
@@ -209,18 +209,18 @@ export async function cleanupOldRecentlyViewed(
   } else if (sessionId) {
     // Get IDs of entries to keep
     const { data: keepEntries } = await supabase
-      .from('recently_viewed_products')
+      .from('recently_viewed_products' as any)
       .select('id')
       .eq('session_id', sessionId)
       .order('viewed_at', { ascending: false })
       .limit(keepCount);
 
     if (keepEntries && keepEntries.length > 0) {
-      const keepIds = keepEntries.map((e) => e.id);
+      const keepIds = (keepEntries as any[]).map((e: any) => e.id);
 
       // Delete entries not in the keep list
       const { error } = await supabase
-        .from('recently_viewed_products')
+        .from('recently_viewed_products' as any)
         .delete()
         .eq('session_id', sessionId)
         .not('id', 'in', `(${keepIds.join(',')})`);
