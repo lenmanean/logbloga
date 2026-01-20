@@ -47,10 +47,10 @@ export function validateEnv(): z.infer<typeof envSchema> {
   try {
     return envSchema.parse(process.env);
   } catch (error) {
-    if (error instanceof z.ZodError) {
+    if (error instanceof z.ZodError && error.errors) {
       const missingVars = error.errors.map((e) => ({
-        path: e.path.join('.'),
-        message: e.message,
+        path: e.path ? e.path.join('.') : 'unknown',
+        message: e.message || 'Validation error',
       }));
 
       const errorMessage = `

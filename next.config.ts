@@ -6,7 +6,8 @@ if (typeof window === 'undefined') {
     const { validateEnv } = require('./lib/security/env-validation');
     validateEnv();
   } catch (error: any) {
-    console.error('Environment variable validation failed:', error.message);
+    const errorMessage = error?.message || error?.toString() || 'Unknown error';
+    console.error('Environment variable validation failed:', errorMessage);
     // Don't throw in build - just warn
     if (process.env.NODE_ENV === 'production') {
       console.warn('⚠️  Warning: Some environment variables may be missing. This may cause issues in production.');

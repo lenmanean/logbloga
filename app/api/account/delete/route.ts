@@ -38,7 +38,7 @@ export async function DELETE(request: Request) {
       await supabase
         .from('reviews')
         .update({
-          user_id: null,
+          user_id: null as any, // Type assertion for anonymization
           // Keep review content but anonymize
         })
         .eq('user_id', user.id);
@@ -52,7 +52,7 @@ export async function DELETE(request: Request) {
       await supabase
         .from('audit_logs')
         .update({
-          user_id: null,
+          user_id: null as any, // Type assertion for anonymization
         })
         .eq('user_id', user.id);
     } catch (error) {
