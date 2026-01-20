@@ -34,7 +34,9 @@ export async function POST(request: NextRequest) {
 
     if (tag) {
       // Revalidate by cache tag
-      revalidateTag(tag);
+      // In Next.js 16, revalidateTag requires a second parameter (profile)
+      // Using empty string as default profile
+      revalidateTag(tag, '');
       return NextResponse.json({
         revalidated: true,
         tag,
