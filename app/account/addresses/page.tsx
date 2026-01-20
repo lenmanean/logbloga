@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 
-export const dynamic = 'force-dynamic';
+// Note: dynamic export is not applicable to client components
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, MapPin } from 'lucide-react';

@@ -1,22 +1,82 @@
 import { notFound } from 'next/navigation';
+import type { Metadata } from 'next';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 import { ProductImageGallery } from '@/components/ui/product-image-gallery';
 import { ProductInfoPanel } from '@/components/ui/product-info-panel';
 import { WhatsIncluded } from '@/components/ui/whats-included';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
-import { UpsellBanner } from '@/components/recommendations/upsell-banner';
-import { CrossSellGrid } from '@/components/recommendations/cross-sell-grid';
-import { BundleOffer } from '@/components/recommendations/bundle-offer';
-import { getProductBySlug } from '@/lib/db/products';
+import { getProductBySlug, getAllProducts } from '@/lib/db/products';
 import { PackageProduct } from '@/lib/products';
 import { ArrowLeft, CheckCircle } from 'lucide-react';
+
+// Lazy load recommendation components (below fold, non-critical)
+const UpsellBanner = dynamic(() => import('@/components/recommendations/upsell-banner').then(mod => ({ default: mod.UpsellBanner })), {
+  loading: () => <div className="h-32 animate-pulse bg-muted rounded-lg" />,
+});
+
+const CrossSellGrid = dynamic(() => import('@/components/recommendations/cross-sell-grid').then(mod => ({ default: mod.CrossSellGrid })), {
+  loading: () => <div className="h-64 animate-pulse bg-muted rounded-lg" />,
+});
+
+const BundleOffer = dynamic(() => import('@/components/recommendations/bundle-offer').then(mod => ({ default: mod.BundleOffer })), {
+  loading: () => <div className="h-48 animate-pulse bg-muted rounded-lg" />,
+});
+
+// Enable ISR - revalidate every hour
+export const revalidate = 3600;
 
 interface PackagePageProps {
   params: Promise<{
     package: string;
   }>;
+}
+
+/**
+ * Generate static params for all active products at build time
+ * This enables static generation with ISR
+ */
+export async function generateStaticParams() {
+  try {
+    const products = await getAllProducts({ active: true });
+    return products.map((product) => ({
+      package: product.slug,
+    }));
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    // Return empty array on error - pages will be generated on demand
+    return [];
+  }
+}
+
+/**
+ * Generate metadata for SEO optimization
+ */
+export async function generateMetadata({ params }: PackagePageProps): Promise<Metadata> {
+  const { package: packageSlug } = await params;
+  const packageData = await getProductBySlug(packageSlug);
+
+  if (!packageData) {
+    return {
+      title: 'Product Not Found',
+    };
+  }
+
+  const title = packageData.title || packageData.name || 'Product';
+  const description = packageData.description || packageData.tagline || `Learn more about ${title}`;
+
+  return {
+    title: `${title} | LogBloga`,
+    description,
+    openGraph: {
+      title,
+      description: packageData.description || packageData.tagline || undefined,
+      images: packageData.package_image ? [packageData.package_image] : [],
+      type: 'website' as const,
+    },
+  };
 }
 
 export default async function PackagePage({ params }: PackagePageProps) {

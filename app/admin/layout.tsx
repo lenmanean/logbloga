@@ -1,6 +1,14 @@
 import { requireAdmin } from '@/lib/admin/permissions';
-import { AdminNav } from '@/components/admin/admin-nav';
-import { AdminHeader } from '@/components/admin/admin-header';
+import dynamic from 'next/dynamic';
+
+// Lazy load admin components (admin-only, reduce initial bundle)
+const AdminNav = dynamic(() => import('@/components/admin/admin-nav').then(mod => ({ default: mod.AdminNav })), {
+  loading: () => <div className="w-64 h-96 animate-pulse bg-muted rounded-lg" />,
+});
+
+const AdminHeader = dynamic(() => import('@/components/admin/admin-header').then(mod => ({ default: mod.AdminHeader })), {
+  loading: () => <div className="h-16 animate-pulse bg-muted" />,
+});
 
 export const metadata = {
   title: 'Admin Dashboard | LogBloga',

@@ -35,7 +35,10 @@ const envSchema = z.object({
   SECURITY_AUDIT_RETENTION_DAYS: z.coerce.number().int().positive().default(365).optional(),
   
   // Optional environment variables
-  SENTRY_DSN: z.string().url('Invalid Sentry DSN').optional(),
+  NEXT_PUBLIC_SENTRY_DSN: z.string().url('Invalid Sentry DSN').optional(),
+  SENTRY_ORG: z.string().optional(),
+  SENTRY_PROJECT: z.string().optional(),
+  SENTRY_AUTH_TOKEN: z.string().optional(),
   NEXT_PUBLIC_ANALYTICS_ID: z.string().optional(),
 });
 

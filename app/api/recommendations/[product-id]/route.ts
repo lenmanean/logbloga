@@ -6,6 +6,7 @@
 import { NextResponse } from 'next/server';
 import { getRecommendations } from '@/lib/recommendations/engine';
 import type { RecommendationType } from '@/lib/recommendations/engine';
+import { cachedResponse, cachePresets } from '@/lib/api/cache-headers';
 
 interface RouteParams {
   params: Promise<{ 'product-id': string }>;
@@ -46,11 +47,15 @@ export async function GET(request: Request, { params }: RouteParams) {
       type: rec.type,
     }));
 
-    return NextResponse.json({
-      productId,
-      recommendations: formatted,
-      count: formatted.length,
-    });
+    // Return with cache headers (5 minutes for recommendations)
+    return cachedResponse(
+      {
+        productId,
+        recommendations: formatted,
+        count: formatted.length,
+      },
+      cachePresets.mediumCache(300) // 5 minutes
+    );
   } catch (error) {
     console.error('Error fetching recommendations:', error);
     const errorMessage = error instanceof Error ? error.message : 'Failed to fetch recommendations';

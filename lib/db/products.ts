@@ -57,6 +57,27 @@ export async function getAllProducts(options?: ProductQueryOptions): Promise<Pro
 }
 
 /**
+ * Get all active products with caching
+ * Uses Redis cache with 10-minute TTL
+ */
+export async function getAllProductsCached(options?: ProductQueryOptions): Promise<Product[]> {
+  const { getCachedOrFetch } = await import('@/lib/cache/redis-cache');
+  
+  // Generate cache key from options
+  const cacheKey = `products:${JSON.stringify(options || {})}`;
+  
+  return getCachedOrFetch(
+    cacheKey,
+    () => getAllProducts(options),
+    {
+      ttl: 600, // 10 minutes
+      tags: ['products'],
+    },
+    'products'
+  );
+}
+
+/**
  * Get a single product by slug
  */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
@@ -79,6 +100,24 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
   }
 
   return data;
+}
+
+/**
+ * Get a single product by slug with caching
+ * Uses Redis cache with 15-minute TTL
+ */
+export async function getProductBySlugCached(slug: string): Promise<Product | null> {
+  const { getCachedOrFetch } = await import('@/lib/cache/redis-cache');
+  
+  return getCachedOrFetch(
+    `product:slug:${slug}`,
+    () => getProductBySlug(slug),
+    {
+      ttl: 900, // 15 minutes
+      tags: ['products', `product:${slug}`],
+    },
+    'products'
+  );
 }
 
 /**

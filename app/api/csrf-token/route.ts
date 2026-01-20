@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getCsrfTokenForClient } from '@/lib/security/csrf';
+import { cachedResponse, cachePresets } from '@/lib/api/cache-headers';
 
 /**
  * GET /api/csrf-token
@@ -16,7 +17,8 @@ export async function GET() {
       );
     }
 
-    return NextResponse.json({ token });
+    // CSRF tokens should not be cached
+    return cachedResponse({ token }, cachePresets.noCache());
   } catch (error) {
     console.error('Error generating CSRF token:', error);
     return NextResponse.json(
