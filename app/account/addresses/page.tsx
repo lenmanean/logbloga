@@ -1,9 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-
-// Force dynamic rendering for this client component
-export const dynamic = 'force-dynamic';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, MapPin } from 'lucide-react';
