@@ -4,6 +4,7 @@
  */
 
 import DOMPurify from 'dompurify';
+import { JSDOM } from 'jsdom';
 
 /**
  * Escape HTML entities to prevent XSS
