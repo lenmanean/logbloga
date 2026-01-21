@@ -14,7 +14,7 @@ interface BlogPostCardProps {
 
 export function BlogPostCard({ post, className }: BlogPostCardProps) {
   const publishedDate = post.published_at ? new Date(post.published_at) : null;
-  const excerpt = post.excerpt || (post.content ? post.content.substring(0, 150) + '...' : '');
+  const excerpt = post.excerpt || '';
 
   return (
     <Card className={cn('group hover:shadow-lg transition-all duration-300 flex flex-col h-full', className)}>
