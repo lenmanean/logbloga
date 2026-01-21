@@ -28,7 +28,7 @@ export async function storeDoerCoupon(
   orderId: string,
   couponCode: string
 ): Promise<void> {
-  const supabase = createServiceRoleClient();
+  const supabase = await createServiceRoleClient();
   
   const now = new Date();
   const expiresAt = new Date(now);
@@ -89,7 +89,7 @@ export async function markDoerCouponAsUsed(
   couponCode: string,
   doerUserId?: string
 ): Promise<void> {
-  const supabase = createServiceRoleClient();
+  const supabase = await createServiceRoleClient();
   
   const updateData: any = {
     doer_coupon_used: true,
