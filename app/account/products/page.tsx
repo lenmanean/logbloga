@@ -24,15 +24,29 @@ export default async function ProductsPage() {
   const individualProducts = products.filter(p => p.product_type !== 'package');
 
   // Get orders with Doer coupons for packages
-  const { data: orders } = await supabase
+  // Using type assertion since columns are added via migration but types may not be regenerated yet
+  const { data: orders, error: ordersError } = await supabase
     .from('orders')
     .select('id, doer_coupon_code, doer_coupon_expires_at, doer_coupon_used, doer_coupon_used_at')
     .eq('user_id', user.id)
     .eq('status', 'completed')
     .not('doer_coupon_code', 'is', null)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false }) as any;
 
-  const ordersWithCoupons = orders || [];
+  // Handle case where columns might not exist or query fails
+  const ordersWithCoupons: Array<{
+    id: string;
+    doer_coupon_code: string | null;
+    doer_coupon_expires_at: string | null;
+    doer_coupon_used: boolean | null;
+    doer_coupon_used_at: string | null;
+  }> = (orders && !ordersError) ? (orders as any[]).map((order: any) => ({
+    id: order.id,
+    doer_coupon_code: order.doer_coupon_code || null,
+    doer_coupon_expires_at: order.doer_coupon_expires_at || null,
+    doer_coupon_used: order.doer_coupon_used || false,
+    doer_coupon_used_at: order.doer_coupon_used_at || null,
+  })) : [];
 
   if (packages.length === 0 && individualProducts.length === 0) {
     return (
