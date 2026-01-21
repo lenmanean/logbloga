@@ -10,6 +10,7 @@ import { getStripeClient } from '@/lib/stripe/client';
 import { formatAmountForStripe } from '@/lib/stripe/utils';
 import { formatStripeError, StripeOrderNotFoundError, StripeCheckoutSessionError } from '@/lib/stripe/errors';
 import { createServiceRoleClient } from '@/lib/supabase/server';
+import type Stripe from 'stripe';
 
 export async function POST(request: Request) {
   try {
@@ -102,7 +103,7 @@ export async function POST(request: Request) {
           },
           unit_amount: formatAmountForStripe(item.unit_price),
           // Enable automatic tax even for dynamically created prices
-          tax_behavior: 'exclusive',
+          tax_behavior: 'exclusive' as Stripe.Checkout.SessionCreateParams.LineItem.PriceData.TaxBehavior,
         },
         quantity: item.quantity,
       };
