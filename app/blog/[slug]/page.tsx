@@ -121,7 +121,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     headline: post.title,
-    description: post.excerpt || post.content.substring(0, 200),
+    description: post.excerpt || '',
     image: post.featured_image || undefined,
     datePublished: publishedDate?.toISOString(),
     dateModified: modifiedDate?.toISOString(),
