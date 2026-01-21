@@ -64,14 +64,17 @@ export async function POST(request: Request) {
     let productsMap = new Map<string, { stripe_price_id: string | null }>();
     
     if (productIds.length > 0) {
-      const { data: products } = await supabase
+      const { data: products, error: productsError } = await supabase
         .from('products')
         .select('id, stripe_price_id')
         .in('id', productIds);
 
-      if (products) {
-        products.forEach(product => {
-          productsMap.set(product.id, { stripe_price_id: product.stripe_price_id });
+      // If error occurs, log but continue with fallback
+      if (productsError) {
+        console.warn('Error fetching Stripe price IDs:', productsError);
+      } else if (products) {
+        products.forEach((product) => {
+          productsMap.set(product.id, { stripe_price_id: product.stripe_price_id || null });
         });
       }
     }
