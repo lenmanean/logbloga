@@ -9,6 +9,7 @@ import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getStripeClient } from '@/lib/stripe/client';
 import { formatAmountForStripe } from '@/lib/stripe/utils';
 import { formatStripeError, StripeOrderNotFoundError, StripeCheckoutSessionError } from '@/lib/stripe/errors';
+import { createServiceRoleClient } from '@/lib/supabase/server';
 
 export async function POST(request: Request) {
   try {
@@ -54,17 +55,55 @@ export async function POST(request: Request) {
       );
     }
 
-    const lineItems = order.items.map((item) => ({
-      price_data: {
-        currency: order.currency?.toLowerCase() || 'usd',
-        product_data: {
-          name: item.product_name,
-          description: `Quantity: ${item.quantity}`,
+    // Fetch products to get Stripe price IDs
+    const supabase = await createServiceRoleClient();
+    const productIds = order.items
+      .map(item => item.product_id)
+      .filter((id): id is string => !!id);
+
+    let productsMap = new Map<string, { stripe_price_id: string | null }>();
+    
+    if (productIds.length > 0) {
+      const { data: products } = await supabase
+        .from('products')
+        .select('id, stripe_price_id')
+        .in('id', productIds);
+
+      if (products) {
+        products.forEach(product => {
+          productsMap.set(product.id, { stripe_price_id: product.stripe_price_id });
+        });
+      }
+    }
+
+    // Build line items - use pre-created Stripe prices when available, otherwise use price_data
+    const lineItems = order.items.map((item) => {
+      const product = item.product_id ? productsMap.get(item.product_id) : null;
+      const stripePriceId = product?.stripe_price_id;
+
+      // If we have a Stripe price ID, use it (enables automatic tax)
+      if (stripePriceId) {
+        return {
+          price: stripePriceId,
+          quantity: item.quantity,
+        };
+      }
+
+      // Fallback to price_data for products without Stripe IDs
+      return {
+        price_data: {
+          currency: order.currency?.toLowerCase() || 'usd',
+          product_data: {
+            name: item.product_name,
+            description: `Quantity: ${item.quantity}`,
+          },
+          unit_amount: formatAmountForStripe(item.unit_price),
+          // Enable automatic tax even for dynamically created prices
+          tax_behavior: 'exclusive',
         },
-        unit_amount: formatAmountForStripe(item.unit_price),
-      },
-      quantity: item.quantity,
-    }));
+        quantity: item.quantity,
+      };
+    });
 
     // Get app URL for redirects
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -93,6 +132,10 @@ export async function POST(request: Request) {
       cancel_url: `${appUrl}/checkout?error=payment_cancelled`,
       // Allow promotion codes
       allow_promotion_codes: true,
+      // Enable automatic tax calculation
+      automatic_tax: {
+        enabled: true,
+      },
     });
 
     // Update order with checkout session ID
