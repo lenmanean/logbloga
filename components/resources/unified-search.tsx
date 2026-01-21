@@ -85,7 +85,9 @@ export function UnifiedSearch({ className, maxResults = 10 }: UnifiedSearchProps
                   <div className="space-y-2">
                     {typeResults.map((result) => {
                       const resource = result.resource;
-                      const href = getResourceUrl(result.type, resource.slug);
+                      // FAQs don't have slug, use id instead
+                      const identifier = 'slug' in resource ? resource.slug : resource.id;
+                      const href = getResourceUrl(result.type, identifier);
 
                       return (
                         <Link
