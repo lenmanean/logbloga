@@ -87,6 +87,13 @@ export interface OrderWithItems extends Order {
     unit_price: number;
     total_price: number;
   }>;
+  // Doer coupon fields (added in migration 000020)
+  doer_coupon_code?: string | null;
+  doer_coupon_generated_at?: string | null;
+  doer_coupon_expires_at?: string | null;
+  doer_coupon_used?: boolean | null;
+  doer_coupon_used_at?: string | null;
+  doer_user_id?: string | null;
 }
 
 export interface LicenseWithProduct extends License {
