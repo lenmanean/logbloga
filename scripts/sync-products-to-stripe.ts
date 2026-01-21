@@ -59,8 +59,8 @@ async function createStripeProduct(
       product_slug: product.slug,
       product_id: product.id,
     },
-    // Enable automatic tax calculation
-    tax_code: 'txcd_10301001', // Digital products tax code
+    // Note: tax_code is optional - automatic tax will handle tax calculation
+    // You can set a tax code later in Stripe Dashboard if needed
   });
 
   console.log(`  ✓ Created Stripe product: ${stripeProduct.id}`);
