@@ -208,6 +208,24 @@ export async function getPackageWithIncludedProductsBySlug(
 export async function getUserPurchasedProducts(userId: string): Promise<Product[]> {
   const supabase = await createClient();
   
+  // First, get all completed order IDs for this user
+  const { data: ordersData, error: ordersError } = await supabase
+    .from('orders')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('status', 'completed');
+
+  if (ordersError || !ordersData) {
+    console.error('Error fetching orders:', ordersError);
+    return [];
+  }
+
+  const orderIds = ordersData.map(order => order.id);
+
+  if (orderIds.length === 0) {
+    return [];
+  }
+
   // Get all products user directly purchased
   const { data: directProducts, error: directError } = await supabase
     .from('order_items')
@@ -215,13 +233,7 @@ export async function getUserPurchasedProducts(userId: string): Promise<Product[
       product_id,
       product:products!product_id(*)
     `)
-    .in('order_id', 
-      supabase
-        .from('orders')
-        .select('id')
-        .eq('user_id', userId)
-        .eq('status', 'completed')
-    );
+    .in('order_id', orderIds);
 
   if (directError) {
     console.error('Error fetching direct products:', directError);
@@ -234,13 +246,7 @@ export async function getUserPurchasedProducts(userId: string): Promise<Product[
       product_id,
       product:products!product_id(*)
     `)
-    .in('order_id', 
-      supabase
-        .from('orders')
-        .select('id')
-        .eq('user_id', userId)
-        .eq('status', 'completed')
-    )
+    .in('order_id', orderIds)
     .eq('product.product_type', 'package');
 
   if (packagesError) {
