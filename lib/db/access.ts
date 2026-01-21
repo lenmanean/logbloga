@@ -144,7 +144,7 @@ export async function getUserProductAccess(userId: string): Promise<Product[]> {
 
     // If it's a package, get all included products
     if (product.product_type === 'package') {
-      const { data: packageProducts, error: ppError } = await supabase
+      const { data: packageProducts, error: ppError } = await (supabase as any)
         .from('package_products')
         .select(`
           product_id,
@@ -194,7 +194,7 @@ export async function getIncludedProductsAccess(
   // Get all products included in the package
   const supabase = await createClient();
   
-  const { data: packageProducts, error } = await supabase
+  const { data: packageProducts, error } = await (supabase as any)
     .from('package_products')
     .select(`
       product_id,

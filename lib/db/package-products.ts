@@ -31,7 +31,7 @@ export interface PackageWithProducts {
 export async function getPackageProducts(packageId: string): Promise<PackageProduct[]> {
   const supabase = await createClient();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('package_products')
     .select(`
       *,
@@ -81,7 +81,7 @@ export async function getPackageProductsBySlug(packageSlug: string): Promise<Pac
 export async function getProductPackage(productId: string): Promise<Product | null> {
   const supabase = await createClient();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('package_products')
     .select(`
       package:products!package_id(*)
@@ -127,7 +127,7 @@ export async function getProductPackageBySlug(productSlug: string): Promise<Prod
 export async function calculatePackageValue(packageId: string): Promise<number> {
   const supabase = await createClient();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('package_products')
     .select('package_value')
     .eq('package_id', packageId);
@@ -255,7 +255,7 @@ export async function getUserPurchasedProducts(userId: string): Promise<Product[
   let includedProducts: Product[] = [];
   
   if (packageIds.length > 0) {
-    const { data: ppData, error: ppError } = await supabase
+    const { data: ppData, error: ppError } = await (supabase as any)
       .from('package_products')
       .select(`
         product_id,
