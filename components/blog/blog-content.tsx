@@ -5,7 +5,7 @@ import { join } from 'path';
 import { cn } from '@/lib/utils';
 
 interface BlogContentProps {
-  content: string;
+  content?: string | null;
   mdxFilePath?: string | null;
   className?: string;
 }
@@ -30,11 +30,11 @@ export async function BlogContent({ content, mdxFilePath, className }: BlogConte
       } catch (error) {
         // If file reading fails, fall back to content field
         console.warn('Could not load MDX file, using content field:', error);
-        htmlContent = content;
+        htmlContent = content || '';
       }
     } else {
       // Use content field directly
-      htmlContent = content;
+      htmlContent = content || '';
     }
 
     // Check if content is markdown (starts with # or contains markdown syntax)
@@ -87,7 +87,7 @@ export async function BlogContent({ content, mdxFilePath, className }: BlogConte
   } catch (error) {
     console.error('Error rendering blog content:', error);
     // Fallback: sanitize and display content as-is
-    const fallbackContent = sanitizeHtml(content);
+    const fallbackContent = sanitizeHtml(content || '');
     return (
       <div
         className={cn(
