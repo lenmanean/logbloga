@@ -22,9 +22,10 @@ interface ProductInfoPanelProps {
   package: PackageProduct;
   className?: string;
   onQuantityChange?: (quantity: number) => void;
+  packageValue?: number; // Total value of included products when purchased separately
 }
 
-export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: ProductInfoPanelProps) {
+export function ProductInfoPanel({ package: pkg, className, onQuantityChange, packageValue }: ProductInfoPanelProps) {
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(
     pkg.variants && pkg.variants.length > 0 ? pkg.variants[0].id : null
@@ -76,17 +77,31 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
       <div className="space-y-2 mb-4">
         <div className="flex items-baseline gap-3">
           <span className="text-4xl md:text-5xl font-bold">${displayPrice.toLocaleString()}</span>
-          {displayOriginalPrice && (
+          {(displayOriginalPrice || packageValue) && (
             <span className="text-xl text-muted-foreground line-through">
-              ${displayOriginalPrice.toLocaleString()}
+              ${(displayOriginalPrice || packageValue || 0).toLocaleString()}
             </span>
           )}
         </div>
-        {displayOriginalPrice && (
-          <p className="text-sm text-muted-foreground">
-            Save ${(displayOriginalPrice - displayPrice).toLocaleString()} 
-            ({Math.round((1 - displayPrice / displayOriginalPrice) * 100)}% off)
-          </p>
+        {(displayOriginalPrice || packageValue) && (
+          <div className="space-y-1">
+            {packageValue ? (
+              <div>
+                <p className="text-sm font-semibold text-green-600 dark:text-green-400">
+                  You Save ${(packageValue - displayPrice).toLocaleString()} 
+                  ({Math.round((1 - displayPrice / packageValue) * 100)}% off individual products)
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Individual products total: ${packageValue.toLocaleString()}
+                </p>
+              </div>
+            ) : displayOriginalPrice ? (
+              <p className="text-sm text-muted-foreground">
+                Save ${(displayOriginalPrice - displayPrice).toLocaleString()} 
+                ({Math.round((1 - displayPrice / displayOriginalPrice) * 100)}% off)
+              </p>
+            ) : null}
+          </div>
         )}
         {pkg.duration && (
           <p className="text-sm text-muted-foreground">

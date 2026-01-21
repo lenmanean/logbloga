@@ -136,11 +136,36 @@ export async function handlePaymentIntentSucceeded(
     console.error(`Error generating licenses for order ${order.id}:`, error);
   }
 
+  // Generate Doer coupon for package purchases
+  try {
+    const { generateDoerCouponForOrder } = await import('@/lib/doer/coupon');
+    const couponCode = await generateDoerCouponForOrder(order.id);
+    if (couponCode) {
+      console.log(`Generated Doer coupon ${couponCode} for order ${order.id}`);
+    }
+  } catch (error) {
+    // Log error but don't fail the webhook (coupon generation is optional)
+    console.error(`Error generating Doer coupon for order ${order.id}:`, error);
+  }
+
   // Send payment receipt and license delivery emails (non-blocking)
   if (order.user_id) {
     try {
       const orderWithItems = await getOrderWithItems(order.id);
       if (orderWithItems && orderWithItems.customer_email) {
+        // Get Doer coupon code if available
+        const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
+        const { createServiceRoleClient } = await import('@/lib/supabase/server');
+        const doerCouponCode = await getDoerCouponForOrder(order.id);
+        
+        // Get coupon expiration if available
+        const supabaseForCoupon = await createServiceRoleClient();
+        const { data: orderData } = await supabaseForCoupon
+          .from('orders')
+          .select('doer_coupon_expires_at')
+          .eq('id', order.id)
+          .single();
+
         const emailData = {
           order: {
             id: orderWithItems.id,
@@ -161,6 +186,8 @@ export async function handlePaymentIntentSucceeded(
             unitPrice: parseFloat(String(item.unit_price)),
             total: parseFloat(String(item.total_price)),
           })),
+          doerCouponCode: doerCouponCode || null,
+          doerCouponExpiresAt: orderData?.doer_coupon_expires_at || null,
         };
 
         // Send payment receipt
@@ -171,7 +198,7 @@ export async function handlePaymentIntentSucceeded(
           // Get product information for licenses
           const { createServiceRoleClient } = await import('@/lib/supabase/server');
           const supabase = await createServiceRoleClient();
-          
+
           const licenseData = {
             order: {
               id: orderWithItems.id,
@@ -195,6 +222,8 @@ export async function handlePaymentIntentSucceeded(
                 };
               })
             ),
+            doerCouponCode: doerCouponCode || null,
+            doerCouponExpiresAt: orderData?.doer_coupon_expires_at || null,
           };
 
           await sendLicenseDelivery(order.user_id, licenseData);

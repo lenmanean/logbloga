@@ -4,6 +4,7 @@ import { getOrderWithItems } from '@/lib/db/orders';
 import { OrderDetails } from '@/components/orders/order-details';
 import { OrderActions } from './order-actions';
 import { canCancelOrder } from '@/lib/orders/status';
+import { DoerCouponDisplay } from '@/components/account/doer-coupon-display';
 
 export const metadata = {
   title: 'Order Details | LogBloga',
@@ -50,6 +51,18 @@ export default async function OrderDetailsPage({ params }: OrderDetailsPageProps
         </div>
 
         <OrderDetails order={order} showActions={true} />
+
+        {/* Doer Coupon Display */}
+        {order.doer_coupon_code && (
+          <div className="mt-6">
+            <DoerCouponDisplay
+              couponCode={order.doer_coupon_code}
+              expiresAt={order.doer_coupon_expires_at || null}
+              used={order.doer_coupon_used || false}
+              usedAt={order.doer_coupon_used_at || null}
+            />
+          </div>
+        )}
 
         {/* Order Actions */}
         <div className="mt-6">

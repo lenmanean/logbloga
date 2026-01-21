@@ -61,6 +61,47 @@ export function LicenseDeliveryEmail({ data }: LicenseDeliveryEmailProps) {
             })}
           </Section>
 
+          {/* Doer Coupon Section */}
+          {data.doerCouponCode && (
+            <>
+              <Hr style={hr} />
+              <Section style={doerCouponSection}>
+                <Heading style={h2}>🎉 Bonus: 6 Months Free Doer Pro</Heading>
+                <Text style={text}>
+                  As a thank you for purchasing a package, you've received a bonus coupon for 6 months of free Pro subscription on Doer.com!
+                </Text>
+                <Section style={couponCodeSection}>
+                  <Text style={couponCodeLabel}>Your Coupon Code:</Text>
+                  <Text style={couponCode}>{data.doerCouponCode}</Text>
+                </Section>
+                <Text style={couponInstructions}>
+                  <strong>How to redeem:</strong>
+                </Text>
+                <Text style={couponInstructions}>
+                  1. Visit <Link href="https://doer.com/checkout" style={link}>doer.com/checkout</Link>
+                </Text>
+                <Text style={couponInstructions}>
+                  2. Apply the coupon code at checkout
+                </Text>
+                <Text style={couponInstructions}>
+                  3. Enter your payment method (required for post-trial billing)
+                </Text>
+                <Text style={couponInstructions}>
+                  4. Enjoy 6 months free Pro subscription!
+                </Text>
+                {data.doerCouponExpiresAt && (
+                  <Text style={couponExpiry}>
+                    Valid until: {new Date(data.doerCouponExpiresAt).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}
+                  </Text>
+                )}
+              </Section>
+            </>
+          )}
+
           <Hr style={hr} />
 
           <Section style={actionsSection}>
@@ -220,6 +261,65 @@ const infoText = {
   color: '#666',
   margin: '8px 0',
   lineHeight: '24px',
+};
+
+const doerCouponSection = {
+  backgroundColor: '#f0f9ff',
+  border: '2px solid #0ea5e9',
+  borderRadius: '8px',
+  padding: '20px',
+  margin: '30px 0',
+};
+
+const couponCodeSection = {
+  backgroundColor: '#ffffff',
+  border: '1px solid #0ea5e9',
+  borderRadius: '4px',
+  padding: '16px',
+  margin: '16px 0',
+  textAlign: 'center' as const,
+};
+
+const couponCodeLabel = {
+  fontSize: '14px',
+  color: '#666',
+  margin: '0 0 8px',
+  textAlign: 'center' as const,
+};
+
+const couponCode = {
+  fontSize: '24px',
+  fontFamily: 'monospace',
+  fontWeight: 'bold',
+  color: '#0ea5e9',
+  margin: '0',
+  textAlign: 'center' as const,
+};
+
+const couponInstructions = {
+  fontSize: '14px',
+  color: '#333',
+  lineHeight: '20px',
+  margin: '8px 0',
+};
+
+const couponExpiry = {
+  fontSize: '12px',
+  color: '#666',
+  margin: '12px 0 0',
+  fontStyle: 'italic',
+};
+
+const link = {
+  color: '#0ea5e9',
+  textDecoration: 'underline',
+};
+
+const h3 = {
+  color: '#333',
+  fontSize: '16px',
+  fontWeight: 'bold',
+  margin: '20px 0 10px',
 };
 
 const footer = {

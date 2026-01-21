@@ -51,6 +51,10 @@ export async function GET(request: Request) {
             orderNumber: orderById.order_number,
             status: orderById.status,
             orderId: orderById.id,
+            doerCouponCode: orderById.doer_coupon_code || null,
+            doerCouponExpiresAt: orderById.doer_coupon_expires_at || null,
+            doerCouponUsed: orderById.doer_coupon_used || false,
+            doerCouponUsedAt: orderById.doer_coupon_used_at || null,
           });
         }
       }
@@ -65,6 +69,10 @@ export async function GET(request: Request) {
       orderNumber: order.order_number,
       status: order.status,
       orderId: order.id,
+      doerCouponCode: order.doer_coupon_code || null,
+      doerCouponExpiresAt: order.doer_coupon_expires_at || null,
+      doerCouponUsed: order.doer_coupon_used || false,
+      doerCouponUsedAt: order.doer_coupon_used_at || null,
     });
   } catch (error) {
     console.error('Error fetching order by session:', error);

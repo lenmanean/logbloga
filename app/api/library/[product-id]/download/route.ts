@@ -5,7 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
-import { userHasActiveLicense } from '@/lib/db/licenses';
+import { hasProductAccess } from '@/lib/db/access';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 
 interface RouteParams {
@@ -38,12 +38,12 @@ export async function GET(
       );
     }
 
-    // Verify user has active license for this product
-    const hasAccess = await userHasActiveLicense(user.id, productId);
+    // Verify user has access to this product (order-based access control)
+    const hasAccess = await hasProductAccess(user.id, productId);
 
     if (!hasAccess) {
       return NextResponse.json(
-        { error: 'You do not have access to this product. Please purchase a license.' },
+        { error: 'You do not have access to this product. Please purchase it first.' },
         { status: 403 }
       );
     }

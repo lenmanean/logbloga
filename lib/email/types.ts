@@ -50,6 +50,8 @@ export interface OrderEmailData {
     unitPrice: number;
     total: number;
   }>;
+  doerCouponCode?: string | null;
+  doerCouponExpiresAt?: string | null;
 }
 
 export interface LicenseEmailData {
@@ -65,6 +67,8 @@ export interface LicenseEmailData {
     productName: string;
     productSlug: string;
   }>;
+  doerCouponCode?: string | null;
+  doerCouponExpiresAt?: string | null;
 }
 
 export interface WelcomeEmailData {

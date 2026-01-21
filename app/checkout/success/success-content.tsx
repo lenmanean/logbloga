@@ -7,12 +7,17 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { DoerCouponDisplay } from '@/components/account/doer-coupon-display';
 
 interface OrderData {
   orderNumber: string;
   status: string;
   orderId?: string;
   productIds?: string[];
+  doerCouponCode?: string | null;
+  doerCouponExpiresAt?: string | null;
+  doerCouponUsed?: boolean;
+  doerCouponUsedAt?: string | null;
 }
 
 export function CheckoutSuccessContent() {
@@ -40,6 +45,10 @@ export function CheckoutSuccessContent() {
             orderNumber: data.orderNumber || 'N/A',
             status: data.status || 'processing',
             orderId: data.orderId,
+            doerCouponCode: data.doerCouponCode || null,
+            doerCouponExpiresAt: data.doerCouponExpiresAt || null,
+            doerCouponUsed: data.doerCouponUsed || false,
+            doerCouponUsedAt: data.doerCouponUsedAt || null,
           });
         } else if (orderNumberParam) {
           // Fallback to order number if provided
@@ -144,6 +153,19 @@ export function CheckoutSuccessContent() {
                   </li>
                 </ul>
               </div>
+
+              {/* Doer Coupon Display */}
+              {orderData?.doerCouponCode && (
+                <>
+                  <Separator />
+                  <DoerCouponDisplay
+                    couponCode={orderData.doerCouponCode}
+                    expiresAt={orderData.doerCouponExpiresAt || null}
+                    used={orderData.doerCouponUsed || false}
+                    usedAt={orderData.doerCouponUsedAt || null}
+                  />
+                </>
+              )}
             </>
           )}
 
