@@ -8,7 +8,14 @@
 import type { Database } from './supabase';
 
 // Helper types for common table rows
-export type Product = Database['public']['Tables']['products']['Row'];
+export type Product = Database['public']['Tables']['products']['Row'] & {
+  // Fields added in migration 000020
+  product_type?: 'package' | 'individual' | 'tool' | 'template' | 'strategy' | 'course' | null;
+  version_year?: number | null;
+  is_current_version?: boolean | null;
+  included_products?: any; // JSONB
+  package_value?: number | null;
+};
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type CartItem = Database['public']['Tables']['cart_items']['Row'];
 export type Order = Database['public']['Tables']['orders']['Row'];
