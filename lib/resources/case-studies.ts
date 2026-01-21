@@ -121,7 +121,7 @@ The agency achieved remarkable growth in client acquisition.`,
     company: 'Digital Solutions Agency',
     industry: 'Digital Marketing',
     outcome: '50+ new clients, 60% cost reduction, 50% faster sales cycle',
-    testimonial: 'AI tools revolutionized our client acquisition process. We're now able to reach more prospects with personalized messaging at a fraction of the cost.',
+    testimonial: 'AI tools revolutionized our client acquisition process. We\'re now able to reach more prospects with personalized messaging at a fraction of the cost.',
     featuredImage: '/images/case-studies/agency.jpg',
     results: [
       { metric: 'New Clients', value: '50+' },

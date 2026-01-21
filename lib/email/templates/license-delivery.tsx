@@ -315,13 +315,6 @@ const link = {
   textDecoration: 'underline',
 };
 
-const h3 = {
-  color: '#333',
-  fontSize: '16px',
-  fontWeight: 'bold',
-  margin: '20px 0 10px',
-};
-
 const footer = {
   color: '#666',
   fontSize: '14px',
