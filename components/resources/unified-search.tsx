@@ -89,7 +89,7 @@ export function UnifiedSearch({ className, maxResults = 10 }: UnifiedSearchProps
 
                       return (
                         <Link
-                          key={resource.id || resource.slug}
+                          key={resource.id || ('slug' in resource ? resource.slug : resource.id)}
                           href={href}
                           className="block p-3 rounded-lg border hover:bg-muted transition-colors"
                         >
