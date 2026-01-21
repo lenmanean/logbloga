@@ -34,14 +34,14 @@ export async function storeDoerCoupon(
   const expiresAt = new Date(now);
   expiresAt.setDate(expiresAt.getDate() + 90); // 90 days expiration
   
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('orders')
     .update({
       doer_coupon_code: couponCode,
       doer_coupon_generated_at: now.toISOString(),
       doer_coupon_expires_at: expiresAt.toISOString(),
       doer_coupon_used: false,
-    })
+    } as any)
     .eq('id', orderId);
 
   if (error) {
@@ -56,7 +56,7 @@ export async function storeDoerCoupon(
 export async function isDoerCouponValid(couponCode: string): Promise<boolean> {
   const supabase = await createClient();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('orders')
     .select('doer_coupon_code, doer_coupon_expires_at, doer_coupon_used')
     .eq('doer_coupon_code', couponCode)
@@ -100,9 +100,9 @@ export async function markDoerCouponAsUsed(
     updateData.doer_user_id = doerUserId;
   }
 
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from('orders')
-    .update(updateData)
+    .update(updateData as any)
     .eq('doer_coupon_code', couponCode);
 
   if (error) {
@@ -117,7 +117,7 @@ export async function markDoerCouponAsUsed(
 export async function getDoerCouponForOrder(orderId: string): Promise<string | null> {
   const supabase = await createClient();
   
-  const { data, error } = await supabase
+  const { data, error } = await (supabase as any)
     .from('orders')
     .select('doer_coupon_code')
     .eq('id', orderId)
@@ -127,7 +127,7 @@ export async function getDoerCouponForOrder(orderId: string): Promise<string | n
     return null;
   }
 
-  return data.doer_coupon_code || null;
+  return (data as any).doer_coupon_code || null;
 }
 
 /**
