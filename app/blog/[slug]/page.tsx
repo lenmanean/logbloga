@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   }
 
   const title = post.seo_title || post.title;
-  const description = post.seo_description || post.excerpt || (post.content ? post.content.substring(0, 160) + '...' : '');
+  const description = post.seo_description || post.excerpt || '';
   const publishedDate = post.published_at ? new Date(post.published_at) : null;
   const modifiedDate = post.updated_at ? new Date(post.updated_at) : null;
 
