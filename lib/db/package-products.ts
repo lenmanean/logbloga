@@ -137,7 +137,7 @@ export async function calculatePackageValue(packageId: string): Promise<number> 
     throw new Error(`Failed to calculate package value: ${error.message}`);
   }
 
-  const totalValue = (data || []).reduce((sum, item) => {
+  const totalValue = ((data || []) as any[]).reduce((sum: number, item: any) => {
     const value = item.package_value ? parseFloat(String(item.package_value)) : 0;
     return sum + value;
   }, 0);
