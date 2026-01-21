@@ -63,8 +63,7 @@ export default async function BlogPage({ searchParams }: BlogPageProps) {
     const searchLower = params.search.toLowerCase();
     filteredPosts = filteredPosts.filter(post =>
       post.title.toLowerCase().includes(searchLower) ||
-      post.excerpt?.toLowerCase().includes(searchLower) ||
-      post.content.toLowerCase().includes(searchLower)
+      post.excerpt?.toLowerCase().includes(searchLower)
     );
   }
 
