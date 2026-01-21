@@ -53,13 +53,13 @@ export default async function OrderDetailsPage({ params }: OrderDetailsPageProps
         <OrderDetails order={order} showActions={true} />
 
         {/* Doer Coupon Display */}
-        {order.doer_coupon_code && (
+        {(order as any).doer_coupon_code && (
           <div className="mt-6">
             <DoerCouponDisplay
-              couponCode={order.doer_coupon_code}
-              expiresAt={order.doer_coupon_expires_at || null}
-              used={order.doer_coupon_used || false}
-              usedAt={order.doer_coupon_used_at || null}
+              couponCode={(order as any).doer_coupon_code}
+              expiresAt={(order as any).doer_coupon_expires_at || null}
+              used={(order as any).doer_coupon_used || false}
+              usedAt={(order as any).doer_coupon_used_at || null}
             />
           </div>
         )}

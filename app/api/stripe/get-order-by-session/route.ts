@@ -47,14 +47,15 @@ export async function GET(request: Request) {
         const orderById = await getOrderById(metadata.orderId);
         
         if (orderById) {
+          const orderWithDoer = orderById as any;
           return NextResponse.json({
             orderNumber: orderById.order_number,
             status: orderById.status,
             orderId: orderById.id,
-            doerCouponCode: orderById.doer_coupon_code || null,
-            doerCouponExpiresAt: orderById.doer_coupon_expires_at || null,
-            doerCouponUsed: orderById.doer_coupon_used || false,
-            doerCouponUsedAt: orderById.doer_coupon_used_at || null,
+            doerCouponCode: orderWithDoer.doer_coupon_code || null,
+            doerCouponExpiresAt: orderWithDoer.doer_coupon_expires_at || null,
+            doerCouponUsed: orderWithDoer.doer_coupon_used || false,
+            doerCouponUsedAt: orderWithDoer.doer_coupon_used_at || null,
           });
         }
       }
@@ -65,14 +66,15 @@ export async function GET(request: Request) {
       );
     }
 
+    const orderWithDoer = order as any;
     return NextResponse.json({
       orderNumber: order.order_number,
       status: order.status,
       orderId: order.id,
-      doerCouponCode: order.doer_coupon_code || null,
-      doerCouponExpiresAt: order.doer_coupon_expires_at || null,
-      doerCouponUsed: order.doer_coupon_used || false,
-      doerCouponUsedAt: order.doer_coupon_used_at || null,
+      doerCouponCode: orderWithDoer.doer_coupon_code || null,
+      doerCouponExpiresAt: orderWithDoer.doer_coupon_expires_at || null,
+      doerCouponUsed: orderWithDoer.doer_coupon_used || false,
+      doerCouponUsedAt: orderWithDoer.doer_coupon_used_at || null,
     });
   } catch (error) {
     console.error('Error fetching order by session:', error);

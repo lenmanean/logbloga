@@ -164,7 +164,7 @@ export async function handlePaymentIntentSucceeded(
           .from('orders')
           .select('doer_coupon_expires_at')
           .eq('id', order.id)
-          .single();
+          .single() as any;
 
         const emailData = {
           order: {
@@ -187,7 +187,7 @@ export async function handlePaymentIntentSucceeded(
             total: parseFloat(String(item.total_price)),
           })),
           doerCouponCode: doerCouponCode || null,
-          doerCouponExpiresAt: orderData?.doer_coupon_expires_at || null,
+          doerCouponExpiresAt: (orderData as any)?.doer_coupon_expires_at || null,
         };
 
         // Send payment receipt
@@ -223,7 +223,7 @@ export async function handlePaymentIntentSucceeded(
               })
             ),
             doerCouponCode: doerCouponCode || null,
-            doerCouponExpiresAt: orderData?.doer_coupon_expires_at || null,
+            doerCouponExpiresAt: (orderData as any)?.doer_coupon_expires_at || null,
           };
 
           await sendLicenseDelivery(order.user_id, licenseData);
