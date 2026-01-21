@@ -207,7 +207,7 @@ export async function getIncludedProductsAccess(
     return [];
   }
 
-  return packageProducts.map(pp => pp.product as Product);
+  return (packageProducts as any[]).map((pp: any) => pp.product as Product);
 }
 
 /**
