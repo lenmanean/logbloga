@@ -45,7 +45,7 @@ export async function getPackageProducts(packageId: string): Promise<PackageProd
     throw new Error(`Failed to fetch package products: ${error.message}`);
   }
 
-  return (data || []).map(item => ({
+  return ((data || []) as any[]).map((item: any) => ({
     id: item.id,
     product_id: item.product_id,
     package_id: item.package_id,
@@ -248,8 +248,8 @@ export async function getUserPurchasedProducts(userId: string): Promise<Product[
   }
 
   // Get all products included in purchased packages
-  const packageIds = (packages || [])
-    .map(p => p.product_id)
+  const packageIds = ((packages || []) as any[])
+    .map((p: any) => p.product_id)
     .filter((id): id is string => id !== null);
 
   let includedProducts: Product[] = [];
@@ -264,13 +264,13 @@ export async function getUserPurchasedProducts(userId: string): Promise<Product[
       .in('package_id', packageIds);
 
     if (!ppError && ppData) {
-      includedProducts = ppData.map(pp => pp.product as Product);
+      includedProducts = (ppData as any[]).map((pp: any) => pp.product as Product);
     }
   }
 
   // Combine direct products and included products, remove duplicates
-  const directProductsList = (directProducts || [])
-    .map(p => p.product as Product)
+  const directProductsList = ((directProducts || []) as any[])
+    .map((p: any) => p.product as Product)
     .filter((p): p is Product => p !== null);
 
   const allProducts = [...directProductsList, ...includedProducts];
