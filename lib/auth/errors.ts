@@ -65,6 +65,15 @@ export function getAuthErrorMessage(error: Error | null): string {
     return 'Too many attempts. Please wait a moment and try again';
   }
 
+  // Email sending errors
+  if (errorMessage.includes('error sending') || 
+      errorMessage.includes('failed to send') ||
+      errorMessage.includes('email delivery') ||
+      errorMessage.includes('smtp') ||
+      errorMessage.includes('confirmation email')) {
+    return 'Error sending confirmation email. Please check your email configuration or try again later.';
+  }
+
   // Network errors
   if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
     return 'Network error. Please check your connection and try again';
