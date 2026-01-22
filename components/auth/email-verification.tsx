@@ -21,7 +21,7 @@ export function EmailVerification() {
   const [isVerifying, setIsVerifying] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { user, refreshSession } = useAuth();
+  const { user } = useAuth();
   const supabase = createClient();
 
   // Get email from user, URL params, or localStorage
@@ -251,13 +251,6 @@ export function EmailVerification() {
           disabled={isResending || (!email && !user?.email)}
         >
           {isResending ? 'Sending...' : 'Resend Code'}
-        </Button>
-        <Button
-          variant="ghost"
-          className="w-full"
-          onClick={refreshSession}
-        >
-          Check Verification Status
         </Button>
         <p className="text-center text-sm text-muted-foreground">
           Already verified?{' '}
