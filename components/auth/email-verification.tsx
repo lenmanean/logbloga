@@ -80,8 +80,8 @@ export function EmailVerification() {
   }, [user, router]);
 
   const handleVerifyOtp = async () => {
-    if (!otpCode || otpCode.length !== 6) {
-      setError('Please enter a valid 6-digit code');
+    if (!otpCode || (otpCode.length !== 6 && otpCode.length !== 8)) {
+      setError('Please enter a valid verification code (6 or 8 digits)');
       return;
     }
 
@@ -216,15 +216,15 @@ export function EmailVerification() {
               type="text"
               inputMode="numeric"
               pattern="[0-9]*"
-              maxLength={6}
+              maxLength={8}
               value={otpCode}
               onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
-              placeholder="000000"
+              placeholder="00000000"
               className="text-center text-2xl font-mono tracking-widest h-14"
               disabled={isVerifying}
             />
             <p className="text-xs text-muted-foreground">
-              Enter the 6-digit code sent to your email
+              Enter the verification code sent to your email
             </p>
           </div>
 
@@ -240,7 +240,7 @@ export function EmailVerification() {
         <Button
           className="w-full"
           onClick={handleVerifyOtp}
-          disabled={isVerifying || !otpCode || otpCode.length !== 6}
+          disabled={isVerifying || !otpCode || (otpCode.length !== 6 && otpCode.length !== 8)}
         >
           {isVerifying ? 'Verifying...' : 'Verify Email'}
         </Button>
