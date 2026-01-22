@@ -18,8 +18,19 @@ export function getAuthErrorMessage(error: Error | null): string {
 
   const errorMessage = error.message.toLowerCase();
 
-  // Email validation errors
-  if (errorMessage.includes('invalid email') || errorMessage.includes('email')) {
+  // Email already exists - check this BEFORE generic email validation
+  if (errorMessage.includes('already registered') || 
+      errorMessage.includes('already exists') ||
+      errorMessage.includes('user already registered') ||
+      errorMessage.includes('email address is already registered') ||
+      errorMessage.includes('user with this email address has already been registered')) {
+    return 'An account with this email already exists. If you recently deleted your account, the email may still be in use. Please try signing in instead, or contact support if you need to reuse this email.';
+  }
+
+  // Email validation errors (format issues)
+  if (errorMessage.includes('invalid email') || 
+      errorMessage.includes('email format') ||
+      errorMessage.includes('valid email')) {
     return 'Please enter a valid email address';
   }
 
@@ -42,11 +53,6 @@ export function getAuthErrorMessage(error: Error | null): string {
   // User not found
   if (errorMessage.includes('user not found')) {
     return 'No account found with this email address';
-  }
-
-  // Email already exists
-  if (errorMessage.includes('already registered') || errorMessage.includes('already exists')) {
-    return 'An account with this email already exists';
   }
 
   // Email not confirmed

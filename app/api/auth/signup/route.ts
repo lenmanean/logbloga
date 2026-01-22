@@ -29,6 +29,37 @@ export async function POST(request: Request) {
     });
 
     if (error) {
+      // Log the actual error for debugging
+      console.error('Signup error:', {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+      });
+      
+      // If user already exists, check if we can resend verification
+      if (error.message.toLowerCase().includes('already registered') || 
+          error.message.toLowerCase().includes('already exists')) {
+        // Try to resend verification email for existing unverified user
+        try {
+          const { error: resendError } = await supabase.auth.resend({
+            type: 'signup',
+            email,
+          });
+          
+          if (!resendError) {
+            return NextResponse.json(
+              { 
+                error: 'An account with this email already exists. We\'ve sent a new verification code to your email.',
+                requiresVerification: true,
+              },
+              { status: 400 }
+            );
+          }
+        } catch (resendErr) {
+          // If resend fails, continue with original error
+        }
+      }
+      
       return NextResponse.json(
         { error: error.message },
         { status: 400 }
