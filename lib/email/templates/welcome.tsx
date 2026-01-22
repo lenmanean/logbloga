@@ -25,7 +25,6 @@ interface WelcomeEmailProps {
 export function WelcomeEmail({ data }: WelcomeEmailProps) {
   const { user } = data;
   const appUrl = getAppUrl();
-  const dashboardUrl = `${appUrl}/account`;
   const libraryUrl = `${appUrl}/account/library`;
 
   return (
@@ -61,11 +60,8 @@ export function WelcomeEmail({ data }: WelcomeEmailProps) {
           <Hr style={hr} />
 
           <Section style={actionsSection}>
-            <Link href={dashboardUrl} style={button}>
-              Go to Dashboard
-            </Link>
-            <Link href={libraryUrl} style={secondaryButton}>
-              View Library
+            <Link href={libraryUrl} style={button}>
+              Go to Library
             </Link>
           </Section>
 

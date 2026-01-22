@@ -3,8 +3,6 @@
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
-  LayoutDashboard, 
-  Package, 
   BookOpen, 
   ShoppingBag, 
   CreditCard, 
@@ -14,18 +12,6 @@ import {
 import { cn } from '@/lib/utils';
 
 const tabs = [
-  {
-    id: 'dashboard',
-    label: 'Dashboard',
-    href: '/account',
-    icon: LayoutDashboard,
-  },
-  {
-    id: 'products',
-    label: 'Downloads/Products',
-    href: '/account/products',
-    icon: Package,
-  },
   {
     id: 'library',
     label: 'Library',

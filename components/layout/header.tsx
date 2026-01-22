@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package, BookOpen, Key, LayoutDashboard, Heart } from 'lucide-react';
+import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package, BookOpen, Key, Heart } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 import {
@@ -249,9 +249,9 @@ export function Header() {
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem asChild>
-                      <Link href="/account" className="flex items-center">
-                        <LayoutDashboard className="mr-2 h-4 w-4" />
-                        Dashboard
+                      <Link href="/account/library" className="flex items-center">
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        Library
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>

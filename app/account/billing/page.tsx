@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import { Plus, CreditCard, ExternalLink } from 'lucide-react';
 import { PaymentMethodCard } from '@/components/billing/payment-method-card';
 import { AddPaymentMethodForm } from '@/components/billing/add-payment-method-form';
-import { BillingHistory } from '@/components/billing/billing-history';
 import {
   Dialog,
   DialogContent,
@@ -130,9 +129,9 @@ export default function BillingPage() {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold">Billing & Payment Methods</h1>
+            <h1 className="text-3xl font-bold">Billing</h1>
             <p className="text-muted-foreground mt-2">
-              Manage your payment methods and billing information
+              Manage your payment methods. View transaction history in <a href="/account/orders" className="text-primary hover:underline">Orders</a>.
             </p>
           </div>
           <div className="flex gap-2">
@@ -149,7 +148,7 @@ export default function BillingPage() {
 
         <div className="grid gap-6 lg:grid-cols-3">
           {/* Payment Methods */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -186,9 +185,6 @@ export default function BillingPage() {
                 )}
               </CardContent>
             </Card>
-
-            {/* Billing History */}
-            <BillingHistory />
           </div>
 
           {/* Info Card */}
@@ -200,6 +196,9 @@ export default function BillingPage() {
               <CardContent className="space-y-4 text-sm">
                 <p className="text-muted-foreground">
                   Your payment methods are securely stored and managed by Stripe. We never store your full card details.
+                </p>
+                <p className="text-muted-foreground">
+                  View your order history and transaction details in the <a href="/account/orders" className="text-primary hover:underline">Orders</a> tab.
                 </p>
                 <p className="text-muted-foreground">
                   Use the Customer Portal to view invoices, update billing information, and manage subscriptions.
