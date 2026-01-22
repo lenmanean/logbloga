@@ -34,11 +34,14 @@ export async function POST(request: Request) {
         message: error.message,
         status: error.status,
         name: error.name,
+        fullError: error,
       });
       
       // If user already exists, check if we can resend verification
       if (error.message.toLowerCase().includes('already registered') || 
-          error.message.toLowerCase().includes('already exists')) {
+          error.message.toLowerCase().includes('already exists') ||
+          error.message.toLowerCase().includes('user already registered') ||
+          error.message.toLowerCase().includes('email address is already registered')) {
         // Try to resend verification email for existing unverified user
         try {
           const { error: resendError } = await supabase.auth.resend({
@@ -56,20 +59,24 @@ export async function POST(request: Request) {
             );
           }
         } catch (resendErr) {
+          console.error('Error resending verification:', resendErr);
           // If resend fails, continue with original error
         }
       }
       
+      // Return the error with proper status code
+      // If it's a 500 from Supabase, return 500; otherwise 400
+      const statusCode = error.status === 500 ? 500 : 400;
       return NextResponse.json(
         { error: error.message },
-        { status: 400 }
+        { status: statusCode }
       );
     }
 
     // Send welcome email after successful signup (non-blocking, fire-and-forget)
+    // Use setTimeout to ensure this doesn't block the response
     if (data.user) {
-      // Use setImmediate or Promise.resolve().then() to ensure this doesn't block the response
-      Promise.resolve().then(async () => {
+      setTimeout(async () => {
         try {
           await sendWelcomeEmail(data.user!.id, {
             user: {
@@ -81,9 +88,7 @@ export async function POST(request: Request) {
           console.error('Error sending welcome email (non-blocking):', error);
           // Don't fail signup if welcome email fails - this is fire-and-forget
         }
-      }).catch(() => {
-        // Silently ignore any errors in the promise chain
-      });
+      }, 0);
     }
 
     return NextResponse.json(

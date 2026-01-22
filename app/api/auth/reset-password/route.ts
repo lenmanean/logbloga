@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { getAppUrl } from '@/lib/utils';
 
 /**
  * Server-side password reset handler
@@ -17,9 +18,10 @@ export async function POST(request: Request) {
     }
 
     const supabase = await createClient();
+    const appUrl = getAppUrl();
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/reset-password?token=reset_token`,
+      redirectTo: `${appUrl}/auth/reset-password?token=reset_token`,
     });
 
     if (error) {

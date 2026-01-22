@@ -231,7 +231,7 @@ export function EmailVerification() {
           {(email || user?.email) && (
             <div className="rounded-md bg-muted p-3">
               <p className="text-sm font-medium">Email sent to:</p>
-              <p className="text-sm text-muted-foreground">{email || user?.email}</p>
+              <p className="text-sm text-muted-foreground">{email || (user ? user.email : null)}</p>
             </div>
           )}
         </div>
