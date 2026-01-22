@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
+import { sendWelcomeEmail } from '@/lib/email/senders';
 
 /**
  * Server-side signup handler
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
       password,
       options: {
         data: fullName ? { full_name: fullName } : {},
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/callback`,
+        // No emailRedirectTo - Supabase will send OTP code automatically
       },
     });
 
@@ -34,11 +35,26 @@ export async function POST(request: Request) {
       );
     }
 
+    // Send welcome email after successful signup (non-blocking)
+    if (data.user) {
+      try {
+        await sendWelcomeEmail(data.user.id, {
+          user: {
+            email: data.user.email || email,
+            name: fullName || null,
+          },
+        });
+      } catch (error) {
+        console.error('Error sending welcome email:', error);
+        // Don't fail signup if welcome email fails
+      }
+    }
+
     return NextResponse.json(
       { 
         user: data.user,
         session: data.session,
-        message: 'Please check your email to verify your account',
+        message: 'Please check your email for a verification code',
       },
       { status: 201 }
     );

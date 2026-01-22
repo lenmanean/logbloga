@@ -21,9 +21,7 @@ export async function POST(request: Request) {
     const { error } = await supabase.auth.resend({
       type: 'signup',
       email,
-      options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/callback`,
-      },
+      // No emailRedirectTo - Supabase will send OTP code automatically
     });
 
     if (error) {

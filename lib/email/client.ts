@@ -28,10 +28,10 @@ export function getResendClient(): Resend {
 
 /**
  * Get the default sender email address
- * Can be configured via environment variable or use Resend default
+ * Uses mail@logbloga.com for production, or environment variable override
  */
 export function getDefaultSender(): string {
-  return process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev';
+  return process.env.RESEND_FROM_EMAIL || 'mail@logbloga.com';
 }
 
 /**

@@ -144,7 +144,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         password,
         options: {
           data: metadata || {},
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          // No emailRedirectTo - Supabase will send OTP code automatically
         },
       });
 
@@ -187,8 +187,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return { error: new Error('Supabase client not initialized') };
     }
     try {
+      // Get app URL - prefer env var, otherwise use current origin
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin;
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/reset-password?token=reset_token`,
+        redirectTo: `${appUrl}/auth/reset-password?token=reset_token`,
       });
 
       if (error) {
