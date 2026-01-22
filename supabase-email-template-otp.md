@@ -35,7 +35,7 @@ If you prefer a simpler version:
 
 <p>Your verification code is: <strong>{{ .Token }}</strong></p>
 
-<p>Enter this 6-digit code to complete your signup.</p>
+<p>Enter this code to complete your signup.</p>
 
 <p>This code expires in 1 hour.</p>
 ```
