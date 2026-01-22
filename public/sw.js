@@ -78,6 +78,11 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Skip Vercel Live feedback script (causes CSP violations)
+  if (url.hostname.includes('vercel.live')) {
+    return; // Don't cache or handle vercel.live requests
+  }
+
   // Skip API routes (these should use network-first)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(networkFirst(request));

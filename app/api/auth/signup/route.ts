@@ -66,19 +66,24 @@ export async function POST(request: Request) {
       );
     }
 
-    // Send welcome email after successful signup (non-blocking)
+    // Send welcome email after successful signup (non-blocking, fire-and-forget)
     if (data.user) {
-      try {
-        await sendWelcomeEmail(data.user.id, {
-          user: {
-            email: data.user.email || email,
-            name: fullName || null,
-          },
-        });
-      } catch (error) {
-        console.error('Error sending welcome email:', error);
-        // Don't fail signup if welcome email fails
-      }
+      // Use setImmediate or Promise.resolve().then() to ensure this doesn't block the response
+      Promise.resolve().then(async () => {
+        try {
+          await sendWelcomeEmail(data.user!.id, {
+            user: {
+              email: data.user!.email || email,
+              name: fullName || null,
+            },
+          });
+        } catch (error) {
+          console.error('Error sending welcome email (non-blocking):', error);
+          // Don't fail signup if welcome email fails - this is fire-and-forget
+        }
+      }).catch(() => {
+        // Silently ignore any errors in the promise chain
+      });
     }
 
     return NextResponse.json(
@@ -90,8 +95,21 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (error) {
+    // Log the full error for debugging
+    console.error('Unexpected signup error:', {
+      error,
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+    });
+    
     return NextResponse.json(
-      { error: 'An unexpected error occurred' },
+      { 
+        error: error instanceof Error ? error.message : 'An unexpected error occurred',
+        // Include original error in development
+        ...(process.env.NODE_ENV === 'development' && { 
+          details: error instanceof Error ? error.stack : String(error) 
+        }),
+      },
       { status: 500 }
     );
   }

@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuth } from '@/hooks/useAuth';
+// Removed useAuth import - using API route instead
 import { getAuthErrorMessage } from '@/lib/auth/errors';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -39,7 +39,6 @@ export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const { signUp } = useAuth();
 
   const {
     register,
@@ -57,20 +56,29 @@ export function SignUpForm() {
     setError(null);
 
     try {
-      const { error: signUpError } = await signUp(
-        data.email,
-        data.password,
-        data.fullName ? { full_name: data.fullName } : undefined
-      );
+      // Use API route instead of direct Supabase call to ensure welcome email is sent
+      const response = await fetch('/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: data.email,
+          password: data.password,
+          fullName: data.fullName,
+        }),
+      });
 
-      if (signUpError) {
-        setError(getAuthErrorMessage(signUpError));
+      const result = await response.json();
+
+      if (!response.ok) {
+        setError(getAuthErrorMessage(new Error(result.error || 'Signup failed')));
         setIsLoading(false);
         return;
       }
 
-      // Redirect to email verification page
-      router.push('/auth/verify-email');
+      // Redirect to email verification page with email in query params
+      router.push(`/auth/verify-email?email=${encodeURIComponent(data.email)}`);
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
       setIsLoading(false);
