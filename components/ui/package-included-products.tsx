@@ -27,6 +27,7 @@ export function PackageIncludedProducts({
   const savingsPercentage = totalPackageValue > 0 
     ? Math.round((savings / totalPackageValue) * 100)
     : 0;
+  const hasSavings = savings > 0;
 
   return (
     <Card className="border-primary/20 bg-primary/5">
@@ -36,9 +37,11 @@ export function PackageIncludedProducts({
             <Package className="h-5 w-5 text-primary" />
             <CardTitle className="text-2xl">Included Products</CardTitle>
           </div>
-          <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400 text-base px-3 py-1">
-            Best Value
-          </Badge>
+          {hasSavings && (
+            <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400 text-base px-3 py-1">
+              Best Value
+            </Badge>
+          )}
         </div>
         <div className="flex items-baseline gap-4 mt-4">
           <div>
@@ -114,13 +117,15 @@ export function PackageIncludedProducts({
               </div>
             </div>
           ))}
-          <div className="mt-4 p-3 rounded-lg bg-muted text-sm text-muted-foreground">
-            <p>
-              <strong>Note:</strong> Individual products are available for standalone purchase at marked-up prices. 
-              Purchasing the package saves you ${savings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
-              compared to buying each product separately.
-            </p>
-          </div>
+          {hasSavings && (
+            <div className="mt-4 p-3 rounded-lg bg-muted text-sm text-muted-foreground">
+              <p>
+                <strong>Note:</strong> Individual products are available for standalone purchase at marked-up prices. 
+                Purchasing the package saves you ${savings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
+                compared to buying each product separately.
+              </p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
