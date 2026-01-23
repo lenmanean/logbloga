@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { PackageProduct, PackageLevels, PackageLevel } from '@/lib/products';
 import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Link from 'next/link';
 
 interface PackageLevelsContentProps {
   package: PackageProduct;
@@ -77,7 +78,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                     Level {level.level}
                   </Badge>
                   <div className="flex-1">
-                    <CardTitle className="text-2xl mb-2">Level {level.level} Package</CardTitle>
+                    <CardTitle className="text-2xl mb-2">Level {level.level}</CardTitle>
                     <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1.5">
                         <Clock className="h-4 w-4" />
@@ -85,7 +86,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                       </div>
                       <div className="flex items-center gap-1.5">
                         <DollarSign className="h-4 w-4" />
-                        <span>{level.expectedProfit}</span>
+                        <span>{level.expectedProfit}*</span>
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Zap className="h-4 w-4" />
@@ -252,6 +253,24 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
           </Card>
         );
       })}
+
+      {/* Earnings Disclaimer */}
+      <Card className="border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800">
+        <CardContent className="pt-6">
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            <sup>*</sup> <strong>Expected Revenue Disclaimer:</strong> The expected revenue figures displayed above are illustrative examples only and are not a guarantee of income. Your actual results will depend on numerous factors including your effort, skill, experience, market conditions, competition, and adherence to the implementation plan. Results may vary significantly. By purchasing this package, you acknowledge that you understand there is no guarantee of achieving any stated or implied earnings, revenue, or profit figures. Please review our{' '}
+            <Link 
+              href="/legal/terms" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary underline hover:text-primary/80"
+            >
+              Terms of Service
+            </Link>
+            {' '}for complete details on earnings disclaimers and limitations of liability.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   );
 }
