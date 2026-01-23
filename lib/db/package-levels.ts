@@ -128,7 +128,7 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
  */
 export function hasPackageLevels(product: Product): boolean {
   const levels = parsePackageLevels(product);
-  return levels !== null && (levels.level1 || levels.level2 || levels.level3);
+  return levels !== null && !!(levels.level1 || levels.level2 || levels.level3);
 }
 
 /**
