@@ -10,8 +10,9 @@ import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { getProductBySlug, getAllProducts } from '@/lib/db/products';
 import { getPackageWithIncludedProductsBySlug } from '@/lib/db/package-products';
+import { parsePackageLevels } from '@/lib/db/package-levels';
 import { PackageProduct } from '@/lib/products';
-import { ArrowLeft, CheckCircle } from 'lucide-react';
+import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb } from 'lucide-react';
 import { PackageIncludedProducts } from '@/components/ui/package-included-products';
 
 // Lazy load recommendation components (below fold, non-critical)
@@ -114,6 +115,9 @@ export default async function PackagePage({ params }: PackagePageProps) {
   // Fetch included products for this package
   const packageWithProducts = await getPackageWithIncludedProductsBySlug(packageSlug);
 
+  // Parse levels data if available
+  const levels = parsePackageLevels(packageData);
+
   // Convert database product to PackageProduct format expected by components
   const packageProduct: PackageProduct = {
     id: packageData.id,
@@ -132,6 +136,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
     modules: (packageData.modules as any) || [],
     resources: (packageData.resources as any) || [],
     bonusAssets: (packageData.bonus_assets as any) || [],
+    levels: levels || undefined, // Add parsed levels data
     pricingJustification: packageData.pricing_justification || '',
     contentHours: packageData.content_hours || '',
     slug: packageData.slug,
@@ -192,7 +197,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
               <p className="text-base leading-relaxed text-muted-foreground mb-6">
                 {packageProduct.description}
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
                   <div>
@@ -203,20 +208,38 @@ export default async function PackagePage({ params }: PackagePageProps) {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
+                  <Layers className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-semibold mb-1">Production-Ready Resources</p>
+                    <p className="font-semibold mb-1">Level-Based Progression</p>
                     <p className="text-sm text-muted-foreground">
-                      Templates and tools you can use immediately
+                      Choose from Level 1, 2, or 3 based on your goals and timeline
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Settings className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold mb-1">Platform Integration Guides</p>
+                    <p className="text-sm text-muted-foreground">
+                      Step-by-step setup instructions for all recommended platforms
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <Lightbulb className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold mb-1">Creative Decision Frameworks</p>
+                    <p className="text-sm text-muted-foreground">
+                      Guided exercises to help you make creative decisions
                     </p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-semibold mb-1">Community Support</p>
+                    <p className="font-semibold mb-1">Production-Ready Templates</p>
                     <p className="text-sm text-muted-foreground">
-                      Join a community of like-minded professionals
+                      Templates, checklists, and tools you can use immediately
                     </p>
                   </div>
                 </div>

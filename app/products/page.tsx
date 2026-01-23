@@ -1,39 +1,90 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ProductCard } from '@/components/ui/product-card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { sampleProducts, Product, ProductCategory } from '@/lib/products';
-import { Search, X } from 'lucide-react';
+import { Product, ProductCategory } from '@/lib/products';
+import { convertDbProductToFrontendProduct } from '@/lib/db/products';
+import { Search, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { Product as DbProduct } from '@/lib/types/database';
 
-export default function ProductsPage() {
+interface ProductsPageClientProps {
+  initialProducts?: DbProduct[];
+}
+
+export default function ProductsPage({ initialProducts = [] }: ProductsPageClientProps) {
+  const [products, setProducts] = useState<DbProduct[]>(initialProducts);
+  const [loading, setLoading] = useState(!initialProducts.length);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<ProductCategory | 'all'>('all');
+  const [selectedProductType, setSelectedProductType] = useState<'all' | 'tool' | 'template' | 'strategy' | 'course' | 'individual'>('all');
   const [selectedDifficulty, setSelectedDifficulty] = useState<'all' | 'beginner' | 'intermediate' | 'advanced'>('all');
   const [priceRange, setPriceRange] = useState<{ min: number; max: number }>({ min: 0, max: 1000 });
 
+  // Fetch products if not provided
+  useEffect(() => {
+    if (initialProducts.length === 0) {
+      fetch('/api/products')
+        .then(res => res.json())
+        .then(data => {
+          setProducts(data.products || []);
+          setLoading(false);
+        })
+        .catch(err => {
+          console.error('Error fetching products:', err);
+          setLoading(false);
+        });
+    }
+  }, [initialProducts.length]);
+
+  // Convert DB products to frontend format and filter
   const filteredProducts = useMemo(() => {
-    return sampleProducts.filter((product) => {
-      // Search filter
-      const matchesSearch = 
-        product.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchQuery.toLowerCase());
+    return products
+      .filter((dbProduct) => {
+        // Only show individual products (not packages)
+        if (dbProduct.product_type === 'package') {
+          return false;
+        }
 
-      // Category filter
-      const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+        // Product type filter
+        if (selectedProductType !== 'all') {
+          if (dbProduct.product_type !== selectedProductType) {
+            return false;
+          }
+        } else {
+          // If "all" is selected, exclude packages
+          if (dbProduct.product_type === 'package') {
+            return false;
+          }
+        }
 
-      // Difficulty filter
-      const matchesDifficulty = selectedDifficulty === 'all' || product.difficulty === selectedDifficulty;
+        // Search filter
+        const title = (dbProduct.title || dbProduct.name || '').toLowerCase();
+        const description = (dbProduct.description || '').toLowerCase();
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch = !searchQuery || 
+          title.includes(searchLower) || 
+          description.includes(searchLower);
 
-      // Price filter
-      const matchesPrice = product.price >= priceRange.min && product.price <= priceRange.max;
+        // Category filter
+        const matchesCategory = selectedCategory === 'all' || 
+          (dbProduct.category && dbProduct.category === selectedCategory);
 
-      return matchesSearch && matchesCategory && matchesDifficulty && matchesPrice;
-    });
-  }, [searchQuery, selectedCategory, selectedDifficulty, priceRange]);
+        // Difficulty filter
+        const matchesDifficulty = selectedDifficulty === 'all' || 
+          (dbProduct.difficulty && dbProduct.difficulty === selectedDifficulty);
+
+        // Price filter
+        const price = typeof dbProduct.price === 'number' ? dbProduct.price : parseFloat(String(dbProduct.price || 0));
+        const matchesPrice = price >= priceRange.min && price <= priceRange.max;
+
+        return matchesSearch && matchesCategory && matchesDifficulty && matchesPrice;
+      })
+      .map(convertDbProductToFrontendProduct);
+  }, [products, searchQuery, selectedCategory, selectedProductType, selectedDifficulty, priceRange]);
 
   const categories = [
     { id: 'all' as const, name: 'All Categories' },
@@ -53,11 +104,12 @@ export default function ProductsPage() {
   const clearFilters = () => {
     setSearchQuery('');
     setSelectedCategory('all');
+    setSelectedProductType('all');
     setSelectedDifficulty('all');
     setPriceRange({ min: 0, max: 1000 });
   };
 
-  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || selectedDifficulty !== 'all' || priceRange.min > 0 || priceRange.max < 1000;
+  const hasActiveFilters = searchQuery || selectedCategory !== 'all' || selectedProductType !== 'all' || selectedDifficulty !== 'all' || priceRange.min > 0 || priceRange.max < 1000;
 
   return (
     <main className="min-h-screen bg-background">
@@ -96,6 +148,27 @@ export default function ProductsPage() {
 
         {/* Filters */}
         <div className="mb-8 space-y-4">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">Product Type:</span>
+              <div className="flex flex-wrap gap-2">
+                {productTypes.map((type) => (
+                  <Badge
+                    key={type.id}
+                    variant={selectedProductType === type.id ? 'default' : 'outline'}
+                    className={cn(
+                      'cursor-pointer transition-colors',
+                      selectedProductType === type.id && 'bg-red-500 text-white border-red-500'
+                    )}
+                    onClick={() => setSelectedProductType(type.id)}
+                  >
+                    {type.name}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">Category:</span>
@@ -179,7 +252,7 @@ export default function ProductsPage() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-sm text-muted-foreground">
-            Showing {filteredProducts.length} of {sampleProducts.length} products
+            Showing {filteredProducts.length} of {products.filter(p => p.product_type !== 'package').length} individual products
           </p>
         </div>
 

@@ -6,6 +6,7 @@
 
 import type { Product } from '@/lib/types/database';
 import { getProductById } from '@/lib/db/products';
+import { getPackageProducts } from '@/lib/db/package-products';
 import {
   getRuleBasedRecommendations,
   getCollaborativeRecommendations,
@@ -52,6 +53,27 @@ export async function getRecommendations(
     return [];
   }
 
+  // If product is a package, get included products to exclude from recommendations
+  let includedProductIds: string[] = [];
+  if ((product as any).product_type === 'package') {
+    try {
+      const packageProducts = await getPackageProducts(productId);
+      includedProductIds = packageProducts
+        .map(pp => pp.product_id)
+        .filter((id): id is string => id !== null && id !== undefined);
+    } catch (error) {
+      console.error('Error fetching package products for recommendations:', error);
+      // Continue without excluding if there's an error
+    }
+  }
+
+  // Combine included products with explicitly excluded products
+  const allExcludedIds = [
+    ...excludeProductIds,
+    ...includedProductIds,
+    productId, // Always exclude the current product
+  ];
+
   const allRecommendations: RecommendationResult[] = [];
 
   // Rule-based recommendations (highest priority)
@@ -86,7 +108,7 @@ export async function getRecommendations(
   if (allRecommendations.length < limit) {
     const popular = await getPopularRecommendations(
       product.category || undefined,
-      [productId, ...excludeProductIds],
+      allExcludedIds,
       limit - allRecommendations.length
     );
     allRecommendations.push(...popular);
@@ -101,9 +123,9 @@ export async function getRecommendations(
     }
   });
 
-  // Filter out excluded products
+  // Filter out excluded products (including included products if this is a package)
   const filtered = Array.from(productMap.values()).filter(
-    (rec) => !excludeProductIds.includes(rec.product.id)
+    (rec) => !allExcludedIds.includes(rec.product.id)
   );
 
   // Rank and return top results

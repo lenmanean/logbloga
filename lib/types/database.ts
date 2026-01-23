@@ -57,6 +57,32 @@ export interface PackageResource {
   items: string[];
 }
 
+// Package Level Structure (added in migration 000027)
+export interface PackageLevelContent {
+  file: string;
+  type: string;
+  description: string;
+  platform?: string; // For platform guides
+  name?: string; // For creative frameworks and templates
+}
+
+export interface PackageLevel {
+  level: 1 | 2 | 3;
+  timeInvestment: string; // "2-3 Weeks"
+  expectedProfit: string; // "$500-$1,500/month"
+  platformCosts: string; // "$0-50/month"
+  implementationPlan: PackageLevelContent;
+  platformGuides: PackageLevelContent[];
+  creativeFrameworks: PackageLevelContent[];
+  templates: PackageLevelContent[];
+}
+
+export interface PackageLevels {
+  level1?: PackageLevel;
+  level2?: PackageLevel;
+  level3?: PackageLevel;
+}
+
 export interface ExtendedProduct {
   // All Product fields but with proper types
   id: string;

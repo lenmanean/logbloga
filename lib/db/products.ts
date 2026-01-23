@@ -6,6 +6,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product, ExtendedProduct } from '@/lib/types/database';
 import type { ProductQueryOptions } from './types';
+import { parsePackageLevels } from './package-levels';
 
 /**
  * Get all active products
@@ -79,13 +80,14 @@ export async function getAllProductsCached(options?: ProductQueryOptions): Promi
 
 /**
  * Get a single product by slug
+ * Includes levels field for level-based packages
  */
 export async function getProductBySlug(slug: string): Promise<Product | null> {
   const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('products')
-    .select('*')
+    .select('*') // Includes levels JSONB field
     .eq('slug', slug)
     .eq('active', true)
     .single();
@@ -97,6 +99,13 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     }
     console.error('Error fetching product:', error);
     throw new Error(`Failed to fetch product: ${error.message}`);
+  }
+
+  // Parse levels if present (for validation)
+  if (data && data.levels) {
+    const parsedLevels = parsePackageLevels(data);
+    // Note: We keep the raw levels data in the product object
+    // The parsing is done in components via parsePackageLevels helper
   }
 
   return data;
@@ -122,13 +131,14 @@ export async function getProductBySlugCached(slug: string): Promise<Product | nu
 
 /**
  * Get a single product by ID
+ * Includes levels field for level-based packages
  */
 export async function getProductById(id: string): Promise<Product | null> {
   const supabase = await createClient();
   
   const { data, error } = await supabase
     .from('products')
-    .select('*')
+    .select('*') // Includes levels JSONB field
     .eq('id', id)
     .eq('active', true)
     .single();

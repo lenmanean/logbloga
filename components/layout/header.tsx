@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package, BookOpen, Key, Heart } from 'lucide-react';
+import { Menu, ChevronDown, ShoppingCart, User, Settings, LogIn, LogOut, UserCircle, Package, BookOpen, Key, Heart, ShoppingBag, CreditCard } from 'lucide-react';
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { TypingAnimation } from '@/components/ui/typing-animation';
 import {
@@ -255,33 +255,27 @@ export function Header() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/account/profile" className="flex items-center">
-                        <UserCircle className="mr-2 h-4 w-4" />
-                        Profile
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
                       <Link href="/account/orders" className="flex items-center">
-                        <Package className="mr-2 h-4 w-4" />
+                        <ShoppingBag className="mr-2 h-4 w-4" />
                         Orders
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                      <Link href="/account/library" className="flex items-center">
-                        <BookOpen className="mr-2 h-4 w-4" />
-                        Library
-                      </Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link href="/account/licenses" className="flex items-center">
-                        <Key className="mr-2 h-4 w-4" />
-                        Licenses
+                      <Link href="/account/billing" className="flex items-center">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Billing
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                       <Link href="/account/settings" className="flex items-center">
                         <Settings className="mr-2 h-4 w-4" />
                         Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/profile" className="flex items-center">
+                        <User className="mr-2 h-4 w-4" />
+                        Account Info
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
