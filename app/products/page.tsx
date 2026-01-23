@@ -94,6 +94,15 @@ export default function ProductsPage({ initialProducts = [] }: ProductsPageClien
       });
   }, [products, searchQuery, selectedCategory, selectedProductType, selectedDifficulty, priceRange]);
 
+  const productTypes = [
+    { id: 'all' as const, name: 'All Types' },
+    { id: 'tool' as const, name: 'Tools' },
+    { id: 'template' as const, name: 'Templates' },
+    { id: 'strategy' as const, name: 'Strategies' },
+    { id: 'course' as const, name: 'Courses' },
+    { id: 'individual' as const, name: 'Individual Products' },
+  ];
+
   const categories = [
     { id: 'all' as const, name: 'All Categories' },
     { id: 'web-apps' as const, name: 'Web Apps' },
