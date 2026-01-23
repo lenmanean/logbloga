@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen } from 'lucide-react';
 import { LibraryPreviewClient } from './library-preview-client';
@@ -87,7 +88,16 @@ export default function PreviewLibraryPage() {
             </CardContent>
           </Card>
         ) : (
-          <LibraryPreviewClient licenses={mockLicenses} />
+          <Suspense fallback={
+            <Card>
+              <CardContent className="flex flex-col items-center justify-center py-12">
+                <BookOpen className="h-12 w-12 text-muted-foreground mb-4 animate-pulse" />
+                <CardTitle className="text-xl mb-2">Loading preview library...</CardTitle>
+              </CardContent>
+            </Card>
+          }>
+            <LibraryPreviewClient licenses={mockLicenses} />
+          </Suspense>
         )}
       </div>
     </main>
