@@ -161,9 +161,6 @@ export function Header() {
               <DropdownMenuItem asChild>
                 <Link href="/ai-to-usd/packages/freelancing">Freelancing</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/products">All Products</Link>
-              </DropdownMenuItem>
             </NavDropdown>
             <NavDropdown
               label="Explore Courses"
@@ -355,13 +352,6 @@ export function Header() {
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Freelancing
-                    </Link>
-                    <Link
-                      href="/products"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      All Products
                     </Link>
                   </div>
                 </div>

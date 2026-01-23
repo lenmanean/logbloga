@@ -86,12 +86,9 @@ export function PackageIncludedProducts({
             >
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <Link
-                    href={`/products?product=${item.product.slug}`}
-                    className="font-semibold hover:text-primary transition-colors"
-                  >
+                  <span className="font-semibold">
                     {item.product.title || item.product.name}
-                  </Link>
+                  </span>
                   {item.product.featured && (
                     <Badge variant="outline" className="text-xs">
                       Featured
@@ -120,9 +117,9 @@ export function PackageIncludedProducts({
           {hasSavings && (
             <div className="mt-4 p-3 rounded-lg bg-muted text-sm text-muted-foreground">
               <p>
-                <strong>Note:</strong> Individual products are available for standalone purchase at marked-up prices. 
+                <strong>Note:</strong> Individual products are included in this package. 
                 Purchasing the package saves you ${savings.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} 
-                compared to buying each product separately.
+                compared to the individual product values.
               </p>
             </div>
           )}

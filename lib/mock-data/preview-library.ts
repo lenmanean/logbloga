@@ -874,6 +874,186 @@ export const mockPackages: MockPackage[] = [
 ];
 
 /**
+ * Mock individual product structure
+ */
+export interface MockIndividualProduct {
+  id: string;
+  slug: string;
+  title: string;
+  description: string;
+  category: ProductCategory;
+  price: number;
+  originalPrice: number | null;
+  featured: boolean;
+  difficulty: ProductDifficulty;
+  duration: string;
+  productType: 'tool' | 'template' | 'strategy' | 'course' | 'individual';
+  image?: string;
+}
+
+/**
+ * Mock individual products for preview
+ */
+export const mockIndividualProducts: MockIndividualProduct[] = [
+  {
+    id: 'ai-ecommerce-builder',
+    slug: 'ai-ecommerce-builder',
+    title: 'AI-Powered E-Commerce Builder',
+    description: 'Create stunning online stores with AI-assisted design and automation',
+    category: 'web-apps',
+    price: 299.00,
+    originalPrice: 499.00,
+    featured: true,
+    difficulty: 'beginner',
+    duration: '6 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'social-content-generator',
+    slug: 'social-content-generator',
+    title: 'Social Media Content Generator',
+    description: 'Generate engaging posts, captions, and content calendars automatically',
+    category: 'social-media',
+    price: 149.00,
+    originalPrice: 249.00,
+    featured: true,
+    difficulty: 'beginner',
+    duration: '4 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'client-management-system',
+    slug: 'client-management-system',
+    title: 'Client Management System',
+    description: 'Streamline your agency workflow with AI-powered project management',
+    category: 'agency',
+    price: 399.00,
+    originalPrice: 599.00,
+    featured: true,
+    difficulty: 'intermediate',
+    duration: '8 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'freelancer-portfolio',
+    slug: 'freelancer-portfolio',
+    title: 'Freelancer Portfolio Platform',
+    description: 'Build a professional portfolio that attracts high-paying clients',
+    category: 'freelancing',
+    price: 199.00,
+    originalPrice: 349.00,
+    featured: true,
+    difficulty: 'beginner',
+    duration: '3 weeks',
+    productType: 'template',
+  },
+  {
+    id: 'saas-dashboard-template',
+    slug: 'saas-dashboard-template',
+    title: 'SaaS Dashboard Template',
+    description: 'Modern dashboard template with AI analytics and reporting',
+    category: 'web-apps',
+    price: 249.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'intermediate',
+    duration: '5 weeks',
+    productType: 'template',
+  },
+  {
+    id: 'instagram-automation',
+    slug: 'instagram-automation',
+    title: 'Instagram Growth Automation',
+    description: 'Automate engagement and grow your Instagram following organically',
+    category: 'social-media',
+    price: 179.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'beginner',
+    duration: '4 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'agency-proposal-generator',
+    slug: 'agency-proposal-generator',
+    title: 'Agency Proposal Generator',
+    description: 'Create winning proposals in minutes with AI-powered templates',
+    category: 'agency',
+    price: 279.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'beginner',
+    duration: '2 weeks',
+    productType: 'template',
+  },
+  {
+    id: 'freelance-invoice-system',
+    slug: 'freelance-invoice-system',
+    title: 'Freelance Invoice System',
+    description: 'Professional invoicing and payment tracking for freelancers',
+    category: 'freelancing',
+    price: 129.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'beginner',
+    duration: '2 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'api-integration-platform',
+    slug: 'api-integration-platform',
+    title: 'API Integration Platform',
+    description: 'Connect multiple services with AI-powered API integrations',
+    category: 'web-apps',
+    price: 349.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'advanced',
+    duration: '10 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'tiktok-strategy',
+    slug: 'tiktok-strategy',
+    title: 'TikTok Content Strategy',
+    description: 'Viral content strategies and AI-powered trend analysis',
+    category: 'social-media',
+    price: 199.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'intermediate',
+    duration: '6 weeks',
+    productType: 'strategy',
+  },
+  {
+    id: 'team-collaboration-tool',
+    slug: 'team-collaboration-tool',
+    title: 'Team Collaboration Tool',
+    description: 'AI-enhanced collaboration platform for distributed teams',
+    category: 'agency',
+    price: 449.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'intermediate',
+    duration: '9 weeks',
+    productType: 'tool',
+  },
+  {
+    id: 'client-communication-system',
+    slug: 'client-communication-system',
+    title: 'Client Communication System',
+    description: 'Automate client updates and maintain professional communication',
+    category: 'freelancing',
+    price: 159.00,
+    originalPrice: null,
+    featured: false,
+    difficulty: 'beginner',
+    duration: '3 weeks',
+    productType: 'tool',
+  },
+];
+
+/**
  * Get all mock packages
  */
 export function getAllMockPackages(): MockPackage[] {
@@ -892,4 +1072,25 @@ export function getMockPackageBySlug(slug: string): MockPackage | undefined {
  */
 export function getMockPackagesByCategory(category: ProductCategory): MockPackage[] {
   return mockPackages.filter((pkg) => pkg.category === category);
+}
+
+/**
+ * Get all mock individual products
+ */
+export function getAllMockIndividualProducts(): MockIndividualProduct[] {
+  return mockIndividualProducts;
+}
+
+/**
+ * Get a mock individual product by slug
+ */
+export function getMockIndividualProductBySlug(slug: string): MockIndividualProduct | undefined {
+  return mockIndividualProducts.find((product) => product.slug === slug);
+}
+
+/**
+ * Get mock individual products by category
+ */
+export function getMockIndividualProductsByCategory(category: ProductCategory): MockIndividualProduct[] {
+  return mockIndividualProducts.filter((product) => product.category === category);
 }

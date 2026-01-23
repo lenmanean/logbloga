@@ -2,12 +2,12 @@ import { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen } from 'lucide-react';
 import { LibraryPreviewClient } from './library-preview-client';
-import { getAllMockPackages } from '@/lib/mock-data/preview-library';
+import { getAllMockPackages, getAllMockIndividualProducts } from '@/lib/mock-data/preview-library';
 import type { ProductWithPurchaseDate } from '@/lib/types/database';
 
 export const metadata = {
   title: 'Preview Library | LogBloga',
-  description: 'Visual testing - All packages with mock data',
+  description: 'Visual testing - All packages and individual products with mock data',
 };
 
 /**
@@ -49,6 +49,53 @@ function mockPackageToProductWithPurchaseDate(mockPackage: ReturnType<typeof get
     resources: null,
     stripe_price_id: null,
     stripe_product_id: null,
+    product_type: 'package',
+    // Purchase information
+    purchasedDate: purchaseDate,
+    orderId: orderId,
+  };
+}
+
+/**
+ * Convert mock individual product to ProductWithPurchaseDate format for component compatibility
+ */
+function mockIndividualProductToProductWithPurchaseDate(mockProduct: ReturnType<typeof getAllMockIndividualProducts>[0]): ProductWithPurchaseDate {
+  const purchaseDate = new Date().toISOString();
+  const orderId = `preview-order-${mockProduct.id}`;
+
+  return {
+    id: mockProduct.id,
+    name: mockProduct.title, // Required field
+    title: mockProduct.title,
+    description: mockProduct.description,
+    category: mockProduct.category,
+    price: mockProduct.price,
+    original_price: mockProduct.originalPrice,
+    featured: mockProduct.featured,
+    active: true,
+    package_image: mockProduct.image || null,
+    images: mockProduct.image ? [mockProduct.image] as any : null,
+    tagline: null,
+    difficulty: mockProduct.difficulty,
+    duration: mockProduct.duration,
+    content_hours: null,
+    rating: null,
+    review_count: null,
+    slug: mockProduct.slug,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    // Additional required fields
+    bonus_assets: null,
+    file_path: null,
+    file_size: null,
+    image_url: mockProduct.image || null,
+    modules: null,
+    published: true,
+    pricing_justification: null,
+    resources: null,
+    stripe_price_id: null,
+    stripe_product_id: null,
+    product_type: mockProduct.productType,
     // Purchase information
     purchasedDate: purchaseDate,
     orderId: orderId,
@@ -57,7 +104,14 @@ function mockPackageToProductWithPurchaseDate(mockPackage: ReturnType<typeof get
 
 export default function PreviewLibraryPage() {
   const mockPackages = getAllMockPackages();
-  const mockProducts = mockPackages.map(mockPackageToProductWithPurchaseDate);
+  const mockIndividualProducts = getAllMockIndividualProducts();
+  
+  // Convert both packages and individual products
+  const packageProducts = mockPackages.map(mockPackageToProductWithPurchaseDate);
+  const individualProductProducts = mockIndividualProducts.map(mockIndividualProductToProductWithPurchaseDate);
+  
+  // Combine both types of products
+  const mockProducts = [...packageProducts, ...individualProductProducts];
 
   return (
     <main className="min-h-screen bg-background">
@@ -65,7 +119,7 @@ export default function PreviewLibraryPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Preview Library</h1>
           <p className="text-muted-foreground mt-2">
-            Visual testing - All packages with mock data
+            Visual testing - All packages and individual products with mock data
           </p>
         </div>
 
@@ -73,10 +127,10 @@ export default function PreviewLibraryPage() {
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
-              <CardTitle className="text-xl mb-2">No packages found</CardTitle>
-              <CardDescription className="text-center">
-                No mock packages available for preview.
-              </CardDescription>
+          <CardTitle className="text-xl mb-2">No products found</CardTitle>
+          <CardDescription className="text-center">
+            No mock packages or products available for preview.
+          </CardDescription>
             </CardContent>
           </Card>
         ) : (

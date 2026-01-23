@@ -206,7 +206,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to add item to cart');
+          const errorData = await response.json().catch(() => ({}));
+          const errorMessage = errorData.error || 'Failed to add item to cart';
+          throw new Error(errorMessage);
         }
 
         const addedItem = await response.json();

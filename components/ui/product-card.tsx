@@ -107,17 +107,18 @@ export function ProductCard({ product, className, packageInfo }: ProductCardProp
             </div>
           )}
         </div>
-        <Link href={`/products/${product.id}`} className="w-full">
-          <Button className="w-full rounded-full" variant={product.featured ? 'default' : 'outline'}>
-            {product.featured ? 'Get Started' : 'View Details'}
-          </Button>
-        </Link>
-        {packageInfo && (
+        {packageInfo ? (
           <Link href={`/ai-to-usd/packages/${packageInfo.packageSlug}`} className="w-full">
-            <Button variant="outline" className="w-full rounded-full text-sm">
-              View Package (Better Value)
+            <Button className="w-full rounded-full" variant="default">
+              View Package
             </Button>
           </Link>
+        ) : (
+          <div className="w-full">
+            <Button className="w-full rounded-full" variant="outline" disabled>
+              Available in Package Only
+            </Button>
+          </div>
         )}
       </CardFooter>
     </Card>

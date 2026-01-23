@@ -1,6 +1,7 @@
 import { requireAuth } from '@/lib/auth/utils';
 import { getUserCartItems, addCartItem } from '@/lib/db/cart';
 import { NextResponse } from 'next/server';
+import type { Product } from '@/lib/types/database';
 
 /**
  * GET /api/cart
@@ -27,6 +28,7 @@ export async function GET() {
 /**
  * POST /api/cart
  * Add item to cart
+ * Only allows packages to be added - individual products must be purchased via packages
  */
 export async function POST(request: Request) {
   try {
@@ -45,6 +47,42 @@ export async function POST(request: Request) {
     if (quantity <= 0 || quantity > 10) {
       return NextResponse.json(
         { error: 'Quantity must be between 1 and 10' },
+        { status: 400 }
+      );
+    }
+
+    // Validate that product is a package (individual products cannot be purchased separately)
+    const { createClient } = await import('@/lib/supabase/server');
+    const supabase = await createClient();
+    
+    const { data: productData, error: productError } = await supabase
+      .from('products')
+      .select('id, product_type, active')
+      .eq('id', productId)
+      .single();
+
+    if (productError || !productData) {
+      console.error('Error fetching product:', productError);
+      return NextResponse.json(
+        { error: 'Product not found' },
+        { status: 404 }
+      );
+    }
+
+    // Type assertion - product_type column exists in database but may not be in generated types
+    const product = productData as unknown as Product;
+
+    if (!product.active) {
+      return NextResponse.json(
+        { error: 'Product is no longer available' },
+        { status: 400 }
+      );
+    }
+
+    // Only allow packages to be added to cart
+    if (product.product_type !== 'package') {
+      return NextResponse.json(
+        { error: 'Individual products cannot be purchased separately. Please purchase the package that includes this product.' },
         { status: 400 }
       );
     }

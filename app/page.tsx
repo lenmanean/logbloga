@@ -22,7 +22,7 @@ export default function HomePage() {
                 Discover our comprehensive collection of AI to USD products. Transform your skills, unlock new opportunities, and start your journey to earning with artificial intelligence.
               </p>
               <div className="animate-fade-in-delay-300">
-                <Link href="/products/ai-to-usd-complete">
+                <Link href="/ai-to-usd">
                   <Button className="bg-white text-red-500 hover:bg-red-50">
                     Learn More
                   </Button>
