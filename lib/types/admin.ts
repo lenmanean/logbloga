@@ -2,7 +2,7 @@
  * Admin-specific type definitions
  */
 
-import type { Order, Product, Profile, License, Coupon } from './database';
+import type { Order, Product, Profile, Coupon } from './database';
 
 export type UserRole = 'user' | 'admin';
 
@@ -46,12 +46,6 @@ export interface AdminProductFilters extends AdminFilters {
 
 export interface AdminCustomerFilters extends AdminFilters {
   role?: UserRole;
-}
-
-export interface AdminLicenseFilters extends AdminFilters {
-  status?: License['status'];
-  productId?: string;
-  userId?: string;
 }
 
 export interface AdminCouponFilters extends AdminFilters {

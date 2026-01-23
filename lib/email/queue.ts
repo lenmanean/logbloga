@@ -98,7 +98,7 @@ class EmailQueue {
    * Send email using appropriate sender function
    */
   private async sendEmail(email: QueuedEmail): Promise<void> {
-    const { sendOrderConfirmation, sendPaymentReceipt, sendLicenseDelivery, sendWelcomeEmail, sendAbandonedCartReminder, sendOrderStatusUpdate, sendProductUpdate } = await import('./senders');
+    const { sendOrderConfirmation, sendPaymentReceipt, sendWelcomeEmail, sendAbandonedCartReminder, sendOrderStatusUpdate, sendProductUpdate } = await import('./senders');
 
     switch (email.emailType) {
       case 'order-confirmation':
@@ -106,9 +106,6 @@ class EmailQueue {
         break;
       case 'payment-receipt':
         await sendPaymentReceipt(email.userId, email.data);
-        break;
-      case 'license-delivery':
-        await sendLicenseDelivery(email.userId, email.data);
         break;
       case 'welcome':
         await sendWelcomeEmail(email.userId, email.data);

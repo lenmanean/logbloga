@@ -6,7 +6,7 @@
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import type { Profile } from '@/lib/types/database';
 import { getUserOrders } from '@/lib/db/orders';
-import { getUserLicenses } from '@/lib/db/licenses';
+import { getUserProductAccess } from '@/lib/db/access';
 
 export interface AdminCustomerFilters {
   search?: string; // Email or name
@@ -72,11 +72,11 @@ export async function getCustomerByIdAdmin(userId: string): Promise<Profile | nu
 export async function getCustomerStats(userId: string): Promise<{
   totalOrders: number;
   totalSpent: number;
-  activeLicenses: number;
+  purchasedProducts: number;
 }> {
-  const [orders, licenses] = await Promise.all([
+  const [orders, products] = await Promise.all([
     getUserOrders(userId),
-    getUserLicenses(userId),
+    getUserProductAccess(userId),
   ]);
 
   const totalOrders = orders.length;
@@ -86,12 +86,12 @@ export async function getCustomerStats(userId: string): Promise<{
       : parseFloat(String(order.total_amount || 0));
     return sum + amount;
   }, 0);
-  const activeLicenses = licenses.filter(l => l.status === 'active').length;
+  const purchasedProducts = products.length;
 
   return {
     totalOrders,
     totalSpent,
-    activeLicenses,
+    purchasedProducts,
   };
 }
 

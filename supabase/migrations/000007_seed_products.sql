@@ -97,7 +97,7 @@ INSERT INTO products (
       ]
     }
   ]'::jsonb,
-  '["Access to private Discord community", "Monthly Q&A sessions (6 months)", "Code review sessions", "Lifetime updates", "Certificate of completion"]'::jsonb,
+  '[]'::jsonb,
   'Comprehensive full-stack development course with production-ready templates and resources. Comparable to bootcamps priced at $2,000-$6,000+. Total content: 40+ hours of structured learning with immediate ROI through templates and tools.'
 ),
 -- Social Media Package
@@ -191,7 +191,7 @@ INSERT INTO products (
       ]
     }
   ]'::jsonb,
-  '["Private community access", "Monthly strategy sessions (6 months)", "Content feedback sessions", "Trend alerts and updates", "Lifetime access to updates"]'::jsonb,
+  '[]'::jsonb,
   'Complete social media mastery with 500+ templates and automation systems. Comparable to agency services at $500-$2,000/month. Total content: 30+ hours of video training with immediate value through templates and automation setups that save 10+ hours/week.'
 ),
 -- Agency Package
@@ -297,7 +297,7 @@ INSERT INTO products (
       ]
     }
   ]'::jsonb,
-  '["Private mastermind community", "Monthly group coaching calls (12 months)", "1-on-1 strategy session", "Access to agency case studies", "Legal document templates", "Lifetime updates and new content"]'::jsonb,
+  '[]'::jsonb,
   'Complete agency scaling system with comprehensive SOP library and templates. Comparable to agency coaching programs at $2,000-$10,000+. Total content: 40+ hours of training with immediate implementation through templates. ROI potential: $10K-$50K+ monthly revenue increase.'
 ),
 -- Freelancing Package
@@ -405,7 +405,7 @@ INSERT INTO products (
       ]
     }
   ]'::jsonb,
-  '["Private freelancer community", "Monthly group calls (6 months)", "Q&A sessions", "Job board access", "Lifetime updates", "Certificate of completion"]'::jsonb,
+  '[]'::jsonb,
   'Complete freelancer business toolkit with comprehensive templates and guides. Total content: 35+ hours of training with immediate value through templates. ROI potential: $1K-$10K+ monthly income increase. Accessible pricing for individual freelancers with can pay for itself with 1-2 projects.'
 )
 ON CONFLICT (slug) DO NOTHING;

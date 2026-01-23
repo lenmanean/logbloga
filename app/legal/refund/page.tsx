@@ -96,7 +96,7 @@ export default function RefundPolicyPage() {
           <ul className="list-disc pl-6 mb-4">
             <li>Products downloaded more than 30 days after purchase</li>
             <li>Products that have been used or modified</li>
-            <li>License keys that have been shared or transferred</li>
+            <li>Products that have been shared or accessed by unauthorized users</li>
             <li>Refund requests that do not meet our eligibility criteria</li>
           </ul>
         </section>
@@ -114,10 +114,10 @@ export default function RefundPolicyPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">8. License Revocation</h2>
+          <h2 className="text-2xl font-semibold mb-4">8. Access Revocation</h2>
           <p className="mb-4">
-            Upon approval of a refund, any license keys associated with the purchase will be 
-            deactivated, and access to the product will be revoked.
+            Upon approval of a refund, access to the purchased product will be revoked, 
+            and you will no longer be able to access the product content or downloads.
           </p>
         </section>
 

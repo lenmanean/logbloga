@@ -83,12 +83,33 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
     return null;
   }
 
+  // Parse schedule (trackable timeline) - default to empty array
+  const rawSchedule = levelData.schedule;
+  const schedule = Array.isArray(rawSchedule)
+    ? rawSchedule
+        .filter(
+          (s: unknown) =>
+            s &&
+            typeof s === 'object' &&
+            'date' in (s as object) &&
+            'milestone' in (s as object)
+        )
+        .map((s: any) => ({
+          date: String(s.date || ''),
+          milestone: String(s.milestone || ''),
+          tasks: Array.isArray(s.tasks) ? s.tasks.map((t: unknown) => String(t)) : [],
+          completed: Boolean(s.completed),
+          order: typeof s.order === 'number' ? s.order : undefined,
+        }))
+    : [];
+
   // Build validated level
   const validatedLevel: PackageLevel = {
     level: levelNumber,
     timeInvestment: String(levelData.timeInvestment),
     expectedProfit: String(levelData.expectedProfit),
     platformCosts: String(levelData.platformCosts),
+    schedule,
     implementationPlan: {
       file: String(levelData.implementationPlan.file || ''),
       type: String(levelData.implementationPlan.type || 'pdf'),

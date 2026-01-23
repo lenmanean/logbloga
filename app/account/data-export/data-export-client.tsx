@@ -56,7 +56,7 @@ export function DataExportClient() {
         <CardTitle>Export Your Data</CardTitle>
         <CardDescription>
           Download all your personal data in JSON format. This includes your profile, 
-          orders, licenses, cart items, addresses, notifications, wishlist, reviews, 
+          orders, cart items, addresses, notifications, wishlist, reviews, 
           and consent records.
         </CardDescription>
       </CardHeader>
@@ -66,7 +66,7 @@ export function DataExportClient() {
           <ul className="list-disc pl-6 space-y-1 text-sm text-muted-foreground">
             <li>Profile information</li>
             <li>Order history</li>
-            <li>Licenses</li>
+            <li>Purchased products (from orders)</li>
             <li>Cart items</li>
             <li>Addresses</li>
             <li>Notifications</li>

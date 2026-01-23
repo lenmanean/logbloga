@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { BookOpen } from 'lucide-react';
 import { LibraryPreviewClient } from './library-preview-client';
 import { getAllMockPackages } from '@/lib/mock-data/preview-library';
-import type { LicenseWithProduct } from '@/lib/types/database';
+import type { ProductWithPurchaseDate } from '@/lib/types/database';
 
 export const metadata = {
   title: 'Preview Library | LogBloga',
@@ -11,61 +11,53 @@ export const metadata = {
 };
 
 /**
- * Convert mock package to LicenseWithProduct format for component compatibility
+ * Convert mock package to ProductWithPurchaseDate format for component compatibility
  */
-function mockPackageToLicenseWithProduct(mockPackage: ReturnType<typeof getAllMockPackages>[0]): LicenseWithProduct {
+function mockPackageToProductWithPurchaseDate(mockPackage: ReturnType<typeof getAllMockPackages>[0]): ProductWithPurchaseDate {
+  const purchaseDate = new Date().toISOString();
+  const orderId = `preview-order-${mockPackage.id}`;
+
   return {
-    id: `license-${mockPackage.id}`,
-    user_id: 'preview-user',
-    product_id: mockPackage.id,
-    license_key: `PREVIEW-${mockPackage.id.toUpperCase()}`,
-    status: 'active',
-    access_granted_at: new Date().toISOString(),
-    activated_at: new Date().toISOString(),
-    order_id: `preview-order-${mockPackage.id}`,
+    id: mockPackage.id,
+    name: mockPackage.title, // Required field
+    title: mockPackage.title,
+    description: mockPackage.description,
+    category: mockPackage.category,
+    price: mockPackage.price,
+    original_price: mockPackage.originalPrice,
+    featured: true,
+    active: true,
+    package_image: mockPackage.packageImage,
+    images: [mockPackage.packageImage] as any, // Json type - stored as string array
+    tagline: mockPackage.tagline,
+    difficulty: mockPackage.difficulty,
+    duration: 'Self-paced',
+    content_hours: mockPackage.contentHours,
+    rating: mockPackage.rating,
+    review_count: mockPackage.reviewCount,
+    slug: mockPackage.slug,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
-    lifetime_access: false,
-    expires_at: null,
-    product: {
-      id: mockPackage.id,
-      name: mockPackage.title, // Required field
-      title: mockPackage.title,
-      description: mockPackage.description,
-      category: mockPackage.category,
-      price: mockPackage.price,
-      original_price: mockPackage.originalPrice,
-      featured: true,
-      active: true,
-      package_image: mockPackage.packageImage,
-      images: [mockPackage.packageImage] as any, // Json type - stored as string array
-      tagline: mockPackage.tagline,
-      difficulty: mockPackage.difficulty,
-      duration: 'Self-paced',
-      content_hours: mockPackage.contentHours,
-      rating: mockPackage.rating,
-      review_count: mockPackage.reviewCount,
-      slug: mockPackage.slug,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      // Additional required fields
-      bonus_assets: null,
-      file_path: null,
-      file_size: null,
-      image_url: null,
-      modules: null,
-      published: true,
-      pricing_justification: null,
-      resources: null,
-      stripe_price_id: null,
-      stripe_product_id: null,
-    },
+    // Additional required fields
+    bonus_assets: null,
+    file_path: null,
+    file_size: null,
+    image_url: null,
+    modules: null,
+    published: true,
+    pricing_justification: null,
+    resources: null,
+    stripe_price_id: null,
+    stripe_product_id: null,
+    // Purchase information
+    purchasedDate: purchaseDate,
+    orderId: orderId,
   };
 }
 
 export default function PreviewLibraryPage() {
   const mockPackages = getAllMockPackages();
-  const mockLicenses = mockPackages.map(mockPackageToLicenseWithProduct);
+  const mockProducts = mockPackages.map(mockPackageToProductWithPurchaseDate);
 
   return (
     <main className="min-h-screen bg-background">
@@ -77,7 +69,7 @@ export default function PreviewLibraryPage() {
           </p>
         </div>
 
-        {mockLicenses.length === 0 ? (
+        {mockProducts.length === 0 ? (
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
@@ -96,7 +88,7 @@ export default function PreviewLibraryPage() {
               </CardContent>
             </Card>
           }>
-            <LibraryPreviewClient licenses={mockLicenses} />
+            <LibraryPreviewClient products={mockProducts} />
           </Suspense>
         )}
       </div>

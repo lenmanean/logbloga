@@ -10,7 +10,6 @@ import { formatDistanceToNow } from 'date-fns';
 import {
   Package,
   CreditCard,
-  Key,
   Bell,
   ShoppingBag,
   AlertCircle,
@@ -29,7 +28,7 @@ interface NotificationItemProps {
 const typeIcons = {
   order_confirmation: Package,
   order_status_update: ShoppingBag,
-  license_delivered: Key,
+  license_delivered: Package, // @deprecated - use Package icon for backward compatibility
   payment_received: CreditCard,
   product_update: Bell,
   system: AlertCircle,
@@ -38,7 +37,7 @@ const typeIcons = {
 const typeColors = {
   order_confirmation: 'text-blue-600',
   order_status_update: 'text-green-600',
-  license_delivered: 'text-purple-600',
+  license_delivered: 'text-blue-600', // @deprecated - use blue for backward compatibility
   payment_received: 'text-green-600',
   product_update: 'text-orange-600',
   system: 'text-gray-600',

@@ -5,21 +5,21 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { getUserOrders } from './orders';
-import { getUserLicenses } from './licenses';
+import { getUserProductAccess } from './access';
 import { getWishlistCount } from './wishlist';
 import { getUserProfile } from './profiles';
 
 export interface AccountStatistics {
   totalOrders: number;
   totalSpent: number;
-  activeLicenses: number;
+  purchasedProducts: number;
   wishlistItems: number;
   accountAge: number; // Days since account creation
   recentActivity: ActivityItem[];
 }
 
 export interface ActivityItem {
-  type: 'order' | 'license' | 'wishlist' | 'profile';
+  type: 'order' | 'wishlist' | 'profile';
   title: string;
   description: string;
   date: string;
@@ -33,9 +33,9 @@ export async function getAccountStatistics(userId: string): Promise<AccountStati
   const supabase = await createClient();
 
   // Fetch all data in parallel
-  const [orders, licenses, wishlistCount, profile] = await Promise.all([
+  const [orders, products, wishlistCount, profile] = await Promise.all([
     getUserOrders(userId),
-    getUserLicenses(userId),
+    getUserProductAccess(userId),
     getWishlistCount(userId),
     getUserProfile(userId),
   ]);
@@ -48,8 +48,8 @@ export async function getAccountStatistics(userId: string): Promise<AccountStati
     return sum + total;
   }, 0);
 
-  // Count active licenses
-  const activeLicenses = licenses.filter((license) => license.status === 'active').length;
+  // Count purchased products
+  const purchasedProducts = products.length;
 
   // Calculate account age
   const accountCreatedAt = profile?.created_at || new Date().toISOString();
@@ -60,8 +60,8 @@ export async function getAccountStatistics(userId: string): Promise<AccountStati
   // Build recent activity feed
   const recentActivity: ActivityItem[] = [];
 
-  // Add recent orders (last 5)
-  orders.slice(0, 5).forEach((order) => {
+  // Add recent orders (last 10)
+  orders.slice(0, 10).forEach((order) => {
     recentActivity.push({
       type: 'order',
       title: `Order #${order.order_number}`,
@@ -70,21 +70,6 @@ export async function getAccountStatistics(userId: string): Promise<AccountStati
       link: `/account/orders/${order.id}`,
     });
   });
-
-  // Add recent licenses (last 5)
-  licenses
-    .filter((license) => license.status === 'active')
-    .slice(0, 5)
-    .forEach((license) => {
-      const productName = license.product?.title || license.product?.name || 'Product';
-      recentActivity.push({
-        type: 'license',
-        title: `License activated: ${productName}`,
-        description: 'You now have access to this product',
-        date: license.access_granted_at || license.created_at || new Date().toISOString(),
-        link: license.product_id ? `/account/library/${license.product_id}` : undefined,
-      });
-    });
 
   // Sort activity by date (most recent first)
   recentActivity.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -95,7 +80,7 @@ export async function getAccountStatistics(userId: string): Promise<AccountStati
   return {
     totalOrders: orders.length,
     totalSpent,
-    activeLicenses,
+    purchasedProducts,
     wishlistItems: wishlistCount,
     accountAge,
     recentActivity: limitedActivity,
@@ -108,15 +93,15 @@ export async function getAccountStatistics(userId: string): Promise<AccountStati
 export async function getAccountStatisticsSummary(userId: string): Promise<{
   totalOrders: number;
   totalSpent: number;
-  activeLicenses: number;
+  purchasedProducts: number;
   wishlistItems: number;
 }> {
   const supabase = await createClient();
 
   // Fetch counts in parallel
-  const [orders, licenses, wishlistCount] = await Promise.all([
+  const [orders, products, wishlistCount] = await Promise.all([
     getUserOrders(userId),
-    getUserLicenses(userId),
+    getUserProductAccess(userId),
     getWishlistCount(userId),
   ]);
 
@@ -127,12 +112,12 @@ export async function getAccountStatisticsSummary(userId: string): Promise<{
     return sum + total;
   }, 0);
 
-  const activeLicenses = licenses.filter((license) => license.status === 'active').length;
+  const purchasedProducts = products.length;
 
   return {
     totalOrders: orders.length,
     totalSpent,
-    activeLicenses,
+    purchasedProducts,
     wishlistItems: wishlistCount,
   };
 }

@@ -1,16 +1,12 @@
 import { redirect, notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { getUserProductLicenses, userHasActiveLicense } from '@/lib/db/licenses';
+import { hasProductAccess } from '@/lib/db/access';
 import { getProductById } from '@/lib/db/products';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { CheckCircle2, Download, Lock, ExternalLink } from 'lucide-react';
+import { DownloadButton } from '@/components/library/download-button';
 import Image from 'next/image';
 import Link from 'next/link';
-import { format } from 'date-fns';
-import { DownloadButton } from '@/components/library/download-button';
 
 export const metadata = {
   title: 'Product Access | LogBloga',
@@ -37,17 +33,13 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
     notFound();
   }
 
-  // Check if user has active license for this product
-  const hasAccess = await userHasActiveLicense(user.id, productId);
+  // Check if user has access to this product via completed orders
+  const hasAccess = await hasProductAccess(user.id, productId);
 
   if (!hasAccess) {
     // Redirect to product page to purchase
     redirect(`/ai-to-usd/packages/${product.slug || product.id}`);
   }
-
-  // Fetch user's licenses for this product
-  const licenses = await getUserProductLicenses(user.id, productId);
-  const activeLicense = licenses.find(l => l.status === 'active') || licenses[0];
 
   const images = product.images as string[] | null | undefined;
   const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
@@ -73,15 +65,11 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
               <CardHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
-                    <CardTitle className="text-2xl">{product.title || 'Product'}</CardTitle>
+                    <CardTitle className="text-2xl">{product.title || product.name || 'Product'}</CardTitle>
                     <CardDescription className="mt-2">
                       {product.description || 'Digital product'}
                     </CardDescription>
                   </div>
-                  <Badge variant="outline" className="flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3 text-green-600" />
-                    Active License
-                  </Badge>
                 </div>
               </CardHeader>
               {productImage && (
@@ -143,68 +131,26 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
                     label="Download Product Files"
                   />
                   <p className="text-xs text-muted-foreground">
-                    Your license provides lifetime access to this product
+                    You have lifetime access to this product
                   </p>
                 </div>
               </CardContent>
             </Card>
           </div>
 
-          {/* Sidebar - License Info */}
+          {/* Sidebar - Purchase Info */}
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>License Information</CardTitle>
+                <CardTitle>Purchase Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                {activeLicense && (
-                  <>
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">License Key</p>
-                      <p className="text-sm font-mono break-all">{activeLicense.license_key}</p>
-                    </div>
-
-                    <Separator />
-
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">Status</p>
-                      <Badge variant="outline" className="flex items-center gap-1 w-fit">
-                        <CheckCircle2 className="h-3 w-3 text-green-600" />
-                        {activeLicense.status}
-                      </Badge>
-                    </div>
-
-                    {activeLicense.access_granted_at && (
-                      <>
-                        <Separator />
-                        <div>
-                          <p className="text-sm text-muted-foreground mb-1">Access Granted</p>
-                          <p className="text-sm">
-                            {format(new Date(activeLicense.access_granted_at), 'MMM d, yyyy')}
-                          </p>
-                        </div>
-                      </>
-                    )}
-
-                    {activeLicense.lifetime_access && (
-                      <>
-                        <Separator />
-                        <div>
-                          <Badge variant="secondary">Lifetime Access</Badge>
-                        </div>
-                      </>
-                    )}
-                  </>
-                )}
-
-                <Separator />
-
-                <Link href="/account/licenses">
-                  <Button variant="outline" className="w-full">
-                    View All Licenses
-                    <ExternalLink className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
+                <div>
+                  <Badge variant="secondary">Lifetime Access</Badge>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    You own this product and have lifetime access to all content and updates.
+                  </p>
+                </div>
               </CardContent>
             </Card>
           </div>

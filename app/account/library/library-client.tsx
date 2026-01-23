@@ -9,13 +9,13 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { X } from 'lucide-react';
-import type { LicenseWithProduct } from '@/lib/types/database';
+import type { ProductWithPurchaseDate } from '@/lib/db/access';
 
 interface LibraryClientProps {
-  licenses: LicenseWithProduct[];
+  products: ProductWithPurchaseDate[];
 }
 
-export function LibraryClient({ licenses: initialLicenses }: LibraryClientProps) {
+export function LibraryClient({ products: initialProducts }: LibraryClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -28,13 +28,13 @@ export function LibraryClient({ licenses: initialLicenses }: LibraryClientProps)
   // Extract unique categories from products
   const categories = useMemo(() => {
     const cats = new Set<string>();
-    initialLicenses.forEach((license) => {
-      if (license.product?.category) {
-        cats.add(license.product.category);
+    initialProducts.forEach((product) => {
+      if (product.category) {
+        cats.add(product.category);
       }
     });
     return Array.from(cats).sort();
-  }, [initialLicenses]);
+  }, [initialProducts]);
 
   // Update URL when filters change
   const updateFilters = (updates: {
@@ -58,28 +58,28 @@ export function LibraryClient({ licenses: initialLicenses }: LibraryClientProps)
     router.push(`/account/library?${params.toString()}`);
   };
 
-  // Filter licenses
-  const filteredLicenses = useMemo(() => {
-    let filtered = [...initialLicenses];
+  // Filter products
+  const filteredProducts = useMemo(() => {
+    let filtered = [...initialProducts];
 
     // Filter by category
     if (categoryFilter !== 'all') {
       filtered = filtered.filter(
-        (license) => license.product?.category === categoryFilter
+        (product) => product.category === categoryFilter
       );
     }
 
     // Filter by search query (product name)
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter((license) => {
-        const productName = license.product?.title?.toLowerCase() || '';
+      filtered = filtered.filter((product) => {
+        const productName = product.title?.toLowerCase() || product.name?.toLowerCase() || '';
         return productName.includes(query);
       });
     }
 
     return filtered;
-  }, [initialLicenses, categoryFilter, searchQuery]);
+  }, [initialProducts, categoryFilter, searchQuery]);
 
   const hasActiveFilters = categoryFilter !== 'all' || searchQuery !== '';
 
@@ -178,7 +178,7 @@ export function LibraryClient({ licenses: initialLicenses }: LibraryClientProps)
       </Card>
 
       {/* Products List */}
-      {filteredLicenses.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-muted-foreground">
@@ -190,19 +190,20 @@ export function LibraryClient({ licenses: initialLicenses }: LibraryClientProps)
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredLicenses.map((license) => (
+          {filteredProducts.map((product) => (
             <ProductLibraryCard
-              key={license.id}
-              license={license}
+              key={product.id}
+              product={product}
+              purchasedDate={product.purchasedDate}
             />
           ))}
         </div>
       )}
 
       {/* Results count */}
-      {filteredLicenses.length > 0 && (
+      {filteredProducts.length > 0 && (
         <p className="text-sm text-muted-foreground text-center">
-          Showing {filteredLicenses.length} of {initialLicenses.length} products
+          Showing {filteredProducts.length} of {initialProducts.length} products
         </p>
       )}
     </div>

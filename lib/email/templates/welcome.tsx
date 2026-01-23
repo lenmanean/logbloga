@@ -50,7 +50,7 @@ export function WelcomeEmail({ data }: WelcomeEmailProps) {
               ✓ Access your purchased products from your library
             </Text>
             <Text style={featureItem}>
-              ✓ Manage your licenses and downloads
+              ✓ Access your purchased products and downloads
             </Text>
             <Text style={featureItem}>
               ✓ Track your orders and invoices

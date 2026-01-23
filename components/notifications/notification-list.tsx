@@ -75,7 +75,6 @@ export function NotificationList() {
               <SelectItem value="all">All</SelectItem>
               <SelectItem value="unread">Unread</SelectItem>
               <SelectItem value="order_confirmation">Orders</SelectItem>
-              <SelectItem value="license_delivered">Licenses</SelectItem>
               <SelectItem value="payment_received">Payments</SelectItem>
               <SelectItem value="product_update">Products</SelectItem>
               <SelectItem value="system">System</SelectItem>

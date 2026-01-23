@@ -8,25 +8,19 @@ import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle2, Download } from 'lucide-react';
-import type { LicenseWithProduct } from '@/lib/types/database';
+import { ArrowRight } from 'lucide-react';
+import type { Product } from '@/lib/types/database';
 import Image from 'next/image';
 
 interface ProductLibraryCardProps {
-  license: LicenseWithProduct;
+  product: Product;
+  purchasedDate: string;
 }
 
-export function ProductLibraryCard({ license }: ProductLibraryCardProps) {
-  const product = license.product;
-  const accessDate = license.access_granted_at
-    ? format(new Date(license.access_granted_at), 'MMM d, yyyy')
-    : license.created_at
-      ? format(new Date(license.created_at), 'MMM d, yyyy')
-      : 'N/A';
-
-  if (!product) {
-    return null;
-  }
+export function ProductLibraryCard({ product, purchasedDate }: ProductLibraryCardProps) {
+  const purchaseDate = purchasedDate
+    ? format(new Date(purchasedDate), 'MMM d, yyyy')
+    : 'N/A';
 
   const images = product.images as string[] | null | undefined;
   const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
@@ -39,33 +33,28 @@ export function ProductLibraryCard({ license }: ProductLibraryCardProps) {
         <CardHeader className="pb-3">
           {/* Product Image */}
           {productImage && (
-            <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden bg-muted">
+            <div className="relative w-full h-48 mb-4 flex items-center justify-center">
               <Image
                 src={productImage}
                 alt={product.title || 'Product'}
-                fill
-                className="object-cover"
+                width={200}
+                height={192}
+                className="object-contain max-w-full max-h-full"
               />
             </div>
           )}
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <CardTitle className="text-base font-semibold truncate">
-                {product.title || 'Product'}
+                {product.title || product.name || 'Product'}
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
-                Access granted {accessDate}
+                Purchased {purchaseDate}
               </p>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {/* Access Badge */}
-          <Badge variant="outline" className="text-xs flex items-center gap-1 w-fit">
-            <CheckCircle2 className="h-3 w-3 text-green-600" />
-            Active License
-          </Badge>
-
           {/* Category */}
           {product.category && (
             <Badge variant="secondary" className="text-xs">

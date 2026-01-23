@@ -55,11 +55,6 @@ export const AuditActions = {
   PAYMENT_FAILED: 'payment_failed',
   PAYMENT_REFUND: 'payment_refund',
   
-  // License actions
-  LICENSE_GENERATE: 'license_generate',
-  LICENSE_ACTIVATE: 'license_activate',
-  LICENSE_DEACTIVATE: 'license_deactivate',
-  
   // Security events
   RATE_LIMIT_HIT: 'rate_limit_hit',
   CSRF_TOKEN_INVALID: 'csrf_token_invalid',
@@ -81,7 +76,6 @@ export const ResourceTypes = {
   PROFILE: 'profile',
   ORDER: 'order',
   PRODUCT: 'product',
-  LICENSE: 'license',
   COUPON: 'coupon',
   PAYMENT: 'payment',
   CART: 'cart',

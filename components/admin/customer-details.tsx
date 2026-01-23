@@ -10,7 +10,7 @@ interface CustomerDetailsProps {
   stats: {
     totalOrders: number;
     totalSpent: number;
-    activeLicenses: number;
+    purchasedProducts: number;
   };
 }
 
@@ -65,8 +65,8 @@ export function CustomerDetails({ customer, stats }: CustomerDetailsProps) {
             </p>
           </div>
           <div>
-            <span className="text-sm text-muted-foreground">Active Licenses</span>
-            <p className="text-2xl font-bold">{stats.activeLicenses}</p>
+            <span className="text-sm text-muted-foreground">Purchased Products</span>
+            <p className="text-2xl font-bold">{stats.purchasedProducts}</p>
           </div>
         </CardContent>
       </Card>

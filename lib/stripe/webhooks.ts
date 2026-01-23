@@ -8,8 +8,7 @@ import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { stripeStatusToOrderStatus } from './utils';
 import type { Order } from '@/lib/types/database';
-import { createLicensesForOrder } from '@/lib/db/licenses';
-import { sendOrderConfirmation, sendPaymentReceipt, sendLicenseDelivery } from '@/lib/email/senders';
+import { sendOrderConfirmation, sendPaymentReceipt } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
 
 /**
@@ -116,24 +115,13 @@ export async function handlePaymentIntentSucceeded(
         user_id: order.user_id,
         type: 'payment_received',
         title: 'Payment Received',
-        message: `Your payment for order #${order.order_number || 'N/A'} has been processed successfully.`,
-        link: `/account/orders/${order.id}`,
+        message: `Your payment for order #${order.order_number || 'N/A'} has been processed successfully. Your products are now available in your library.`,
+        link: `/account/library`,
         metadata: { orderId: order.id },
       });
     }
   } catch (error) {
     console.error('Error creating payment notification:', error);
-  }
-
-  // Generate licenses for the completed order
-  let licenses: any[] = [];
-  try {
-    licenses = await createLicensesForOrder(order.id);
-    console.log(`Generated ${licenses.length} license(s) for order ${order.id}`);
-  } catch (error) {
-    // Log error but don't fail the webhook (order is already completed)
-    // This allows for manual license generation if needed
-    console.error(`Error generating licenses for order ${order.id}:`, error);
   }
 
   // Generate Doer coupon for package purchases
@@ -148,7 +136,7 @@ export async function handlePaymentIntentSucceeded(
     console.error(`Error generating Doer coupon for order ${order.id}:`, error);
   }
 
-  // Send payment receipt and license delivery emails (non-blocking)
+  // Send payment receipt email (non-blocking)
   if (order.user_id) {
     try {
       const orderWithItems = await getOrderWithItems(order.id);
@@ -190,61 +178,11 @@ export async function handlePaymentIntentSucceeded(
           doerCouponExpiresAt: (orderData as any)?.doer_coupon_expires_at || null,
         };
 
-        // Send payment receipt
+        // Send payment receipt - products are now available in library via order-based access
         await sendPaymentReceipt(order.user_id, emailData);
-
-        // Send license delivery email if licenses were generated
-        if (licenses.length > 0) {
-          // Get product information for licenses
-          const { createServiceRoleClient } = await import('@/lib/supabase/server');
-          const supabase = await createServiceRoleClient();
-
-          const licenseData = {
-            order: {
-              id: orderWithItems.id,
-              orderNumber: orderWithItems.order_number || '',
-              customerEmail: orderWithItems.customer_email,
-              customerName: orderWithItems.customer_name,
-            },
-            licenses: await Promise.all(
-              licenses.map(async (license) => {
-                const { data: product } = await supabase
-                  .from('products')
-                  .select('title, slug')
-                  .eq('id', license.product_id)
-                  .single();
-                
-                return {
-                  id: license.id,
-                  licenseKey: license.license_key,
-                  productName: product?.title || 'Product',
-                  productSlug: product?.slug || '',
-                };
-              })
-            ),
-            doerCouponCode: doerCouponCode || null,
-            doerCouponExpiresAt: (orderData as any)?.doer_coupon_expires_at || null,
-          };
-
-          await sendLicenseDelivery(order.user_id, licenseData);
-
-          // Create license delivery notification (non-blocking)
-          try {
-            await createNotification({
-              user_id: order.user_id,
-              type: 'license_delivered',
-              title: 'License Keys Delivered',
-              message: `Your license keys for order #${order.order_number || 'N/A'} are now available in your library.`,
-              link: '/account/library',
-              metadata: { orderId: order.id, licenseCount: licenses.length },
-            });
-          } catch (error) {
-            console.error('Error creating license delivery notification:', error);
-          }
-        }
       }
     } catch (error) {
-      console.error('Error sending payment receipt/license delivery emails:', error);
+      console.error('Error sending payment receipt email:', error);
     }
   }
 }

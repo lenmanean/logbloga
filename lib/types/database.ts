@@ -22,7 +22,6 @@ export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type CartItem = Database['public']['Tables']['cart_items']['Row'];
 export type Order = Database['public']['Tables']['orders']['Row'];
 export type OrderItem = Database['public']['Tables']['order_items']['Row'];
-export type License = Database['public']['Tables']['licenses']['Row'];
 export type ProductVariant = Database['public']['Tables']['product_variants']['Row'];
 export type Coupon = Database['public']['Tables']['coupons']['Row'];
 export type Review = Database['public']['Tables']['reviews']['Row'];
@@ -40,8 +39,6 @@ export type ProductDifficulty = 'beginner' | 'intermediate' | 'advanced';
 // Order status type
 export type OrderStatus = 'pending' | 'processing' | 'completed' | 'cancelled' | 'refunded';
 
-// License status type
-export type LicenseStatus = 'active' | 'inactive' | 'revoked';
 
 // Review status type
 export type ReviewStatus = 'pending' | 'approved' | 'rejected';
@@ -131,9 +128,8 @@ export interface OrderWithItems extends Order {
   doer_user_id?: string | null;
 }
 
-export interface LicenseWithProduct extends License {
-  product?: Product;
-}
+// Re-export ProductWithPurchaseDate from access.ts for consistency
+export type { ProductWithPurchaseDate } from '@/lib/db/access';
 
 export interface WishlistItem {
   id: string;

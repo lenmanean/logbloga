@@ -12,7 +12,7 @@ import type { Database } from '@/lib/types/supabase';
 export type NotificationType =
   | 'order_confirmation'
   | 'order_status_update'
-  | 'license_delivered'
+  | 'license_delivered' // @deprecated - kept for backward compatibility with existing notifications
   | 'payment_received'
   | 'product_update'
   | 'system';

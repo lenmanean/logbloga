@@ -43,7 +43,7 @@ export default async function SettingsPage() {
                 <h3 className="font-semibold">Delete Account</h3>
                 <p className="text-sm text-muted-foreground">
                   Once you delete your account, there is no going back. This action cannot be undone.
-                  All your data, orders, and licenses will be permanently deleted.
+                  All your data, orders, and purchased products will be permanently deleted.
                 </p>
               </div>
             </CardContent>

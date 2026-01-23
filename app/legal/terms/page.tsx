@@ -26,17 +26,17 @@ export default function TermsOfServicePage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">2. Use License</h2>
+          <h2 className="text-2xl font-semibold mb-4">2. Use Rights</h2>
           <p className="mb-4">
-            Permission is granted to temporarily use LogBloga for personal, non-commercial use only. 
-            This is the grant of a license, not a transfer of title, and under this license you may not:
+            When you purchase a digital product from LogBloga, you receive lifetime access to that product. 
+            You may use the products for personal and commercial purposes, subject to the following restrictions:
           </p>
           <ul className="list-disc pl-6 mb-4">
-            <li>Modify or copy the materials</li>
-            <li>Use the materials for any commercial purpose or for any public display</li>
-            <li>Attempt to reverse engineer any software contained on LogBloga</li>
-            <li>Remove any copyright or other proprietary notations from the materials</li>
-            <li>Transfer the materials to another person or &quot;mirror&quot; the materials on any other server</li>
+            <li>You may not resell or redistribute the products themselves</li>
+            <li>You may not share your account or product access with others</li>
+            <li>You may not attempt to reverse engineer any software contained in our products</li>
+            <li>You may not remove any copyright or other proprietary notations from the materials</li>
+            <li>You may not transfer product access to another person</li>
           </ul>
         </section>
 
@@ -44,8 +44,8 @@ export default function TermsOfServicePage() {
           <h2 className="text-2xl font-semibold mb-4">3. Products and Services</h2>
           <h3 className="text-xl font-semibold mb-3">3.1 Digital Products</h3>
           <p className="mb-4">
-            Our digital products are provided for personal use. License keys are non-transferable 
-            and tied to your account. Sharing or reselling license keys is prohibited.
+            Our digital products are provided with lifetime access upon purchase. Product access is 
+            tied to your account and is non-transferable. Sharing your account or product access is prohibited.
           </p>
 
           <h3 className="text-xl font-semibold mb-3">3.2 Product Availability</h3>

@@ -72,7 +72,7 @@ export function DeleteAccountButton() {
             <ul className="list-disc list-inside space-y-1 text-sm">
               <li>Your profile information</li>
               <li>All your orders and purchase history</li>
-              <li>All your licenses and product access</li>
+              <li>All your purchased products and access</li>
               <li>Your cart items</li>
             </ul>
             <div className="mt-4 space-y-2">

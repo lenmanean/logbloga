@@ -9,7 +9,6 @@ import { shouldSendEmail } from './utils';
 import type {
   EmailResult,
   OrderEmailData,
-  LicenseEmailData,
   WelcomeEmailData,
   AbandonedCartEmailData,
   OrderStatusUpdateEmailData,
@@ -17,7 +16,6 @@ import type {
 } from './types';
 import { OrderConfirmationEmail } from './templates/order-confirmation';
 import { PaymentReceiptEmail } from './templates/payment-receipt';
-import { LicenseDeliveryEmail } from './templates/license-delivery';
 import { WelcomeEmail } from './templates/welcome';
 import { AbandonedCartEmail } from './templates/abandoned-cart';
 import { OrderStatusUpdateEmail } from './templates/order-status-update';
@@ -111,49 +109,6 @@ export async function sendPaymentReceipt(
   }
 }
 
-/**
- * Send license delivery email
- */
-export async function sendLicenseDelivery(
-  userId: string,
-  data: LicenseEmailData
-): Promise<EmailResult> {
-  try {
-    // Check notification preferences
-    const shouldSend = await shouldSendEmail(userId, 'license-delivery');
-    if (!shouldSend) {
-      console.log(`Skipping license delivery email for user ${userId} (preferences)`);
-      return { success: true, messageId: 'skipped-preference' };
-    }
-
-    const resend = getResendClient();
-    const html = await render(LicenseDeliveryEmail({ data }));
-
-    const result = await resend.emails.send({
-      from: getDefaultSender(),
-      to: data.order.customerEmail,
-      subject: `Your License Keys - Order ${data.order.orderNumber}`,
-      html,
-      tags: [
-        { name: 'email_type', value: 'license_delivery' },
-        { name: 'order_id', value: data.order.id },
-      ],
-    });
-
-    if (result.error) {
-      console.error('Error sending license delivery email:', result.error);
-      return { success: false, error: result.error.message };
-    }
-
-    return { success: true, messageId: result.data?.id };
-  } catch (error) {
-    console.error('Error sending license delivery email:', error);
-    return {
-      success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
-    };
-  }
-}
 
 /**
  * Send welcome email

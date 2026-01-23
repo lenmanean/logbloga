@@ -9,15 +9,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, CheckCircle2, X } from 'lucide-react';
+import { ArrowRight, X } from 'lucide-react';
 import Image from 'next/image';
-import type { LicenseWithProduct } from '@/lib/types/database';
+import type { ProductWithPurchaseDate } from '@/lib/types/database';
 
 interface LibraryPreviewClientProps {
-  licenses: LicenseWithProduct[];
+  products: ProductWithPurchaseDate[];
 }
 
-export function LibraryPreviewClient({ licenses: initialLicenses }: LibraryPreviewClientProps) {
+export function LibraryPreviewClient({ products: initialProducts }: LibraryPreviewClientProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -30,13 +30,13 @@ export function LibraryPreviewClient({ licenses: initialLicenses }: LibraryPrevi
   // Extract unique categories from products
   const categories = useMemo(() => {
     const cats = new Set<string>();
-    initialLicenses.forEach((license) => {
-      if (license.product?.category) {
-        cats.add(license.product.category);
+    initialProducts.forEach((product) => {
+      if (product.category) {
+        cats.add(product.category);
       }
     });
     return Array.from(cats).sort();
-  }, [initialLicenses]);
+  }, [initialProducts]);
 
   // Update URL when filters change
   const updateFilters = (updates: {
@@ -60,28 +60,28 @@ export function LibraryPreviewClient({ licenses: initialLicenses }: LibraryPrevi
     router.push(`/preview/library?${params.toString()}`);
   };
 
-  // Filter licenses
-  const filteredLicenses = useMemo(() => {
-    let filtered = [...initialLicenses];
+  // Filter products
+  const filteredProducts = useMemo(() => {
+    let filtered = [...initialProducts];
 
     // Filter by category
     if (categoryFilter !== 'all') {
       filtered = filtered.filter(
-        (license) => license.product?.category === categoryFilter
+        (product) => product.category === categoryFilter
       );
     }
 
     // Filter by search query (product name)
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter((license) => {
-        const productName = license.product?.title?.toLowerCase() || '';
+      filtered = filtered.filter((product) => {
+        const productName = product.title?.toLowerCase() || product.name?.toLowerCase() || '';
         return productName.includes(query);
       });
     }
 
     return filtered;
-  }, [initialLicenses, categoryFilter, searchQuery]);
+  }, [initialProducts, categoryFilter, searchQuery]);
 
   const hasActiveFilters = categoryFilter !== 'all' || searchQuery !== '';
 
@@ -180,7 +180,7 @@ export function LibraryPreviewClient({ licenses: initialLicenses }: LibraryPrevi
       </Card>
 
       {/* Products List */}
-      {filteredLicenses.length === 0 ? (
+      {filteredProducts.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-muted-foreground">
@@ -192,19 +192,20 @@ export function LibraryPreviewClient({ licenses: initialLicenses }: LibraryPrevi
         </Card>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredLicenses.map((license) => (
+          {filteredProducts.map((product) => (
             <PreviewProductLibraryCard
-              key={license.id}
-              license={license}
+              key={product.id}
+              product={product}
+              purchasedDate={product.purchasedDate}
             />
           ))}
         </div>
       )}
 
       {/* Results count */}
-      {filteredLicenses.length > 0 && (
+      {filteredProducts.length > 0 && (
         <p className="text-sm text-muted-foreground text-center">
-          Showing {filteredLicenses.length} of {initialLicenses.length} products
+          Showing {filteredProducts.length} of {initialProducts.length} products
         </p>
       )}
     </div>
@@ -214,17 +215,10 @@ export function LibraryPreviewClient({ licenses: initialLicenses }: LibraryPrevi
 /**
  * Preview version of ProductLibraryCard that links to preview pages
  */
-function PreviewProductLibraryCard({ license }: { license: LicenseWithProduct }) {
-  const product = license.product;
-  const accessDate = license.access_granted_at
-    ? format(new Date(license.access_granted_at), 'MMM d, yyyy')
-    : license.created_at
-      ? format(new Date(license.created_at), 'MMM d, yyyy')
-      : 'N/A';
-
-  if (!product) {
-    return null;
-  }
+function PreviewProductLibraryCard({ product, purchasedDate }: { product: ProductWithPurchaseDate; purchasedDate: string }) {
+  const purchaseDate = purchasedDate
+    ? format(new Date(purchasedDate), 'MMM d, yyyy')
+    : 'N/A';
 
   const images = product.images as string[] | null | undefined;
   const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
@@ -237,33 +231,28 @@ function PreviewProductLibraryCard({ license }: { license: LicenseWithProduct })
         <CardHeader className="pb-3">
           {/* Product Image */}
           {productImage && (
-            <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden bg-muted">
+            <div className="relative w-full h-48 mb-4 flex items-center justify-center">
               <Image
                 src={productImage}
                 alt={product.title || 'Product'}
-                fill
-                className="object-cover"
+                width={200}
+                height={192}
+                className="object-contain max-w-full max-h-full"
               />
             </div>
           )}
           <div className="flex items-start justify-between gap-2">
             <div className="flex-1 min-w-0">
               <CardTitle className="text-base font-semibold truncate">
-                {product.title || 'Product'}
+                {product.title || product.name || 'Product'}
               </CardTitle>
               <p className="text-sm text-muted-foreground mt-1">
-                Access granted {accessDate}
+                Purchased {purchaseDate}
               </p>
             </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {/* Access Badge */}
-          <Badge variant="outline" className="text-xs flex items-center gap-1 w-fit">
-            <CheckCircle2 className="h-3 w-3 text-green-600" />
-            Active License
-          </Badge>
-
           {/* Category */}
           {product.category && (
             <Badge variant="secondary" className="text-xs">

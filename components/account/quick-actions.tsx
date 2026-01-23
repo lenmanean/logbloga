@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button';
 import {
   Package,
   BookOpen,
-  Key,
   UserCircle,
   Settings,
   Heart,
@@ -28,13 +27,6 @@ export function QuickActions() {
       description: 'Your products',
       href: '/account/library',
       icon: BookOpen,
-      variant: 'outline' as const,
-    },
-    {
-      title: 'Manage Licenses',
-      description: 'License keys',
-      href: '/account/licenses',
-      icon: Key,
       variant: 'outline' as const,
     },
     {

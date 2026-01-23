@@ -21,8 +21,6 @@ export async function shouldSendEmail(
         return preferences.email_order_confirmation;
       case 'order-status-update':
         return preferences.email_order_shipped;
-      case 'license-delivery':
-        return preferences.email_order_confirmation;
       case 'welcome':
         // Always send welcome emails
         return true;

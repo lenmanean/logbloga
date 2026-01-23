@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, Key, Heart, UserCircle, ArrowRight } from 'lucide-react';
+import { Package, Heart, UserCircle, ArrowRight } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import type { ActivityItem } from '@/lib/db/account-stats';
 
@@ -34,8 +34,6 @@ export function ActivityFeed({ activities, limit = 10 }: ActivityFeedProps) {
     switch (type) {
       case 'order':
         return Package;
-      case 'license':
-        return Key;
       case 'wishlist':
         return Heart;
       case 'profile':
@@ -49,8 +47,6 @@ export function ActivityFeed({ activities, limit = 10 }: ActivityFeedProps) {
     switch (type) {
       case 'order':
         return 'text-blue-500';
-      case 'license':
-        return 'text-green-500';
       case 'wishlist':
         return 'text-red-500';
       case 'profile':

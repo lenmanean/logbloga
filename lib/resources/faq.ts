@@ -57,9 +57,9 @@ export const faqs: FAQ[] = [
   {
     id: '7',
     question: 'Can I use these products for commercial purposes?',
-    answer: 'Yes, most of our products include commercial licenses that allow you to use them for your business or client projects. However, please review the specific license terms for each product, as some may have restrictions. Generally, you can use templates and tools for commercial purposes, but you cannot resell or redistribute the products themselves.',
-    category: 'Licensing',
-    tags: ['license', 'commercial', 'usage'],
+    answer: 'Yes, you can use our products for commercial purposes, including for your business or client projects. However, you cannot resell or redistribute the products themselves. You can use the templates, tools, and content you create using our products commercially.',
+    category: 'Usage',
+    tags: ['commercial', 'usage', 'rights'],
     helpfulCount: 194
   },
   {
@@ -89,9 +89,9 @@ export const faqs: FAQ[] = [
   {
     id: '11',
     question: 'Can I share my account with others?',
-    answer: 'No, account sharing is not permitted. Each account is for individual use only. If multiple people need access, each person should create their own account and purchase the products they need. This ensures proper licensing and access control.',
+    answer: 'No, account sharing is not permitted. Each account is for individual use only. If multiple people need access, each person should create their own account and purchase the products they need. This ensures proper access control and protects your purchases.',
     category: 'Account',
-    tags: ['account', 'sharing', 'license'],
+    tags: ['account', 'sharing', 'access'],
     helpfulCount: 98
   },
   {

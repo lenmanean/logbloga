@@ -1,13 +1,13 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Package, DollarSign, Key, Heart, Calendar } from 'lucide-react';
+import { Package, DollarSign, ShoppingBag, Heart, Calendar } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export interface DashboardStatsData {
   totalOrders: number;
   totalSpent: number;
-  activeLicenses: number;
+  purchasedProducts: number;
   wishlistItems: number;
   accountAge: number;
 }
@@ -78,9 +78,9 @@ export function DashboardStats({ stats, isLoading = false }: DashboardStatsProps
       description: 'Lifetime value',
     },
     {
-      title: 'Active Licenses',
-      value: stats.activeLicenses.toString(),
-      icon: Key,
+      title: 'Purchased Products',
+      value: stats.purchasedProducts.toString(),
+      icon: ShoppingBag,
       description: 'Products owned',
     },
     {

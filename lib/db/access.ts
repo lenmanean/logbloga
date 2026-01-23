@@ -1,6 +1,9 @@
 /**
  * Access Control Database Operations
- * Simplified order-based access control (no license keys needed)
+ * Order-based access control for digital products
+ * 
+ * This is the primary and only access control system. Product access is determined
+ * by completed orders. Users have lifetime access to products they've purchased.
  */
 
 import { createClient } from '@/lib/supabase/server';
@@ -165,6 +168,120 @@ export async function getUserProductAccess(userId: string): Promise<Product[]> {
   }
 
   return products;
+}
+
+/**
+ * Product with purchase information for library display
+ */
+export interface ProductWithPurchaseDate extends Product {
+  purchasedDate: string; // ISO date string from order
+  orderId: string; // Order ID for reference
+}
+
+/**
+ * Get all products user has access to with purchase dates
+ * Returns products with the date they were purchased (from order creation)
+ */
+export async function getUserProductAccessWithDates(userId: string): Promise<ProductWithPurchaseDate[]> {
+  const supabase = await createClient();
+  
+  // Get all completed orders for user with creation dates
+  const { data: orders, error: ordersError } = await supabase
+    .from('orders')
+    .select('id, created_at')
+    .eq('user_id', userId)
+    .eq('status', 'completed')
+    .order('created_at', { ascending: false });
+
+  if (ordersError || !orders || orders.length === 0) {
+    return [];
+  }
+
+  const orderIds = orders.map(o => o.id);
+  const orderMap = new Map<string, { date: string; orderId: string }>();
+  orders.forEach(order => {
+    if (order.id && order.created_at) {
+      orderMap.set(order.id, { date: order.created_at, orderId: order.id });
+    }
+  });
+
+  // Get all products from order items with order information
+  const { data: orderItems, error: itemsError } = await supabase
+    .from('order_items')
+    .select(`
+      product_id,
+      order_id,
+      product:products!product_id(*)
+    `)
+    .in('order_id', orderIds);
+
+  if (itemsError || !orderItems) {
+    return [];
+  }
+
+  const products: ProductWithPurchaseDate[] = [];
+  const productMap = new Map<string, ProductWithPurchaseDate>();
+
+  for (const item of orderItems) {
+    if (!item.product_id || !item.order_id) continue;
+
+    const product = item.product as Product;
+    const orderInfo = orderMap.get(item.order_id);
+    if (!orderInfo) continue;
+
+    // Use the earliest purchase date if product appears in multiple orders
+    const existing = productMap.get(product.id);
+    if (!existing) {
+      productMap.set(product.id, {
+        ...product,
+        purchasedDate: orderInfo.date,
+        orderId: orderInfo.orderId,
+      });
+    } else {
+      // Keep the earliest purchase date
+      const existingDate = new Date(existing.purchasedDate);
+      const newDate = new Date(orderInfo.date);
+      if (newDate < existingDate) {
+        existing.purchasedDate = orderInfo.date;
+        existing.orderId = orderInfo.orderId;
+      }
+    }
+
+    // If it's a package, get all included products
+    if (product.product_type === 'package') {
+      const { data: packageProducts, error: ppError } = await (supabase as any)
+        .from('package_products')
+        .select(`
+          product_id,
+          product:products!product_id(*)
+        `)
+        .eq('package_id', product.id);
+
+      if (!ppError && packageProducts) {
+        for (const pp of packageProducts) {
+          const includedProduct = pp.product as Product;
+          if (!productMap.has(includedProduct.id)) {
+            productMap.set(includedProduct.id, {
+              ...includedProduct,
+              purchasedDate: orderInfo.date,
+              orderId: orderInfo.orderId,
+            });
+          } else {
+            // Update with earliest date if needed
+            const existing = productMap.get(includedProduct.id)!;
+            const existingDate = new Date(existing.purchasedDate);
+            const newDate = new Date(orderInfo.date);
+            if (newDate < existingDate) {
+              existing.purchasedDate = orderInfo.date;
+              existing.orderId = orderInfo.orderId;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return Array.from(productMap.values());
 }
 
 /**

@@ -5,7 +5,6 @@
 export type EmailTemplate =
   | 'order-confirmation'
   | 'payment-receipt'
-  | 'license-delivery'
   | 'welcome'
   | 'password-reset'
   | 'email-verification'
@@ -49,23 +48,6 @@ export interface OrderEmailData {
     quantity: number;
     unitPrice: number;
     total: number;
-  }>;
-  doerCouponCode?: string | null;
-  doerCouponExpiresAt?: string | null;
-}
-
-export interface LicenseEmailData {
-  order: {
-    id: string;
-    orderNumber: string;
-    customerEmail: string;
-    customerName: string | null;
-  };
-  licenses: Array<{
-    id: string;
-    licenseKey: string;
-    productName: string;
-    productSlug: string;
   }>;
   doerCouponCode?: string | null;
   doerCouponExpiresAt?: string | null;

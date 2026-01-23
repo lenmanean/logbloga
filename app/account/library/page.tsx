@@ -1,10 +1,10 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { getUserLicenses } from '@/lib/db/licenses';
+import { getUserProductAccessWithDates } from '@/lib/db/access';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen } from 'lucide-react';
 import { LibraryClient } from './library-client';
-import type { LicenseWithProduct } from '@/lib/types/database';
+import type { ProductWithPurchaseDate } from '@/lib/db/access';
 
 export const metadata = {
   title: 'My Library | LogBloga',
@@ -19,24 +19,8 @@ export default async function LibraryPage() {
     redirect('/auth/signin?redirect=/account/library');
   }
 
-  // Fetch user's licenses with product data
-  const licenses = await getUserLicenses(user.id);
-
-  // Group licenses by product (show one product per license, taking the most recent active one)
-  const productMap = new Map<string, LicenseWithProduct>();
-  for (const license of licenses) {
-    if (!license.product_id || !license.product) continue;
-    
-    // Only show active licenses
-    if (license.status !== 'active') continue;
-
-    const existing = productMap.get(license.product_id);
-    if (!existing || new Date(license.access_granted_at || license.created_at || '') > new Date(existing.access_granted_at || existing.created_at || '')) {
-      productMap.set(license.product_id, license);
-    }
-  }
-
-  const libraryProducts = Array.from(productMap.values());
+  // Fetch user's products with purchase dates from completed orders
+  const libraryProducts = await getUserProductAccessWithDates(user.id);
 
   return (
     <main className="min-h-screen bg-background">
@@ -59,7 +43,7 @@ export default async function LibraryPage() {
             </CardContent>
           </Card>
         ) : (
-          <LibraryClient licenses={libraryProducts} />
+          <LibraryClient products={libraryProducts} />
         )}
       </div>
     </main>

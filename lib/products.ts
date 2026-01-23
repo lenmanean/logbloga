@@ -34,11 +34,21 @@ export interface PackageLevelContent {
   name?: string; // For creative frameworks and templates
 }
 
+// Schedule/Timeline item for trackable progress
+export interface PackageLevelScheduleItem {
+  date: string; // "YYYY-MM-DD" format
+  milestone: string; // Milestone description
+  tasks: string[]; // Array of tasks for this milestone
+  completed?: boolean; // Track completion status
+  order?: number; // Display order
+}
+
 export interface PackageLevel {
   level: 1 | 2 | 3;
   timeInvestment: string; // "2-3 Weeks"
   expectedProfit: string; // "$500-$1,500/month"
   platformCosts: string; // "$0-50/month"
+  schedule: PackageLevelScheduleItem[]; // Trackable timeline/schedule
   implementationPlan: PackageLevelContent;
   platformGuides: PackageLevelContent[];
   creativeFrameworks: PackageLevelContent[];

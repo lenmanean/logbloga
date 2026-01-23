@@ -15,7 +15,6 @@ export async function exportUserData(userId: string): Promise<Record<string, any
   const [
     profileData,
     ordersData,
-    licensesData,
     cartData,
     addressesData,
     notificationsData,
@@ -36,13 +35,6 @@ export async function exportUserData(userId: string): Promise<Record<string, any
     supabase
       .from('orders')
       .select('*, order_items(*)')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false }),
-    
-    // Licenses
-    supabase
-      .from('licenses')
-      .select('*')
       .eq('user_id', userId)
       .order('created_at', { ascending: false }),
     
@@ -129,7 +121,6 @@ export async function exportUserData(userId: string): Promise<Record<string, any
     profile: profileData.data || null,
     auth: authData,
     orders: ordersData.data || [],
-    licenses: licensesData.data || [],
     cart_items: cartData.data || [],
     addresses: addressesData.data || [],
     notifications: notificationsData.data || [],

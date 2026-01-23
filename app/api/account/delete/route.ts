@@ -74,7 +74,7 @@ export async function DELETE(request: Request) {
       );
     }
 
-    // Note: Most related data (profiles, orders, licenses, cart_items, addresses, 
+    // Note: Most related data (profiles, orders, cart_items, addresses, 
     // notifications, wishlist, cookie_consents, consents) will be automatically 
     // deleted via CASCADE constraints. Reviews and audit logs are anonymized 
     // instead of deleted to maintain data integrity.
