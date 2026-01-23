@@ -6,7 +6,6 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product, ExtendedProduct } from '@/lib/types/database';
 import type { ProductQueryOptions } from './types';
-import { parsePackageLevels } from './package-levels';
 
 /**
  * Get all active products
@@ -101,12 +100,8 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     throw new Error(`Failed to fetch product: ${error.message}`);
   }
 
-  // Parse levels if present (for validation)
-  if (data && data.levels) {
-    const parsedLevels = parsePackageLevels(data);
-    // Note: We keep the raw levels data in the product object
-    // The parsing is done in components via parsePackageLevels helper
-  }
+  // Note: levels data is included in the returned product object
+  // Parsing is done in components via parsePackageLevels helper when needed
 
   return data;
 }
