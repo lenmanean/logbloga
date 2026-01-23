@@ -15,6 +15,8 @@ export type Product = Database['public']['Tables']['products']['Row'] & {
   is_current_version?: boolean | null;
   included_products?: any; // JSONB
   package_value?: number | null;
+  // Fields added in migration 000027
+  levels?: any; // JSONB - Level-based content structure
 };
 export type Profile = Database['public']['Tables']['profiles']['Row'];
 export type CartItem = Database['public']['Tables']['cart_items']['Row'];
