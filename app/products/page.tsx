@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Product, ProductCategory } from '@/lib/products';
-import { convertDbProductToFrontendProduct } from '@/lib/db/products';
 import { Search, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { Product as DbProduct } from '@/lib/types/database';
@@ -83,7 +82,21 @@ export default function ProductsPage({ initialProducts = [] }: ProductsPageClien
 
         return matchesSearch && matchesCategory && matchesDifficulty && matchesPrice;
       })
-      .map(convertDbProductToFrontendProduct);
+      .map((dbProduct): Product => {
+        // Convert DB product to frontend format (client-safe conversion)
+        return {
+          id: dbProduct.id,
+          title: (dbProduct.title || dbProduct.name || 'Untitled Product'),
+          description: dbProduct.description || '',
+          category: (dbProduct.category || 'web-apps') as ProductCategory,
+          price: typeof dbProduct.price === 'number' ? dbProduct.price : parseFloat(String(dbProduct.price || 0)),
+          originalPrice: dbProduct.original_price ? (typeof dbProduct.original_price === 'number' ? dbProduct.original_price : parseFloat(String(dbProduct.original_price))) : undefined,
+          featured: dbProduct.featured || false,
+          image: dbProduct.package_image || (dbProduct.images as any)?.[0] || dbProduct.image_url || undefined,
+          difficulty: dbProduct.difficulty as Product['difficulty'] | undefined,
+          duration: dbProduct.duration || undefined,
+        };
+      });
   }, [products, searchQuery, selectedCategory, selectedProductType, selectedDifficulty, priceRange]);
 
   const categories = [

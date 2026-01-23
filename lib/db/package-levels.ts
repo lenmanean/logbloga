@@ -60,7 +60,7 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
   }
 
   // Ensure level matches expected
-  const level = levelData.level === expectedLevel ? expectedLevel : expectedLevel;
+  const levelNumber = levelData.level === expectedLevel ? expectedLevel : expectedLevel;
 
   // Validate required fields
   if (!levelData.timeInvestment || !levelData.expectedProfit || !levelData.platformCosts) {
@@ -75,8 +75,8 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
   }
 
   // Build validated level
-  const level: PackageLevel = {
-    level,
+  const validatedLevel: PackageLevel = {
+    level: levelNumber,
     timeInvestment: String(levelData.timeInvestment),
     expectedProfit: String(levelData.expectedProfit),
     platformCosts: String(levelData.platformCosts),
@@ -111,7 +111,7 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
       : [],
   };
 
-  return level;
+  return validatedLevel;
 }
 
 /**
