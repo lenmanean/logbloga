@@ -53,11 +53,6 @@ export default function ProductsPage({ initialProducts = [] }: ProductsPageClien
           if (dbProduct.product_type !== selectedProductType) {
             return false;
           }
-        } else {
-          // If "all" is selected, exclude packages
-          if (dbProduct.product_type === 'package') {
-            return false;
-          }
         }
 
         // Search filter
