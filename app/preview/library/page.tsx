@@ -20,6 +20,8 @@ function mockPackageToLicenseWithProduct(mockPackage: ReturnType<typeof getAllMo
     license_key: `PREVIEW-${mockPackage.id.toUpperCase()}`,
     status: 'active',
     access_granted_at: new Date().toISOString(),
+    activated_at: new Date().toISOString(),
+    order_id: `preview-order-${mockPackage.id}`,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     lifetime_access: false,
