@@ -30,13 +30,22 @@ export function parsePackageLevels(product: Product): PackageLevels | null {
     const levels: PackageLevels = {};
     
     if (levelsData.level1) {
-      levels.level1 = validatePackageLevel(levelsData.level1, 1);
+      const level1 = validatePackageLevel(levelsData.level1, 1);
+      if (level1) {
+        levels.level1 = level1;
+      }
     }
     if (levelsData.level2) {
-      levels.level2 = validatePackageLevel(levelsData.level2, 2);
+      const level2 = validatePackageLevel(levelsData.level2, 2);
+      if (level2) {
+        levels.level2 = level2;
+      }
     }
     if (levelsData.level3) {
-      levels.level3 = validatePackageLevel(levelsData.level3, 3);
+      const level3 = validatePackageLevel(levelsData.level3, 3);
+      if (level3) {
+        levels.level3 = level3;
+      }
     }
 
     // Return null if no valid levels found
