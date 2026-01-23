@@ -26,6 +26,7 @@ function mockPackageToLicenseWithProduct(mockPackage: ReturnType<typeof getAllMo
     expires_at: null,
     product: {
       id: mockPackage.id,
+      name: mockPackage.title, // Required field
       title: mockPackage.title,
       description: mockPackage.description,
       category: mockPackage.category,
@@ -34,7 +35,7 @@ function mockPackageToLicenseWithProduct(mockPackage: ReturnType<typeof getAllMo
       featured: true,
       active: true,
       package_image: mockPackage.packageImage,
-      images: [mockPackage.packageImage],
+      images: [mockPackage.packageImage] as any, // Json type - stored as string array
       tagline: mockPackage.tagline,
       difficulty: mockPackage.difficulty,
       duration: 'Self-paced',
@@ -44,6 +45,17 @@ function mockPackageToLicenseWithProduct(mockPackage: ReturnType<typeof getAllMo
       slug: mockPackage.slug,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
+      // Additional required fields
+      bonus_assets: null,
+      file_path: null,
+      file_size: null,
+      image_url: null,
+      modules: null,
+      published: true,
+      pricing_justification: null,
+      resources: null,
+      stripe_price_id: null,
+      stripe_product_id: null,
     },
   };
 }
