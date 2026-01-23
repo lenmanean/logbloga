@@ -7,12 +7,14 @@ import { useCart } from '@/contexts/cart-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 import { Loader2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 export function CheckoutOrderReview() {
-  const { customerInfo, appliedCoupon, orderTotals, setCurrentStep } = useCheckout();
+  const { customerInfo, appliedCoupon, orderTotals, termsAccepted, setTermsAccepted, setCurrentStep } = useCheckout();
   const { items } = useCart();
   const router = useRouter();
   const [isPlacingOrder, setIsPlacingOrder] = useState(false);
@@ -21,6 +23,11 @@ export function CheckoutOrderReview() {
   const handlePlaceOrder = async () => {
     if (!customerInfo) {
       setError('Customer information is required');
+      return;
+    }
+
+    if (!termsAccepted) {
+      setError('You must accept the Terms of Service and Refund Policy to place an order');
       return;
     }
 
@@ -186,10 +193,53 @@ export function CheckoutOrderReview() {
             </div>
           )}
 
-          {/* Terms and Conditions */}
-          <div className="rounded-md bg-muted/50 p-4 text-sm">
-            <p className="text-muted-foreground">
-              By placing this order, you agree to our terms and conditions. 
+          {/* Terms and Conditions - Required Checkbox */}
+          <div className="space-y-2">
+            <div className="flex items-start space-x-2">
+              <Checkbox
+                id="checkout-terms"
+                checked={termsAccepted}
+                onCheckedChange={(checked) => {
+                  setTermsAccepted(checked === true);
+                  setError(null);
+                }}
+                className="mt-1"
+                aria-invalid={error && !termsAccepted ? 'true' : 'false'}
+              />
+              <Label 
+                htmlFor="checkout-terms" 
+                className="text-sm font-normal cursor-pointer leading-relaxed"
+              >
+                I agree to the{' '}
+                <Link 
+                  href="/legal/terms" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary underline hover:text-primary/80"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Terms of Service
+                </Link>
+                {' '}and{' '}
+                <Link 
+                  href="/legal/refund" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-primary underline hover:text-primary/80"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Refund Policy
+                </Link>
+                . I understand that no earnings, revenue, or profit figures are guaranteed, and 
+                that results will vary based on my effort and circumstances.
+              </Label>
+            </div>
+            {error && !termsAccepted && (
+              <p className="text-sm text-destructive ml-6">
+                You must accept the Terms of Service to complete your purchase.
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground ml-6">
               You will be redirected to our secure payment provider to complete your purchase.
             </p>
           </div>
@@ -207,7 +257,7 @@ export function CheckoutOrderReview() {
             </Button>
             <Button
               onClick={handlePlaceOrder}
-              disabled={isPlacingOrder}
+              disabled={isPlacingOrder || !termsAccepted}
               size="lg"
               className="flex-1 max-w-xs"
             >

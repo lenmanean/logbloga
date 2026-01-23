@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 export default function CookiePolicyPage() {
-  const lastUpdated = '2024-01-01';
+  const lastUpdated = '2026-01-23';
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -132,8 +132,12 @@ export default function CookiePolicyPage() {
             If you have questions about our use of cookies, please contact us at:
           </p>
           <p className="mb-4">
-            <strong>Email:</strong> privacy@logbloga.com<br />
-            <strong>Address:</strong> [Your Business Address]
+            <strong>Email:</strong> support@logbloga.com (for general inquiries)<br />
+            <strong>Privacy Inquiries:</strong> privacy@logbloga.com<br />
+            <strong>Response Time:</strong> We typically respond within 24-48 hours during business days
+          </p>
+          <p className="mb-4 text-sm text-muted-foreground">
+            <em>Note: Business address will be provided upon request or when available.</em>
           </p>
         </section>
       </div>

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 export default function RefundPolicyPage() {
-  const lastUpdated = '2024-01-01';
+  const lastUpdated = '2026-01-23';
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -22,7 +22,7 @@ export default function RefundPolicyPage() {
           <p className="mb-4">
             Due to the digital nature of our products, all sales are generally final. However, we 
             understand that exceptional circumstances may arise, and we will review refund requests 
-            on a case-by-case basis.
+            submitted within <strong>30 days</strong> of the purchase date on a case-by-case basis.
           </p>
           <p className="mb-4">
             Refunds may be considered in the following situations:
@@ -41,6 +41,11 @@ export default function RefundPolicyPage() {
             Refund requests must be submitted within <strong>30 days</strong> of the purchase date. 
             Requests submitted after this period will not be considered unless exceptional 
             circumstances apply.
+          </p>
+          <p className="mb-4">
+            Processing times vary by payment method. Credit card refunds typically appear in your 
+            account within 5-10 business days after approval, while other payment methods may take 
+            longer. We will notify you once your refund has been processed.
           </p>
         </section>
 
@@ -76,7 +81,8 @@ export default function RefundPolicyPage() {
           </ol>
           <p className="mb-4">
             Please note that it may take additional time for the refund to appear in your account, 
-            depending on your payment provider.
+            depending on your payment provider. In some cases, partial refunds may be issued if only 
+            a portion of your purchase qualifies for a refund.
           </p>
         </section>
 
@@ -85,6 +91,11 @@ export default function RefundPolicyPage() {
           <p className="mb-4">
             Refunds will be processed using the same payment method used for the original purchase. 
             If this is not possible, we will work with you to find an alternative solution.
+          </p>
+          <p className="mb-4">
+            <strong>Timeline Expectations:</strong> After we process your refund, it typically takes 
+            5-10 business days for the funds to appear in your account, depending on your payment provider 
+            and financial institution. Some payment methods may take longer.
           </p>
         </section>
 
@@ -97,6 +108,7 @@ export default function RefundPolicyPage() {
             <li>Products downloaded more than 30 days after purchase</li>
             <li>Products that have been used or modified</li>
             <li>Products that have been shared or accessed by unauthorized users</li>
+            <li>Refund requests based on failure to achieve stated or implied earnings, revenue, or profit figures</li>
             <li>Refund requests that do not meet our eligibility criteria</li>
           </ul>
         </section>
@@ -109,7 +121,9 @@ export default function RefundPolicyPage() {
             your account.
           </p>
           <p className="mb-4">
-            We encourage you to contact us first so we can resolve any issues promptly.
+            We encourage you to contact us first so we can resolve any issues promptly. We work 
+            with payment processors to resolve disputes fairly and will provide all necessary 
+            documentation to support our position.
           </p>
         </section>
 
@@ -122,7 +136,28 @@ export default function RefundPolicyPage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">9. Contact Us</h2>
+          <h2 className="text-2xl font-semibold mb-4">9. Earnings and Results</h2>
+          <p className="mb-4">
+            <strong>No Refund for Business Results:</strong> Refunds will not be granted based on 
+            your failure to achieve any stated or implied earnings, revenue, or profit figures 
+            displayed on our website. Our products are educational content, templates, and tools. 
+            We do not guarantee any level of business success, income, or financial results.
+          </p>
+          <p className="mb-4">
+            Your purchase is made with the understanding that business outcomes vary based on numerous 
+            factors including your effort, skill, experience, market conditions, competition, and 
+            many other variables beyond our control. Individual results vary significantly, and past 
+            results of others do not guarantee your future results.
+          </p>
+          <p className="mb-4">
+            If you are dissatisfied with your business results after using our products, this does 
+            not constitute a valid reason for a refund. Refunds are only available for the specific 
+            circumstances outlined in Section 1 (Refund Eligibility) of this policy.
+          </p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">10. Contact Us</h2>
           <p className="mb-4">
             If you have questions about our refund policy, please contact us at:
           </p>

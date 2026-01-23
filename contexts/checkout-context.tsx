@@ -17,6 +17,7 @@ interface CheckoutState {
   customerInfo: CustomerInfo | null;
   appliedCoupon: Coupon | null;
   orderTotals: OrderTotals;
+  termsAccepted: boolean;
 }
 
 export interface CheckoutContextType {
@@ -24,10 +25,12 @@ export interface CheckoutContextType {
   customerInfo: CustomerInfo | null;
   appliedCoupon: Coupon | null;
   orderTotals: OrderTotals;
+  termsAccepted: boolean;
   isValidatingCoupon: boolean;
   checkoutError: string | null;
   setCurrentStep: (step: CheckoutStep) => void;
   setCustomerInfo: (info: CustomerInfo) => void;
+  setTermsAccepted: (accepted: boolean) => void;
   applyCoupon: (code: string) => Promise<{ success: boolean; error?: string }>;
   removeCoupon: () => void;
   calculateTotals: () => void;
@@ -53,6 +56,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     taxAmount: 0,
     total: 0,
   });
+  const [termsAccepted, setTermsAcceptedState] = useState<boolean>(false);
   const [isValidatingCoupon, setIsValidatingCoupon] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
@@ -80,6 +84,9 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
         if (parsed.orderTotals) {
           setOrderTotals(parsed.orderTotals);
         }
+        if (typeof parsed.termsAccepted === 'boolean') {
+          setTermsAcceptedState(parsed.termsAccepted);
+        }
       }
     } catch (error) {
       console.error('Error loading checkout state:', error);
@@ -98,12 +105,13 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
         customerInfo,
         appliedCoupon,
         orderTotals,
+        termsAccepted,
       };
       sessionStorage.setItem(CHECKOUT_STORAGE_KEY, JSON.stringify(state));
     } catch (error) {
       console.error('Error saving checkout state:', error);
     }
-  }, [currentStep, customerInfo, appliedCoupon, orderTotals]);
+  }, [currentStep, customerInfo, appliedCoupon, orderTotals, termsAccepted]);
 
   /**
    * Calculate order totals whenever items or coupon changes
@@ -131,6 +139,14 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
    */
   const setCustomerInfo = useCallback((info: CustomerInfo) => {
     setCustomerInfoState(info);
+    setCheckoutError(null);
+  }, []);
+
+  /**
+   * Set terms acceptance
+   */
+  const setTermsAccepted = useCallback((accepted: boolean) => {
+    setTermsAcceptedState(accepted);
     setCheckoutError(null);
   }, []);
 
@@ -224,7 +240,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
       default:
         return false;
     }
-  }, [items.length, customerInfo]);
+  }, [items.length, customerInfo, termsAccepted]);
 
   /**
    * Reset checkout state
@@ -233,6 +249,7 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     setCurrentStepState(1);
     setCustomerInfoState(null);
     setAppliedCoupon(null);
+    setTermsAcceptedState(false);
     setCheckoutError(null);
     if (typeof window !== 'undefined') {
       sessionStorage.removeItem(CHECKOUT_STORAGE_KEY);
@@ -244,10 +261,12 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     customerInfo,
     appliedCoupon,
     orderTotals,
+    termsAccepted,
     isValidatingCoupon,
     checkoutError,
     setCurrentStep,
     setCustomerInfo,
+    setTermsAccepted,
     applyCoupon,
     removeCoupon,
     calculateTotals,
