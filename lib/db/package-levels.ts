@@ -77,6 +77,11 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
     return null;
   }
 
+  if (!levelData.aiLeverage || typeof levelData.aiLeverage !== 'string') {
+    console.warn(`Package level ${expectedLevel} missing required aiLeverage`);
+    return null;
+  }
+
   // Validate implementation plan
   if (!levelData.implementationPlan || typeof levelData.implementationPlan !== 'object') {
     console.warn(`Package level ${expectedLevel} missing implementation plan`);
@@ -109,7 +114,7 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
     timeInvestment: String(levelData.timeInvestment),
     expectedProfit: String(levelData.expectedProfit),
     platformCosts: String(levelData.platformCosts),
-    aiLeverage: String(levelData.aiLeverage || ''),
+    aiLeverage: String(levelData.aiLeverage),
     schedule,
     implementationPlan: {
       file: String(levelData.implementationPlan.file || ''),

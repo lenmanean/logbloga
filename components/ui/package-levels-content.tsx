@@ -45,9 +45,8 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
     setExpandedLevels(prev => ({ ...prev, [levelKey]: !prev[levelKey] }));
   };
 
-  // Check if package has levels structure
   if (!pkg.levels || (!pkg.levels.level1 && !pkg.levels.level2 && !pkg.levels.level3)) {
-    return null; // Return null if no levels data - fallback to WhatsIncluded
+    return null;
   }
 
   const levels: Array<{ key: string; level: PackageLevel }> = [];
@@ -70,10 +69,10 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
         // Get enriched content (merges database data with static content)
         const enrichedContent = getLevelContent(pkg.slug, level.level, level);
         
-        // Use enriched content if available, otherwise fall back to database level
+        // Use enriched content if available, otherwise database level (both have required aiLeverage)
         const displayLevel = enrichedContent ? {
           ...level,
-          aiLeverage: enrichedContent.aiLeverage || level.aiLeverage || '',
+          aiLeverage: enrichedContent.aiLeverage ?? level.aiLeverage,
           implementationPlan: enrichedContent.implementationPlan,
           platformGuides: enrichedContent.platformGuides,
           creativeFrameworks: enrichedContent.creativeFrameworks,
@@ -124,21 +123,19 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
             {isExpanded && (
               <CardContent className="space-y-6 pt-0">
                 {/* AI Leverage Section */}
-                {displayLevel.aiLeverage && (
-                  <div className="border rounded-lg p-4 bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
-                    <div className="flex items-start gap-3">
-                      <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-lg mb-2 text-blue-900 dark:text-blue-100">
-                          AI Leverage & Revenue Connection
-                        </h3>
-                        <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                          {displayLevel.aiLeverage}
-                        </p>
-                      </div>
+                <div className="border rounded-lg p-4 bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                  <div className="flex items-start gap-3">
+                    <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-lg mb-2 text-blue-900 dark:text-blue-100">
+                        AI Leverage & Revenue Connection
+                      </h3>
+                      <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                        {displayLevel.aiLeverage}
+                      </p>
                     </div>
                   </div>
-                )}
+                </div>
 
                 {/* Implementation Plan */}
                 <div className="border rounded-lg p-4 bg-muted/50">

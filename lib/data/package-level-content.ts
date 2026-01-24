@@ -329,10 +329,10 @@ export function getLevelContent(
     return null;
   }
 
-  // If database has data, merge it with static content (database takes precedence for implementation plan)
+  // If database has data, merge it with static content (database takes precedence)
   if (databaseLevel) {
     return {
-      aiLeverage: databaseLevel.aiLeverage || staticContent.aiLeverage,
+      aiLeverage: databaseLevel.aiLeverage ?? staticContent.aiLeverage,
       implementationPlan: databaseLevel.implementationPlan?.file
         ? databaseLevel.implementationPlan
         : staticContent.implementationPlan,

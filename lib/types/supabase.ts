@@ -646,7 +646,6 @@ export type Database = {
       products: {
         Row: {
           active: boolean | null
-          bonus_assets: Json | null
           category: string | null
           content_hours: string | null
           created_at: string | null
@@ -658,7 +657,6 @@ export type Database = {
           id: string
           image_url: string | null
           images: Json | null
-          modules: Json | null
           name: string
           original_price: number | null
           package_image: string | null
@@ -666,7 +664,6 @@ export type Database = {
           pricing_justification: string | null
           published: boolean | null
           rating: number | null
-          resources: Json | null
           review_count: number | null
           slug: string
           stripe_price_id: string | null
@@ -677,7 +674,6 @@ export type Database = {
         }
         Insert: {
           active?: boolean | null
-          bonus_assets?: Json | null
           category?: string | null
           content_hours?: string | null
           created_at?: string | null
@@ -689,7 +685,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           images?: Json | null
-          modules?: Json | null
           name: string
           original_price?: number | null
           package_image?: string | null
@@ -697,7 +692,6 @@ export type Database = {
           pricing_justification?: string | null
           published?: boolean | null
           rating?: number | null
-          resources?: Json | null
           review_count?: number | null
           slug: string
           stripe_price_id?: string | null
@@ -708,7 +702,6 @@ export type Database = {
         }
         Update: {
           active?: boolean | null
-          bonus_assets?: Json | null
           category?: string | null
           content_hours?: string | null
           created_at?: string | null
@@ -720,7 +713,6 @@ export type Database = {
           id?: string
           image_url?: string | null
           images?: Json | null
-          modules?: Json | null
           name?: string
           original_price?: number | null
           package_image?: string | null
@@ -728,7 +720,6 @@ export type Database = {
           pricing_justification?: string | null
           published?: boolean | null
           rating?: number | null
-          resources?: Json | null
           review_count?: number | null
           slug?: string
           stripe_price_id?: string | null

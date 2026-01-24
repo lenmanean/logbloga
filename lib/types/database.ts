@@ -40,20 +40,7 @@ export type OrderStatus = 'pending' | 'processing' | 'completed' | 'cancelled' |
 // Review status type
 export type ReviewStatus = 'pending' | 'approved' | 'rejected';
 
-// Extended Product type with JSON fields parsed
-export interface PackageModule {
-  title: string;
-  description: string;
-  hours: string;
-  items: string[];
-}
-
-export interface PackageResource {
-  category: string;
-  items: string[];
-}
-
-// Package Level Structure (added in migration 000027)
+// Package Level Structure (migration 000027)
 export interface PackageLevelContent {
   file: string;
   type: string;
@@ -80,7 +67,6 @@ export interface PackageLevels {
 }
 
 export interface ExtendedProduct {
-  // All Product fields but with proper types
   id: string;
   title: string | null;
   description: string | null;
@@ -89,10 +75,6 @@ export interface ExtendedProduct {
   original_price: number | null;
   featured: boolean | null;
   duration: string | null;
-  // Extended fields
-  modules: PackageModule[];
-  resources: PackageResource[];
-  bonusAssets: string[];
   images: string[];
 }
 

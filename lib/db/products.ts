@@ -185,12 +185,8 @@ export async function getPackageProducts(): Promise<ExtendedProduct[]> {
     throw new Error(`Failed to fetch package products: ${error.message}`);
   }
 
-  // Parse JSON fields
   return (data || []).map(product => ({
     ...product,
-    modules: (product.modules as any) || [],
-    resources: (product.resources as any) || [],
-    bonusAssets: (product.bonus_assets as any) || [],
     images: (product.images as any) || [],
   })) as ExtendedProduct[];
 }

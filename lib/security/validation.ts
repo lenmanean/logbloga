@@ -44,9 +44,6 @@ export const productCreateSchema = z.object({
   package_image: z.string().url().optional().nullable(),
   images: z.array(z.string().url()).optional().default([]),
   tagline: z.string().max(500).optional().nullable(),
-  modules: z.any().optional().nullable(), // JSONB
-  resources: z.any().optional().nullable(), // JSONB
-  bonus_assets: z.any().optional().nullable(), // JSONB
   pricing_justification: z.string().optional().nullable(),
   rating: z.number().min(0).max(5).optional().nullable(),
   review_count: z.number().int().min(0).optional().default(0),

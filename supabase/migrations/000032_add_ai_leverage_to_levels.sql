@@ -5,5 +5,4 @@
 -- Update comment on products.levels column to include aiLeverage field
 COMMENT ON COLUMN products.levels IS 'Level-based content structure for packages. Format: { "level1": { "level": 1, "timeInvestment": "2-3 Weeks", "expectedProfit": "$500-$1,500/month", "platformCosts": "$0-50/month", "aiLeverage": "Comprehensive text description of AI tools used and how they drive revenue", "schedule": [...], "implementationPlan": {...}, "platformGuides": [...], "creativeFrameworks": [...], "templates": [...] }, ... }';
 
--- Note: JSONB is flexible, so no ALTER TABLE needed. This migration documents the new field structure.
--- Existing data without aiLeverage will continue to work (defaults to empty string in application code).
+-- JSONB is flexible; application requires aiLeverage for all package levels (see migration 000033).

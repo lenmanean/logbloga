@@ -127,10 +127,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
     packageImage: packageData.package_image || '',
     images: (packageData.images as string[]) || [packageData.package_image || ''],
     tagline: packageData.tagline || '',
-    modules: (packageData.modules as any) || [],
-    resources: (packageData.resources as any) || [],
-    bonusAssets: (packageData.bonus_assets as any) || [],
-    levels: levels || undefined, // Add parsed levels data
+    levels: levels ?? undefined,
     pricingJustification: packageData.pricing_justification || '',
     contentHours: packageData.content_hours || '',
     slug: packageData.slug,
