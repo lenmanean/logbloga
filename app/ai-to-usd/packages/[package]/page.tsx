@@ -298,21 +298,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
           />
         </div>
 
-        {/* Pricing Justification */}
-        {packageProduct.pricingJustification && (
-          <div className="mb-12">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-2xl">Why This Price?</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground leading-relaxed">
-                  {packageProduct.pricingJustification}
-                </p>
-              </CardContent>
-            </Card>
-          </div>
-        )}
 
             {/* Related Links */}
             <div className="flex flex-wrap gap-4 justify-center">

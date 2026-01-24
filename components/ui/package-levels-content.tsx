@@ -7,6 +7,7 @@ import { PackageProduct, PackageLevels, PackageLevel } from '@/lib/products';
 import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { getLevelContent } from '@/lib/data/package-level-content';
 
 interface PackageLevelsContentProps {
   package: PackageProduct;
@@ -64,7 +65,20 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
 
       {levels.map(({ key, level }) => {
         const isExpanded = expandedLevels[key];
-        const FileIcon = getFileTypeIcon(level.implementationPlan.type);
+        
+        // Get enriched content (merges database data with static content)
+        const enrichedContent = getLevelContent(pkg.slug, level.level, level);
+        
+        // Use enriched content if available, otherwise fall back to database level
+        const displayLevel = enrichedContent ? {
+          ...level,
+          implementationPlan: enrichedContent.implementationPlan,
+          platformGuides: enrichedContent.platformGuides,
+          creativeFrameworks: enrichedContent.creativeFrameworks,
+          templates: enrichedContent.templates,
+        } : level;
+        
+        const FileIcon = getFileTypeIcon(displayLevel.implementationPlan.type);
 
         return (
           <Card key={key} className="overflow-hidden">
@@ -118,14 +132,14 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                       </p>
                       <div className="flex items-center gap-2">
                         <FileIcon className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm font-medium">{level.implementationPlan.file}</span>
-                        <Badge variant={getFileTypeBadgeVariant(level.implementationPlan.type)} className="text-xs">
-                          {level.implementationPlan.type.toUpperCase()}
+                        <span className="text-sm font-medium">{displayLevel.implementationPlan.file}</span>
+                        <Badge variant={getFileTypeBadgeVariant(displayLevel.implementationPlan.type)} className="text-xs">
+                          {displayLevel.implementationPlan.type.toUpperCase()}
                         </Badge>
                       </div>
-                      {level.implementationPlan.description && (
+                      {displayLevel.implementationPlan.description && (
                         <p className="text-sm text-muted-foreground mt-2">
-                          {level.implementationPlan.description}
+                          {displayLevel.implementationPlan.description}
                         </p>
                       )}
                     </div>
@@ -133,7 +147,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                 </div>
 
                 {/* Platform Setup Guides */}
-                {level.platformGuides.length > 0 && (
+                {displayLevel.platformGuides.length > 0 && (
                   <div className="border rounded-lg p-4">
                     <div className="flex items-start gap-3 mb-3">
                       <Settings className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -143,7 +157,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                           Step-by-step instructions for setting up and configuring platforms
                         </p>
                         <div className="space-y-2">
-                          {level.platformGuides.map((guide, index) => {
+                          {displayLevel.platformGuides.map((guide, index) => {
                             const GuideIcon = getFileTypeIcon(guide.type);
                             return (
                               <div key={index} className="flex items-center gap-2 p-2 rounded bg-accent/30">
@@ -174,7 +188,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                 )}
 
                 {/* Creative Decision Frameworks */}
-                {level.creativeFrameworks.length > 0 && (
+                {displayLevel.creativeFrameworks.length > 0 && (
                   <div className="border rounded-lg p-4">
                     <div className="flex items-start gap-3 mb-3">
                       <Lightbulb className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -184,7 +198,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                           Guided exercises to help you make creative decisions (niche, branding, ideas, etc.)
                         </p>
                         <div className="space-y-2">
-                          {level.creativeFrameworks.map((framework, index) => {
+                          {displayLevel.creativeFrameworks.map((framework, index) => {
                             const FrameworkIcon = getFileTypeIcon(framework.type);
                             return (
                               <div key={index} className="flex items-center gap-2 p-2 rounded bg-accent/30">
@@ -212,7 +226,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                 )}
 
                 {/* Templates & Checklists */}
-                {level.templates.length > 0 && (
+                {displayLevel.templates.length > 0 && (
                   <div className="border rounded-lg p-4">
                     <div className="flex items-start gap-3 mb-3">
                       <FileText className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
@@ -222,7 +236,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                           Ready-to-use templates, checklists, and resources
                         </p>
                         <div className="space-y-2">
-                          {level.templates.map((template, index) => {
+                          {displayLevel.templates.map((template, index) => {
                             const TemplateIcon = getFileTypeIcon(template.type);
                             return (
                               <div key={index} className="flex items-center gap-2 p-2 rounded bg-accent/30">
@@ -258,7 +272,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
       <Card className="border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800">
         <CardContent className="pt-6">
           <p className="text-sm text-muted-foreground leading-relaxed">
-            <sup>*</sup> <strong>Expected Revenue Disclaimer:</strong> The expected revenue figures displayed above are illustrative examples only and are not a guarantee of income. Your actual results will depend on numerous factors including your effort, skill, experience, market conditions, competition, and adherence to the implementation plan. Results may vary significantly. By purchasing this package, you acknowledge that you understand there is no guarantee of achieving any stated or implied earnings, revenue, or profit figures. Please review our{' '}
+            <sup>*</sup> <strong>Expected Revenue Disclaimer:</strong> Expected revenue figures are illustrative only and not a guarantee. Results depend on your skills, effort, and adherence to the plan. Results may vary. See our{' '}
             <Link 
               href="/legal/terms" 
               target="_blank" 
@@ -267,7 +281,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
             >
               Terms of Service
             </Link>
-            {' '}for complete details on earnings disclaimers and limitations of liability.
+            {' '}for complete details.
           </p>
         </CardContent>
       </Card>
