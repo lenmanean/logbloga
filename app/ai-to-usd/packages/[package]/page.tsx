@@ -123,7 +123,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
     originalPrice: packageData.original_price ? (typeof packageData.original_price === 'number' ? packageData.original_price : parseFloat(String(packageData.original_price))) : undefined,
     featured: packageData.featured || false,
     image: packageData.package_image || (packageData.images as any)?.[0] || packageData.image_url || undefined,
-    difficulty: (packageData.difficulty as PackageProduct['difficulty']) || undefined,
     duration: packageData.duration || undefined,
     packageImage: packageData.package_image || '',
     images: (packageData.images as string[]) || [packageData.package_image || ''],

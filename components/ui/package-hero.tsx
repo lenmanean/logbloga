@@ -9,11 +9,6 @@ interface PackageHeroProps {
 }
 
 export function PackageHero({ package: pkg, className }: PackageHeroProps) {
-  const difficultyColors: Record<string, string> = {
-    beginner: 'bg-green-100 text-green-800 border-green-200',
-    intermediate: 'bg-blue-100 text-blue-800 border-blue-200',
-    advanced: 'bg-purple-100 text-purple-800 border-purple-200',
-  };
 
   return (
     <div className={cn('w-full', className)}>
@@ -36,11 +31,6 @@ export function PackageHero({ package: pkg, className }: PackageHeroProps) {
               <Badge variant="outline" className="text-sm">
                 {pkg.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
               </Badge>
-              {pkg.difficulty && (
-                <Badge variant="outline" className={cn('text-sm', difficultyColors[pkg.difficulty])}>
-                  {pkg.difficulty}
-                </Badge>
-              )}
               <Badge variant="outline" className="text-sm">
                 {pkg.contentHours}
               </Badge>

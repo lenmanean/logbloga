@@ -27,12 +27,6 @@ export function ProductCard({ product, className, packageInfo }: ProductCardProp
     'freelancing': 'Freelancing',
   };
 
-  const difficultyColors: Record<string, string> = {
-    beginner: 'bg-green-100 text-green-800 border-green-200',
-    intermediate: 'bg-blue-100 text-blue-800 border-blue-200',
-    advanced: 'bg-purple-100 text-purple-800 border-purple-200',
-  };
-
   return (
     <Card className={cn('group hover:shadow-lg transition-all duration-300 flex flex-col', className)}>
       <CardHeader className="pb-4">
@@ -74,11 +68,6 @@ export function ProductCard({ product, className, packageInfo }: ProductCardProp
           {product.description}
         </p>
         <div className="flex flex-wrap gap-2 mt-auto">
-          {product.difficulty && (
-            <Badge variant="outline" className={cn('text-xs', difficultyColors[product.difficulty])}>
-              {product.difficulty}
-            </Badge>
-          )}
           {product.duration && (
             <Badge variant="outline" className="text-xs">
               {product.duration}

@@ -82,11 +82,6 @@ export default async function PackagePreviewPage({ params }: PackagePreviewPageP
                 </div>
 
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Difficulty</p>
-                  <Badge variant="outline">{mockPackage.difficulty}</Badge>
-                </div>
-
-                <div>
                   <p className="text-sm text-muted-foreground mb-1">Content Hours</p>
                   <p className="text-sm">{mockPackage.contentHours}</p>
                 </div>

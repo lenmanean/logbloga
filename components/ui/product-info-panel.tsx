@@ -44,24 +44,13 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
 
   const finalPrice = displayPrice * quantity;
 
-  const difficultyColors: Record<string, string> = {
-    beginner: 'bg-green-100 text-green-800 border-green-200',
-    intermediate: 'bg-blue-100 text-blue-800 border-blue-200',
-    advanced: 'bg-purple-100 text-purple-800 border-purple-200',
-  };
-
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Category & Difficulty Badges */}
+      {/* Category & Content Hours Badges */}
       <div className="flex flex-wrap items-center gap-2">
         <Badge variant="outline" className="text-xs">
           {pkg.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
         </Badge>
-        {pkg.difficulty && (
-          <Badge variant="outline" className={cn('text-xs', difficultyColors[pkg.difficulty])}>
-            {pkg.difficulty}
-          </Badge>
-        )}
         <Badge variant="outline" className="text-xs">
           {pkg.contentHours}
         </Badge>

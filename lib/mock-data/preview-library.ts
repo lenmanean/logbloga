@@ -35,7 +35,6 @@ export interface MockPackage {
   originalPrice: number;
   packageImage: string;
   tagline: string;
-  difficulty: ProductDifficulty;
   contentHours: string;
   rating: number;
   reviewCount: number;
@@ -57,7 +56,6 @@ export const mockPackages: MockPackage[] = [
     originalPrice: 2997,
     packageImage: '/package-2.png',
     tagline: 'Convert powerful AI solutions into profitable web applications that generate USD revenue',
-    difficulty: 'intermediate',
     contentHours: '40+ hours',
     rating: 4.8,
     reviewCount: 127,
@@ -281,7 +279,6 @@ export const mockPackages: MockPackage[] = [
     originalPrice: 1497,
     packageImage: '/package-1.png',
     tagline: 'Monetize your AI-driven content by creating profitable social media automation tools',
-    difficulty: 'beginner',
     contentHours: '30+ hours',
     rating: 4.9,
     reviewCount: 203,
@@ -475,7 +472,6 @@ export const mockPackages: MockPackage[] = [
     originalPrice: 4497,
     packageImage: '/package-3.png',
     tagline: 'Build a profitable agency selling AI-powered services to business clients',
-    difficulty: 'intermediate',
     contentHours: '40+ hours',
     rating: 4.7,
     reviewCount: 89,
@@ -675,7 +671,6 @@ export const mockPackages: MockPackage[] = [
     originalPrice: 797,
     packageImage: '/package-4.png',
     tagline: 'Offer your AI expertise as a freelancer to turn automated solutions into USD earnings',
-    difficulty: 'beginner',
     contentHours: '35+ hours',
     rating: 4.6,
     reviewCount: 156,
