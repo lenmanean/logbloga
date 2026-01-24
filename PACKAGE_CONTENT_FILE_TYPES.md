@@ -229,7 +229,7 @@ Packages currently store content as **JSON metadata** in the database:
 - `saas-starter-template.zip` - Full Next.js SaaS template
 
 **Level 3 Content:**
-- `web-apps-level-3-plan.pdf` - 10-12 week implementation plan (Doer timeline)
+- `web-apps-level-3-plan.pdf` - 10-12 week implementation plan (DOER timeline)
 - `advanced-supabase-setup.pdf` - Complex database setup
 - `ai-integration-guide.pdf` - OpenAI/Anthropic setup
 - `third-party-integrations-guide.pdf` - API integrations

@@ -203,7 +203,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
                   <div>
                     <p className="font-semibold mb-1">Level-Based Progression</p>
                     <p className="text-sm text-muted-foreground">
-                      Choose from Level 1, 2, or 3 based on your goals and timeline
+                      Progress through Levels 1, 2, and 3 as your skills and revenue grow; your package includes all levels, so you can revisit them as your business scales
                     </p>
                   </div>
                 </div>

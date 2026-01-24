@@ -23,7 +23,7 @@ export default async function ProductsPage() {
   const packages = products.filter(p => p.product_type === 'package');
   const individualProducts = products.filter(p => p.product_type !== 'package');
 
-  // Get orders with Doer coupons for packages
+  // Get orders with DOER coupons for packages
   // Using type assertion since columns are added via migration but types may not be regenerated yet
   const { data: orders, error: ordersError } = await supabase
     .from('orders')

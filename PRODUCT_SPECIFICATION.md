@@ -12,7 +12,7 @@
 4. [Package Products Specification](#package-products-specification)
 5. [Product Delivery Formats](#product-delivery-formats)
 6. [Access & Licensing Model](#access--licensing-model)
-7. [Doer Integration](#doer-integration)
+7. [DOER Integration](#doer-integration)
 8. [Account Management Structure](#account-management-structure)
 9. [Future Versioning Strategy](#future-versioning-strategy)
 
@@ -403,7 +403,7 @@ ai-ecommerce-builder/
    - Lifetime updates
    - Certificate of completion
 
-5. **Doer Integration:**
+5. **DOER Integration:**
    - 6 months free Pro subscription (via coupon code)
 
 ---
@@ -447,7 +447,7 @@ ai-ecommerce-builder/
    - Trend alerts and updates
    - Lifetime access to updates
 
-5. **Doer Integration:**
+5. **DOER Integration:**
    - 6 months free Pro subscription (via coupon code)
 
 ---
@@ -495,7 +495,7 @@ ai-ecommerce-builder/
    - Legal document templates
    - Lifetime updates and new content
 
-5. **Doer Integration:**
+5. **DOER Integration:**
    - 6 months free Pro subscription (via coupon code)
 
 ---
@@ -539,7 +539,7 @@ ai-ecommerce-builder/
    - Lifetime updates
    - Certificate of completion
 
-5. **Doer Integration:**
+5. **DOER Integration:**
    - 6 months free Pro subscription (via coupon code)
 
 ---
@@ -637,14 +637,14 @@ WHERE o.user_id = ?
 
 ---
 
-## Doer Integration
+## DOER Integration
 
 ### Integration Flow
 
 #### 1. Package Purchase Completion
 - User completes package purchase on LogBloga
 - Order status changes to "completed"
-- System generates unique Doer coupon code
+- System generates unique DOER coupon code
 
 #### 2. Coupon Code Generation
 **Format:** `DOER6M-{ORDER_ID}-{RANDOM_SUFFIX}`
@@ -668,7 +668,7 @@ WHERE o.user_id = ?
 
 **Display Format:**
 ```
-🎉 Bonus: 6 Months Free Doer Pro Subscription
+🎉 Bonus: 6 Months Free DOER Pro Subscription
 
 Your coupon code: DOER6M-abc123def-7x9k2m
 
@@ -676,15 +676,15 @@ Redeem at: doer.com/checkout
 Valid for: 90 days
 ```
 
-#### 4. Doer System Integration
-**Required Doer System Updates:**
-- Create coupon code in Doer's system (via API or manual)
+#### 4. DOER System Integration
+**Required DOER System Updates:**
+- Create coupon code in DOER's system (via API or manual)
 - Set coupon to: 100% discount, 6 months duration
 - Require payment method at checkout
 - Auto-renewal after trial period
 
 **Tracking:**
-- Link LogBloga order_id to Doer user_id
+- Link LogBloga order_id to DOER user_id
 - Track coupon usage status
 - Mark coupon as used when redeemed
 
@@ -695,13 +695,13 @@ ALTER TABLE orders ADD COLUMN doer_coupon_code TEXT;
 ALTER TABLE orders ADD COLUMN doer_coupon_generated_at TIMESTAMP;
 ALTER TABLE orders ADD COLUMN doer_coupon_expires_at TIMESTAMP;
 ALTER TABLE orders ADD COLUMN doer_coupon_used BOOLEAN DEFAULT FALSE;
-ALTER TABLE orders ADD COLUMN doer_user_id TEXT; -- Track Doer account
+ALTER TABLE orders ADD COLUMN doer_user_id TEXT; -- Track DOER account
 ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
 ```
 
 #### 6. Implementation Steps
 1. Create coupon generation function
-2. Integrate with Doer's coupon API (if available)
+2. Integrate with DOER's coupon API (if available)
 3. Display coupon on order completion
 4. Email coupon to customer
 5. Track redemption status
@@ -716,7 +716,7 @@ ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
 **Tab Structure:**
 1. **Dashboard** (Default)
    - Recent orders
-   - Active subscriptions (Doer)
+   - Active subscriptions (DOER)
    - Quick access to library
    - Account summary
 
@@ -726,7 +726,7 @@ ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
    - Download buttons/links
    - Access status
    - Version information
-   - Doer coupon codes (if applicable)
+   - DOER coupon codes (if applicable)
 
 3. **Library** (Alternative view of products)
    - Visual grid of purchased products
@@ -745,7 +745,7 @@ ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
    - Payment methods
    - Billing history
    - Invoices
-   - Subscription management (Doer)
+   - Subscription management (DOER)
 
 6. **Settings**
    - Profile information
@@ -783,9 +783,9 @@ ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
 │  │                                  │   │
 │  │ [Access Library] [Download All]  │   │
 │  │                                  │   │
-│  │ 🎁 Bonus: Doer 6 Months Free    │   │
+│  │ Bonus: DOER 6 Months Free       │   │
 │  │ Code: DOER6M-abc123-xyz          │   │
-│  │ [Copy Code] [Redeem on Doer]     │   │
+│  │ [Copy Code] [Redeem on DOER]     │   │
 │  └──────────────────────────────────┘   │
 │                                          │
 │  ┌──────────────────────────────────┐   │
@@ -803,7 +803,7 @@ ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
 - Download individual files
 - Access streaming content
 - View product details
-- Copy Doer coupon codes
+- Copy DOER coupon codes
 - Track download history
 
 ---
@@ -829,7 +829,7 @@ ALTER TABLE orders ADD COLUMN doer_coupon_used_at TIMESTAMP;
 - Updated templates and resources
 - New case studies and examples
 - Latest best practices
-- Updated Doer integration (if applicable)
+- Updated DOER integration (if applicable)
 
 #### Customer Communication
 - **Existing Customers:** Email about new version availability
@@ -860,7 +860,7 @@ ALTER TABLE products ADD COLUMN is_current_version BOOLEAN DEFAULT TRUE;
 
 ### Phase 2: Database & Structure
 - ⬜ Add product versioning fields
-- ⬜ Add Doer coupon fields to orders
+- ⬜ Add DOER coupon fields to orders
 - ⬜ Create product-package relationship (if needed)
 - ⬜ Update product pricing (individual markup)
 
@@ -870,9 +870,9 @@ ALTER TABLE products ADD COLUMN is_current_version BOOLEAN DEFAULT TRUE;
 - ⬜ Create Downloads/Products tab
 - ⬜ Implement file delivery system
 
-### Phase 4: Doer Integration
+### Phase 4: DOER Integration
 - ⬜ Build coupon generation system
-- ⬜ Integrate with Doer API (if available)
+- ⬜ Integrate with DOER API (if available)
 - ⬜ Display coupons on order completion
 - ⬜ Track coupon usage
 
@@ -885,7 +885,7 @@ ALTER TABLE products ADD COLUMN is_current_version BOOLEAN DEFAULT TRUE;
 ### Phase 6: Testing & Launch
 - ⬜ Test complete purchase flow
 - ⬜ Test product access
-- ⬜ Test Doer coupon redemption
+- ⬜ Test DOER coupon redemption
 - ⬜ User acceptance testing
 
 ---
@@ -894,7 +894,7 @@ ALTER TABLE products ADD COLUMN is_current_version BOOLEAN DEFAULT TRUE;
 
 1. **Community Access Duration:** Lifetime or 1 year?
 2. **Product Updates:** How to handle minor updates to purchased products?
-3. **Doer API:** Does Doer have API for coupon creation, or manual?
+3. **DOER API:** Does DOER have API for coupon creation, or manual?
 4. **File Storage:** Supabase Storage or AWS S3?
 5. **Download Limits:** Any limits on download counts?
 6. **Version Naming:** Year-based or semantic versioning (v1.0, v2.0)?

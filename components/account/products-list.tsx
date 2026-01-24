@@ -40,7 +40,7 @@ export function ProductsList({ products, ordersWithCoupons = [], type }: Product
       {products.map((product) => {
         const productImage = product.package_image || (product.images as string[])?.[0] || '/placeholder-product.png';
         
-        // Find order with Doer coupon for this package (if it's a package)
+        // Find order with DOER coupon for this package (if it's a package)
         const orderWithCoupon = type === 'package' && product.id
           ? ordersWithCoupons.find(order => {
               // We need to check if this order contains this package
@@ -103,7 +103,7 @@ export function ProductsList({ products, ordersWithCoupons = [], type }: Product
                 )}
               </div>
 
-              {/* Doer Coupon for Packages */}
+              {/* DOER Coupon for Packages */}
               {type === 'package' && orderWithCoupon && orderWithCoupon.doer_coupon_code && (
                 <div className="border-t pt-4">
                   <DoerCouponDisplay

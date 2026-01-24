@@ -30,12 +30,12 @@
 | **Freelancing** | $497 | $797 | $300 | 4.6 ⭐ | 156 |
 
 ### Package Benefits (All Packages Include)
-- ✅ **3 Implementation Levels** (Level 1, 2, 3) - Choose based on complexity and goals
+- ✅ **3 Implementation Levels** (Level 1, 2, 3) - All included with each package and designed as a progression path as your complexity and goals increase
 - ✅ **Implementation Plans** - Step-by-step roadmaps for each level
 - ✅ **Platform Setup Guides** - Detailed instructions with screenshots
 - ✅ **Creative Decision Frameworks** - Guided exercises and worksheets
 - ✅ **Templates & Checklists** - Ready-to-use resources
-- ✅ **6 Months Free Doer Pro** - Bonus subscription via coupon code
+- ✅ **6 Months Free DOER Pro** - Bonus subscription via coupon code
 
 ---
 
@@ -165,7 +165,7 @@ We use Cursor, ChatGPT, Claude, and GitHub Copilot, with optional OpenAI API int
 
 ---
 
-#### Level 3: Complex SaaS (Like Doer)
+#### Level 3: Complex SaaS (Like DOER)
 - **Time Investment:** 10-12 Weeks
 - **Expected Revenue:** $10,000-$50,000+/month
 - **Platform Costs:** $200-500/month
@@ -800,7 +800,7 @@ Each package contains **3 levels** (Level 1, 2, 3), and each level includes:
 2. **Platform Setup Guides** - Technical instructions with screenshots
 3. **Creative Decision Frameworks** - Guided exercises and worksheets
 4. **Templates & Checklists** - Ready-to-use resources
-5. **DOER Coupon** - 6 months free Doer Pro (package-level bonus)
+5. **DOER Coupon** - 6 months free DOER Pro (package-level bonus)
 
 ### Level Comparison Across Packages
 
@@ -884,9 +884,9 @@ Example:
 
 ---
 
-## Doer Integration
+## DOER Integration
 
-### Bonus: 6 Months Free Doer Pro
+### Bonus: 6 Months Free DOER Pro
 - **Included in:** All packages
 - **Coupon Format:** `DOER6M-{ORDER_ID}-{RANDOM_SUFFIX}`
 - **Example:** `DOER6M-abc123def-7x9k2m`

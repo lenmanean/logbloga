@@ -102,12 +102,12 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
             </Row>
           </Section>
 
-          {/* Doer Coupon Section */}
+          {/* DOER Coupon Section */}
           {data.doerCouponCode && (
             <>
               <Hr style={hr} />
               <Section style={doerCouponSection}>
-                <Heading style={h2}>🎉 Bonus: 6 Months Free Doer Pro</Heading>
+                <Heading style={h2}>🎉 Bonus: 6 Months Free DOER Pro</Heading>
                 <Text style={text}>
                   As a thank you for purchasing a package, you've received a bonus coupon for 6 months of free Pro subscription on usedoer.com!
                 </Text>

@@ -14,7 +14,7 @@
 3. [Package Structure & Levels](#package-structure--levels)
 4. [Level 1: Simple Single-Page App / Landing Page SaaS](#level-1-simple-single-page-app--landing-page-saas)
 5. [Level 2: Medium Complexity SaaS](#level-2-medium-complexity-saas)
-6. [Level 3: Complex SaaS (Like Doer)](#level-3-complex-saas-like-doer)
+6. [Level 3: Complex SaaS (Like DOER)](#level-3-complex-saas-like-doer)
 7. [File Organization & Delivery Structure](#file-organization--delivery-structure)
 8. [Content Delivery Specifications](#content-delivery-specifications)
 9. [Individual Product Details](#individual-product-details)
@@ -44,12 +44,12 @@ A comprehensive package for launching SaaS applications and web apps, from simpl
 - Agencies offering web app development services
 
 ### Package Benefits
-- **Three Implementation Levels:** Choose based on complexity, time, and revenue goals
+- **Three Implementation Levels:** All included in your package and designed as a progression path as complexity, time, and revenue goals increase
 - **Complete Codebases:** Three production-ready templates/codebases
 - **Step-by-Step Guidance:** From idea to launch with detailed roadmaps
 - **Platform Integration:** Guides for Next.js, Vercel, Supabase, Stripe, and more
 - **Creative Frameworks:** Decision-making tools for idea generation, branding, and strategy
-- **Bonus:** 6 months free Doer Pro subscription
+- **Bonus:** 6 months free DOER Pro subscription
 
 ---
 
@@ -381,8 +381,8 @@ Why idea generation matters and how to approach it systematically.
 ### Exercise: Value Proposition Worksheet
 [Fill in: What problem? Who has it? Why your solution?]
 
-## Real-World Example: Doer
-[Case study of how Doer was created from Motion shutting down]
+## Real-World Example: DOER
+[Case study of how DOER was created from Motion shutting down]
 ```
 
 **Key Features:**
@@ -705,7 +705,7 @@ saas-starter-template/
 
 ---
 
-## Level 3: Complex SaaS (Like Doer)
+## Level 3: Complex SaaS (Like DOER)
 
 **⏱️ Time to Launch:** 10-12 Weeks  
 **💰 Expected Revenue:** $10,000-$50,000+/month  
@@ -722,7 +722,7 @@ saas-starter-template/
 - Enterprise-ready architecture
 
 ### Example Apps
-- AI-powered planning tools (like Doer)
+- AI-powered planning tools (like DOER)
 - Complex CRMs
 - Automation platforms
 - AI-powered applications
@@ -740,7 +740,7 @@ saas-starter-template/
 
 **Content Structure:**
 ```markdown
-# Web Apps Level 3: Complex SaaS (Like Doer)
+# Web Apps Level 3: Complex SaaS (Like DOER)
 ## 10-12 Week Implementation Roadmap
 
 ### Week 1-2: Architecture & Foundation
@@ -775,7 +775,7 @@ saas-starter-template/
 ```
 
 **Key Sections:**
-- Detailed 90-day roadmap (based on Doer's timeline)
+- Detailed 90-day roadmap (based on DOER's timeline)
 - Architecture decisions
 - AI integration phases
 - Third-party integration strategy

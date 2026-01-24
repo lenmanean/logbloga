@@ -52,7 +52,7 @@ export default async function OrderDetailsPage({ params }: OrderDetailsPageProps
 
         <OrderDetails order={order} showActions={true} />
 
-        {/* Doer Coupon Display */}
+        {/* DOER Coupon Display */}
         {(order as any).doer_coupon_code && (
           <div className="mt-6">
             <DoerCouponDisplay

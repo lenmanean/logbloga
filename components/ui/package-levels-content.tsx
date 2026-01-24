@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PackageProduct, PackageLevels, PackageLevel } from '@/lib/products';
-import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Zap, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { getLevelContent } from '@/lib/data/package-level-content';
@@ -59,7 +59,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
       <div className="mb-6">
         <h2 className="text-3xl font-bold mb-2">What's Included</h2>
         <p className="text-muted-foreground">
-          Choose your implementation level based on your goals, timeline, and budget. Each level includes comprehensive guides, frameworks, and templates.
+          Each package includes all three implementation levels. Start where you are today and move through higher levels as your business scales; every level includes comprehensive guides, frameworks, and templates.
         </p>
       </div>
 
@@ -104,7 +104,6 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                         <span>{level.expectedProfit}*</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Zap className="h-4 w-4" />
                         <span>{level.platformCosts}</span>
                       </div>
                     </div>

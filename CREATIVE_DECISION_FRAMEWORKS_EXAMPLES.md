@@ -200,7 +200,7 @@ Write 3 sample captions in your brand voice:
 
 ### Structure: Problem-to-Solution Journey
 
-**Phase 1: Problem Discovery (Like Doer Example)**
+**Phase 1: Problem Discovery (Like DOER Example)**
 ```
 Think about tools/apps you use daily:
 
@@ -210,7 +210,7 @@ Think about tools/apps you use daily:
    - What would make it better? _________________________
 
 2. What apps shut down or got bought out?
-   - App: _________________________ (Like Motion → Doer)
+   - App: _________________________ (Like Motion → DOER)
    - What did you use it for? _________________________
    - What's missing now? _________________________
 

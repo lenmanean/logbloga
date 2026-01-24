@@ -72,7 +72,7 @@ export function DoerCouponDisplay({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Gift className="h-5 w-5 text-primary" />
-            <CardTitle>6 Months Free Doer Pro</CardTitle>
+            <CardTitle>6 Months Free DOER Pro</CardTitle>
           </div>
           {isValid && (
             <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400">
@@ -91,7 +91,7 @@ export function DoerCouponDisplay({
           )}
         </div>
         <CardDescription>
-          Your bonus coupon code for 6 months of free Pro subscription on usedoer.com
+          Your bonus coupon code for 6 months of free DOER Pro subscription on usedoer.com
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -157,7 +157,7 @@ export function DoerCouponDisplay({
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Redeem on Doer
+                Redeem on DOER
                 <ExternalLink className="ml-2 h-4 w-4" />
               </a>
             </Button>

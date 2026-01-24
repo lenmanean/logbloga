@@ -124,16 +124,16 @@ export async function handlePaymentIntentSucceeded(
     console.error('Error creating payment notification:', error);
   }
 
-  // Generate Doer coupon for package purchases
+  // Generate DOER coupon for package purchases
   try {
     const { generateDoerCouponForOrder } = await import('@/lib/doer/coupon');
     const couponCode = await generateDoerCouponForOrder(order.id);
     if (couponCode) {
-      console.log(`Generated Doer coupon ${couponCode} for order ${order.id}`);
+      console.log(`Generated DOER coupon ${couponCode} for order ${order.id}`);
     }
   } catch (error) {
     // Log error but don't fail the webhook (coupon generation is optional)
-    console.error(`Error generating Doer coupon for order ${order.id}:`, error);
+    console.error(`Error generating DOER coupon for order ${order.id}:`, error);
   }
 
   // Send payment receipt email (non-blocking)
@@ -141,7 +141,7 @@ export async function handlePaymentIntentSucceeded(
     try {
       const orderWithItems = await getOrderWithItems(order.id);
       if (orderWithItems && orderWithItems.customer_email) {
-        // Get Doer coupon code if available
+        // Get DOER coupon code if available
         const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
         const { createServiceRoleClient } = await import('@/lib/supabase/server');
         const doerCouponCode = await getDoerCouponForOrder(order.id);

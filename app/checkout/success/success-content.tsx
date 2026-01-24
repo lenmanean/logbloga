@@ -154,7 +154,7 @@ export function CheckoutSuccessContent() {
                 </ul>
               </div>
 
-              {/* Doer Coupon Display */}
+              {/* DOER Coupon Display */}
               {orderData?.doerCouponCode && (
                 <>
                   <Separator />

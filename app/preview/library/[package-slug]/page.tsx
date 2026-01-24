@@ -143,7 +143,7 @@ export default async function PackagePreviewPage({ params }: PackagePreviewPageP
                     <li>Platform Setup Guides</li>
                     <li>Creative Decision Frameworks</li>
                     <li>Templates & Checklists</li>
-                    <li>6 Months Free Doer Pro</li>
+                    <li>6 Months Free DOER Pro</li>
                   </ul>
                 </div>
               </CardContent>

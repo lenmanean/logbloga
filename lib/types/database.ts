@@ -97,7 +97,7 @@ export interface OrderWithItems extends Order {
     unit_price: number;
     total_price: number;
   }>;
-  // Doer coupon fields (added in migration 000020)
+  // DOER coupon fields (added in migration 000020)
   doer_coupon_code?: string | null;
   doer_coupon_generated_at?: string | null;
   doer_coupon_expires_at?: string | null;

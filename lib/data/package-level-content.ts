@@ -93,7 +93,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       implementationPlan: {
         file: 'web-apps-level-3-plan.md',
         type: 'md',
-        description: 'Step-by-step roadmap for building a complex SaaS like Doer'
+        description: 'Step-by-step roadmap for building a complex SaaS like DOER'
       },
       platformGuides: [
         { file: 'advanced-supabase-setup.md', type: 'md', platform: 'Supabase' },

@@ -8,7 +8,7 @@ Each package contains **3 levels** (Level 1, 2, 3), and each level includes:
 2. **Platform Setup Guides** - Technical instructions
 3. **Creative Decision Frameworks** - Guided exercises
 4. **Templates & Checklists** - Ready-to-use resources
-5. **DOER Coupon** - 6 months free Doer Pro
+5. **DOER Coupon** - 6 months free DOER Pro
 
 ---
 
@@ -187,7 +187,7 @@ Each package contains **3 levels** (Level 1, 2, 3), and each level includes:
    - `github-setup.pdf` - Version control (PDF)
 
 3. **Creative Decision Frameworks**
-   - `idea-generation-framework.pdf` - What app to build (Fillable PDF - includes Doer example)
+   - `idea-generation-framework.pdf` - What app to build (Fillable PDF - includes DOER example)
    - `value-proposition-worksheet.pdf` - Value prop exercises (Fillable PDF)
    - `simple-mvp-framework.pdf` - Feature prioritization (Fillable PDF)
 
@@ -224,7 +224,7 @@ Each package contains **3 levels** (Level 1, 2, 3), and each level includes:
 
 ---
 
-### LEVEL 3: Complex SaaS (Like Doer)
+### LEVEL 3: Complex SaaS (Like DOER)
 ⏱️ 10-12 Weeks | 💰 $10,000-$50,000+/month | 💵 $200-500/month
 
 **Content & File Types:**
@@ -232,7 +232,7 @@ Each package contains **3 levels** (Level 1, 2, 3), and each level includes:
 1. **Implementation Plan**
    - File: `web-apps-level-3-plan.pdf`
    - Type: PDF
-   - Content: 10-12 week roadmap (based on Doer's 90-day timeline)
+   - Content: 10-12 week roadmap (based on DOER's 90-day timeline)
 
 2. **Platform Setup Guides**
    - `advanced-supabase-setup.pdf` - Complex database setup (PDF)

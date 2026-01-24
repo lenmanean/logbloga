@@ -1,13 +1,13 @@
 /**
- * Doer Coupon Management
- * Generates and manages coupon codes for Doer.com integration
+ * DOER Coupon Management
+ * Generates and manages coupon codes for DOER.com integration
  */
 
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import crypto from 'crypto';
 
 /**
- * Generate a unique Doer coupon code for an order
+ * Generate a unique DOER coupon code for an order
  * Format: DOER6M-{ORDER_ID_SHORT}-{RANDOM_6CHARS}
  * Example: DOER6M-abc123-7x9k2m
  */
@@ -22,7 +22,7 @@ export function generateDoerCouponCode(orderId: string): string {
 }
 
 /**
- * Store Doer coupon code in order record
+ * Store DOER coupon code in order record
  */
 export async function storeDoerCoupon(
   orderId: string,
@@ -45,13 +45,13 @@ export async function storeDoerCoupon(
     .eq('id', orderId);
 
   if (error) {
-    console.error('Error storing Doer coupon:', error);
-    throw new Error(`Failed to store Doer coupon: ${error.message}`);
+    console.error('Error storing DOER coupon:', error);
+    throw new Error(`Failed to store DOER coupon: ${error.message}`);
   }
 }
 
 /**
- * Check if a Doer coupon code is valid and unused
+ * Check if a DOER coupon code is valid and unused
  */
 export async function isDoerCouponValid(couponCode: string): Promise<boolean> {
   const supabase = await createClient();
@@ -83,7 +83,7 @@ export async function isDoerCouponValid(couponCode: string): Promise<boolean> {
 }
 
 /**
- * Mark a Doer coupon as used
+ * Mark a DOER coupon as used
  */
 export async function markDoerCouponAsUsed(
   couponCode: string,
@@ -106,13 +106,13 @@ export async function markDoerCouponAsUsed(
     .eq('doer_coupon_code', couponCode);
 
   if (error) {
-    console.error('Error marking Doer coupon as used:', error);
-    throw new Error(`Failed to mark Doer coupon as used: ${error.message}`);
+    console.error('Error marking DOER coupon as used:', error);
+    throw new Error(`Failed to mark DOER coupon as used: ${error.message}`);
   }
 }
 
 /**
- * Get Doer coupon code for an order
+ * Get DOER coupon code for an order
  */
 export async function getDoerCouponForOrder(orderId: string): Promise<string | null> {
   const supabase = await createClient();
@@ -131,7 +131,7 @@ export async function getDoerCouponForOrder(orderId: string): Promise<string | n
 }
 
 /**
- * Generate and store Doer coupon for an order (if it's a package purchase)
+ * Generate and store DOER coupon for an order (if it's a package purchase)
  */
 export async function generateDoerCouponForOrder(orderId: string): Promise<string | null> {
   // Check if order already has a coupon

@@ -210,7 +210,7 @@ export const mockPackages: MockPackage[] = [
         implementationPlan: {
           file: 'web-apps-level-3-plan.md',
           type: 'markdown',
-          description: '10-12 week roadmap for building a complex SaaS application (like Doer)',
+          description: '10-12 week roadmap for building a complex SaaS application (like DOER)',
         },
         platformGuides: [
           {

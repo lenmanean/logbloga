@@ -67,7 +67,7 @@
 
 **Action Items:**
 - [ ] Add DOER coupon section to `components/ui/product-info-panel.tsx` or create separate component
-- [ ] Display: "🎁 Bonus: 6 Months Free Doer Pro Subscription"
+- [ ] Display: "Bonus: 6 Months Free DOER Pro Subscription"
 - [ ] Show this as a feature/benefit, not the actual code (code is generated after purchase)
 - [ ] Add to "What's Included" section or as a separate highlight
 
@@ -102,7 +102,7 @@ Each package should provide:
 
 4. **Templates & Checklists** - Quick-start resources (not full systems)
 
-5. **DOER Coupon** - 6 months free Doer Pro subscription
+5. **DOER Coupon** - 6 months free DOER Pro subscription
 
 **Important Distinction:**
 - We **guide** technical processes (how to set up accounts, configure tools)
@@ -282,7 +282,7 @@ Each package now offers **three implementation levels** that users can choose fr
 - **Google Analytics** - Tracking
 
 **Bonus:**
-- 6 Months Free Doer Pro Subscription
+- 6 Months Free DOER Pro Subscription
 
 **Potential Cross-Sell/Upsell:**
 - Freelancing Package (for offering social media services)
@@ -411,7 +411,7 @@ Each package now offers **three implementation levels** that users can choose fr
 - **Toptal/Arc** - Premium platforms (Level 3)
 
 **Bonus:**
-- 6 Months Free Doer Pro Subscription
+- 6 Months Free DOER Pro Subscription
 
 **Potential Cross-Sell/Upsell:**
 - Agency Package (for scaling beyond freelancing)
@@ -430,14 +430,14 @@ Each package now offers **three implementation levels** that users can choose fr
 
 **CREATIVE DECISIONS (User Must Decide):**
 - **Idea Generation Framework:**
-  - What problem do you personally experience? (Like Doer came from Motion shutting down)
+  - What problem do you personally experience? (Like DOER came from Motion shutting down)
   - What tools do you use that could be better? (What's missing? What's frustrating?)
   - What would make your life easier? (What repetitive task could be automated?)
   - What niche problems exist? (Specific industries, specific use cases)
   - **Decision Prompts:** 
     - List 10 problems you face daily. Which could be solved with a simple tool?
     - What apps do you use? What would you change about them?
-    - What's a simple version of a complex tool? (Like Doer is a simpler Motion)
+    - What's a simple version of a complex tool? (Like DOER is a simpler Motion)
     - What tool doesn't exist that should?
 
 - **Value Proposition Framework:**
@@ -515,11 +515,11 @@ Each package now offers **three implementation levels** that users can choose fr
 
 ---
 
-#### **LEVEL 3: Complex SaaS (Like Doer)** ⏱️ 10-12 Weeks | 💰 $10,000-$50,000+/month | 💵 $200-500/month costs
+#### **LEVEL 3: Complex SaaS (Like DOER)** ⏱️ 10-12 Weeks | 💰 $10,000-$50,000+/month | 💵 $200-500/month costs
 **Target:** Complex SaaS with AI, integrations, advanced features, storage
 
 **WHAT WE CREATE:**
-- **Level 3 Implementation Plan** - 10-12 week roadmap (based on Doer's 90-day timeline)
+- **Level 3 Implementation Plan** - 10-12 week roadmap (based on DOER's 90-day timeline)
 - **Platform Setup Guides:**
   - Next.js SaaS Starter (official template) or custom setup
   - Supabase (paid tier) - Advanced database, auth, storage
@@ -542,7 +542,7 @@ Each package now offers **three implementation levels** that users can choose fr
 **Time Investment:** 50-60 hours/week
 **Platform Costs:** $200-500/month (Supabase paid, Stripe fees, AI API costs, domain, hosting)
 
-**Example Apps:** Doer (AI-powered planning), complex CRMs, automation platforms, AI tools
+**Example Apps:** DOER (AI-powered planning), complex CRMs, automation platforms, AI tools
 
 ---
 
@@ -555,7 +555,7 @@ Each package now offers **three implementation levels** that users can choose fr
 - **OpenAI/Anthropic** - AI APIs (Level 3)
 
 **Bonus:**
-- 6 Months Free Doer Pro Subscription
+- 6 Months Free DOER Pro Subscription
 
 **Potential Cross-Sell/Upsell:**
 - Agency Package (for offering web app services)
@@ -717,7 +717,7 @@ Each package now offers **three implementation levels** that users can choose fr
 - **Google Workspace** - Free/Paid tier for email/calendar/docs
 
 **Bonus:**
-- 6 Months Free Doer Pro Subscription
+- 6 Months Free DOER Pro Subscription
 
 **Potential Cross-Sell/Upsell:**
 - Social Media Package (for offering social media services)
@@ -837,10 +837,10 @@ export async function getRecommendations(
       <Gift className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
       <div>
         <p className="font-semibold text-green-900 dark:text-green-100 mb-1">
-          🎁 Bonus: 6 Months Free Doer Pro
+          Bonus: 6 Months Free DOER Pro
         </p>
         <p className="text-sm text-green-700 dark:text-green-300">
-          Get 6 months of free Pro subscription on Doer.com with your package purchase. 
+          Get 6 months of free Pro subscription on DOER.com with your package purchase. 
           Perfect for managing your projects and tasks.
         </p>
       </div>

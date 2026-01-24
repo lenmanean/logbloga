@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { PackageProduct } from '@/lib/products';
 import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
@@ -175,11 +176,18 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
         <div className="flex items-start gap-3">
           <Gift className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold text-green-900 dark:text-green-100 mb-1">
-              🎁 Bonus: 6 Months Free Doer Pro
+            <p className="font-semibold text-green-900 dark:text-green-100 mb-1 flex items-center gap-2">
+              <Image
+                src="/logo.png"
+                alt="DOER logo"
+                width={20}
+                height={20}
+                className="h-5 w-5 rounded flex-shrink-0"
+              />
+              <span>Bonus: 6 Months Free DOER Pro</span>
             </p>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Get 6 months of free Pro subscription on usedoer.com with your package purchase. 
+              Get 6 months of free DOER Pro subscription on usedoer.com with your package purchase. 
               Perfect for managing your projects and tasks. Your unique coupon code will be provided after purchase.
             </p>
           </div>
