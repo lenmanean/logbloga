@@ -128,7 +128,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                     <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
                       <h3 className="font-semibold text-lg mb-2 text-blue-900 dark:text-blue-100">
-                        AI Leverage & Revenue Connection
+                        AI Leverage
                       </h3>
                       <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
                         {displayLevel.aiLeverage}
