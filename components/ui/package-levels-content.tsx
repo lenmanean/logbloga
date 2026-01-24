@@ -122,7 +122,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
             {isExpanded && (
               <CardContent className="space-y-6 pt-0">
                 {/* Implementation Plan */}
-                <div className="border rounded-lg p-4 bg-accent/30">
+                <div className="border rounded-lg p-4 bg-muted/50">
                   <div className="flex items-start gap-3 mb-3">
                     <BookOpen className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
                     <div className="flex-1">
@@ -160,7 +160,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                           {displayLevel.platformGuides.map((guide, index) => {
                             const GuideIcon = getFileTypeIcon(guide.type);
                             return (
-                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-accent/30">
+                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-muted/30">
                                 <GuideIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">
@@ -201,7 +201,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                           {displayLevel.creativeFrameworks.map((framework, index) => {
                             const FrameworkIcon = getFileTypeIcon(framework.type);
                             return (
-                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-accent/30">
+                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-muted/30">
                                 <FrameworkIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">
@@ -239,7 +239,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                           {displayLevel.templates.map((template, index) => {
                             const TemplateIcon = getFileTypeIcon(template.type);
                             return (
-                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-accent/30">
+                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-muted/30">
                                 <TemplateIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">

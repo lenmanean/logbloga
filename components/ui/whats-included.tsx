@@ -95,7 +95,7 @@ export function WhatsIncluded({ package: pkg, className }: WhatsIncludedProps) {
                   </div>
                 </button>
                 {expandedModules[index] && module.items && module.items.length > 0 && (
-                  <div className="px-4 pb-4 space-y-2 border-t bg-accent/30">
+                  <div className="px-4 pb-4 space-y-2 border-t bg-muted/50">
                     {module.items.map((item, itemIndex) => (
                       <div key={itemIndex} className="flex items-start gap-2 pt-2">
                         <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
@@ -136,7 +136,7 @@ export function WhatsIncluded({ package: pkg, className }: WhatsIncludedProps) {
                   </div>
                 </button>
                 {expandedResources[index] && resource.items && resource.items.length > 0 && (
-                  <div className="px-4 pb-4 space-y-2 border-t bg-accent/30">
+                  <div className="px-4 pb-4 space-y-2 border-t bg-muted/50">
                     {resource.items.map((item, itemIndex) => (
                       <div key={itemIndex} className="flex items-start gap-2 pt-2">
                         <Check className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
