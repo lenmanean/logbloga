@@ -39,7 +39,6 @@ export const productCreateSchema = z.object({
   category: z.string().min(1).max(100),
   price: z.number().positive('Price must be positive'),
   original_price: z.number().positive().optional().nullable(),
-  difficulty: z.enum(['beginner', 'intermediate', 'advanced']).optional().nullable(),
   duration: z.string().max(100).optional().nullable(),
   content_hours: z.string().max(50).optional().nullable(),
   package_image: z.string().url().optional().nullable(),

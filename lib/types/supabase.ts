@@ -651,7 +651,6 @@ export type Database = {
           content_hours: string | null
           created_at: string | null
           description: string | null
-          difficulty: string | null
           duration: string | null
           featured: boolean | null
           file_path: string | null
@@ -683,7 +682,6 @@ export type Database = {
           content_hours?: string | null
           created_at?: string | null
           description?: string | null
-          difficulty?: string | null
           duration?: string | null
           featured?: boolean | null
           file_path?: string | null
@@ -715,7 +713,6 @@ export type Database = {
           content_hours?: string | null
           created_at?: string | null
           description?: string | null
-          difficulty?: string | null
           duration?: string | null
           featured?: boolean | null
           file_path?: string | null

@@ -33,9 +33,6 @@ export type BlogPostUpdate = Database['public']['Tables']['blog_posts']['Update'
 // Product category type
 export type ProductCategory = 'web-apps' | 'social-media' | 'agency' | 'freelancing';
 
-// Product difficulty type
-export type ProductDifficulty = 'beginner' | 'intermediate' | 'advanced';
-
 // Order status type
 export type OrderStatus = 'pending' | 'processing' | 'completed' | 'cancelled' | 'refunded';
 
@@ -91,7 +88,6 @@ export interface ExtendedProduct {
   price: number;
   original_price: number | null;
   featured: boolean | null;
-  difficulty: string | null;
   duration: string | null;
   // Extended fields
   modules: PackageModule[];

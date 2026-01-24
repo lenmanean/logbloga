@@ -91,7 +91,7 @@ export function DoerCouponDisplay({
           )}
         </div>
         <CardDescription>
-          Your bonus coupon code for 6 months of free Pro subscription on Doer.com
+          Your bonus coupon code for 6 months of free Pro subscription on usedoer.com
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -153,7 +153,7 @@ export function DoerCouponDisplay({
               variant="default"
             >
               <a
-                href="https://doer.com/checkout"
+                href="https://usedoer.com/checkout"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -169,7 +169,7 @@ export function DoerCouponDisplay({
           <div className="rounded-lg bg-muted p-3 text-sm">
             <p className="font-medium mb-1">How to redeem:</p>
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-              <li>Visit doer.com/checkout</li>
+              <li>Visit usedoer.com/checkout</li>
               <li>Apply the coupon code at checkout</li>
               <li>Enter your payment method (required for post-trial billing)</li>
               <li>Enjoy 6 months free Pro subscription</li>

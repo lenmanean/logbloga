@@ -30,7 +30,6 @@ function mockPackageToProductWithPurchaseDate(mockPackage: ReturnType<typeof get
     package_image: mockPackage.packageImage,
     images: [mockPackage.packageImage] as any, // Json type - stored as string array
     tagline: mockPackage.tagline,
-    difficulty: null, // No longer used for packages
     duration: 'Self-paced',
     content_hours: mockPackage.contentHours,
     rating: mockPackage.rating,
@@ -76,7 +75,6 @@ function mockIndividualProductToProductWithPurchaseDate(mockProduct: ReturnType<
     package_image: mockProduct.image || null,
     images: mockProduct.image ? [mockProduct.image] as any : null,
     tagline: null,
-    difficulty: mockProduct.difficulty,
     duration: mockProduct.duration,
     content_hours: null,
     rating: null,

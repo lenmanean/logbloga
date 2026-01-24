@@ -4,7 +4,7 @@
  * Used for visual testing and UI refinement
  */
 
-import type { ProductCategory, ProductDifficulty } from '@/lib/types/database';
+import type { ProductCategory } from '@/lib/types/database';
 
 export interface MockPackageLevelContent {
   file: string;
@@ -880,7 +880,6 @@ export interface MockIndividualProduct {
   price: number;
   originalPrice: number | null;
   featured: boolean;
-  difficulty: ProductDifficulty;
   duration: string;
   productType: 'tool' | 'template' | 'strategy' | 'course' | 'individual';
   image?: string;
@@ -899,7 +898,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 299.00,
     originalPrice: 499.00,
     featured: true,
-    difficulty: 'beginner',
     duration: '6 weeks',
     productType: 'tool',
   },
@@ -912,7 +910,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 149.00,
     originalPrice: 249.00,
     featured: true,
-    difficulty: 'beginner',
     duration: '4 weeks',
     productType: 'tool',
   },
@@ -925,7 +922,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 399.00,
     originalPrice: 599.00,
     featured: true,
-    difficulty: 'intermediate',
     duration: '8 weeks',
     productType: 'tool',
   },
@@ -938,7 +934,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 199.00,
     originalPrice: 349.00,
     featured: true,
-    difficulty: 'beginner',
     duration: '3 weeks',
     productType: 'template',
   },
@@ -951,7 +946,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 249.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'intermediate',
     duration: '5 weeks',
     productType: 'template',
   },
@@ -964,7 +958,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 179.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'beginner',
     duration: '4 weeks',
     productType: 'tool',
   },
@@ -977,7 +970,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 279.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'beginner',
     duration: '2 weeks',
     productType: 'template',
   },
@@ -990,7 +982,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 129.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'beginner',
     duration: '2 weeks',
     productType: 'tool',
   },
@@ -1003,7 +994,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 349.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'advanced',
     duration: '10 weeks',
     productType: 'tool',
   },
@@ -1016,7 +1006,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 199.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'intermediate',
     duration: '6 weeks',
     productType: 'strategy',
   },
@@ -1029,7 +1018,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 449.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'intermediate',
     duration: '9 weeks',
     productType: 'tool',
   },
@@ -1042,7 +1030,6 @@ export const mockIndividualProducts: MockIndividualProduct[] = [
     price: 159.00,
     originalPrice: null,
     featured: false,
-    difficulty: 'beginner',
     duration: '3 weeks',
     productType: 'tool',
   },

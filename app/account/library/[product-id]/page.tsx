@@ -99,13 +99,6 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
                   </div>
                 )}
 
-                {product.difficulty && (
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Difficulty</p>
-                    <Badge variant="outline">{product.difficulty}</Badge>
-                  </div>
-                )}
-
                 {product.description && (
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Description</p>

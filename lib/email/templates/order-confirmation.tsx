@@ -109,7 +109,7 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
               <Section style={doerCouponSection}>
                 <Heading style={h2}>🎉 Bonus: 6 Months Free Doer Pro</Heading>
                 <Text style={text}>
-                  As a thank you for purchasing a package, you've received a bonus coupon for 6 months of free Pro subscription on Doer.com!
+                  As a thank you for purchasing a package, you've received a bonus coupon for 6 months of free Pro subscription on usedoer.com!
                 </Text>
                 <Section style={couponCodeSection}>
                   <Text style={couponCodeLabel}>Your Coupon Code:</Text>
@@ -119,7 +119,7 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
                   <strong>How to redeem:</strong>
                 </Text>
                 <Text style={couponInstructions}>
-                  1. Visit <Link href="https://doer.com/checkout" style={link}>doer.com/checkout</Link>
+                  1. Visit <Link href="https://usedoer.com/checkout" style={link}>usedoer.com/checkout</Link>
                 </Text>
                 <Text style={couponInstructions}>
                   2. Apply the coupon code at checkout

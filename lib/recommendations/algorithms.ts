@@ -61,7 +61,7 @@ export async function getCollaborativeRecommendations(
 
 /**
  * Content-based recommendations
- * Similar products by category, price range, and difficulty
+ * Similar products by category and price range
  */
 export async function getContentBasedRecommendations(
   product: Product,
@@ -89,11 +89,6 @@ export async function getContentBasedRecommendations(
     const priceDiff = Math.abs(pPrice - productPrice);
     if (priceDiff <= priceRange) {
       score += 20 - (priceDiff / priceRange) * 10;
-    }
-
-    // Difficulty similarity
-    if (product.difficulty && p.difficulty && product.difficulty === p.difficulty) {
-      score += 10;
     }
 
     // Featured products get bonus

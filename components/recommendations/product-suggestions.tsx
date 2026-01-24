@@ -91,12 +91,6 @@ export function ProductSuggestions({
     'freelancing': 'Freelancing',
   };
 
-  const difficultyColors: Record<string, string> = {
-    beginner: 'bg-green-100 text-green-800 border-green-200',
-    intermediate: 'bg-blue-100 text-blue-800 border-blue-200',
-    advanced: 'bg-purple-100 text-purple-800 border-purple-200',
-  };
-
   const renderProductCard = (suggestion: ProductSuggestion, index: number) => {
     const product = suggestion.product;
     const productImage = getProductImage(product);
@@ -150,14 +144,6 @@ export function ProductSuggestions({
             {product.description || ''}
           </p>
           <div className="flex flex-wrap gap-2 mt-auto">
-            {product.difficulty && (
-              <Badge
-                variant="outline"
-                className={cn('text-xs', difficultyColors[product.difficulty])}
-              >
-                {product.difficulty}
-              </Badge>
-            )}
             {product.duration && (
               <Badge variant="outline" className="text-xs">
                 {product.duration}

@@ -2,8 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { CategoryCard } from '@/components/ui/category-card';
-import { ProductCard } from '@/components/ui/product-card';
-import { categories, sampleProducts } from '@/lib/products';
+import { categories } from '@/lib/products';
 import { Sparkles, DollarSign, BookOpen, Users } from 'lucide-react';
 
 export default function HomePage() {
@@ -66,34 +65,6 @@ export default function HomePage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products Section */}
-      <section className="py-16 md:py-24 px-4 md:px-6 bg-muted">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12 animate-fade-in-delay-100">
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
-              Featured Products
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-              Our most popular products designed to help you succeed. Start your journey with these top-rated resources.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sampleProducts
-              .filter(product => product.featured)
-              .map((product, index) => {
-                const delayClass = index === 0 ? 'animate-fade-in-delay-200' : 
-                                  index === 1 ? 'animate-fade-in-delay-300' :
-                                  index === 2 ? 'animate-fade-in-delay-400' : 'animate-fade-in-delay-500';
-                return (
-                  <div key={product.id} className={delayClass}>
-                    <ProductCard product={product} />
-                  </div>
-                );
-              })}
           </div>
         </div>
       </section>

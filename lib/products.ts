@@ -9,7 +9,6 @@ export interface Product {
   originalPrice?: number;
   featured: boolean;
   image?: string;
-  difficulty?: 'beginner' | 'intermediate' | 'advanced';
   duration?: string;
 }
 
@@ -143,7 +142,6 @@ export const sampleProducts: Product[] = [
     price: 299,
     originalPrice: 499,
     featured: true,
-    difficulty: 'beginner',
     duration: '6 weeks',
   },
   {
@@ -154,7 +152,6 @@ export const sampleProducts: Product[] = [
     price: 149,
     originalPrice: 249,
     featured: true,
-    difficulty: 'beginner',
     duration: '4 weeks',
   },
   {
@@ -165,7 +162,6 @@ export const sampleProducts: Product[] = [
     price: 399,
     originalPrice: 599,
     featured: true,
-    difficulty: 'intermediate',
     duration: '8 weeks',
   },
   {
@@ -176,7 +172,6 @@ export const sampleProducts: Product[] = [
     price: 199,
     originalPrice: 349,
     featured: true,
-    difficulty: 'beginner',
     duration: '3 weeks',
   },
   {
@@ -186,7 +181,6 @@ export const sampleProducts: Product[] = [
     category: 'web-apps',
     price: 249,
     featured: false,
-    difficulty: 'intermediate',
     duration: '5 weeks',
   },
   {
@@ -196,7 +190,6 @@ export const sampleProducts: Product[] = [
     category: 'social-media',
     price: 179,
     featured: false,
-    difficulty: 'beginner',
     duration: '4 weeks',
   },
   {
@@ -206,7 +199,6 @@ export const sampleProducts: Product[] = [
     category: 'agency',
     price: 279,
     featured: false,
-    difficulty: 'beginner',
     duration: '2 weeks',
   },
   {
@@ -216,7 +208,6 @@ export const sampleProducts: Product[] = [
     category: 'freelancing',
     price: 129,
     featured: false,
-    difficulty: 'beginner',
     duration: '2 weeks',
   },
   {
@@ -226,7 +217,6 @@ export const sampleProducts: Product[] = [
     category: 'web-apps',
     price: 349,
     featured: false,
-    difficulty: 'advanced',
     duration: '10 weeks',
   },
   {
@@ -236,7 +226,6 @@ export const sampleProducts: Product[] = [
     category: 'social-media',
     price: 199,
     featured: false,
-    difficulty: 'intermediate',
     duration: '6 weeks',
   },
   {
@@ -246,7 +235,6 @@ export const sampleProducts: Product[] = [
     category: 'agency',
     price: 449,
     featured: false,
-    difficulty: 'intermediate',
     duration: '9 weeks',
   },
   {
@@ -256,7 +244,6 @@ export const sampleProducts: Product[] = [
     category: 'freelancing',
     price: 159,
     featured: false,
-    difficulty: 'beginner',
     duration: '3 weeks',
   },
 ];
@@ -281,7 +268,6 @@ export const packageProducts: PackageProduct[] = [
     images: ['/package-2.png'],
     rating: 4.8,
     reviewCount: 127,
-    difficulty: 'intermediate',
     duration: 'Self-paced',
     contentHours: '40+ hours',
     modules: [
@@ -376,7 +362,6 @@ export const packageProducts: PackageProduct[] = [
     images: ['/package-1.png'],
     rating: 4.9,
     reviewCount: 203,
-    difficulty: 'beginner',
     duration: 'Self-paced',
     contentHours: '30+ hours',
     modules: [
@@ -475,7 +460,6 @@ export const packageProducts: PackageProduct[] = [
     images: ['/package-3.png'],
     rating: 4.7,
     reviewCount: 89,
-    difficulty: 'intermediate',
     duration: 'Self-paced',
     contentHours: '40+ hours',
     modules: [
@@ -587,7 +571,6 @@ export const packageProducts: PackageProduct[] = [
     images: ['/package-4.png'],
     rating: 4.6,
     reviewCount: 156,
-    difficulty: 'beginner',
     duration: 'Self-paced',
     contentHours: '35+ hours',
     modules: [

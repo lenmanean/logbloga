@@ -8,6 +8,7 @@ import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Downloa
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { getLevelContent } from '@/lib/data/package-level-content';
+import { getLevelTitle } from '@/lib/data/package-level-titles';
 
 interface PackageLevelsContentProps {
   package: PackageProduct;
@@ -92,7 +93,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                     Level {level.level}
                   </Badge>
                   <div className="flex-1">
-                    <CardTitle className="text-2xl mb-2">Level {level.level}</CardTitle>
+                    <CardTitle className="text-2xl mb-2">{getLevelTitle(pkg.slug, level.level)}</CardTitle>
                     <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-1.5">
                         <Clock className="h-4 w-4" />

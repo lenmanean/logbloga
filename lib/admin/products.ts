@@ -104,7 +104,6 @@ export async function createProductAdmin(productData: Partial<Product>): Promise
       category: productData.category,
       price: productData.price,
       original_price: productData.original_price ?? null,
-      difficulty: productData.difficulty ?? null,
       duration: productData.duration ?? null,
       content_hours: productData.content_hours ?? null,
       package_image: productData.package_image ?? null,

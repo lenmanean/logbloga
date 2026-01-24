@@ -218,7 +218,6 @@ export function convertDbProductToFrontendProduct(dbProduct: Product): FrontendP
     originalPrice: dbProduct.original_price ? (typeof dbProduct.original_price === 'number' ? dbProduct.original_price : parseFloat(String(dbProduct.original_price))) : undefined,
     featured: dbProduct.featured || false,
     image: dbProduct.package_image || (dbProduct.images as any)?.[0] || dbProduct.image_url || undefined,
-    difficulty: dbProduct.difficulty as FrontendProduct['difficulty'] | undefined,
     duration: dbProduct.duration || undefined,
   };
 }

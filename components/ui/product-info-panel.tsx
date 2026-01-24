@@ -179,7 +179,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
               🎁 Bonus: 6 Months Free Doer Pro
             </p>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Get 6 months of free Pro subscription on Doer.com with your package purchase. 
+              Get 6 months of free Pro subscription on usedoer.com with your package purchase. 
               Perfect for managing your projects and tasks. Your unique coupon code will be provided after purchase.
             </p>
           </div>
