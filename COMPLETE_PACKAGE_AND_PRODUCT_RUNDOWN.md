@@ -110,7 +110,7 @@ Build powerful web applications with AI assistance. Transform your skills into p
 - **Time Commitment:** 20-30 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Cursor, and GitHub Copilot. This AI-assisted approach helps you build a functional Stripe-integrated landing page in 2-4 weeks instead of 6-8 weeks and reach market faster. Illustrative revenue for this level is in the $500-$2,000/month range.
+We use ChatGPT, Cursor, and GitHub Copilot. This AI-assisted approach helps you build a functional Stripe-integrated landing page in 2-4 weeks instead of 6-8 weeks and reach market faster.
 
 **Content Included:**
 - Implementation Plan (Markdown: `web-apps-level-1-plan.md`)
@@ -141,7 +141,7 @@ We use ChatGPT, Cursor, and GitHub Copilot. This AI-assisted approach helps you 
 - **Time Commitment:** 40-50 hours/week
 
 **AI Leverage:**
-We use Cursor, ChatGPT, Claude, and GitHub Copilot, with optional OpenAI API integration. This AI leverage supports rapid MVP development and faster market entry (e.g. 6-8 weeks instead of 12-16). Illustrative revenue is in the $2,000-$8,000/month range.
+We use Cursor, ChatGPT, Claude, and GitHub Copilot, with optional OpenAI API integration. This AI leverage supports rapid MVP development and faster market entry (e.g. 6-8 weeks instead of 12-16).
 
 **Content Included:**
 - Implementation Plan (Markdown: `web-apps-level-2-plan.md`)
@@ -172,7 +172,7 @@ We use Cursor, ChatGPT, Claude, and GitHub Copilot, with optional OpenAI API int
 - **Time Commitment:** 50-60 hours/week
 
 **AI Leverage:**
-We use Cursor, Claude, OpenAI and Anthropic APIs, and GitHub Copilot. AI serves as both a development tool and a product feature. This dual leverage supports building enterprise-grade platforms. Illustrative revenue is in the $10,000-$50,000+/month range.
+We use Cursor, Claude, OpenAI and Anthropic APIs, and GitHub Copilot. AI serves as both a development tool and a product feature. This dual leverage supports building enterprise-grade platforms.
 
 **Content Included:**
 - Implementation Plan (Markdown: `web-apps-level-3-plan.md`)
@@ -270,7 +270,7 @@ Monetize your AI-driven content by creating profitable social media automation t
 - **Time Commitment:** 20-30 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Canva AI, and Claude, with optional tools like Midjourney or DALL-E. This AI leverage supports personal brand monetization through affiliate marketing, sponsored content, and product sales. Illustrative revenue is in the $300-$1,000/month range.
+We use ChatGPT, Canva AI, and Claude, with optional tools like Midjourney or DALL-E. This AI leverage supports personal brand monetization through affiliate marketing, sponsored content, and product sales.
 
 **Content Included:**
 - Implementation Plan (PDF: `social-media-level-1-plan.pdf`)
@@ -300,7 +300,7 @@ We use ChatGPT, Canva AI, and Claude, with optional tools like Midjourney or DAL
 - **Time Commitment:** 30-40 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Canva AI, Buffer, Later, and related automation tools. This AI leverage supports scaling content creation and managing 3-5 clients simultaneously. Illustrative revenue is in the $1,000-$3,000/month range. AI multiplies your output (e.g. one hour of AI-assisted work = 10 hours of manual work).
+We use ChatGPT, Canva AI, Buffer, Later, and related automation tools. This AI leverage supports scaling content creation and managing 3-5 clients simultaneously. AI multiplies your output (e.g. one hour of AI-assisted work = 10 hours of manual work).
 
 **Content Included:**
 - Implementation Plan (PDF: `social-media-level-2-plan.pdf`)
@@ -331,7 +331,7 @@ We use ChatGPT, Canva AI, Buffer, Later, and related automation tools. This AI l
 - **Time Commitment:** 40-50 hours/week
 
 **AI Leverage:**
-We use Hootsuite, advanced analytics AI, and related workflow tools. This AI leverage supports running a social media agency with a lean team and enterprise-level results. Illustrative revenue is in the $3,000-$10,000+/month per-client range.
+We use Hootsuite, advanced analytics AI, and related workflow tools. This AI leverage supports running a social media agency with a lean team and enterprise-level results.
 
 **Content Included:**
 - Implementation Plan (PDF: `social-media-level-3-plan.pdf`)
@@ -433,7 +433,7 @@ Build a profitable agency selling AI-powered services to business clients. Scale
 - **Time Commitment:** 30-40 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Claude, Canva AI, AI SEO tools (e.g. Jasper or similar), and AI ad-creation tools. This AI leverage allows a solo operator to deliver services that typically require 2-3 person teams. Illustrative revenue is in the $2,000-$5,000/month range.
+We use ChatGPT, Claude, Canva AI, AI SEO tools (e.g. Jasper or similar), and AI ad-creation tools. This AI leverage allows a solo operator to deliver services that typically require 2-3 person teams.
 
 **Content Included:**
 - Implementation Plan (PDF: `agency-level-1-plan.pdf`)
@@ -465,7 +465,7 @@ We use ChatGPT, Claude, Canva AI, AI SEO tools (e.g. Jasper or similar), and AI 
 - **Time Commitment:** 40-50 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Claude, AI workflow automation, and related tools. This AI leverage supports scaling service delivery across your team and managing 5-10 clients with a 2-5 person team. Illustrative revenue is in the $5,000-$15,000/month range.
+We use ChatGPT, Claude, AI workflow automation, and related tools. This AI leverage supports scaling service delivery across your team and managing 5-10 clients with a 2-5 person team.
 
 **Content Included:**
 - Implementation Plan (PDF: `agency-level-2-plan.pdf`)
@@ -497,7 +497,7 @@ We use ChatGPT, Claude, AI workflow automation, and related tools. This AI lever
 - **Time Commitment:** 50-60 hours/week
 
 **AI Leverage:**
-We use enterprise AI platforms, ChatGPT, Claude, and AI analytics tools. This AI leverage supports multi-service delivery and premium offerings. Illustrative revenue is in the $15,000-$50,000+/month per-client range.
+We use enterprise AI platforms, ChatGPT, Claude, and AI analytics tools. This AI leverage supports multi-service delivery and premium offerings.
 
 **Content Included:**
 - Implementation Plan (PDF: `agency-level-3-plan.pdf`)
@@ -602,7 +602,7 @@ Offer your AI expertise as a freelancer to turn automated solutions into USD ear
 - **Time Commitment:** 10-20 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Claude, Canva AI, and Fiverr's AI features. This AI leverage supports part-time freelancing and helps you deliver work 2-3x faster. Illustrative revenue is in the $500-$1,500/month range.
+We use ChatGPT, Claude, Canva AI, and Fiverr's AI features. This AI leverage supports part-time freelancing and helps you deliver work 2-3x faster.
 
 **Content Included:**
 - Implementation Plan (PDF: `freelancing-level-1-plan.pdf`)
@@ -632,7 +632,7 @@ We use ChatGPT, Claude, Canva AI, and Fiverr's AI features. This AI leverage sup
 - **Time Commitment:** 30-40 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Claude, proposal and contract AI tools, and communication automation. This AI leverage supports full-time freelancing and taking on 2-3x more clients. Illustrative revenue is in the $1,500-$4,000/month range.
+We use ChatGPT, Claude, proposal and contract AI tools, and communication automation. This AI leverage supports full-time freelancing and taking on 2-3x more clients.
 
 **Content Included:**
 - Implementation Plan (PDF: `freelancing-level-2-plan.pdf`)
@@ -664,7 +664,7 @@ We use ChatGPT, Claude, proposal and contract AI tools, and communication automa
 - **Time Commitment:** 40-50 hours/week
 
 **AI Leverage:**
-We use ChatGPT, Claude, advanced AI platforms, and direct-client AI systems. This AI leverage supports premium consulting and positioning. Illustrative revenue is in the $4,000-$10,000+/month range.
+We use ChatGPT, Claude, advanced AI platforms, and direct-client AI systems. This AI leverage supports premium consulting and positioning.
 
 **Content Included:**
 - Implementation Plan (PDF: `freelancing-level-3-plan.pdf`)

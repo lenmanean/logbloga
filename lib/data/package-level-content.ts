@@ -43,7 +43,7 @@ export interface PackageLevelContent {
 export const packageLevelContent: Record<string, PackageLevelContent> = {
   'web-apps': {
     level1: {
-      aiLeverage: 'We use ChatGPT, Cursor, and GitHub Copilot. This AI-assisted approach helps you build a functional Stripe-integrated landing page in 2-4 weeks instead of 6-8 weeks and reach market faster. Illustrative revenue for this level is in the $500-$2,000/month range.',
+      aiLeverage: 'We use ChatGPT, Cursor, and GitHub Copilot. This AI-assisted approach helps you build a functional Stripe-integrated landing page in 2-4 weeks instead of 6-8 weeks and reach market faster.',
       implementationPlan: {
         file: 'web-apps-level-1-plan.md',
         type: 'md',
@@ -66,7 +66,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level2: {
-      aiLeverage: 'We use Cursor, ChatGPT, Claude, and GitHub Copilot, with optional OpenAI API integration. This AI leverage supports rapid MVP development and faster market entry (e.g. 6-8 weeks instead of 12-16). Illustrative revenue is in the $2,000-$8,000/month range.',
+      aiLeverage: 'We use Cursor, ChatGPT, Claude, and GitHub Copilot, with optional OpenAI API integration. This AI leverage supports rapid MVP development and faster market entry (e.g. 6-8 weeks instead of 12-16).',
       implementationPlan: {
         file: 'web-apps-level-2-plan.md',
         type: 'md',
@@ -89,7 +89,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level3: {
-      aiLeverage: 'We use Cursor, Claude, OpenAI and Anthropic APIs, and GitHub Copilot. AI serves as both a development tool and a product feature. This dual leverage supports building enterprise-grade platforms. Illustrative revenue is in the $10,000-$50,000+/month range.',
+      aiLeverage: 'We use Cursor, Claude, OpenAI and Anthropic APIs, and GitHub Copilot. AI serves as both a development tool and a product feature. This dual leverage supports building enterprise-grade platforms.',
       implementationPlan: {
         file: 'web-apps-level-3-plan.md',
         type: 'md',
@@ -113,7 +113,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
   },
   'social-media': {
     level1: {
-      aiLeverage: 'We use ChatGPT, Canva AI, and Claude, with optional tools like Midjourney or DALL-E. This AI leverage supports personal brand monetization through affiliate marketing, sponsored content, and product sales. Illustrative revenue is in the $300-$1,000/month range.',
+      aiLeverage: 'We use ChatGPT, Canva AI, and Claude, with optional tools like Midjourney or DALL-E. This AI leverage supports personal brand monetization through affiliate marketing, sponsored content, and product sales.',
       implementationPlan: {
         file: 'social-media-level-1-plan.pdf',
         type: 'pdf',
@@ -135,7 +135,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level2: {
-      aiLeverage: 'We use ChatGPT, Canva AI, Buffer, Later, and related automation tools. This AI leverage supports scaling content creation and managing 3-5 clients simultaneously. Illustrative revenue is in the $1,000-$3,000/month range. AI multiplies your output (e.g. one hour of AI-assisted work = 10 hours of manual work).',
+      aiLeverage: 'We use ChatGPT, Canva AI, Buffer, Later, and related automation tools. This AI leverage supports scaling content creation and managing 3-5 clients simultaneously. AI multiplies your output (e.g. one hour of AI-assisted work = 10 hours of manual work).',
       implementationPlan: {
         file: 'social-media-level-2-plan.pdf',
         type: 'pdf',
@@ -157,7 +157,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level3: {
-      aiLeverage: 'We use Hootsuite, advanced analytics AI, and related workflow tools. This AI leverage supports running a social media agency with a lean team and enterprise-level results. Illustrative revenue is in the $3,000-$10,000+/month per-client range.',
+      aiLeverage: 'We use Hootsuite, advanced analytics AI, and related workflow tools. This AI leverage supports running a social media agency with a lean team and enterprise-level results.',
       implementationPlan: {
         file: 'social-media-level-3-plan.pdf',
         type: 'pdf',
@@ -178,7 +178,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
   },
   'agency': {
     level1: {
-      aiLeverage: 'We use ChatGPT, Claude, Canva AI, AI SEO tools (e.g. Jasper or similar), and AI ad-creation tools. This AI leverage allows a solo operator to deliver services that typically require 2-3 person teams. Illustrative revenue is in the $2,000-$5,000/month range.',
+      aiLeverage: 'We use ChatGPT, Claude, Canva AI, AI SEO tools (e.g. Jasper or similar), and AI ad-creation tools. This AI leverage allows a solo operator to deliver services that typically require 2-3 person teams.',
       implementationPlan: {
         file: 'agency-level-1-plan.pdf',
         type: 'pdf',
@@ -200,7 +200,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level2: {
-      aiLeverage: 'We use ChatGPT, Claude, AI workflow automation, and related tools. This AI leverage supports scaling service delivery across your team and managing 5-10 clients with a 2-5 person team. Illustrative revenue is in the $5,000-$15,000/month range.',
+      aiLeverage: 'We use ChatGPT, Claude, AI workflow automation, and related tools. This AI leverage supports scaling service delivery across your team and managing 5-10 clients with a 2-5 person team.',
       implementationPlan: {
         file: 'agency-level-2-plan.pdf',
         type: 'pdf',
@@ -222,7 +222,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level3: {
-      aiLeverage: 'We use enterprise AI platforms, ChatGPT, Claude, and AI analytics tools. This AI leverage supports multi-service delivery and premium offerings. Illustrative revenue is in the $15,000-$50,000+/month per-client range.',
+      aiLeverage: 'We use enterprise AI platforms, ChatGPT, Claude, and AI analytics tools. This AI leverage supports multi-service delivery and premium offerings.',
       implementationPlan: {
         file: 'agency-level-3-plan.pdf',
         type: 'pdf',
@@ -244,7 +244,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
   },
   'freelancing': {
     level1: {
-      aiLeverage: 'We use ChatGPT, Claude, Canva AI, and Fiverr\'s AI features. This AI leverage supports part-time freelancing and helps you deliver work 2-3x faster. Illustrative revenue is in the $500-$1,500/month range.',
+      aiLeverage: 'We use ChatGPT, Claude, Canva AI, and Fiverr\'s AI features. This AI leverage supports part-time freelancing and helps you deliver work 2-3x faster.',
       implementationPlan: {
         file: 'freelancing-level-1-plan.pdf',
         type: 'pdf',
@@ -266,7 +266,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level2: {
-      aiLeverage: 'We use ChatGPT, Claude, proposal and contract AI tools, and communication automation. This AI leverage supports full-time freelancing and taking on 2-3x more clients. Illustrative revenue is in the $1,500-$4,000/month range.',
+      aiLeverage: 'We use ChatGPT, Claude, proposal and contract AI tools, and communication automation. This AI leverage supports full-time freelancing and taking on 2-3x more clients.',
       implementationPlan: {
         file: 'freelancing-level-2-plan.pdf',
         type: 'pdf',
@@ -289,7 +289,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ]
     },
     level3: {
-      aiLeverage: 'We use ChatGPT, Claude, advanced AI platforms, and direct-client AI systems. This AI leverage supports premium consulting and positioning. Illustrative revenue is in the $4,000-$10,000+/month range.',
+      aiLeverage: 'We use ChatGPT, Claude, advanced AI platforms, and direct-client AI systems. This AI leverage supports premium consulting and positioning.',
       implementationPlan: {
         file: 'freelancing-level-3-plan.pdf',
         type: 'pdf',
