@@ -270,8 +270,8 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
 
       {/* Earnings Disclaimer */}
       <Card className="border-amber-200 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-800">
-        <CardContent className="pt-6">
-          <p className="text-sm text-muted-foreground leading-relaxed">
+        <CardContent className="p-6">
+          <p className="text-sm text-muted-foreground leading-relaxed text-center">
             <sup>*</sup> <strong>Expected Revenue Disclaimer:</strong> Expected revenue figures are illustrative only and not a guarantee. Results depend on your skills, effort, and adherence to the plan. Results may vary. See our{' '}
             <Link 
               href="/legal/terms" 
