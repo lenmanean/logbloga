@@ -9,11 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { getProductBySlug, getAllProducts } from '@/lib/db/products';
-import { getPackageWithIncludedProductsBySlug } from '@/lib/db/package-products';
 import { parsePackageLevels } from '@/lib/db/package-levels';
 import { PackageProduct } from '@/lib/products';
 import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb } from 'lucide-react';
-import { PackageIncludedProducts } from '@/components/ui/package-included-products';
 
 // Lazy load recommendation components (below fold, non-critical)
 const UpsellBanner = dynamic(() => import('@/components/recommendations/upsell-banner').then(mod => ({ default: mod.UpsellBanner })), {
@@ -111,9 +109,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
   if (!packageData) {
     notFound();
   }
-
-  // Fetch included products for this package
-  const packageWithProducts = await getPackageWithIncludedProductsBySlug(packageSlug);
 
   // Parse levels data if available
   const levels = parsePackageLevels(packageData);
@@ -256,18 +251,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
             </CardContent>
           </Card>
         </div>
-
-        {/* Included Products Section */}
-        {packageWithProducts && packageWithProducts.includedProducts.length > 0 && (
-          <div className="mb-12">
-            <PackageIncludedProducts
-              includedProducts={packageWithProducts.includedProducts}
-              totalPackageValue={packageWithProducts.totalPackageValue}
-              packagePrice={typeof packageData.price === 'number' ? packageData.price : parseFloat(String(packageData.price || 0))}
-              packageSlug={packageSlug}
-            />
-          </div>
-        )}
 
         {/* What's Included Section */}
         <div className="mb-12">
