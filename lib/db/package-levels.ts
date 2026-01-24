@@ -109,6 +109,7 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
     timeInvestment: String(levelData.timeInvestment),
     expectedProfit: String(levelData.expectedProfit),
     platformCosts: String(levelData.platformCosts),
+    aiLeverage: String(levelData.aiLeverage || ''),
     schedule,
     implementationPlan: {
       file: String(levelData.implementationPlan.file || ''),

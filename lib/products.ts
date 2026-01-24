@@ -47,6 +47,7 @@ export interface PackageLevel {
   timeInvestment: string; // "2-3 Weeks"
   expectedProfit: string; // "$500-$1,500/month"
   platformCosts: string; // "$0-50/month"
+  aiLeverage: string; // Comprehensive description of AI tools used and how they drive revenue
   schedule: PackageLevelScheduleItem[]; // Trackable timeline/schedule
   implementationPlan: PackageLevelContent;
   platformGuides: PackageLevelContent[];

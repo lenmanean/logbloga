@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PackageProduct, PackageLevels, PackageLevel } from '@/lib/products';
-import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Zap } from 'lucide-react';
+import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Zap, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { getLevelContent } from '@/lib/data/package-level-content';
@@ -73,6 +73,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
         // Use enriched content if available, otherwise fall back to database level
         const displayLevel = enrichedContent ? {
           ...level,
+          aiLeverage: enrichedContent.aiLeverage || level.aiLeverage || '',
           implementationPlan: enrichedContent.implementationPlan,
           platformGuides: enrichedContent.platformGuides,
           creativeFrameworks: enrichedContent.creativeFrameworks,
@@ -122,6 +123,23 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
 
             {isExpanded && (
               <CardContent className="space-y-6 pt-0">
+                {/* AI Leverage Section */}
+                {displayLevel.aiLeverage && (
+                  <div className="border rounded-lg p-4 bg-blue-50/50 dark:bg-blue-950/20 border-blue-200 dark:border-blue-800">
+                    <div className="flex items-start gap-3">
+                      <Sparkles className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-2 text-blue-900 dark:text-blue-100">
+                          AI Leverage & Revenue Connection
+                        </h3>
+                        <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                          {displayLevel.aiLeverage}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Implementation Plan */}
                 <div className="border rounded-lg p-4 bg-muted/50">
                   <div className="flex items-start gap-3 mb-3">
