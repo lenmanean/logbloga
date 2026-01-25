@@ -8,8 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Sparkles, Layers, FileText, Lightbulb, TrendingUp, Users, BookOpen, CheckCircle, Clock } from 'lucide-react';
 
 export default function AiToUsdPage() {
-  // Get featured case studies (first 3)
-  const featuredCaseStudies = caseStudies.slice(0, 3);
+  // Get DOER case study (only real case study)
+  const doerCaseStudy = caseStudies.find(study => study.slug === 'doer-ai-goal-achievement-platform');
 
   return (
     <main className="min-h-screen bg-background">
@@ -194,52 +194,70 @@ export default function AiToUsdPage() {
         </section>
 
         {/* Case Studies Showcase Section */}
-        <section className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Success Stories
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              See how others have transformed their businesses and careers using AI to USD principles and resources.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {featuredCaseStudies.map((study) => (
-              <Card key={study.id} className="hover:shadow-lg transition-shadow">
+        {doerCaseStudy && (
+          <section className="mb-16">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                Success Story
+              </h2>
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                See how AI to USD principles were used to build a real-world, production-ready application.
+              </p>
+            </div>
+            <div className="max-w-4xl mx-auto">
+              <Card className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <Badge variant="outline" className="text-xs">
-                      {study.category}
+                      {doerCaseStudy.category}
                     </Badge>
                   </div>
-                  <CardTitle className="text-lg">{study.title}</CardTitle>
-                  <CardDescription>{study.description}</CardDescription>
+                  <CardTitle className="text-2xl">{doerCaseStudy.title}</CardTitle>
+                  <CardDescription className="text-base">{doerCaseStudy.description}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {study.outcome && (
-                    <p className="text-sm text-muted-foreground mb-4">
-                      <strong>Outcome:</strong> {study.outcome}
-                    </p>
+                  {doerCaseStudy.outcome && (
+                    <div className="mb-6">
+                      <p className="text-sm font-semibold mb-2">Key Achievement:</p>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        {doerCaseStudy.outcome}
+                      </p>
+                    </div>
                   )}
-                  <Link href={`/resources/case-studies/${study.slug}`}>
-                    <Button variant="ghost" size="sm" className="w-full">
-                      Read Full Story
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
+                  {doerCaseStudy.results && doerCaseStudy.results.length > 0 && (
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                      {doerCaseStudy.results.map((result, index) => (
+                        <div key={index} className="border rounded-lg p-3">
+                          <p className="text-xs text-muted-foreground mb-1">{result.metric}</p>
+                          <p className="text-sm font-semibold">{result.value}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <Link href={`/resources/case-studies/${doerCaseStudy.slug}`} className="flex-1">
+                      <Button variant="default" className="w-full">
+                        Read Full Story
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </Link>
+                    <a 
+                      href="https://usedoer.com" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="flex-1"
+                    >
+                      <Button variant="outline" className="w-full">
+                        Visit DOER
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-          <div className="text-center">
-            <Link href="/resources/case-studies">
-              <Button variant="outline" size="lg">
-                View All Case Studies
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
 
         {/* Call-to-Action Section */}
         <section className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 rounded-lg p-8 md:p-12 text-center">
