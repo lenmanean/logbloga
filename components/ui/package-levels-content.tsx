@@ -36,6 +36,19 @@ const getFileTypeBadgeVariant = (fileType: string): 'default' | 'secondary' | 'o
   return 'outline';
 };
 
+// Helper function to convert filename to display name
+function formatFileNameToDisplayName(filename: string): string {
+  // Remove file extension
+  const withoutExt = filename.replace(/\.[^/.]+$/, '');
+  // Replace hyphens and underscores with spaces
+  const withSpaces = withoutExt.replace(/[-_]/g, ' ');
+  // Capitalize first letter of each word
+  return withSpaces
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
+}
+
 export function PackageLevelsContent({ package: pkg, className }: PackageLevelsContentProps) {
   const [expandedLevels, setExpandedLevels] = useState<Record<string, boolean>>({
     level1: true, // Default to first level expanded
@@ -144,7 +157,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                       </p>
                       <div className="flex items-center gap-2">
                         <FileIcon className="h-4 w-4 text-muted-foreground" />
-                        <span className="text-sm font-medium">{displayLevel.implementationPlan.file}</span>
+                        <span className="text-sm font-medium">{formatFileNameToDisplayName(displayLevel.implementationPlan.file)}</span>
                         <Badge variant={getFileTypeBadgeVariant(displayLevel.implementationPlan.type)} className="text-xs">
                           {displayLevel.implementationPlan.type.toUpperCase()}
                         </Badge>
@@ -176,7 +189,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                                 <GuideIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                                 <div className="flex-1 min-w-0">
                                   <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-sm font-medium truncate">{guide.file}</span>
+                                    <span className="text-sm font-medium truncate">{formatFileNameToDisplayName(guide.file)}</span>
                                     {guide.platform && (
                                       <Badge variant="outline" className="text-xs">
                                         {guide.platform}
