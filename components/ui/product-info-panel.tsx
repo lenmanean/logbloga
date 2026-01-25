@@ -176,16 +176,19 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
         <div className="flex items-start gap-3">
           <Gift className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold text-green-900 dark:text-green-100 mb-1 flex items-center gap-2">
-              <Image
-                src="/usedoer_favicon.png"
-                alt="DOER logo"
-                width={20}
-                height={20}
-                className="h-5 w-5 rounded flex-shrink-0"
-              />
+            <div className="font-semibold text-green-900 dark:text-green-100 mb-1 flex items-center gap-2">
+              <span className="relative inline-flex h-6 w-6 flex-shrink-0 items-center justify-center">
+                <Image
+                  src="/usedoer_favicon.png"
+                  alt="DOER logo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 object-contain"
+                  unoptimized
+                />
+              </span>
               <span>Bonus: 6 Months Free DOER Pro</span>
-            </p>
+            </div>
             <p className="text-sm text-green-700 dark:text-green-300">
               Get 6 months of free DOER Pro subscription on usedoer.com with your package purchase. 
               Perfect for managing your projects and tasks. Your unique coupon code will be provided after purchase.
