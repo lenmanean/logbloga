@@ -103,9 +103,6 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                         <DollarSign className="h-4 w-4" />
                         <span>{level.expectedProfit}*</span>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <span>{level.platformCosts}</span>
-                      </div>
                     </div>
                   </div>
                 </div>

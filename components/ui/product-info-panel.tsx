@@ -178,7 +178,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
           <div>
             <p className="font-semibold text-green-900 dark:text-green-100 mb-1 flex items-center gap-2">
               <Image
-                src="/logo.png"
+                src="/usedoer_favicon.png"
                 alt="DOER logo"
                 width={20}
                 height={20}
