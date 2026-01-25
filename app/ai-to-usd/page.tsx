@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { CategoryCard } from '@/components/ui/category-card';
-import { categories, packageProducts } from '@/lib/products';
+import { categories } from '@/lib/products';
 import { caseStudies } from '@/lib/resources/case-studies';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -14,75 +14,43 @@ export default function AiToUsdPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
-        {/* Enhanced Hero Section */}
+        {/* Hero Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
             AI to USD
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-4 leading-relaxed">
-            Transform artificial intelligence into real revenue. Our comprehensive collection of packages provides everything you need to monetize AI capabilities and build profitable businesses.
-          </p>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Whether you're building web applications, growing your social media presence, scaling an agency, or advancing your freelancing career, we provide the roadmap, resources, and support to turn AI into sustainable income.
-          </p>
         </div>
 
-        {/* Package Navigation Cards - Keep at Top */}
+        {/* What is AI to USD Section */}
+        <section className="mb-16">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+              What is AI to USD?
+            </h2>
+            <div className="max-w-3xl mx-auto">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                Transform artificial intelligence into real revenue. Our comprehensive collection of packages provides everything you need to monetize AI capabilities and build profitable businesses. Whether you're building web applications, growing your social media presence, scaling an agency, or advancing your freelancing career, we provide the roadmap, resources, and support to turn AI into sustainable income.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Package Navigation Cards */}
         <div id="explore-packages" className="mb-16">
-          <h2 className="text-2xl md:text-3xl font-bold text-center mb-8">
-            Explore Our Packages
-          </h2>
+          <div className="text-center mb-8">
+            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+              Explore Our Packages
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Each package is designed to take you from concept to revenue, with comprehensive resources tailored to your path.
+            </p>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category) => (
               <CategoryCard key={category.id} category={category} />
             ))}
           </div>
         </div>
-
-        {/* Package Overview Section */}
-        <section className="mb-16">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              What's Included in Each Package
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Each package is designed to take you from concept to revenue, with comprehensive resources tailored to your path.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {packageProducts.map((pkg) => (
-              <Card key={pkg.id} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <CardTitle className="text-xl">{pkg.title}</CardTitle>
-                  <CardDescription className="text-base">
-                    {pkg.tagline}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {pkg.description}
-                  </p>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                    <span className="flex items-center gap-1">
-                      <BookOpen className="h-4 w-4" />
-                      {pkg.contentHours}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-4 w-4" />
-                      {pkg.duration}
-                    </span>
-                  </div>
-                  <Link href={`/ai-to-usd/packages/${pkg.slug}`}>
-                    <Button variant="outline" className="w-full">
-                      Learn More
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </section>
 
         {/* Key Features/Value Propositions Section */}
         <section className="mb-16">
