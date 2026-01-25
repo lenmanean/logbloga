@@ -14,22 +14,15 @@ export default function AiToUsdPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-            AI to USD
-          </h1>
-        </div>
-
         {/* What is AI to USD Section */}
         <section className="mb-16">
           <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
               What is AI to USD?
-            </h2>
+            </h1>
             <div className="max-w-3xl mx-auto">
               <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                Transform artificial intelligence into real revenue. Our comprehensive collection of packages provides everything you need to monetize AI capabilities and build profitable businesses. Whether you're building web applications, growing your social media presence, scaling an agency, or advancing your freelancing career, we provide the roadmap, resources, and support to turn AI into sustainable income.
+                AI to USD is a comprehensive collection of packages designed to help you monetize artificial intelligence and build profitable businesses. Each package provides structured learning paths, implementation guides, and production-ready resources to transform AI capabilities into sustainable revenue streams.
               </p>
             </div>
           </div>
