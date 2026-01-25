@@ -163,7 +163,7 @@ export function Header() {
               </DropdownMenuItem>
             </NavDropdown>
             <NavDropdown
-              label="Explore Courses"
+              label="Resources"
               href="/resources"
               isOpen={resourcesOpen}
               onOpenChange={setResourcesOpen}
@@ -356,7 +356,7 @@ export function Header() {
                   </div>
                 </div>
                 <div className="flex flex-col">
-                  <div className="text-lg font-medium py-2">Explore Courses</div>
+                  <div className="text-lg font-medium py-2">Resources</div>
                   <div className="flex flex-col pl-4 space-y-2">
                     <Link
                       href="/resources/guides"

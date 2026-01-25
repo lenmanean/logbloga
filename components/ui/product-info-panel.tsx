@@ -18,7 +18,17 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
-import { Gift } from 'lucide-react';
+import { Gift, Info } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface ProductInfoPanelProps {
   package: PackageProduct;
@@ -175,7 +185,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20 border border-green-200 dark:border-green-900 rounded-lg p-4 mb-6">
         <div className="flex items-start gap-3">
           <Gift className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
-          <div>
+          <div className="flex-1">
             <div className="font-semibold text-green-900 dark:text-green-100 mb-1 flex items-center gap-2">
               <span className="relative inline-flex h-6 w-6 flex-shrink-0 items-center justify-center">
                 <Image
@@ -188,6 +198,94 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
                 />
               </span>
               <span>Bonus: 6 Months Free DOER Pro</span>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 rounded-full hover:bg-green-200 dark:hover:bg-green-900 p-0"
+                  >
+                    <Info className="h-4 w-4 text-green-600 dark:text-green-400" />
+                    <span className="sr-only">Learn more about DOER integration</span>
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl max-h-[80vh]">
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2">
+                      <Image
+                        src="/usedoer_favicon.png"
+                        alt="DOER logo"
+                        width={24}
+                        height={24}
+                        className="h-6 w-6 object-contain"
+                        unoptimized
+                      />
+                      DOER Integration with LogBloga AI to USD Packages
+                    </DialogTitle>
+                    <DialogDescription>
+                      Learn how DOER enhances your package experience
+                    </DialogDescription>
+                  </DialogHeader>
+                  <ScrollArea className="max-h-[60vh] pr-4">
+                    <div className="space-y-6">
+                      <div>
+                        <h3 className="font-semibold text-lg mb-2">What is DOER?</h3>
+                        <p className="text-sm text-muted-foreground">
+                          DOER is a powerful project management and task tracking platform that helps you organize, 
+                          manage, and execute your projects efficiently. When you purchase any LogBloga AI to USD package, 
+                          you receive 6 months of free DOER Pro subscription to help you implement and track your progress.
+                        </p>
+                      </div>
+                      
+                      <div>
+                        <h3 className="font-semibold text-lg mb-2">How DOER Works with Your Package</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          DOER seamlessly integrates with your LogBloga packages to provide:
+                        </p>
+                        <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground ml-4">
+                          <li>Project tracking and milestone management for each package level</li>
+                          <li>Task organization aligned with your package's implementation plan</li>
+                          <li>Progress monitoring to track your journey from Level 1 to Level 3</li>
+                          <li>Resource management for templates, guides, and creative frameworks</li>
+                          <li>Time tracking to monitor your investment and ROI</li>
+                        </ul>
+                      </div>
+
+                      <div>
+                        <h3 className="font-semibold text-lg mb-2">Getting Started</h3>
+                        <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground ml-4">
+                          <li>Purchase your LogBloga AI to USD package</li>
+                          <li>Receive your unique DOER Pro coupon code after purchase</li>
+                          <li>Visit usedoer.com/checkout and apply your coupon code</li>
+                          <li>Set up your DOER workspace and import your package implementation plan</li>
+                          <li>Start tracking your progress through each level</li>
+                        </ol>
+                      </div>
+
+                      <div>
+                        <h3 className="font-semibold text-lg mb-2">Video Tutorials</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Watch these videos to learn more about implementing DOER with your package:
+                        </p>
+                        <div className="space-y-3">
+                          <div className="bg-muted rounded-lg p-4 text-center">
+                            <p className="text-sm text-muted-foreground">
+                              Video tutorials will be available here soon
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900 rounded-lg p-4">
+                        <p className="text-sm text-green-900 dark:text-green-100">
+                          <strong>Note:</strong> Your DOER Pro coupon code will be available in your account 
+                          after purchase. The 6-month free subscription starts when you redeem the code on usedoer.com.
+                        </p>
+                      </div>
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
             </div>
             <p className="text-sm text-green-700 dark:text-green-300">
               Get 6 months of free DOER Pro subscription on usedoer.com with your package purchase. 

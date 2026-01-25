@@ -37,9 +37,6 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
               <p className="text-sm text-muted-foreground">
                 {category.description}
               </p>
-              <p className="text-xs text-muted-foreground pt-2">
-                {category.productCount} products
-              </p>
             </div>
           </div>
         </CardContent>
