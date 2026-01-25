@@ -188,7 +188,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
               <p className="text-base leading-relaxed text-muted-foreground mb-6">
                 {packageProduct.description}
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6 justify-items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
                   <div>
@@ -231,6 +231,15 @@ export default async function PackagePage({ params }: PackagePageProps) {
                     <p className="font-semibold mb-1">Production-Ready Templates</p>
                     <p className="text-sm text-muted-foreground">
                       Templates, checklists, and tools you can use immediately
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold mb-1">Customer Support</p>
+                    <p className="text-sm text-muted-foreground">
+                      Get support for your package implementation and product questions
                     </p>
                   </div>
                 </div>
