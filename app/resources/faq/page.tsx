@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { FAQPageClient } from '@/components/resources/faq-page-client';
-import { faqs, getAllCategories } from '@/lib/resources/faq';
+import { faqs } from '@/lib/resources/faq';
 
 export const revalidate = 3600; // ISR: revalidate every hour
 
@@ -15,12 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default function FAQPage() {
-  const allCategories = getAllCategories();
-
   return (
     <FAQPageClient 
       initialFAQs={faqs}
-      categories={allCategories}
     />
   );
 }

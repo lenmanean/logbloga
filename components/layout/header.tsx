@@ -176,21 +176,15 @@ export function Header() {
                 <Link href="/resources/case-studies">Case Studies</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/resources/tools">Tools & Templates</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
                 <Link href="/resources/faq">FAQ</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/resources/community">Community Forum</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/blog">Blog</Link>
+              </DropdownMenuItem>
             </NavDropdown>
-            <Link 
-              href="/blog" 
-              className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105"
-            >
-              Blog
-            </Link>
           </nav>
 
           {/* Cart & Profile - Desktop */}
@@ -373,13 +367,6 @@ export function Header() {
                       Case Studies
                     </Link>
                     <Link
-                      href="/resources/tools"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Tools & Templates
-                    </Link>
-                    <Link
                       href="/resources/faq"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
@@ -393,15 +380,15 @@ export function Header() {
                     >
                       Community Forum
                     </Link>
+                    <Link
+                      href="/blog"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Blog
+                    </Link>
                   </div>
                 </div>
-                <Link
-                  href="/blog"
-                  onClick={() => setOpen(false)}
-                  className="text-lg font-medium transition-colors hover:text-primary py-2"
-                >
-                  Blog
-                </Link>
                 <div className="flex flex-col space-y-3 pt-4 border-t">
                   <Link href="/checkout" onClick={() => setOpen(false)}>
                     <Button variant="outline" className="w-full rounded-full flex items-center justify-center gap-2">

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { FileText, TrendingUp, Wrench, HelpCircle, Users } from 'lucide-react';
+import { FileText, TrendingUp, HelpCircle, Users } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ResourceCardProps {
@@ -50,12 +50,6 @@ const resources = [
     description: 'Real-world examples and success stories from businesses and individuals using AI to USD products.',
     href: '/resources/case-studies',
     icon: TrendingUp,
-  },
-  {
-    title: 'Tools & Templates',
-    description: 'Ready-to-use templates, tools, and resources to accelerate your AI-powered projects.',
-    href: '/resources/tools',
-    icon: Wrench,
   },
   {
     title: 'FAQ',

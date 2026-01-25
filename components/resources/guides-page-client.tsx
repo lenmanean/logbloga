@@ -3,68 +3,29 @@
 import { useState, useMemo } from 'react';
 import type { Guide } from '@/lib/resources/types';
 import { ResourceCard } from './resource-card';
-import { ResourceFilters } from './resource-filters';
 import { ResourceSearch } from './resource-search';
-import { Button } from '@/components/ui/button';
-import { searchGuides, getGuidesByCategory } from '@/lib/resources/guides';
-import { X } from 'lucide-react';
+import { searchGuides } from '@/lib/resources/guides';
 
 interface GuidesPageClientProps {
   initialGuides: Guide[];
-  categories: string[];
-  tags: string[];
+  categories?: string[];
+  tags?: string[];
 }
 
-export function GuidesPageClient({ initialGuides, categories, tags }: GuidesPageClientProps) {
+export function GuidesPageClient({ initialGuides }: GuidesPageClientProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | undefined>();
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const filteredGuides = useMemo(() => {
-    let filtered = initialGuides;
-
-    // Filter by category
-    if (selectedCategory) {
-      filtered = getGuidesByCategory(selectedCategory);
-    }
-
-    // Filter by tags
-    if (selectedTags.length > 0) {
-      filtered = filtered.filter(guide =>
-        selectedTags.some(tag => guide.tags.includes(tag))
-      );
-    }
-
-    // Filter by search
+    // Filter by search only
     if (searchQuery) {
       const searchResults = searchGuides(searchQuery);
-      filtered = filtered.filter(guide =>
+      return initialGuides.filter(guide =>
         searchResults.some(result => result.id === guide.id)
       );
     }
 
-    return filtered;
-  }, [searchQuery, selectedCategory, selectedTags, initialGuides]);
-
-  const handleCategoryChange = (category: string | undefined) => {
-    setSelectedCategory(category);
-  };
-
-  const handleTagToggle = (tag: string) => {
-    setSelectedTags(prev =>
-      prev.includes(tag)
-        ? prev.filter(t => t !== tag)
-        : [...prev, tag]
-    );
-  };
-
-  const handleClearFilters = () => {
-    setSearchQuery('');
-    setSelectedCategory(undefined);
-    setSelectedTags([]);
-  };
-
-  const hasActiveFilters = searchQuery || selectedCategory || selectedTags.length > 0;
+    return initialGuides;
+  }, [searchQuery, initialGuides]);
 
   return (
     <main className="min-h-screen bg-background">
@@ -88,27 +49,15 @@ export function GuidesPageClient({ initialGuides, categories, tags }: GuidesPage
           />
         </div>
 
-        {/* Filters */}
-        <div className="mb-6">
-          <ResourceFilters
-            categories={categories}
-            tags={tags}
-            selectedCategory={selectedCategory}
-            selectedTags={selectedTags}
-            onCategoryChange={handleCategoryChange}
-            onTagChange={handleTagToggle}
-            onClearFilters={hasActiveFilters ? handleClearFilters : undefined}
-          />
-        </div>
-
         {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-sm text-muted-foreground">
-            Showing {filteredGuides.length} of {initialGuides.length} {initialGuides.length === 1 ? 'guide' : 'guides'}
-            {selectedCategory && ` in "${selectedCategory}"`}
-            {searchQuery && ` matching "${searchQuery}"`}
-          </p>
-        </div>
+        {searchQuery && (
+          <div className="mb-6">
+            <p className="text-sm text-muted-foreground">
+              Showing {filteredGuides.length} of {initialGuides.length} {initialGuides.length === 1 ? 'guide' : 'guides'}
+              {searchQuery && ` matching "${searchQuery}"`}
+            </p>
+          </div>
+        )}
 
         {/* Guides Grid */}
         {filteredGuides.length > 0 ? (
@@ -120,15 +69,8 @@ export function GuidesPageClient({ initialGuides, categories, tags }: GuidesPage
         ) : (
           <div className="text-center py-12">
             <p className="text-lg text-muted-foreground mb-4">
-              No guides found.
-              {hasActiveFilters && ' Try adjusting your filters.'}
+              {searchQuery ? 'No guides found matching your search.' : 'No guides available at this time.'}
             </p>
-            {hasActiveFilters && (
-              <Button variant="outline" onClick={handleClearFilters}>
-                <X className="h-4 w-4 mr-2" />
-                Clear All Filters
-              </Button>
-            )}
           </div>
         )}
       </div>
