@@ -45,6 +45,12 @@ function mockPackageToProductWithPurchaseDate(mockPackage: ReturnType<typeof get
     stripe_price_id: null,
     stripe_product_id: null,
     product_type: 'package',
+    // Optional Product fields
+    included_products: null,
+    is_current_version: null,
+    levels: null,
+    package_value: null,
+    version_year: null,
     // Purchase information
     purchasedDate: purchaseDate,
     orderId: orderId,
@@ -86,6 +92,12 @@ function mockIndividualProductToProductWithPurchaseDate(mockProduct: ReturnType<
     stripe_price_id: null,
     stripe_product_id: null,
     product_type: mockProduct.productType,
+    // Optional Product fields
+    included_products: null,
+    is_current_version: null,
+    levels: null,
+    package_value: null,
+    version_year: null,
     // Purchase information
     purchasedDate: purchaseDate,
     orderId: orderId,
