@@ -15,7 +15,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
 import { Gift, Info } from 'lucide-react';
@@ -57,16 +56,6 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Category & Content Hours Badges */}
-      <div className="flex flex-wrap items-center gap-2">
-        <Badge variant="outline" className="text-xs">
-          {pkg.category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
-        </Badge>
-        <Badge variant="outline" className="text-xs">
-          {pkg.contentHours}
-        </Badge>
-      </div>
-
       {/* Product Title */}
       <div className="mb-4">
         <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight tracking-tight">
