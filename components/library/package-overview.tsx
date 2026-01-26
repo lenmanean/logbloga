@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowRight, Layers } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card';
+import { ArrowRight } from 'lucide-react';
 import { getLevelTitle } from '@/lib/data/package-level-titles';
 import { ProgressStepper } from '@/components/library/progress-stepper';
 import type { Product } from '@/lib/types/database';
@@ -46,14 +46,39 @@ export function PackageOverview({ product, progress, className }: PackageOvervie
       <Card>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-            {/* Left Column: Header Text */}
-            <div className="flex flex-col justify-center space-y-3">
-              <CardTitle className="text-2xl md:text-3xl">
-                {product.title || product.name || 'Package'}
-              </CardTitle>
-              <CardDescription className="text-base md:text-lg">
-                {product.description || 'Digital product package'}
-              </CardDescription>
+            {/* Left Column: Header Text + Level Links */}
+            <div className="flex flex-col justify-center space-y-4">
+              <div className="space-y-3">
+                <CardTitle className="text-2xl md:text-3xl">
+                  {product.title || product.name || 'Package'}
+                </CardTitle>
+                <CardDescription className="text-base md:text-lg">
+                  {product.description || 'Digital product package'}
+                </CardDescription>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Link
+                  href={tabUrl('level1')}
+                  className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted/50"
+                >
+                  <span className="font-medium">Level 1: {level1Title}</span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </Link>
+                <Link
+                  href={tabUrl('level2')}
+                  className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted/50"
+                >
+                  <span className="font-medium">Level 2: {level2Title}</span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </Link>
+                <Link
+                  href={tabUrl('level3')}
+                  className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted/50"
+                >
+                  <span className="font-medium">Level 3: {level3Title}</span>
+                  <ArrowRight className="h-4 w-4 text-muted-foreground" />
+                </Link>
+              </div>
             </div>
 
             {/* Right Column: 3D Mockup Image */}
@@ -68,44 +93,6 @@ export function PackageOverview({ product, progress, className }: PackageOvervie
                 />
               </div>
             )}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border-primary/20">
-        <CardHeader>
-          <div className="flex items-center gap-2">
-            <Layers className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">What&apos;s Included</CardTitle>
-          </div>
-          <CardDescription>
-            Three implementation levels with guides, frameworks, and templates. Use the tabs above
-            or the links below to jump to each level.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col gap-2">
-            <Link
-              href={tabUrl('level1')}
-              className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted/50"
-            >
-              <span className="font-medium">Level 1: {level1Title}</span>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
-            </Link>
-            <Link
-              href={tabUrl('level2')}
-              className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted/50"
-            >
-              <span className="font-medium">Level 2: {level2Title}</span>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
-            </Link>
-            <Link
-              href={tabUrl('level3')}
-              className="flex items-center justify-between rounded-lg border p-3 text-left transition-colors hover:bg-muted/50"
-            >
-              <span className="font-medium">Level 3: {level3Title}</span>
-              <ArrowRight className="h-4 w-4 text-muted-foreground" />
-            </Link>
           </div>
         </CardContent>
       </Card>
