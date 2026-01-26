@@ -138,36 +138,19 @@ export interface PaginatedResult<T> {
 export interface PaginatedBlogResult extends PaginatedResult<BlogPost> {}
 
 // Contact Submission types (migration 000036)
-export interface ContactSubmission {
-  id: string;
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  ip_address: string | null;
-  user_agent: string | null;
+// Based on Supabase generated types with stricter constraints
+import type { Database } from './supabase';
+
+export type ContactSubmissionRow = Database['public']['Tables']['contact_submissions']['Row'];
+export type ContactSubmissionInsert = Database['public']['Tables']['contact_submissions']['Insert'];
+export type ContactSubmissionUpdate = Database['public']['Tables']['contact_submissions']['Update'];
+
+// Enhanced type with stricter status constraint
+export interface ContactSubmission extends Omit<ContactSubmissionRow, 'status' | 'spam_score' | 'metadata' | 'created_at' | 'updated_at'> {
   status: 'pending' | 'read' | 'replied' | 'archived';
   spam_score: number;
   metadata: Record<string, any>;
   created_at: string;
   updated_at: string;
-}
-
-export interface ContactSubmissionInsert {
-  name: string;
-  email: string;
-  subject: string;
-  message: string;
-  ip_address?: string | null;
-  user_agent?: string | null;
-  status?: 'pending' | 'read' | 'replied' | 'archived';
-  spam_score?: number;
-  metadata?: Record<string, any>;
-}
-
-export interface ContactSubmissionUpdate {
-  status?: 'pending' | 'read' | 'replied' | 'archived';
-  spam_score?: number;
-  metadata?: Record<string, any>;
 }
 

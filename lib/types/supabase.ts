@@ -176,6 +176,51 @@ export type Database = {
         }
         Relationships: []
       }
+      contact_submissions: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          ip_address: string | null
+          message: string
+          metadata: Json | null
+          name: string
+          spam_score: number | null
+          status: string
+          subject: string
+          updated_at: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id?: string
+          ip_address?: string | null
+          message: string
+          metadata?: Json | null
+          name: string
+          spam_score?: number | null
+          status?: string
+          subject: string
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          ip_address?: string | null
+          message?: string
+          metadata?: Json | null
+          name?: string
+          spam_score?: number | null
+          status?: string
+          subject?: string
+          updated_at?: string | null
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       cookie_consents: {
         Row: {
           analytics: boolean
@@ -282,66 +327,6 @@ export type Database = {
             columns: ["order_item_id"]
             isOneToOne: false
             referencedRelation: "order_items"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      licenses: {
-        Row: {
-          access_granted_at: string | null
-          activated_at: string | null
-          created_at: string | null
-          expires_at: string | null
-          id: string
-          license_key: string
-          lifetime_access: boolean | null
-          order_id: string
-          product_id: string
-          status: string
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          access_granted_at?: string | null
-          activated_at?: string | null
-          created_at?: string | null
-          expires_at?: string | null
-          id?: string
-          license_key: string
-          lifetime_access?: boolean | null
-          order_id: string
-          product_id: string
-          status?: string
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          access_granted_at?: string | null
-          activated_at?: string | null
-          created_at?: string | null
-          expires_at?: string | null
-          id?: string
-          license_key?: string
-          lifetime_access?: boolean | null
-          order_id?: string
-          product_id?: string
-          status?: string
-          updated_at?: string | null
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "licenses_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: false
-            referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "licenses_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]
@@ -499,6 +484,12 @@ export type Database = {
           customer_email: string | null
           customer_name: string | null
           discount_amount: number | null
+          doer_coupon_code: string | null
+          doer_coupon_expires_at: string | null
+          doer_coupon_generated_at: string | null
+          doer_coupon_used: boolean | null
+          doer_coupon_used_at: string | null
+          doer_user_id: string | null
           id: string
           metadata: Json | null
           order_number: string | null
@@ -519,6 +510,12 @@ export type Database = {
           customer_email?: string | null
           customer_name?: string | null
           discount_amount?: number | null
+          doer_coupon_code?: string | null
+          doer_coupon_expires_at?: string | null
+          doer_coupon_generated_at?: string | null
+          doer_coupon_used?: boolean | null
+          doer_coupon_used_at?: string | null
+          doer_user_id?: string | null
           id?: string
           metadata?: Json | null
           order_number?: string | null
@@ -539,6 +536,12 @@ export type Database = {
           customer_email?: string | null
           customer_name?: string | null
           discount_amount?: number | null
+          doer_coupon_code?: string | null
+          doer_coupon_expires_at?: string | null
+          doer_coupon_generated_at?: string | null
+          doer_coupon_used?: boolean | null
+          doer_coupon_used_at?: string | null
+          doer_user_id?: string | null
           id?: string
           metadata?: Json | null
           order_number?: string | null
@@ -553,6 +556,48 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      package_products: {
+        Row: {
+          created_at: string | null
+          display_order: number | null
+          id: string
+          package_id: string
+          package_value: number | null
+          product_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          package_id: string
+          package_value?: number | null
+          product_id: string
+        }
+        Update: {
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          package_id?: string
+          package_value?: number | null
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "package_products_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "package_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_recommendations: {
         Row: {
@@ -657,11 +702,16 @@ export type Database = {
           id: string
           image_url: string | null
           images: Json | null
+          included_products: Json | null
+          is_current_version: boolean | null
+          levels: Json | null
           name: string
           original_price: number | null
           package_image: string | null
+          package_value: number | null
           price: number
           pricing_justification: string | null
+          product_type: string | null
           published: boolean | null
           rating: number | null
           review_count: number | null
@@ -671,6 +721,7 @@ export type Database = {
           tagline: string | null
           title: string | null
           updated_at: string | null
+          version_year: number | null
         }
         Insert: {
           active?: boolean | null
@@ -685,11 +736,16 @@ export type Database = {
           id?: string
           image_url?: string | null
           images?: Json | null
+          included_products?: Json | null
+          is_current_version?: boolean | null
+          levels?: Json | null
           name: string
           original_price?: number | null
           package_image?: string | null
+          package_value?: number | null
           price: number
           pricing_justification?: string | null
+          product_type?: string | null
           published?: boolean | null
           rating?: number | null
           review_count?: number | null
@@ -699,6 +755,7 @@ export type Database = {
           tagline?: string | null
           title?: string | null
           updated_at?: string | null
+          version_year?: number | null
         }
         Update: {
           active?: boolean | null
@@ -713,11 +770,16 @@ export type Database = {
           id?: string
           image_url?: string | null
           images?: Json | null
+          included_products?: Json | null
+          is_current_version?: boolean | null
+          levels?: Json | null
           name?: string
           original_price?: number | null
           package_image?: string | null
+          package_value?: number | null
           price?: number
           pricing_justification?: string | null
+          product_type?: string | null
           published?: boolean | null
           rating?: number | null
           review_count?: number | null
@@ -727,6 +789,7 @@ export type Database = {
           tagline?: string | null
           title?: string | null
           updated_at?: string | null
+          version_year?: number | null
         }
         Relationships: []
       }
@@ -1010,7 +1073,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      generate_license_key: { Args: never; Returns: string }
       generate_order_number: { Args: never; Returns: string }
     }
     Enums: {

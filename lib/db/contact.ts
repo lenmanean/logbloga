@@ -5,8 +5,24 @@
 
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import type { ContactSubmission, ContactSubmissionInsert, ContactSubmissionUpdate } from '@/lib/types/database';
+import type { Database } from '@/lib/types/supabase';
 
 type ContactSubmissionStatus = ContactSubmission['status'];
+type SupabaseContactSubmission = Database['public']['Tables']['contact_submissions']['Row'];
+
+/**
+ * Convert Supabase row type to our stricter ContactSubmission type
+ */
+function toContactSubmission(row: SupabaseContactSubmission): ContactSubmission {
+  return {
+    ...row,
+    status: row.status as ContactSubmission['status'],
+    spam_score: row.spam_score ?? 0,
+    metadata: (row.metadata as Record<string, any>) ?? {},
+    created_at: row.created_at ?? new Date().toISOString(),
+    updated_at: row.updated_at ?? new Date().toISOString(),
+  };
+}
 
 /**
  * Create a new contact submission
@@ -17,8 +33,8 @@ export async function createContactSubmission(
 ): Promise<ContactSubmission> {
   const supabase = await createClient();
 
-  const { data: submission, error } = await (supabase
-    .from('contact_submissions' as any)
+  const { data: submission, error } = await supabase
+    .from('contact_submissions')
     .insert({
       name: data.name,
       email: data.email,
@@ -31,14 +47,18 @@ export async function createContactSubmission(
       metadata: data.metadata || {},
     })
     .select()
-    .single()) as any;
+    .single();
 
   if (error) {
     console.error('Error creating contact submission:', error);
     throw new Error(`Failed to create contact submission: ${error.message}`);
   }
 
-  return submission as ContactSubmission;
+  if (!submission) {
+    throw new Error('Failed to create contact submission: No data returned');
+  }
+
+  return toContactSubmission(submission);
 }
 
 /**
@@ -48,11 +68,11 @@ export async function createContactSubmission(
 export async function getContactSubmission(id: string): Promise<ContactSubmission | null> {
   const supabase = await createServiceRoleClient();
 
-  const { data, error } = await (supabase
-    .from('contact_submissions' as any)
+  const { data, error } = await supabase
+    .from('contact_submissions')
     .select('*')
     .eq('id', id)
-    .single()) as any;
+    .single();
 
   if (error) {
     if (error.code === 'PGRST116') {
@@ -62,7 +82,11 @@ export async function getContactSubmission(id: string): Promise<ContactSubmissio
     throw new Error(`Failed to fetch contact submission: ${error.message}`);
   }
 
-  return data as ContactSubmission | null;
+  if (!data) {
+    return null;
+  }
+
+  return toContactSubmission(data);
 }
 
 /**
@@ -83,9 +107,9 @@ export async function getContactSubmissions(
 ): Promise<ContactSubmission[]> {
   const supabase = await createServiceRoleClient();
 
-  let query = (supabase
-    .from('contact_submissions' as any)
-    .select('*')) as any;
+  let query = supabase
+    .from('contact_submissions')
+    .select('*');
 
   if (options?.status) {
     query = query.eq('status', options.status);
@@ -119,7 +143,7 @@ export async function getContactSubmissions(
     throw new Error(`Failed to fetch contact submissions: ${error.message}`);
   }
 
-  return (data || []) as ContactSubmission[];
+  return (data || []).map(toContactSubmission);
 }
 
 /**
@@ -132,10 +156,10 @@ export async function updateContactSubmissionStatus(
 ): Promise<void> {
   const supabase = await createServiceRoleClient();
 
-  const { error } = await (supabase
-    .from('contact_submissions' as any)
+  const { error } = await supabase
+    .from('contact_submissions')
     .update({ status })
-    .eq('id', id)) as any;
+    .eq('id', id);
 
   if (error) {
     console.error('Error updating contact submission status:', error);
@@ -153,17 +177,21 @@ export async function updateContactSubmission(
 ): Promise<ContactSubmission> {
   const supabase = await createServiceRoleClient();
 
-  const { data, error } = await (supabase
-    .from('contact_submissions' as any)
+  const { data, error } = await supabase
+    .from('contact_submissions')
     .update(updates)
     .eq('id', id)
     .select()
-    .single()) as any;
+    .single();
 
   if (error) {
     console.error('Error updating contact submission:', error);
     throw new Error(`Failed to update contact submission: ${error.message}`);
   }
 
-  return data as ContactSubmission;
+  if (!data) {
+    throw new Error('Failed to update contact submission: No data returned');
+  }
+
+  return toContactSubmission(data);
 }
