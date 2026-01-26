@@ -6,7 +6,6 @@
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 import type { Product } from '@/lib/types/database';
@@ -55,13 +54,6 @@ export function ProductLibraryCard({ product, purchasedDate }: ProductLibraryCar
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {/* Category */}
-          {product.category && (
-            <Badge variant="secondary" className="text-xs">
-              {product.category}
-            </Badge>
-          )}
-
           {/* Access Button */}
           <Button variant="default" size="sm" className="w-full h-9">
             Access Product

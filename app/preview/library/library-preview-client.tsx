@@ -253,13 +253,6 @@ function PreviewProductLibraryCard({ product, purchasedDate }: { product: Produc
           </div>
         </CardHeader>
         <CardContent className="space-y-3">
-          {/* Category */}
-          {product.category && (
-            <Badge variant="secondary" className="text-xs">
-              {product.category}
-            </Badge>
-          )}
-
           {/* Access Button */}
           <Button variant="default" size="sm" className="w-full h-9">
             Access Product

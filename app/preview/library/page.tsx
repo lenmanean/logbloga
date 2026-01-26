@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen } from 'lucide-react';
 import { LibraryPreviewClient } from './library-preview-client';
-import { getAllMockPackages, getAllMockIndividualProducts } from '@/lib/mock-data/preview-library';
+import { getAllMockPackages } from '@/lib/mock-data/preview-library';
 import type { ProductWithPurchaseDate } from '@/lib/types/database';
 
 export const metadata = {
@@ -57,63 +57,11 @@ function mockPackageToProductWithPurchaseDate(mockPackage: ReturnType<typeof get
   };
 }
 
-/**
- * Convert mock individual product to ProductWithPurchaseDate format for component compatibility
- */
-function mockIndividualProductToProductWithPurchaseDate(mockProduct: ReturnType<typeof getAllMockIndividualProducts>[0]): ProductWithPurchaseDate {
-  const purchaseDate = new Date().toISOString();
-  const orderId = `preview-order-${mockProduct.id}`;
-
-  return {
-    id: mockProduct.id,
-    name: mockProduct.title, // Required field
-    title: mockProduct.title,
-    description: mockProduct.description,
-    category: mockProduct.category,
-    price: mockProduct.price,
-    original_price: mockProduct.originalPrice,
-    featured: mockProduct.featured,
-    active: true,
-    package_image: mockProduct.image || null,
-    images: mockProduct.image ? [mockProduct.image] as any : null,
-    tagline: null,
-    duration: mockProduct.duration,
-    content_hours: null,
-    rating: null,
-    review_count: null,
-    slug: mockProduct.slug,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    file_path: null,
-    file_size: null,
-    image_url: mockProduct.image || null,
-    published: true,
-    pricing_justification: null,
-    stripe_price_id: null,
-    stripe_product_id: null,
-    product_type: mockProduct.productType,
-    // Optional Product fields
-    included_products: null,
-    is_current_version: null,
-    levels: null,
-    package_value: null,
-    version_year: null,
-    // Purchase information
-    purchasedDate: purchaseDate,
-    orderId: orderId,
-  };
-}
-
 export default function PreviewLibraryPage() {
   const mockPackages = getAllMockPackages();
-  const mockIndividualProducts = getAllMockIndividualProducts();
   
-  // Convert both packages and individual products
-  const packageProducts = mockPackages.map(mockPackageToProductWithPurchaseDate);
-  const individualProductProducts = mockIndividualProducts.map(mockIndividualProductToProductWithPurchaseDate);
-  
-  // Combine both types of products
-  const mockProducts = [...packageProducts, ...individualProductProducts];
+  // Convert only packages (exclude tools and other products)
+  const mockProducts = mockPackages.map(mockPackageToProductWithPurchaseDate);
 
   return (
     <main className="min-h-screen bg-background">
