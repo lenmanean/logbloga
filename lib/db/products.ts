@@ -6,6 +6,19 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product, ExtendedProduct } from '@/lib/types/database';
 import type { ProductQueryOptions } from './types';
+import type { Database } from '@/lib/types/supabase';
+
+type SupabaseProduct = Database['public']['Tables']['products']['Row'];
+
+/**
+ * Convert Supabase product row to our Product type with proper type constraints
+ */
+function toProduct(row: SupabaseProduct): Product {
+  return {
+    ...row,
+    product_type: (row.product_type as Product['product_type']) ?? null,
+  };
+}
 
 /**
  * Get all active products
@@ -53,7 +66,7 @@ export async function getAllProducts(options?: ProductQueryOptions): Promise<Pro
     throw new Error(`Failed to fetch products: ${error.message}`);
   }
 
-  return data || [];
+  return (data || []).map(toProduct);
 }
 
 /**
@@ -100,10 +113,14 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     throw new Error(`Failed to fetch product: ${error.message}`);
   }
 
+  if (!data) {
+    return null;
+  }
+
   // Note: levels data is included in the returned product object
   // Parsing is done in components via parsePackageLevels helper when needed
 
-  return data;
+  return toProduct(data);
 }
 
 /**
@@ -146,7 +163,11 @@ export async function getProductById(id: string): Promise<Product | null> {
     throw new Error(`Failed to fetch product: ${error.message}`);
   }
 
-  return data;
+  if (!data) {
+    return null;
+  }
+
+  return toProduct(data);
 }
 
 /**
