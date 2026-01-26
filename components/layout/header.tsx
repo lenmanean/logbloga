@@ -194,10 +194,7 @@ export function Header() {
               onNavigate={() => router.push('/about')}
             >
               <DropdownMenuItem asChild>
-                <Link href="/about">About Us</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/contact">Contact Us</Link>
+                <Link href="/about">About</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/legal/terms">Terms & Conditions</Link>
@@ -207,6 +204,9 @@ export function Header() {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <Link href="/legal/cookies">Cookie Policy</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/contact">Contact</Link>
               </DropdownMenuItem>
             </NavDropdown>
           </nav>
@@ -421,14 +421,7 @@ export function Header() {
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
                     >
-                      About Us
-                    </Link>
-                    <Link
-                      href="/contact"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Contact Us
+                      About
                     </Link>
                     <Link
                       href="/legal/terms"
@@ -450,6 +443,13 @@ export function Header() {
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Cookie Policy
+                    </Link>
+                    <Link
+                      href="/contact"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Contact
                     </Link>
                   </div>
                 </div>
