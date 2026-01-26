@@ -39,6 +39,10 @@ export async function getAllProducts(options?: ProductQueryOptions): Promise<Pro
     query = query.eq('featured', options.featured);
   }
 
+  if (options?.productType) {
+    query = query.eq('product_type', options.productType);
+  }
+
   if (options?.search) {
     query = query.or(`title.ilike.%${options.search}%,description.ilike.%${options.search}%`);
   }

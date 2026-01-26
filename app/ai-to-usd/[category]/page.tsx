@@ -24,8 +24,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  // Fetch products from database by category
-  const dbProducts = await getProductsByCategory(typedCategoryId);
+  // Fetch packages from database by category (packages only)
+  const dbProducts = await getProductsByCategory(typedCategoryId, { productType: 'package' });
   
   // Convert database products to frontend Product format
   const categoryProducts = dbProducts.map(convertDbProductToFrontendProduct);
@@ -41,18 +41,18 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
             {categoryName}
           </h1>
           <p className="text-lg text-muted-foreground">
-            Discover all {categoryName.toLowerCase()} products designed to help you transform your skills and start earning.
+            Discover {categoryName.toLowerCase()} packages designed to help you transform your skills and start earning.
           </p>
         </div>
 
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-sm text-muted-foreground">
-            Showing {categoryProducts.length} {categoryProducts.length === 1 ? 'product' : 'products'}
+            Showing {categoryProducts.length} {categoryProducts.length === 1 ? 'package' : 'packages'}
           </p>
         </div>
 
-        {/* Products Grid */}
+        {/* Packages Grid */}
         {categoryProducts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {categoryProducts.map((product) => (
@@ -62,7 +62,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         ) : (
           <div className="text-center py-12">
             <p className="text-lg text-muted-foreground">
-              No products found in this category.
+              No packages found in this category.
             </p>
           </div>
         )}

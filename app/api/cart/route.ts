@@ -28,7 +28,7 @@ export async function GET() {
 /**
  * POST /api/cart
  * Add item to cart
- * Only allows packages to be added - individual products must be purchased via packages
+ * Only allows packages to be added
  */
 export async function POST(request: Request) {
   try {
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate that product is a package (individual products cannot be purchased separately)
+    // Validate that product is a package
     const { createClient } = await import('@/lib/supabase/server');
     const supabase = await createClient();
     
@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     // Only allow packages to be added to cart
     if (product.product_type !== 'package') {
       return NextResponse.json(
-        { error: 'Individual products cannot be purchased separately. Please purchase the package that includes this product.' },
+        { error: 'Only packages can be added to cart.' },
         { status: 400 }
       );
     }

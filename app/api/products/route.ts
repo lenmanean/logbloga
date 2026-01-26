@@ -3,7 +3,8 @@ import { getAllProducts } from '@/lib/db/products';
 
 export async function GET() {
   try {
-    const products = await getAllProducts({ active: true });
+    // Only return packages for customer-facing API
+    const products = await getAllProducts({ active: true, productType: 'package' });
     return NextResponse.json({ products });
   } catch (error) {
     console.error('Error fetching products:', error);

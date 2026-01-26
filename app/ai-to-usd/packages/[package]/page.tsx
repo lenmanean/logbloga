@@ -55,7 +55,8 @@ export async function generateStaticParams() {
     const { data: products, error } = await supabase
       .from('products')
       .select('slug')
-      .eq('active', true);
+      .eq('active', true)
+      .eq('product_type', 'package');
     
     if (error || !products) {
       console.error('Error generating static params:', error);
@@ -171,7 +172,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
           <div className="w-full order-2 lg:order-2">
             <ProductInfoPanel 
               package={packageProduct}
-              packageValue={packageData.package_value ? (typeof packageData.package_value === 'number' ? packageData.package_value : parseFloat(String(packageData.package_value))) : undefined}
             />
           </div>
         </div>

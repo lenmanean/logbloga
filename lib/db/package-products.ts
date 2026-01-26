@@ -1,6 +1,11 @@
 /**
  * Package-Product Relationship Database Operations
- * Handles queries for package-product relationships and calculations
+ * 
+ * DEPRECATED: This module is no longer used in customer-facing code.
+ * Individual products and package-product relationships have been removed from the storefront.
+ * This file is retained for potential migration/cleanup purposes only.
+ * 
+ * All functions in this module are deprecated and should not be used in new code.
  */
 
 import { createClient } from '@/lib/supabase/server';

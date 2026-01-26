@@ -20,5 +20,6 @@ export interface ProductQueryOptions extends QueryOptions {
   featured?: boolean;
   active?: boolean;
   search?: string;
+  productType?: 'package' | 'individual';
 }
 

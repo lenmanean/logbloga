@@ -28,7 +28,7 @@ export default async function LibraryPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold">My Library</h1>
           <p className="text-muted-foreground mt-2">
-            Access your purchased digital products
+            Access your purchased packages
           </p>
         </div>
 
@@ -36,9 +36,9 @@ export default async function LibraryPage() {
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <BookOpen className="h-12 w-12 text-muted-foreground mb-4" />
-              <CardTitle className="text-xl mb-2">No products yet</CardTitle>
+              <CardTitle className="text-xl mb-2">No packages yet</CardTitle>
               <CardDescription className="text-center">
-                You haven't purchased any products yet. Start shopping to build your library.
+                You haven't purchased any packages yet. Start shopping to build your library.
               </CardDescription>
             </CardContent>
           </Card>
