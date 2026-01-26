@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
@@ -13,31 +13,47 @@ interface NotificationPreferencesFormProps {
   onSave?: (preferences: NotificationPreferences) => void;
 }
 
+const defaultPreferences = {
+  email_order_confirmation: true,
+  email_order_shipped: true,
+  email_promotional: true,
+  email_product_updates: true,
+  email_newsletter: false,
+};
+
 export function NotificationPreferencesForm({
   initialPreferences,
   onSave,
 }: NotificationPreferencesFormProps) {
-  const [preferences, setPreferences] = useState({
-    email_order_confirmation: true,
-    email_order_shipped: true,
-    email_promotional: true,
-    email_product_updates: true,
-    email_newsletter: false,
-  });
+  const [preferences, setPreferences] = useState(defaultPreferences);
   const [isLoading, setIsLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const initialPreferencesRef = useRef<typeof defaultPreferences>(defaultPreferences);
 
   useEffect(() => {
-    if (initialPreferences) {
-      setPreferences({
-        email_order_confirmation: initialPreferences.email_order_confirmation,
-        email_order_shipped: initialPreferences.email_order_shipped,
-        email_promotional: initialPreferences.email_promotional,
-        email_product_updates: initialPreferences.email_product_updates,
-        email_newsletter: initialPreferences.email_newsletter,
-      });
-    }
+    const prefs = initialPreferences || defaultPreferences;
+    const prefsState = {
+      email_order_confirmation: prefs.email_order_confirmation,
+      email_order_shipped: prefs.email_order_shipped,
+      email_promotional: prefs.email_promotional,
+      email_product_updates: prefs.email_product_updates,
+      email_newsletter: prefs.email_newsletter,
+    };
+    setPreferences(prefsState);
+    initialPreferencesRef.current = prefsState;
   }, [initialPreferences]);
+
+  // Check if preferences have changed from initial state
+  const hasChanges = useMemo(() => {
+    const initial = initialPreferencesRef.current;
+    return (
+      preferences.email_order_confirmation !== initial.email_order_confirmation ||
+      preferences.email_order_shipped !== initial.email_order_shipped ||
+      preferences.email_promotional !== initial.email_promotional ||
+      preferences.email_product_updates !== initial.email_product_updates ||
+      preferences.email_newsletter !== initial.email_newsletter
+    );
+  }, [preferences]);
 
   const handleToggle = (key: keyof typeof preferences) => {
     setPreferences((prev) => ({
@@ -57,6 +73,14 @@ export function NotificationPreferencesForm({
 
       if (response.ok) {
         const data = await response.json();
+        // Update initial preferences ref to current state after successful save
+        initialPreferencesRef.current = {
+          email_order_confirmation: data.preferences.email_order_confirmation,
+          email_order_shipped: data.preferences.email_order_shipped,
+          email_promotional: data.preferences.email_promotional,
+          email_product_updates: data.preferences.email_product_updates,
+          email_newsletter: data.preferences.email_newsletter,
+        };
         onSave?.(data.preferences);
         // Optionally show success toast
       } else {
@@ -125,11 +149,13 @@ export function NotificationPreferencesForm({
           </div>
         ))}
       </CardContent>
-      <CardFooter>
-        <Button onClick={handleSave} disabled={isSaving} className="w-full">
-          {isSaving ? 'Saving...' : 'Save Preferences'}
-        </Button>
-      </CardFooter>
+      {hasChanges && (
+        <CardFooter className="pt-4">
+          <Button onClick={handleSave} disabled={isSaving} className="w-full">
+            {isSaving ? 'Saving...' : 'Save Preferences'}
+          </Button>
+        </CardFooter>
+      )}
     </Card>
   );
 }

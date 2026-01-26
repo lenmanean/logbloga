@@ -132,11 +132,13 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
             )}
           </div>
         </CardContent>
-        <CardFooter>
-          <Button type="submit" disabled={isLoading || !isDirty}>
-            {isLoading ? 'Saving...' : 'Save Changes'}
-          </Button>
-        </CardFooter>
+        {isDirty && (
+          <CardFooter className="pt-4">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Saving...' : 'Save Changes'}
+            </Button>
+          </CardFooter>
+        )}
       </form>
     </Card>
   );

@@ -2,6 +2,7 @@ import { requireAuth } from '@/lib/auth/utils';
 import { getUserProfile } from '@/lib/db/profiles';
 import { ProfileForm } from '@/components/account/profile-form';
 import { AvatarUpload } from '@/components/account/avatar-upload';
+import { ChangePasswordForm } from '@/components/account/change-password-form';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export const dynamic = 'force-dynamic';
@@ -38,6 +39,10 @@ export default async function ProfilePage() {
                 fullName: profile?.full_name || null,
               }}
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <ChangePasswordForm />
           </div>
         </div>
       </div>

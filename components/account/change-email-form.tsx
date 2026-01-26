@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -27,13 +27,21 @@ export function ChangeEmailForm() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<ChangeEmailFormData>({
     resolver: zodResolver(changeEmailSchema),
     defaultValues: {
       newEmail: user?.email || '',
     },
   });
+
+  useEffect(() => {
+    if (user?.email) {
+      reset({
+        newEmail: user.email,
+      });
+    }
+  }, [user?.email, reset]);
 
   const onSubmit = async (data: ChangeEmailFormData) => {
     setIsLoading(true);
@@ -123,11 +131,13 @@ export function ChangeEmailForm() {
             </p>
           </div>
         </CardContent>
-        <CardFooter>
-          <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Sending verification...' : 'Change Email'}
-          </Button>
-        </CardFooter>
+        {isDirty && (
+          <CardFooter className="pt-4">
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Sending verification...' : 'Change Email'}
+            </Button>
+          </CardFooter>
+        )}
       </form>
     </Card>
   );
