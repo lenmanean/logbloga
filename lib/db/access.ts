@@ -9,6 +9,19 @@
 import { createClient } from '@/lib/supabase/server';
 import type { Product } from '@/lib/types/database';
 import { getProductPackage } from './package-products';
+import type { Database } from '@/lib/types/supabase';
+
+type SupabaseProduct = Database['public']['Tables']['products']['Row'];
+
+/**
+ * Convert Supabase product row to our Product type with proper type constraints
+ */
+function toProduct(row: SupabaseProduct): Product {
+  return {
+    ...row,
+    product_type: (row.product_type as Product['product_type']) ?? null,
+  };
+}
 
 /**
  * Check if user has access to a specific product
