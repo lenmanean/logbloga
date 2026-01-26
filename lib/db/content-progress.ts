@@ -22,18 +22,27 @@ export interface ProgressMap {
     platform_guides: boolean;
     creative_frameworks: boolean;
     templates: boolean;
+    launch_marketing: boolean;
+    troubleshooting: boolean;
+    planning: boolean;
   };
   level2: {
     implementation_plan: boolean;
     platform_guides: boolean;
     creative_frameworks: boolean;
     templates: boolean;
+    launch_marketing: boolean;
+    troubleshooting: boolean;
+    planning: boolean;
   };
   level3: {
     implementation_plan: boolean;
     platform_guides: boolean;
     creative_frameworks: boolean;
     templates: boolean;
+    launch_marketing: boolean;
+    troubleshooting: boolean;
+    planning: boolean;
   };
 }
 
@@ -64,18 +73,27 @@ export async function getProgress(
       platform_guides: false,
       creative_frameworks: false,
       templates: false,
+      launch_marketing: false,
+      troubleshooting: false,
+      planning: false,
     },
     level2: {
       implementation_plan: false,
       platform_guides: false,
       creative_frameworks: false,
       templates: false,
+      launch_marketing: false,
+      troubleshooting: false,
+      planning: false,
     },
     level3: {
       implementation_plan: false,
       platform_guides: false,
       creative_frameworks: false,
       templates: false,
+      launch_marketing: false,
+      troubleshooting: false,
+      planning: false,
     },
   };
 

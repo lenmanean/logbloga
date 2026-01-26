@@ -44,14 +44,17 @@
 
 ### 1.3 Content Categories per Level
 
-Every level includes exactly **four** content categories:
+Every level includes **seven** content categories (Web Apps package; other packages retain four until expanded):
 
 1. **Implementation Plan** — One file per level. Step-by-step roadmap.
 2. **Platform Setup Guides** — One or more guides per level. Account creation, configuration, screenshots.
 3. **Creative Decision Frameworks** — Worksheets, exercises, decision prompts.
 4. **Templates & Checklists** — Ready-to-use resources (docs, spreadsheets, code, ZIPs).
+5. **Launch & Marketing** — Launch checklists, marketing guides, customer acquisition. (Web Apps only.)
+6. **Troubleshooting** — Common issues, solutions, debugging guides. (Web Apps only.)
+7. **Time & Budget Planning** — Time investment planners, budget worksheets, success metrics. (Web Apps only.)
 
-File types used: **MD**, **PDF**, **XLSX**, **DOCX**, **ZIP**. Web Apps uses **MD** for plans, guides, and frameworks; other packages use **PDF** for those. Templates vary by package.
+File types used: **MD**, **PDF**, **XLSX**, **DOCX**, **ZIP**. Web Apps uses **MD** for plans, guides, frameworks, and the new categories; other packages use **PDF** for those. Templates vary by package.
 
 ---
 
@@ -80,7 +83,22 @@ File types used: **MD**, **PDF**, **XLSX**, **DOCX**, **ZIP**. Web Apps uses **M
 - **Formats:** PDF, XLSX, DOCX, MD, ZIP (code or multi-file packs).
 - **Role:** Editable templates, checklists, code starters, or bundled assets.
 
-### 2.5 Schedule (optional, in DB)
+### 2.5 Launch & Marketing (Web Apps)
+
+- **Role:** Launch checklists, basic marketing, customer acquisition, enterprise playbooks.
+- **Format:** Web Apps → `.md`.
+
+### 2.6 Troubleshooting (Web Apps)
+
+- **Role:** Common issues and solutions, debugging guides.
+- **Format:** Web Apps → `.md`.
+
+### 2.7 Time & Budget Planning (Web Apps)
+
+- **Role:** Time investment planners, budget worksheets, success metrics, scaling budgets.
+- **Format:** Web Apps → `.md`.
+
+### 2.8 Schedule (optional, in DB)
 
 Levels can optionally store a **schedule** (trackable timeline) in the database:
 
@@ -114,8 +132,13 @@ This is separate from the implementation plan **file**; the file is the canonica
 | 8 | Creative Framework | `simple-mvp-framework.md` | md | Simple MVP Framework |
 | 9 | Template | `basic-starter-template.zip` | zip | Basic Starter Template — minimal Next.js starter |
 | 10 | Template | `mvp-checklist.md` | md | MVP Checklist |
+| 11 | Launch & Marketing | `web-apps-level-1-launch-checklist.md` | md | Launch Checklist |
+| 12 | Launch & Marketing | `web-apps-level-1-basic-marketing-guide.md` | md | Basic Marketing Guide |
+| 13 | Troubleshooting | `web-apps-level-1-common-issues-solutions.md` | md | Common Issues & Solutions |
+| 14 | Planning | `web-apps-level-1-time-investment-planner.md` | md | Time Investment Planner |
+| 15 | Planning | `web-apps-level-1-budget-planning-worksheet.md` | md | Budget Planning Worksheet |
 
-**Level 1 total: 10 files.**
+**Level 1 total: 15 files.**
 
 ---
 
@@ -138,8 +161,12 @@ This is separate from the implementation plan **file**; the file is the canonica
 | 8 | Creative Framework | `pricing-strategy-saas.md` | md | Pricing Strategy for SaaS |
 | 9 | Template | `saas-starter-template.zip` | zip | SaaS Starter Template — Next.js + Supabase + Stripe |
 | 10 | Template | `development-milestones-checklist.md` | md | Development Milestones Checklist |
+| 11 | Launch & Marketing | `web-apps-level-2-customer-acquisition-guide.md` | md | Customer Acquisition Guide |
+| 12 | Troubleshooting | `web-apps-level-2-troubleshooting-debugging-guide.md` | md | Troubleshooting & Debugging Guide |
+| 13 | Planning | `web-apps-level-2-success-metrics-dashboard.md` | md | Success Metrics Dashboard |
+| 14 | Planning | `web-apps-level-2-budget-planning-worksheet.md` | md | Budget Planning Worksheet |
 
-**Level 2 total: 10 files.**
+**Level 2 total: 14 files.**
 
 ---
 
@@ -161,12 +188,16 @@ This is separate from the implementation plan **file**; the file is the canonica
 | 7 | Creative Framework | `scaling-strategy.md` | md | Scaling Strategy |
 | 8 | Template | `advanced-saas-template.zip` | zip | Advanced SaaS Template — AI, multi-tenant, integrations |
 | 9 | Template | `ai-integration-examples.zip` | zip | AI Integration Examples — OpenAI, Anthropic, prompts, patterns |
+| 10 | Launch & Marketing | `web-apps-level-3-enterprise-marketing-playbook.md` | md | Enterprise Marketing Playbook |
+| 11 | Launch & Marketing | `web-apps-level-3-partnership-strategy.md` | md | Partnership Strategy |
+| 12 | Troubleshooting | `web-apps-level-3-advanced-troubleshooting-guide.md` | md | Advanced Troubleshooting Guide |
+| 13 | Planning | `web-apps-level-3-scaling-operations-budget.md` | md | Scaling Operations Budget |
 
-**Level 3 total: 9 files.**
+**Level 3 total: 13 files.**
 
 ---
 
-**Web Apps package total: 29 files** (10 + 10 + 9).
+**Web Apps package total: 42 files** (15 + 14 + 13).
 
 ---
 
@@ -439,22 +470,22 @@ All listed guide **files** are included regardless of path; users choose which p
 
 | Package      | Level 1 | Level 2 | Level 3 | **Total** |
 |-------------|---------|---------|---------|-----------|
-| Web Apps    | 10      | 10      | 9       | **29**    |
+| Web Apps    | 15      | 14      | 13      | **42**    |
 | Social Media| 9       | 9       | 6       | **24**    |
 | Agency      | 9       | 9       | 7       | **25**    |
 | Freelancing | 9       | 10      | 7       | **26**    |
-| **Total**   | **37**  | **38**  | **29**  | **104**   |
+| **Total**   | **42**  | **42**  | **33**  | **117**   |
 
 ### 8.2 File Type Distribution (all packages)
 
 | Type | Use | Count |
 |------|-----|-------|
-| **md** | Web Apps plans, guides, frameworks, checklists; Freelancing templates | 28 |
+| **md** | Web Apps plans, guides, frameworks, checklists, launch/marketing, troubleshooting, planning; Freelancing templates | 41 |
 | **pdf** | Social Media, Agency, Freelancing plans, guides, frameworks, checklists | 62 |
 | **zip** | Code templates, multi-file packs | 11 |
 | **xlsx** | Editable templates (content calendar, strategy) | 2 |
 | **docx** | Editable docs (client reporting) | 1 |
-| **Total** | | **104** |
+| **Total** | | **117** |
 
 ### 8.3 Content Category Counts (all levels, all packages)
 
@@ -464,13 +495,16 @@ All listed guide **files** are included regardless of path; users choose which p
 | Platform Setup Guides  | 40          |
 | Creative Frameworks    | 31          |
 | Templates & Checklists | 21 (including ZIP bundles with multiple assets) |
+| Launch & Marketing     | 5 (Web Apps only) |
+| Troubleshooting        | 3 (Web Apps only) |
+| Time & Budget Planning | 5 (Web Apps only) |
 
 ### 8.4 Master File List (alphabetical)
 
 Use this for checklists when creating or uploading. Filenames are unique across packages unless otherwise noted; same name in different packages = different file (e.g. `service-suite-development.pdf` in Social Media L3 vs Agency L2).
 
 **Web Apps (md, zip):**  
-`advanced-mvp-framework.md`, `advanced-saas-template.zip`, `advanced-supabase-setup.md`, `ai-integration-examples.zip`, `ai-integration-guide.md`, `basic-starter-template.zip`, `development-milestones-checklist.md`, `github-setup-guide.md`, `go-to-market-strategy.md`, `idea-generation-framework.md`, `mvp-checklist.md`, `mvp-development-framework.md`, `nextjs-saas-starter-setup.md`, `nextjs-simple-setup-guide.md`, `pricing-strategy-saas.md`, `saas-starter-template.zip`, `scaling-strategy.md`, `simple-mvp-framework.md`, `stripe-basic-setup.md`, `stripe-integration-guide.md`, `supabase-setup-guide.md`, `third-party-integrations-guide.md`, `value-proposition-worksheet.md`, `vercel-advanced-deployment.md`, `vercel-deployment-guide.md`, `vercel-edge-functions.md`, `web-apps-level-1-plan.md`, `web-apps-level-2-plan.md`, `web-apps-level-3-plan.md`.
+`advanced-mvp-framework.md`, `advanced-saas-template.zip`, `advanced-supabase-setup.md`, `ai-integration-examples.zip`, `ai-integration-guide.md`, `basic-starter-template.zip`, `development-milestones-checklist.md`, `github-setup-guide.md`, `go-to-market-strategy.md`, `idea-generation-framework.md`, `mvp-checklist.md`, `mvp-development-framework.md`, `nextjs-saas-starter-setup.md`, `nextjs-simple-setup-guide.md`, `pricing-strategy-saas.md`, `saas-starter-template.zip`, `scaling-strategy.md`, `simple-mvp-framework.md`, `stripe-basic-setup.md`, `stripe-integration-guide.md`, `supabase-setup-guide.md`, `third-party-integrations-guide.md`, `value-proposition-worksheet.md`, `vercel-advanced-deployment.md`, `vercel-deployment-guide.md`, `vercel-edge-functions.md`, `web-apps-level-1-basic-marketing-guide.md`, `web-apps-level-1-budget-planning-worksheet.md`, `web-apps-level-1-common-issues-solutions.md`, `web-apps-level-1-launch-checklist.md`, `web-apps-level-1-plan.md`, `web-apps-level-1-time-investment-planner.md`, `web-apps-level-2-budget-planning-worksheet.md`, `web-apps-level-2-customer-acquisition-guide.md`, `web-apps-level-2-plan.md`, `web-apps-level-2-success-metrics-dashboard.md`, `web-apps-level-2-troubleshooting-debugging-guide.md`, `web-apps-level-3-advanced-troubleshooting-guide.md`, `web-apps-level-3-enterprise-marketing-playbook.md`, `web-apps-level-3-partnership-strategy.md`, `web-apps-level-3-plan.md`, `web-apps-level-3-scaling-operations-budget.md`.
 
 **Social Media (pdf, xlsx, docx, zip):**  
 `advanced-analytics-setup.pdf`, `agency-operations-framework.pdf`, `brand-identity-framework.pdf`, `buffer-paid-setup-guide.pdf`, `buffer-setup-guide.pdf`, `canva-setup-guide.pdf`, `client-onboarding-checklist.pdf`, `client-onboarding-framework.pdf`, `client-reporting-template.docx`, `content-calendar-template.xlsx`, `content-direction-framework.pdf`, `content-strategy-template.xlsx`, `daily-posting-checklist.pdf`, `google-analytics-setup-guide.pdf`, `hootsuite-setup-guide.pdf`, `later-setup-guide.pdf`, `metricool-setup-guide.pdf`, `niche-selection-worksheet.pdf`, `service-pricing-framework.pdf`, `service-suite-development.pdf`, `social-media-level-1-plan.pdf`, `social-media-level-2-plan.pdf`, `social-media-level-3-plan.pdf`, `team-management-templates.zip`.

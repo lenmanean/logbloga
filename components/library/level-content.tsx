@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BookOpen, Settings, Lightbulb, FileText, Check } from 'lucide-react';
+import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar } from 'lucide-react';
 import type { LevelContent } from '@/lib/data/package-level-content';
 import {
   isHostedContent,
@@ -38,7 +38,15 @@ export function LevelContent({
   className,
 }: LevelContentProps) {
   const [isMarkingComplete, setIsMarkingComplete] = useState<string | null>(null);
-  const { implementationPlan, platformGuides, creativeFrameworks, templates } = levelData;
+  const {
+    implementationPlan,
+    platformGuides,
+    creativeFrameworks,
+    templates,
+    launchMarketing = [],
+    troubleshooting = [],
+    planning = [],
+  } = levelData;
   const levelProgress = progress[`level${level}` as keyof ProgressMap];
 
   const handleMarkComplete = async (component: LevelComponent) => {
@@ -359,6 +367,231 @@ export function LevelContent({
                     filename={t.file}
                     label={`Download ${label}`}
                   />
+                </div>
+              );
+            })}
+          </div>
+        </ContentSection>
+      )}
+
+      {/* Launch & Marketing */}
+      {launchMarketing.length > 0 && (
+        <ContentSection
+          id="section-launch-marketing"
+          title="Launch & Marketing"
+          description="Guides for launching your product and basic marketing"
+          icon={Rocket}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-end">
+              {!levelProgress.launch_marketing && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleMarkComplete('launch_marketing')}
+                  disabled={isMarkingComplete === 'launch_marketing'}
+                >
+                  {isMarkingComplete === 'launch_marketing' ? (
+                    'Marking...'
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-1" />
+                      Mark Complete
+                    </>
+                  )}
+                </Button>
+              )}
+              {levelProgress.launch_marketing && (
+                <div className="flex items-center gap-1 text-sm text-primary">
+                  <Check className="h-4 w-4" />
+                  <span>Completed</span>
+                </div>
+              )}
+            </div>
+            {launchMarketing.map((item, idx) => {
+              const hosted = isHostedContent(item.type);
+              const Icon = getFileTypeIcon(item.type);
+              const label = item.name || formatFileName(item.file);
+              return (
+                <div
+                  key={idx}
+                  className="rounded-lg border bg-muted/30 p-4 space-y-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Icon className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">{label}</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {item.type.toUpperCase()}
+                    </Badge>
+                  </div>
+                  {item.description && (
+                    <p className="text-xs text-muted-foreground">
+                      {item.description}
+                    </p>
+                  )}
+                  {hosted ? (
+                    <MarkdownViewer
+                      productId={productId}
+                      filename={item.file}
+                      className="mt-2"
+                    />
+                  ) : (
+                    <DownloadButton
+                      productId={productId}
+                      filename={item.file}
+                      label={`Download ${label}`}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </ContentSection>
+      )}
+
+      {/* Troubleshooting */}
+      {troubleshooting.length > 0 && (
+        <ContentSection
+          id="section-troubleshooting"
+          title="Troubleshooting"
+          description="Common issues and solutions"
+          icon={Wrench}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-end">
+              {!levelProgress.troubleshooting && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleMarkComplete('troubleshooting')}
+                  disabled={isMarkingComplete === 'troubleshooting'}
+                >
+                  {isMarkingComplete === 'troubleshooting' ? (
+                    'Marking...'
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-1" />
+                      Mark Complete
+                    </>
+                  )}
+                </Button>
+              )}
+              {levelProgress.troubleshooting && (
+                <div className="flex items-center gap-1 text-sm text-primary">
+                  <Check className="h-4 w-4" />
+                  <span>Completed</span>
+                </div>
+              )}
+            </div>
+            {troubleshooting.map((item, idx) => {
+              const hosted = isHostedContent(item.type);
+              const Icon = getFileTypeIcon(item.type);
+              const label = item.name || formatFileName(item.file);
+              return (
+                <div
+                  key={idx}
+                  className="rounded-lg border bg-muted/30 p-4 space-y-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Icon className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">{label}</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {item.type.toUpperCase()}
+                    </Badge>
+                  </div>
+                  {item.description && (
+                    <p className="text-xs text-muted-foreground">
+                      {item.description}
+                    </p>
+                  )}
+                  {hosted ? (
+                    <MarkdownViewer
+                      productId={productId}
+                      filename={item.file}
+                      className="mt-2"
+                    />
+                  ) : (
+                    <DownloadButton
+                      productId={productId}
+                      filename={item.file}
+                      label={`Download ${label}`}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </ContentSection>
+      )}
+
+      {/* Time & Budget Planning */}
+      {planning.length > 0 && (
+        <ContentSection
+          id="section-planning"
+          title="Time & Budget Planning"
+          description="Time investment and budget planning resources"
+          icon={Calendar}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-end">
+              {!levelProgress.planning && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleMarkComplete('planning')}
+                  disabled={isMarkingComplete === 'planning'}
+                >
+                  {isMarkingComplete === 'planning' ? (
+                    'Marking...'
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-1" />
+                      Mark Complete
+                    </>
+                  )}
+                </Button>
+              )}
+              {levelProgress.planning && (
+                <div className="flex items-center gap-1 text-sm text-primary">
+                  <Check className="h-4 w-4" />
+                  <span>Completed</span>
+                </div>
+              )}
+            </div>
+            {planning.map((item, idx) => {
+              const hosted = isHostedContent(item.type);
+              const Icon = getFileTypeIcon(item.type);
+              const label = item.name || formatFileName(item.file);
+              return (
+                <div
+                  key={idx}
+                  className="rounded-lg border bg-muted/30 p-4 space-y-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Icon className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">{label}</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {item.type.toUpperCase()}
+                    </Badge>
+                  </div>
+                  {item.description && (
+                    <p className="text-xs text-muted-foreground">
+                      {item.description}
+                    </p>
+                  )}
+                  {hosted ? (
+                    <MarkdownViewer
+                      productId={productId}
+                      filename={item.file}
+                      className="mt-2"
+                    />
+                  ) : (
+                    <DownloadButton
+                      productId={productId}
+                      filename={item.file}
+                      label={`Download ${label}`}
+                    />
+                  )}
                 </div>
               );
             })}

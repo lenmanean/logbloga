@@ -31,6 +31,9 @@ export function ProgressStepper({
       'platform_guides',
       'creative_frameworks',
       'templates',
+      'launch_marketing',
+      'troubleshooting',
+      'planning',
     ];
 
     return (
@@ -94,7 +97,7 @@ export function ProgressStepper({
     );
   }
 
-  // Overview variant: 3 levels with 4 components each
+  // Overview variant: 3 levels with 7 components each
   const levels: Array<{ level: 1 | 2 | 3; title: string }> = [
     { level: 1, title: getLevelTitle(slug, 1) },
     { level: 2, title: getLevelTitle(slug, 2) },
@@ -106,6 +109,9 @@ export function ProgressStepper({
     'platform_guides',
     'creative_frameworks',
     'templates',
+    'launch_marketing',
+    'troubleshooting',
+    'planning',
   ];
 
   return (

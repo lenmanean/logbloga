@@ -25,18 +25,27 @@ const DEFAULT_PROGRESS: ProgressMap = {
     platform_guides: false,
     creative_frameworks: false,
     templates: false,
+    launch_marketing: false,
+    troubleshooting: false,
+    planning: false,
   },
   level2: {
     implementation_plan: false,
     platform_guides: false,
     creative_frameworks: false,
     templates: false,
+    launch_marketing: false,
+    troubleshooting: false,
+    planning: false,
   },
   level3: {
     implementation_plan: false,
     platform_guides: false,
     creative_frameworks: false,
     templates: false,
+    launch_marketing: false,
+    troubleshooting: false,
+    planning: false,
   },
 };
 

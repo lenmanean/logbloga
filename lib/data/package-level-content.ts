@@ -32,6 +32,24 @@ export interface LevelContent {
     name?: string;
     description?: string;
   }>;
+  launchMarketing?: Array<{
+    file: string;
+    type: string;
+    name?: string;
+    description?: string;
+  }>;
+  troubleshooting?: Array<{
+    file: string;
+    type: string;
+    name?: string;
+    description?: string;
+  }>;
+  planning?: Array<{
+    file: string;
+    type: string;
+    name?: string;
+    description?: string;
+  }>;
 }
 
 export interface PackageLevelContent {
@@ -63,6 +81,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       templates: [
         { file: 'basic-starter-template.zip', type: 'zip', name: 'Basic Starter Template' },
         { file: 'mvp-checklist.md', type: 'md', name: 'MVP Checklist' }
+      ],
+      launchMarketing: [
+        { file: 'web-apps-level-1-launch-checklist.md', type: 'md', name: 'Launch Checklist' },
+        { file: 'web-apps-level-1-basic-marketing-guide.md', type: 'md', name: 'Basic Marketing Guide' }
+      ],
+      troubleshooting: [
+        { file: 'web-apps-level-1-common-issues-solutions.md', type: 'md', name: 'Common Issues & Solutions' }
+      ],
+      planning: [
+        { file: 'web-apps-level-1-time-investment-planner.md', type: 'md', name: 'Time Investment Planner' },
+        { file: 'web-apps-level-1-budget-planning-worksheet.md', type: 'md', name: 'Budget Planning Worksheet' }
       ]
     },
     level2: {
@@ -86,6 +115,16 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       templates: [
         { file: 'saas-starter-template.zip', type: 'zip', name: 'SaaS Starter Template' },
         { file: 'development-milestones-checklist.md', type: 'md', name: 'Development Milestones Checklist' }
+      ],
+      launchMarketing: [
+        { file: 'web-apps-level-2-customer-acquisition-guide.md', type: 'md', name: 'Customer Acquisition Guide' }
+      ],
+      troubleshooting: [
+        { file: 'web-apps-level-2-troubleshooting-debugging-guide.md', type: 'md', name: 'Troubleshooting & Debugging Guide' }
+      ],
+      planning: [
+        { file: 'web-apps-level-2-success-metrics-dashboard.md', type: 'md', name: 'Success Metrics Dashboard' },
+        { file: 'web-apps-level-2-budget-planning-worksheet.md', type: 'md', name: 'Budget Planning Worksheet' }
       ]
     },
     level3: {
@@ -108,6 +147,16 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       templates: [
         { file: 'advanced-saas-template.zip', type: 'zip', name: 'Advanced SaaS Template' },
         { file: 'ai-integration-examples.zip', type: 'zip', name: 'AI Integration Examples' }
+      ],
+      launchMarketing: [
+        { file: 'web-apps-level-3-enterprise-marketing-playbook.md', type: 'md', name: 'Enterprise Marketing Playbook' },
+        { file: 'web-apps-level-3-partnership-strategy.md', type: 'md', name: 'Partnership Strategy' }
+      ],
+      troubleshooting: [
+        { file: 'web-apps-level-3-advanced-troubleshooting-guide.md', type: 'md', name: 'Advanced Troubleshooting Guide' }
+      ],
+      planning: [
+        { file: 'web-apps-level-3-scaling-operations-budget.md', type: 'md', name: 'Scaling Operations Budget' }
       ]
     }
   },
@@ -345,6 +394,18 @@ export function getLevelContent(
       templates: databaseLevel.templates?.length > 0
         ? databaseLevel.templates
         : staticContent.templates,
+      launchMarketing:
+        databaseLevel.launchMarketing?.length > 0
+          ? databaseLevel.launchMarketing
+          : staticContent.launchMarketing,
+      troubleshooting:
+        databaseLevel.troubleshooting?.length > 0
+          ? databaseLevel.troubleshooting
+          : staticContent.troubleshooting,
+      planning:
+        databaseLevel.planning?.length > 0
+          ? databaseLevel.planning
+          : staticContent.planning,
     };
   }
 

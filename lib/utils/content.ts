@@ -67,13 +67,16 @@ export function getContentType(filename: string): string {
 
 /**
  * Level component types for progress tracking.
- * Matches the four main sections in each package level.
+ * Matches the main sections in each package level.
  */
 export const LEVEL_COMPONENTS = [
   'implementation_plan',
   'platform_guides',
   'creative_frameworks',
   'templates',
+  'launch_marketing',
+  'troubleshooting',
+  'planning',
 ] as const;
 
 export type LevelComponent = (typeof LEVEL_COMPONENTS)[number];
@@ -86,6 +89,9 @@ export const LEVEL_COMPONENT_LABELS: Record<LevelComponent, string> = {
   platform_guides: 'Platform Setup Guides',
   creative_frameworks: 'Creative Decision Frameworks',
   templates: 'Templates & Checklists',
+  launch_marketing: 'Launch & Marketing',
+  troubleshooting: 'Troubleshooting',
+  planning: 'Time & Budget Planning',
 };
 
 /**
