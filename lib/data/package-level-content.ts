@@ -4,7 +4,7 @@
  * This file contains the complete content structure for each level of each package.
  * Used to display accurate content information when database data is incomplete.
  * 
- * Data sourced from COMPLETE_PACKAGE_AND_PRODUCT_RUNDOWN.md
+ * Canonical content structure; see docs/PACKAGE_CONTENT_INFRASTRUCTURE.md
  */
 
 export interface LevelContent {
