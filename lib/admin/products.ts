@@ -5,6 +5,19 @@
 
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import type { Product } from '@/lib/types/database';
+import type { Database } from '@/lib/types/supabase';
+
+type SupabaseProduct = Database['public']['Tables']['products']['Row'];
+
+/**
+ * Convert Supabase product row to our Product type with proper type constraints
+ */
+function toProduct(row: SupabaseProduct): Product {
+  return {
+    ...row,
+    product_type: (row.product_type as Product['product_type']) ?? null,
+  };
+}
 
 export interface AdminProductFilters {
   category?: string;
@@ -48,7 +61,7 @@ export async function getAllProductsAdmin(filters?: AdminProductFilters): Promis
     throw new Error(`Failed to fetch products: ${error.message}`);
   }
 
-  return data || [];
+  return (data || []).map(toProduct);
 }
 
 /**
@@ -71,7 +84,11 @@ export async function getProductByIdAdmin(id: string): Promise<Product | null> {
     throw new Error(`Failed to fetch product: ${error.message}`);
   }
 
-  return data;
+  if (!data) {
+    return null;
+  }
+
+  return toProduct(data);
 }
 
 /**
@@ -132,7 +149,7 @@ export async function createProductAdmin(productData: Partial<Product>): Promise
     throw new Error('Failed to create product: No data returned');
   }
 
-  return data;
+  return toProduct(data);
 }
 
 /**
@@ -163,7 +180,7 @@ export async function updateProductAdmin(
     throw new Error('Failed to update product: No data returned');
   }
 
-  return data;
+  return toProduct(data);
 }
 
 /**
