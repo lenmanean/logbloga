@@ -99,6 +99,7 @@ export function Header() {
   const [typingComplete, setTypingComplete] = useState(false);
   const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   // Get user initials for avatar fallback
   const getUserInitials = (name?: string, email?: string) => {
@@ -170,6 +171,9 @@ export function Header() {
               onNavigate={() => router.push('/resources')}
             >
               <DropdownMenuItem asChild>
+                <Link href="/blog">Blog</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/resources/guides">Guides</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -181,8 +185,28 @@ export function Header() {
               <DropdownMenuItem asChild>
                 <Link href="/resources/community">Community Forum</Link>
               </DropdownMenuItem>
+            </NavDropdown>
+            <NavDropdown
+              label="About"
+              href="/about"
+              isOpen={aboutOpen}
+              onOpenChange={setAboutOpen}
+              onNavigate={() => router.push('/about')}
+            >
               <DropdownMenuItem asChild>
-                <Link href="/blog">Blog</Link>
+                <Link href="/about">About Us</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/contact">Contact Us</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/legal/terms">Terms & Conditions</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/legal/privacy">Privacy Policy</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/legal/cookies">Cookie Policy</Link>
               </DropdownMenuItem>
             </NavDropdown>
           </nav>
@@ -353,6 +377,13 @@ export function Header() {
                   <div className="text-lg font-medium py-2">Resources</div>
                   <div className="flex flex-col pl-4 space-y-2">
                     <Link
+                      href="/blog"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Blog
+                    </Link>
+                    <Link
                       href="/resources/guides"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
@@ -380,12 +411,45 @@ export function Header() {
                     >
                       Community Forum
                     </Link>
+                  </div>
+                </div>
+                <div className="flex flex-col">
+                  <div className="text-lg font-medium py-2">About</div>
+                  <div className="flex flex-col pl-4 space-y-2">
                     <Link
-                      href="/blog"
+                      href="/about"
                       onClick={() => setOpen(false)}
                       className="text-base transition-colors hover:text-primary py-1"
                     >
-                      Blog
+                      About Us
+                    </Link>
+                    <Link
+                      href="/contact"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Contact Us
+                    </Link>
+                    <Link
+                      href="/legal/terms"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Terms & Conditions
+                    </Link>
+                    <Link
+                      href="/legal/privacy"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Privacy Policy
+                    </Link>
+                    <Link
+                      href="/legal/cookies"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Cookie Policy
                     </Link>
                   </div>
                 </div>
