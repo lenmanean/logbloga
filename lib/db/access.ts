@@ -137,7 +137,10 @@ export async function getUserProductAccess(userId: string): Promise<Product[]> {
   for (const item of orderItems) {
     if (!item.product_id) continue;
 
-    const product = item.product as Product;
+    const rawProduct = item.product as SupabaseProduct;
+    if (!rawProduct) continue;
+    
+    const product = toProduct(rawProduct);
     
     // Add direct product
     if (!productIds.has(product.id)) {
@@ -157,7 +160,9 @@ export async function getUserProductAccess(userId: string): Promise<Product[]> {
 
       if (!ppError && packageProducts) {
         for (const pp of packageProducts) {
-          const includedProduct = pp.product as Product;
+          const rawIncludedProduct = pp.product as SupabaseProduct;
+          if (!rawIncludedProduct) continue;
+          const includedProduct = toProduct(rawIncludedProduct);
           if (!productIds.has(includedProduct.id)) {
             products.push(includedProduct);
             productIds.add(includedProduct.id);
@@ -324,7 +329,12 @@ export async function getIncludedProductsAccess(
     return [];
   }
 
-  return (packageProducts as any[]).map((pp: any) => pp.product as Product);
+  return (packageProducts as any[])
+    .map((pp: any) => {
+      const rawProduct = pp.product as SupabaseProduct;
+      return rawProduct ? toProduct(rawProduct) : null;
+    })
+    .filter((p): p is Product => p !== null);
 }
 
 /**
@@ -375,6 +385,9 @@ export async function getPackageProductsFromOrder(orderId: string): Promise<Prod
   }
 
   return data
-    .map(item => item.product as Product)
+    .map(item => {
+      const rawProduct = item.product as SupabaseProduct;
+      return rawProduct ? toProduct(rawProduct) : null;
+    })
     .filter((p): p is Product => p !== null);
 }

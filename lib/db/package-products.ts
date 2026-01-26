@@ -5,6 +5,19 @@
 
 import { createClient } from '@/lib/supabase/server';
 import type { Product } from '@/lib/types/database';
+import type { Database } from '@/lib/types/supabase';
+
+type SupabaseProduct = Database['public']['Tables']['products']['Row'];
+
+/**
+ * Convert Supabase product row to our Product type with proper type constraints
+ */
+function toProduct(row: SupabaseProduct): Product {
+  return {
+    ...row,
+    product_type: (row.product_type as Product['product_type']) ?? null,
+  };
+}
 
 export interface PackageProduct {
   id: string;
@@ -45,14 +58,17 @@ export async function getPackageProducts(packageId: string): Promise<PackageProd
     throw new Error(`Failed to fetch package products: ${error.message}`);
   }
 
-  return ((data || []) as any[]).map((item: any) => ({
-    id: item.id,
-    product_id: item.product_id,
-    package_id: item.package_id,
-    package_value: item.package_value ? parseFloat(String(item.package_value)) : null,
-    display_order: item.display_order || 0,
-    product: item.product as Product,
-  }));
+  return ((data || []) as any[]).map((item: any) => {
+    const rawProduct = item.product as SupabaseProduct;
+    return {
+      id: item.id,
+      product_id: item.product_id,
+      package_id: item.package_id,
+      package_value: item.package_value ? parseFloat(String(item.package_value)) : null,
+      display_order: item.display_order || 0,
+      product: rawProduct ? toProduct(rawProduct) : undefined,
+    };
+  });
 }
 
 /**
@@ -98,7 +114,8 @@ export async function getProductPackage(productId: string): Promise<Product | nu
     throw new Error(`Failed to fetch product package: ${error.message}`);
   }
 
-  return (data as any)?.package as Product || null;
+  const rawPackage = (data as any)?.package as SupabaseProduct;
+  return rawPackage ? toProduct(rawPackage) : null;
 }
 
 /**
@@ -171,12 +188,14 @@ export async function getPackageWithIncludedProducts(
   const totalPackageValue = await calculatePackageValue(packageId);
 
   return {
-    package: packageData as Product,
-    includedProducts: includedProducts.map(pp => ({
-      product: pp.product!,
-      package_value: pp.package_value || 0,
-      display_order: pp.display_order,
-    })),
+    package: toProduct(packageData),
+    includedProducts: includedProducts
+      .filter(pp => pp.product !== undefined)
+      .map(pp => ({
+        product: pp.product!,
+        package_value: pp.package_value || 0,
+        display_order: pp.display_order,
+      })),
     totalPackageValue,
   };
 }
@@ -270,13 +289,21 @@ export async function getUserPurchasedProducts(userId: string): Promise<Product[
       .in('package_id', packageIds);
 
     if (!ppError && ppData) {
-      includedProducts = (ppData as any[]).map((pp: any) => pp.product as Product);
+      includedProducts = (ppData as any[])
+        .map((pp: any) => {
+          const rawProduct = pp.product as SupabaseProduct;
+          return rawProduct ? toProduct(rawProduct) : null;
+        })
+        .filter((p): p is Product => p !== null);
     }
   }
 
   // Combine direct products and included products, remove duplicates
   const directProductsList = ((directProducts || []) as any[])
-    .map((p: any) => p.product as Product)
+    .map((p: any) => {
+      const rawProduct = p.product as SupabaseProduct;
+      return rawProduct ? toProduct(rawProduct) : null;
+    })
     .filter((p): p is Product => p !== null);
 
   const allProducts = [...directProductsList, ...includedProducts];
