@@ -64,3 +64,33 @@ export function getContentType(filename: string): string {
   const ext = filename.split('.').pop()?.toLowerCase() || '';
   return MIME_TYPES[ext] ?? 'application/octet-stream';
 }
+
+/**
+ * Level component types for progress tracking.
+ * Matches the four main sections in each package level.
+ */
+export const LEVEL_COMPONENTS = [
+  'implementation_plan',
+  'platform_guides',
+  'creative_frameworks',
+  'templates',
+] as const;
+
+export type LevelComponent = (typeof LEVEL_COMPONENTS)[number];
+
+/**
+ * Display labels for level components.
+ */
+export const LEVEL_COMPONENT_LABELS: Record<LevelComponent, string> = {
+  implementation_plan: 'Implementation Plan',
+  platform_guides: 'Platform Setup Guides',
+  creative_frameworks: 'Creative Decision Frameworks',
+  templates: 'Templates & Checklists',
+};
+
+/**
+ * Validate if a string is a valid level component type.
+ */
+export function isValidLevelComponent(value: string): value is LevelComponent {
+  return LEVEL_COMPONENTS.includes(value as LevelComponent);
+}

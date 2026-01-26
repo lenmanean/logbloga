@@ -4,18 +4,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Layers, Sparkles } from 'lucide-react';
+import { ArrowRight, Layers } from 'lucide-react';
 import { getLevelTitle } from '@/lib/data/package-level-titles';
+import { ProgressStepper } from '@/components/library/progress-stepper';
 import type { Product } from '@/lib/types/database';
+import type { ProgressMap } from '@/lib/db/content-progress';
 import { cn } from '@/lib/utils';
 
 interface PackageOverviewProps {
   product: Product;
+  progress: ProgressMap;
   className?: string;
 }
 
-export function PackageOverview({ product, className }: PackageOverviewProps) {
+export function PackageOverview({ product, progress, className }: PackageOverviewProps) {
   const pathname = usePathname();
   const slug = (product.slug || product.category || '') as string;
 
@@ -31,6 +33,16 @@ export function PackageOverview({ product, className }: PackageOverviewProps) {
 
   return (
     <div className={cn('space-y-6', className)}>
+      {/* Progress Stepper */}
+      <div className="mb-6">
+        <ProgressStepper
+          productId={product.id}
+          slug={slug}
+          progress={progress}
+          variant="overview"
+        />
+      </div>
+
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">
@@ -54,18 +66,11 @@ export function PackageOverview({ product, className }: PackageOverviewProps) {
         )}
       </Card>
 
-      {product.category && (
-        <div>
-          <p className="text-sm text-muted-foreground mb-1">Category</p>
-          <Badge variant="secondary">{product.category}</Badge>
-        </div>
-      )}
-
       <Card className="border-primary/20">
         <CardHeader>
           <div className="flex items-center gap-2">
             <Layers className="h-5 w-5 text-primary" />
-            <CardTitle className="text-lg">What's Included</CardTitle>
+            <CardTitle className="text-lg">What&apos;s Included</CardTitle>
           </div>
           <CardDescription>
             Three implementation levels with guides, frameworks, and templates. Use the tabs above
@@ -95,22 +100,6 @@ export function PackageOverview({ product, className }: PackageOverviewProps) {
               <span className="font-medium">Level 3: {level3Title}</span>
               <ArrowRight className="h-4 w-4 text-muted-foreground" />
             </Link>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="bg-muted/30">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-3">
-            <Sparkles className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-            <div>
-              <p className="font-semibold mb-1">Lifetime access</p>
-              <p className="text-sm text-muted-foreground">
-                You have full access to all levels, including implementation plans, platform setup
-                guides, creative frameworks, and templates. Hosted content can be read in-browser;
-                other files are available to download.
-              </p>
-            </div>
           </div>
         </CardContent>
       </Card>

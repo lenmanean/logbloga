@@ -10,6 +10,7 @@ interface ContentSectionProps {
   icon?: LucideIcon;
   children: React.ReactNode;
   className?: string;
+  id?: string;
 }
 
 export function ContentSection({
@@ -18,9 +19,10 @@ export function ContentSection({
   icon: Icon,
   children,
   className,
+  id,
 }: ContentSectionProps) {
   return (
-    <Card className={cn('overflow-hidden', className)}>
+    <Card id={id} className={cn('overflow-hidden', className)}>
       <CardContent className="pt-6">
         <div className="space-y-4">
           <div className="flex items-start gap-3">
