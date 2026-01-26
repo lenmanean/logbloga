@@ -17,8 +17,8 @@ export async function createContactSubmission(
 ): Promise<ContactSubmission> {
   const supabase = await createClient();
 
-  const { data: submission, error } = await supabase
-    .from('contact_submissions')
+  const { data: submission, error } = await (supabase
+    .from('contact_submissions' as any)
     .insert({
       name: data.name,
       email: data.email,
@@ -31,14 +31,14 @@ export async function createContactSubmission(
       metadata: data.metadata || {},
     })
     .select()
-    .single();
+    .single()) as any;
 
   if (error) {
     console.error('Error creating contact submission:', error);
     throw new Error(`Failed to create contact submission: ${error.message}`);
   }
 
-  return submission;
+  return submission as ContactSubmission;
 }
 
 /**
@@ -48,11 +48,11 @@ export async function createContactSubmission(
 export async function getContactSubmission(id: string): Promise<ContactSubmission | null> {
   const supabase = await createServiceRoleClient();
 
-  const { data, error } = await supabase
-    .from('contact_submissions')
+  const { data, error } = await (supabase
+    .from('contact_submissions' as any)
     .select('*')
     .eq('id', id)
-    .single();
+    .single()) as any;
 
   if (error) {
     if (error.code === 'PGRST116') {
@@ -62,7 +62,7 @@ export async function getContactSubmission(id: string): Promise<ContactSubmissio
     throw new Error(`Failed to fetch contact submission: ${error.message}`);
   }
 
-  return data;
+  return data as ContactSubmission | null;
 }
 
 /**
@@ -83,9 +83,9 @@ export async function getContactSubmissions(
 ): Promise<ContactSubmission[]> {
   const supabase = await createServiceRoleClient();
 
-  let query = supabase
-    .from('contact_submissions')
-    .select('*');
+  let query = (supabase
+    .from('contact_submissions' as any)
+    .select('*')) as any;
 
   if (options?.status) {
     query = query.eq('status', options.status);
@@ -119,7 +119,7 @@ export async function getContactSubmissions(
     throw new Error(`Failed to fetch contact submissions: ${error.message}`);
   }
 
-  return data || [];
+  return (data || []) as ContactSubmission[];
 }
 
 /**
@@ -132,10 +132,10 @@ export async function updateContactSubmissionStatus(
 ): Promise<void> {
   const supabase = await createServiceRoleClient();
 
-  const { error } = await supabase
-    .from('contact_submissions')
+  const { error } = await (supabase
+    .from('contact_submissions' as any)
     .update({ status })
-    .eq('id', id);
+    .eq('id', id)) as any;
 
   if (error) {
     console.error('Error updating contact submission status:', error);
@@ -153,17 +153,17 @@ export async function updateContactSubmission(
 ): Promise<ContactSubmission> {
   const supabase = await createServiceRoleClient();
 
-  const { data, error } = await supabase
-    .from('contact_submissions')
+  const { data, error } = await (supabase
+    .from('contact_submissions' as any)
     .update(updates)
     .eq('id', id)
     .select()
-    .single();
+    .single()) as any;
 
   if (error) {
     console.error('Error updating contact submission:', error);
     throw new Error(`Failed to update contact submission: ${error.message}`);
   }
 
-  return data;
+  return data as ContactSubmission;
 }
