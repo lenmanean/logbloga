@@ -8,7 +8,6 @@ import { LevelContent } from '@/components/library/level-content';
 import type { Product } from '@/lib/types/database';
 import type { LevelContent as LevelContentType } from '@/lib/data/package-level-content';
 import { cn } from '@/lib/utils';
-import { Loader2 } from 'lucide-react';
 
 type TabValue = 'overview' | 'level1' | 'level2' | 'level3';
 
@@ -38,40 +37,57 @@ export function LibraryPackageTabs({
   const router = useRouter();
   const pathname = usePathname();
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const transitionTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
-    };
-  }, []);
+  const pendingTabRef = useRef<TabValue | null>(null);
+  const safetyTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const tab = (searchParams.get('tab') as TabValue) || 'overview';
   const validTab: TabValue =
     tab === 'level1' || tab === 'level2' || tab === 'level3' ? tab : 'overview';
 
+  // When URL has updated to the target tab, fade in and re-enable interaction
+  useEffect(() => {
+    if (!isTransitioning || pendingTabRef.current === null) return;
+    if (validTab !== pendingTabRef.current) return;
+
+    pendingTabRef.current = null;
+    if (safetyTimeoutRef.current) {
+      clearTimeout(safetyTimeoutRef.current);
+      safetyTimeoutRef.current = null;
+    }
+    setIsTransitioning(false);
+  }, [isTransitioning, validTab]);
+
+  useEffect(() => {
+    return () => {
+      if (safetyTimeoutRef.current) clearTimeout(safetyTimeoutRef.current);
+    };
+  }, []);
+
   const setTab = useCallback(
     (value: string) => {
-      if (value === validTab) return;
-      if (transitionTimeoutRef.current) {
-        clearTimeout(transitionTimeoutRef.current);
-        transitionTimeoutRef.current = null;
-      }
+      const next = value as TabValue;
+      if (next === validTab) return;
+      if (isTransitioning) return;
+
+      pendingTabRef.current = next;
       setIsTransitioning(true);
+
       const params = new URLSearchParams(searchParams.toString());
-      if (value === 'overview') {
-        params.delete('tab');
-      } else {
-        params.set('tab', value);
-      }
+      if (next === 'overview') params.delete('tab');
+      else params.set('tab', next);
       const q = params.toString();
       router.push(q ? `${pathname}?${q}` : pathname, { scroll: false });
-      transitionTimeoutRef.current = setTimeout(() => {
-        transitionTimeoutRef.current = null;
-        setIsTransitioning(false);
-      }, 400);
+
+      // Fallback: clear transitioning if URL never updates (e.g. navigation error)
+      safetyTimeoutRef.current = setTimeout(() => {
+        safetyTimeoutRef.current = null;
+        if (pendingTabRef.current !== null) {
+          pendingTabRef.current = null;
+          setIsTransitioning(false);
+        }
+      }, 2000);
     },
-    [validTab, searchParams, router, pathname]
+    [validTab, isTransitioning, searchParams, router, pathname]
   );
 
   return (
@@ -80,7 +96,13 @@ export function LibraryPackageTabs({
       onValueChange={setTab}
       className={cn('w-full', className)}
     >
-      <TabsList className="flex w-full flex-wrap h-auto gap-1.5 p-1.5 rounded-lg bg-muted">
+      <TabsList
+        className={cn(
+          'flex w-full flex-wrap h-auto gap-1.5 p-1.5 rounded-lg bg-muted transition-opacity duration-150',
+          isTransitioning && 'pointer-events-none opacity-70'
+        )}
+        aria-busy={isTransitioning}
+      >
         <TabsTrigger value="overview" className={TAB_TRIGGER_CLASS}>
           Overview
         </TabsTrigger>
@@ -95,21 +117,12 @@ export function LibraryPackageTabs({
         </TabsTrigger>
       </TabsList>
 
-      <div className="relative min-h-[280px] mt-6">
-        {isTransitioning && (
-          <div
-            className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 rounded-lg bg-background/95 backdrop-blur-sm border border-border/50 animate-fade-in"
-            role="status"
-            aria-live="polite"
-            aria-label="Loading tab content"
-          >
-            <Loader2 className="h-10 w-10 animate-spin text-primary" />
-            <p className="text-sm font-medium text-muted-foreground">
-              Loading…
-            </p>
-          </div>
+      <div
+        className={cn(
+          'relative min-h-[280px] mt-6 transition-opacity duration-150 ease-out',
+          isTransitioning ? 'opacity-0' : 'opacity-100'
         )}
-
+      >
         <TabsContent value="overview" className="mt-0 data-[state=inactive]:hidden">
           <PackageOverview product={product} />
         </TabsContent>
