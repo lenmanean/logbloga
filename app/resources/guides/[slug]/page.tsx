@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
 
   if (!guide) {
     return {
-      title: 'Guide Not Found | LogBloga',
+      title: 'Guide Not Found | Logbloga',
     };
   }
 
   return {
-    title: `${guide.title} | Guides | LogBloga`,
+    title: `${guide.title} | Guides | Logbloga`,
     description: guide.description,
     openGraph: {
       title: guide.title,

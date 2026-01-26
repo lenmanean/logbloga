@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { CheckoutSuccessContent } from './success-content';
 
 export const metadata = {
-  title: 'Order Confirmed | LogBloga',
+  title: 'Order Confirmed | Logbloga',
   description: 'Your order has been confirmed',
 };
 

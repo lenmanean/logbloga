@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Cookie Policy | LogBloga',
-  description: 'Learn about how we use cookies and similar technologies on LogBloga.',
+  title: 'Cookie Policy | Logbloga',
+  description: 'Learn about how we use cookies and similar technologies on Logbloga.',
 };
 
 export default function CookiePolicyPage() {

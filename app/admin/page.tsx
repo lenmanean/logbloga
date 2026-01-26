@@ -11,7 +11,7 @@ import { TopProducts } from '@/components/admin/top-products';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Admin Dashboard | LogBloga',
+  title: 'Admin Dashboard | Logbloga',
   description: 'Admin dashboard overview',
 };
 

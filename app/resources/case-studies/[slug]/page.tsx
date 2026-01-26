@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
 
   if (!study) {
     return {
-      title: 'Case Study Not Found | LogBloga',
+      title: 'Case Study Not Found | Logbloga',
     };
   }
 
   return {
-    title: `${study.title} | Case Studies | LogBloga`,
+    title: `${study.title} | Case Studies | Logbloga`,
     description: study.description,
     openGraph: {
       title: study.title,
@@ -83,7 +83,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'LogBloga',
+      name: 'Logbloga',
     },
   };
 

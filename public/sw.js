@@ -1,5 +1,5 @@
 /**
- * Service Worker for LogBloga
+ * Service Worker for Logbloga
  * Implements caching strategy for offline support
  */
 

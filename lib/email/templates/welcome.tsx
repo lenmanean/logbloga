@@ -30,15 +30,15 @@ export function WelcomeEmail({ data }: WelcomeEmailProps) {
   return (
     <Html>
       <Head />
-      <Preview>Welcome to LogBloga!</Preview>
+      <Preview>Welcome to Logbloga!</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Heading style={h1}>Welcome to LogBloga!</Heading>
+          <Heading style={h1}>Welcome to Logbloga!</Heading>
           <Text style={text}>
             Hi {user.name || 'there'},
           </Text>
           <Text style={text}>
-            We're thrilled to have you join our community! LogBloga is your destination for digital products, technology insights, and productivity tools.
+            We're thrilled to have you join our community! Logbloga is your destination for digital products, technology insights, and productivity tools.
           </Text>
 
           <Section style={featuresSection}>
@@ -73,7 +73,7 @@ export function WelcomeEmail({ data }: WelcomeEmailProps) {
           </Section>
 
           <Text style={footer}>
-            Thank you for choosing LogBloga. We're excited to have you on board!
+            Thank you for choosing Logbloga. We're excited to have you on board!
           </Text>
         </Container>
       </Body>

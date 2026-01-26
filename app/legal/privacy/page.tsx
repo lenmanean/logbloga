@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Privacy Policy | LogBloga',
+  title: 'Privacy Policy | Logbloga',
   description: 'Our privacy policy explains how we collect, use, and protect your personal information.',
 };
 
@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
           <p className="mb-4">
-            At LogBloga, we respect your privacy and are committed to protecting your personal data. 
+            At Logbloga, we respect your privacy and are committed to protecting your personal data. 
             This privacy policy explains how we collect, use, and safeguard your information when you 
             use our website and services.
           </p>

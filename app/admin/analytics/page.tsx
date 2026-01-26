@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Analytics | Admin Dashboard | LogBloga',
+  title: 'Analytics | Admin Dashboard | Logbloga',
   description: 'Store analytics and reports',
 };
 

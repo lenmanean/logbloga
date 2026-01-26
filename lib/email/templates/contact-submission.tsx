@@ -72,7 +72,7 @@ export function ContactSubmissionEmail({ data }: ContactSubmissionEmailProps) {
           </Section>
 
           <Text style={footer}>
-            This is an automated notification from the LogBloga contact form.
+            This is an automated notification from the Logbloga contact form.
           </Text>
         </Container>
       </Body>

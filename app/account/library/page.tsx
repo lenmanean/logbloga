@@ -7,7 +7,7 @@ import { LibraryClient } from './library-client';
 import type { ProductWithPurchaseDate } from '@/lib/db/access';
 
 export const metadata = {
-  title: 'My Library | LogBloga',
+  title: 'My Library | Logbloga',
   description: 'Access your purchased digital products',
 };
 

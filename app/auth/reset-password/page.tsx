@@ -3,8 +3,8 @@ import { ResetPasswordForm } from '@/components/auth/reset-password-form';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Reset Password | LogBloga',
-  description: 'Reset your LogBloga account password',
+  title: 'Reset Password | Logbloga',
+  description: 'Reset your Logbloga account password',
 };
 
 export default function ResetPasswordPage() {

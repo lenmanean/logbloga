@@ -13,7 +13,7 @@ import type { OrderStatus } from '@/lib/types/database';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Order Details | Admin Dashboard | LogBloga',
+  title: 'Order Details | Admin Dashboard | Logbloga',
   description: 'Order details and management',
 };
 

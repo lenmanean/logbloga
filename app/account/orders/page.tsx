@@ -7,7 +7,7 @@ import { Package } from 'lucide-react';
 import { OrdersListClient } from './orders-list-client';
 
 export const metadata = {
-  title: 'Order History | LogBloga',
+  title: 'Order History | Logbloga',
   description: 'View your order history',
 };
 

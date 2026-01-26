@@ -5,10 +5,10 @@ import { faqs } from '@/lib/resources/faq';
 export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'FAQ | Resources | LogBloga',
+  title: 'FAQ | Resources | Logbloga',
   description: 'Find answers to common questions about our products, services, and AI implementation.',
   openGraph: {
-    title: 'FAQ | Resources | LogBloga',
+    title: 'FAQ | Resources | Logbloga',
     description: 'Find answers to common questions about our products, services, and AI implementation.',
     type: 'website',
   },

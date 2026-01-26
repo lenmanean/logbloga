@@ -33,7 +33,7 @@ export async function generateInvoicePDF(order: OrderWithItems): Promise<Buffer>
       // Company/Brand Info
       doc
         .fontSize(12)
-        .text('LogBloga', { align: 'left' })
+        .text('Logbloga', { align: 'left' })
         .fontSize(10)
         .text('Digital Products & Resources', { align: 'left' })
         .moveDown(2);

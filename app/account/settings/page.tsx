@@ -9,7 +9,7 @@ import { DeleteAccountButton } from '@/components/account/delete-account-button'
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Account Settings | LogBloga',
+  title: 'Account Settings | Logbloga',
   description: 'Manage your account settings',
 };
 

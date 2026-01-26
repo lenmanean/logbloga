@@ -1,6 +1,6 @@
 # Unimplemented Features & Missing Content
 
-This document provides a comprehensive list of features, pages, and content that have not yet been implemented in the LogBloga application.
+This document provides a comprehensive list of features, pages, and content that have not yet been implemented in the Logbloga application.
 
 ---
 

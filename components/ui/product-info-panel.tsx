@@ -220,7 +220,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
                         className="h-6 w-6 object-contain"
                         unoptimized
                       />
-                      DOER Integration with LogBloga AI to USD Packages
+                      DOER Integration with Logbloga AI to USD Packages
                     </DialogTitle>
                     <DialogDescription>
                       Learn how DOER enhances your package experience
@@ -232,7 +232,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
                         <h3 className="font-semibold text-lg mb-2">What is DOER?</h3>
                         <p className="text-sm text-muted-foreground">
                           DOER is a powerful project management and task tracking platform that helps you organize, 
-                          manage, and execute your projects efficiently. When you purchase any LogBloga AI to USD package, 
+                          manage, and execute your projects efficiently. When you purchase any Logbloga AI to USD package, 
                           you receive 6 months of free DOER Pro subscription to help you implement and track your progress.
                         </p>
                       </div>
@@ -240,7 +240,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
                       <div>
                         <h3 className="font-semibold text-lg mb-2">How DOER Works with Your Package</h3>
                         <p className="text-sm text-muted-foreground mb-3">
-                          DOER seamlessly integrates with your LogBloga packages to provide:
+                          DOER seamlessly integrates with your Logbloga packages to provide:
                         </p>
                         <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground ml-4">
                           <li>Project tracking and milestone management for each package level</li>
@@ -254,7 +254,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, pa
                       <div>
                         <h3 className="font-semibold text-lg mb-2">Getting Started</h3>
                         <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground ml-4">
-                          <li>Purchase your LogBloga AI to USD package</li>
+                          <li>Purchase your Logbloga AI to USD package</li>
                           <li>Receive your unique DOER Pro coupon code after purchase</li>
                           <li>Visit usedoer.com/checkout and apply your coupon code</li>
                           <li>Set up your DOER workspace and import your package implementation plan</li>

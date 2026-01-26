@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Profile | LogBloga',
+  title: 'Profile | Logbloga',
   description: 'Manage your profile information',
 };
 

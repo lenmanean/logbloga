@@ -31,7 +31,7 @@ export function ContactConfirmationEmail({ data }: ContactConfirmationEmailProps
   return (
     <Html>
       <Head />
-      <Preview>We received your message - LogBloga</Preview>
+      <Preview>We received your message - Logbloga</Preview>
       <Body style={main}>
         <Container style={container}>
           <Heading style={h1}>We Received Your Message</Heading>
@@ -41,7 +41,7 @@ export function ContactConfirmationEmail({ data }: ContactConfirmationEmailProps
           </Text>
           
           <Text style={text}>
-            Thank you for contacting LogBloga! We've received your message regarding <strong>"{subject}"</strong> and will get back to you as soon as possible.
+            Thank you for contacting Logbloga! We've received your message regarding <strong>"{subject}"</strong> and will get back to you as soon as possible.
           </Text>
 
           <Section style={infoSection}>

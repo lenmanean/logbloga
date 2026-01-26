@@ -37,12 +37,12 @@ export async function generateMetadata({ params }: ToolPageProps): Promise<Metad
 
   if (!tool) {
     return {
-      title: 'Tool Not Found | LogBloga',
+      title: 'Tool Not Found | Logbloga',
     };
   }
 
   return {
-    title: `${tool.title} | Tools & Templates | LogBloga`,
+    title: `${tool.title} | Tools & Templates | Logbloga`,
     description: tool.description,
     openGraph: {
       title: tool.title,

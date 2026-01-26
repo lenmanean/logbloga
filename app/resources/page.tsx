@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Card, CardContent } from '@/components/ui/card';
-import { FileText, TrendingUp, HelpCircle, Users } from 'lucide-react';
+import { FileText, TrendingUp, HelpCircle, Users, BookOpen } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface ResourceCardProps {
@@ -39,6 +39,12 @@ function ResourceCard({ title, description, href, icon: Icon, className }: Resou
 }
 
 const resources = [
+  {
+    title: 'Blog',
+    description: 'Read the latest articles, insights, and updates about AI tools, business strategies, and success stories.',
+    href: '/blog',
+    icon: BookOpen,
+  },
   {
     title: 'Guides',
     description: 'Step-by-step tutorials and comprehensive guides to help you master AI tools and techniques.',

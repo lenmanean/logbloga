@@ -3,8 +3,8 @@ import { SignUpForm } from '@/components/auth/signup-form';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Sign Up | LogBloga',
-  description: 'Create a new LogBloga account',
+  title: 'Sign Up | Logbloga',
+  description: 'Create a new Logbloga account',
 };
 
 export default function SignUpPage() {

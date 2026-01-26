@@ -11,7 +11,7 @@ const AdminHeader = dynamic(() => import('@/components/admin/admin-header').then
 });
 
 export const metadata = {
-  title: 'Admin Dashboard | LogBloga',
+  title: 'Admin Dashboard | Logbloga',
   description: 'Admin dashboard for managing the store',
 };
 

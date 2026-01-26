@@ -72,7 +72,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
 
   if (!post) {
     return {
-      title: 'Post Not Found | LogBloga',
+      title: 'Post Not Found | Logbloga',
     };
   }
 
@@ -82,7 +82,7 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
   const modifiedDate = post.updated_at ? new Date(post.updated_at) : null;
 
   return {
-    title: `${title} | LogBloga`,
+    title: `${title} | Logbloga`,
     description,
     openGraph: {
       title,
@@ -131,7 +131,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     } : undefined,
     publisher: {
       '@type': 'Organization',
-      name: 'LogBloga',
+      name: 'Logbloga',
       logo: {
         '@type': 'ImageObject',
         url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://logbloga.com'}/logo.png`,

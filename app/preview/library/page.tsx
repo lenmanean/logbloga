@@ -6,7 +6,7 @@ import { getAllMockPackages, getAllMockIndividualProducts } from '@/lib/mock-dat
 import type { ProductWithPurchaseDate } from '@/lib/types/database';
 
 export const metadata = {
-  title: 'Preview Library | LogBloga',
+  title: 'Preview Library | Logbloga',
   description: 'Visual testing - All packages and individual products with mock data',
 };
 

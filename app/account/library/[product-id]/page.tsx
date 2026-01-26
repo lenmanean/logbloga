@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const metadata = {
-  title: 'Product Access | LogBloga',
+  title: 'Product Access | Logbloga',
   description: 'Access your purchased digital product',
 };
 

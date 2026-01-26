@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Refund Policy | LogBloga',
+  title: 'Refund Policy | Logbloga',
   description: 'Our refund policy explains the terms and conditions for returns and refunds.',
 };
 

@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service | LogBloga',
-  description: 'Terms and conditions for using LogBloga services.',
+  title: 'Terms of Service | Logbloga',
+  description: 'Terms and conditions for using Logbloga services.',
 };
 
 export default function TermsOfServicePage() {
@@ -20,7 +20,7 @@ export default function TermsOfServicePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
           <p className="mb-4">
-            By accessing and using LogBloga, creating an account, or making a purchase, you explicitly 
+            By accessing and using Logbloga, creating an account, or making a purchase, you explicitly 
             accept and agree to be bound by the terms and provisions of this agreement. Your acceptance 
             is indicated by checking the required checkbox during account creation or checkout. If you do 
             not agree to these terms, please do not use our services.
@@ -30,7 +30,7 @@ export default function TermsOfServicePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">2. Use Rights</h2>
           <p className="mb-4">
-            When you purchase a digital product from LogBloga, you receive lifetime access to that product. 
+            When you purchase a digital product from Logbloga, you receive lifetime access to that product. 
             You may use the products for personal and commercial purposes, including creating your own 
             templates, content, and business materials based on our products. However, you are subject to 
             the following restrictions:
@@ -112,8 +112,8 @@ export default function TermsOfServicePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">7. Intellectual Property</h2>
           <p className="mb-4">
-            All content on LogBloga, including but not limited to text, graphics, logos, images, 
-            and software, is the property of LogBloga or its content suppliers and is protected by 
+            All content on Logbloga, including but not limited to text, graphics, logos, images, 
+            and software, is the property of Logbloga or its content suppliers and is protected by 
             international copyright laws.
           </p>
         </section>
@@ -121,13 +121,13 @@ export default function TermsOfServicePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">8. Disclaimer</h2>
           <p className="mb-4">
-            The materials on LogBloga are provided on an &quot;as is&quot; basis. LogBloga makes no warranties, 
+            The materials on Logbloga are provided on an &quot;as is&quot; basis. Logbloga makes no warranties, 
             expressed or implied, and hereby disclaims and negates all other warranties including, 
             without limitation, implied warranties or conditions of merchantability, fitness for a 
             particular purpose, or non-infringement of intellectual property or other violation of rights.
           </p>
           <p className="mb-4">
-            <strong>Business and Earnings Disclaimer:</strong> LogBloga makes no representations, warranties, 
+            <strong>Business and Earnings Disclaimer:</strong> Logbloga makes no representations, warranties, 
             or guarantees regarding any level of business success, income, revenue, or profit that you may 
             achieve by using our products or services. Any revenue, profit, or earnings figures displayed 
             on our website are illustrative examples only and do not represent actual results you will achieve.
@@ -137,14 +137,14 @@ export default function TermsOfServicePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">9. Limitations</h2>
           <p className="mb-4">
-            In no event shall LogBloga or its suppliers be liable for any damages (including, without 
+            In no event shall Logbloga or its suppliers be liable for any damages (including, without 
             limitation, damages for loss of data or profit, or due to business interruption) arising 
-            out of the use or inability to use the materials on LogBloga, even if LogBloga or a 
-            LogBloga authorized representative has been notified orally or in writing of the possibility 
+            out of the use or inability to use the materials on Logbloga, even if Logbloga or a 
+            Logbloga authorized representative has been notified orally or in writing of the possibility 
             of such damage.
           </p>
           <p className="mb-4">
-            <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, LogBloga 
+            <strong>Limitation of Liability:</strong> To the maximum extent permitted by law, Logbloga 
             shall not be liable for any indirect, incidental, special, consequential, or punitive damages, 
             or any loss of profits or revenues, whether incurred directly or indirectly, or any loss of 
             data, use, goodwill, or other intangible losses. Our total liability for any claims arising 
@@ -200,7 +200,7 @@ export default function TermsOfServicePage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">13. Earnings and Results Disclaimer</h2>
           <p className="mb-4">
-            <strong>No Guarantee of Income:</strong> LogBloga makes no representations, warranties, or 
+            <strong>No Guarantee of Income:</strong> Logbloga makes no representations, warranties, or 
             guarantees regarding any level of income, revenue, or profit that you may achieve by using 
             our products or services. Your success depends on numerous factors including your effort, 
             skill, experience, market conditions, competition, and many other variables beyond our control.
@@ -227,7 +227,7 @@ export default function TermsOfServicePage() {
           <p className="mb-4">
             <strong>Assumption of Risk:</strong> By purchasing our products, you acknowledge that you 
             understand and accept the risks associated with starting or operating a business, and that 
-            you are solely responsible for your business decisions and outcomes. You agree that LogBloga 
+            you are solely responsible for your business decisions and outcomes. You agree that Logbloga 
             shall not be liable for any business losses, lost profits, or other damages resulting from 
             your use of our products.
           </p>

@@ -4,11 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Us | LogBloga',
-  description: 'Learn about LogBloga, our mission, and our commitment to helping you succeed with AI.',
+  title: 'About Us | Logbloga',
+  description: 'Learn about Logbloga, our mission, and our commitment to helping you succeed with AI.',
   openGraph: {
-    title: 'About Us | LogBloga',
-    description: 'Learn about LogBloga, our mission, and our commitment to helping you succeed with AI.',
+    title: 'About Us | Logbloga',
+    description: 'Learn about Logbloga, our mission, and our commitment to helping you succeed with AI.',
     type: 'website',
   },
 };
@@ -22,7 +22,7 @@ export default function AboutUsPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Introduction</h2>
           <p className="mb-4">
-            LogBloga is a digital platform dedicated to helping individuals and businesses transform 
+            Logbloga is a digital platform dedicated to helping individuals and businesses transform 
             artificial intelligence capabilities into sustainable revenue streams. We provide comprehensive 
             packages, resources, and tools designed to guide you from concept to revenue.
           </p>
@@ -51,7 +51,7 @@ export default function AboutUsPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">What We Do</h2>
           <p className="mb-4">
-            LogBloga offers structured learning paths and implementation guides through our AI to USD 
+            Logbloga offers structured learning paths and implementation guides through our AI to USD 
             product line. Our packages are designed for different paths:
           </p>
           <ul className="list-disc pl-6 mb-4">

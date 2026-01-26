@@ -9,7 +9,7 @@ import { getMockPackageBySlug } from '@/lib/mock-data/preview-library';
 import { PackageLevelContent } from './package-level-content';
 
 export const metadata = {
-  title: 'Preview Package | LogBloga',
+  title: 'Preview Package | Logbloga',
   description: 'Visual testing - Package content with mock data',
 };
 

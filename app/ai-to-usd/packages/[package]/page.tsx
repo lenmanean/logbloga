@@ -89,7 +89,7 @@ export async function generateMetadata({ params }: PackagePageProps): Promise<Me
   const description = packageData.description || packageData.tagline || `Learn more about ${title}`;
 
   return {
-    title: `${title} | LogBloga`,
+    title: `${title} | Logbloga`,
     description,
     openGraph: {
       title,

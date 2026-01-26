@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Customer Details | Admin Dashboard | LogBloga',
+  title: 'Customer Details | Admin Dashboard | Logbloga',
   description: 'Customer details and management',
 };
 

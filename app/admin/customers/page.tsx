@@ -5,7 +5,7 @@ import { CustomerTable } from '@/components/admin/customer-table';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Customers | Admin Dashboard | LogBloga',
+  title: 'Customers | Admin Dashboard | Logbloga',
   description: 'Manage customers',
 };
 

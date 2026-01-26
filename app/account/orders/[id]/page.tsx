@@ -7,7 +7,7 @@ import { canCancelOrder } from '@/lib/orders/status';
 import { DoerCouponDisplay } from '@/components/account/doer-coupon-display';
 
 export const metadata = {
-  title: 'Order Details | LogBloga',
+  title: 'Order Details | Logbloga',
   description: 'View order details',
 };
 

@@ -8,7 +8,7 @@ import { Plus } from 'lucide-react';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Products | Admin Dashboard | LogBloga',
+  title: 'Products | Admin Dashboard | Logbloga',
   description: 'Manage products',
 };
 

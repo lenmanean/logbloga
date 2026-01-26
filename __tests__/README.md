@@ -1,6 +1,6 @@
 # Testing Documentation
 
-This directory contains all tests for the LogBloga e-commerce application.
+This directory contains all tests for the Logbloga e-commerce application.
 
 ## Test Structure
 

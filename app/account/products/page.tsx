@@ -8,7 +8,7 @@ import { ProductsList } from '@/components/account/products-list';
 import { DoerCouponDisplay } from '@/components/account/doer-coupon-display';
 
 export const metadata = {
-  title: 'My Products & Downloads | LogBloga',
+  title: 'My Products & Downloads | Logbloga',
   description: 'Access your purchased digital products',
 };
 

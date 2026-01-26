@@ -10,7 +10,7 @@ import { Suspense } from 'react';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Orders | Admin Dashboard | LogBloga',
+  title: 'Orders | Admin Dashboard | Logbloga',
   description: 'Manage orders',
 };
 

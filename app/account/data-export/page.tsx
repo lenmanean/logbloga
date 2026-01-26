@@ -3,7 +3,7 @@ import { requireAuth } from '@/lib/auth/utils';
 import { DataExportClient } from './data-export-client';
 
 export const metadata: Metadata = {
-  title: 'Data Export | LogBloga',
+  title: 'Data Export | Logbloga',
   description: 'Download all your personal data in JSON format.',
 };
 

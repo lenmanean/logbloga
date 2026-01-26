@@ -22,14 +22,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LogBloga - Digital Products & Tech Insights",
+  title: "Logbloga - Digital Products & Tech Insights",
   description: "Your destination for digital products, technology insights, and productivity tools.",
   manifest: "/manifest.json",
   themeColor: "#ef4444",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "LogBloga",
+    title: "Logbloga",
   },
   icons: {
     icon: "/icon.png",
@@ -49,7 +49,7 @@ export default function RootLayout({
         <meta name="theme-color" content="#ef4444" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="LogBloga" />
+        <meta name="apple-mobile-web-app-title" content="Logbloga" />
         <link rel="apple-touch-icon" href="/icon.png" />
       </head>
       <body

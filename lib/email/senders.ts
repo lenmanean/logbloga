@@ -129,7 +129,7 @@ export async function sendWelcomeEmail(
     const result = await resend.emails.send({
       from: getDefaultSender(),
       to: data.user.email,
-      subject: 'Welcome to LogBloga!',
+      subject: 'Welcome to Logbloga!',
       html,
       tags: [
         { name: 'email_type', value: 'welcome' },
@@ -334,7 +334,7 @@ export async function sendContactConfirmation(
     const result = await resend.emails.send({
       from: getDefaultSender(),
       to: data.email,
-      subject: 'We received your message - LogBloga',
+      subject: 'We received your message - Logbloga',
       html,
       tags: [
         { name: 'email_type', value: 'contact_confirmation' },

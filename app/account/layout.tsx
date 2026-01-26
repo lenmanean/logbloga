@@ -5,7 +5,7 @@ import { requireAuth } from '@/lib/auth/utils';
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Account | LogBloga',
+  title: 'Account | Logbloga',
   description: 'Manage your account settings, orders, and products',
 };
 

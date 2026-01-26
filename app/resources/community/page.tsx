@@ -7,10 +7,10 @@ import Link from 'next/link';
 export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'Community Forum | Resources | LogBloga',
+  title: 'Community Forum | Resources | Logbloga',
   description: 'Connect with other users, share experiences, and get help from our active community.',
   openGraph: {
-    title: 'Community Forum | Resources | LogBloga',
+    title: 'Community Forum | Resources | Logbloga',
     description: 'Connect with other users, share experiences, and get help from our active community.',
     type: 'website',
   },

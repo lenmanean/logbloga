@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides internal documentation for security measures implemented in the LogBloga application.
+This document provides internal documentation for security measures implemented in the Logbloga application.
 
 ## Architecture
 

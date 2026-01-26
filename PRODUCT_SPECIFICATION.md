@@ -1,4 +1,4 @@
-# LogBloga Product Specification Document
+# Logbloga Product Specification Document
 **Version:** 1.0  
 **Last Updated:** January 2025  
 **Status:** Draft - Strategic Planning
@@ -642,7 +642,7 @@ WHERE o.user_id = ?
 ### Integration Flow
 
 #### 1. Package Purchase Completion
-- User completes package purchase on LogBloga
+- User completes package purchase on Logbloga
 - Order status changes to "completed"
 - System generates unique DOER coupon code
 
@@ -684,7 +684,7 @@ Valid for: 90 days
 - Auto-renewal after trial period
 
 **Tracking:**
-- Link LogBloga order_id to DOER user_id
+- Link Logbloga order_id to DOER user_id
 - Track coupon usage status
 - Mark coupon as used when redeemed
 

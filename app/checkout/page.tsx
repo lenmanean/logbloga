@@ -5,7 +5,7 @@ import { CheckoutProvider } from '@/contexts/checkout-context';
 import { CheckoutContent } from './checkout-content';
 
 export const metadata = {
-  title: 'Checkout | LogBloga',
+  title: 'Checkout | Logbloga',
   description: 'Complete your purchase',
 };
 

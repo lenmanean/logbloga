@@ -4,11 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Mail, Clock } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Contact Us | LogBloga',
-  description: 'Get in touch with LogBloga. We\'re here to help with questions, support, and inquiries.',
+  title: 'Contact Us | Logbloga',
+  description: 'Get in touch with Logbloga. We\'re here to help with questions, support, and inquiries.',
   openGraph: {
-    title: 'Contact Us | LogBloga',
-    description: 'Get in touch with LogBloga. We\'re here to help with questions, support, and inquiries.',
+    title: 'Contact Us | Logbloga',
+    description: 'Get in touch with Logbloga. We\'re here to help with questions, support, and inquiries.',
     type: 'website',
   },
 };

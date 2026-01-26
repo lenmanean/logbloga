@@ -11,10 +11,10 @@ import { BlogListingClient } from '@/components/blog/blog-listing-client';
 export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'Blog | LogBloga',
+  title: 'Blog | Logbloga',
   description: 'Read our latest articles, insights, and guides about AI, technology, and digital products.',
   openGraph: {
-    title: 'Blog | LogBloga',
+    title: 'Blog | Logbloga',
     description: 'Read our latest articles, insights, and guides about AI, technology, and digital products.',
     type: 'website',
   },

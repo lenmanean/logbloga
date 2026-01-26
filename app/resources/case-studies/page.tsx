@@ -5,10 +5,10 @@ import { CaseStudiesPageClient } from '@/components/resources/case-studies-page-
 export const revalidate = 3600; // ISR: revalidate every hour
 
 export const metadata: Metadata = {
-  title: 'Case Studies | Resources | LogBloga',
+  title: 'Case Studies | Resources | Logbloga',
   description: 'Real-world examples and success stories from businesses and individuals using AI to USD products.',
   openGraph: {
-    title: 'Case Studies | Resources | LogBloga',
+    title: 'Case Studies | Resources | Logbloga',
     description: 'Real-world examples and success stories from businesses and individuals using AI to USD products.',
     type: 'website',
   },
