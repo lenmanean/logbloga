@@ -76,9 +76,6 @@ export function ContactConfirmationEmail({ data }: ContactConfirmationEmailProps
               • <Link href={`${appUrl}/resources/faq`} style={link}>Frequently Asked Questions</Link>
             </Text>
             <Text style={resourceItem}>
-              • <Link href={`${appUrl}/resources/guides`} style={link}>Guides & Tutorials</Link>
-            </Text>
-            <Text style={resourceItem}>
               • <Link href={`${appUrl}/resources/community`} style={link}>Community Forum</Link>
             </Text>
           </Section>

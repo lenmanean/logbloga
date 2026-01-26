@@ -1,6 +1,6 @@
 /**
  * Type definitions for Resources
- * Defines all resource types: Guides, Case Studies, Tools/Templates, and FAQs
+ * Defines all resource types: Case Studies, Tools/Templates, and FAQs
  */
 
 // Base resource interface
@@ -13,15 +13,6 @@ export interface BaseResource {
   tags: string[];
   createdAt: string;
   updatedAt: string;
-}
-
-// Guide-specific interface
-export interface Guide extends BaseResource {
-  content: string; // Markdown/HTML content
-  steps?: string[]; // Optional step-by-step guide
-  difficulty: 'beginner' | 'intermediate' | 'advanced';
-  estimatedTime: string;
-  featuredImage?: string;
 }
 
 // Case study-specific interface
@@ -63,7 +54,7 @@ export interface FAQ {
 
 // Search result interface for unified search
 export interface SearchResult {
-  type: 'guide' | 'case-study' | 'tool' | 'faq';
-  resource: Guide | CaseStudy | Tool | FAQ;
+  type: 'case-study' | 'tool' | 'faq';
+  resource: CaseStudy | Tool | FAQ;
   relevanceScore?: number;
 }

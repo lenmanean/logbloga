@@ -174,9 +174,6 @@ export function Header() {
                 <Link href="/blog">Blog</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
-                <Link href="/resources/guides">Guides</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
                 <Link href="/resources/case-studies">Case Studies</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -382,13 +379,6 @@ export function Header() {
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Blog
-                    </Link>
-                    <Link
-                      href="/resources/guides"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Guides
                     </Link>
                     <Link
                       href="/resources/case-studies"

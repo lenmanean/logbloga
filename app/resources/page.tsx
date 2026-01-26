@@ -46,12 +46,6 @@ const resources = [
     icon: BookOpen,
   },
   {
-    title: 'Guides',
-    description: 'Step-by-step tutorials and comprehensive guides to help you master AI tools and techniques.',
-    href: '/resources/guides',
-    icon: FileText,
-  },
-  {
     title: 'Case Studies',
     description: 'Real-world examples and success stories from businesses and individuals using AI to USD products.',
     href: '/resources/case-studies',
@@ -81,7 +75,7 @@ export default function ResourcesPage() {
             Resources
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
-            Access comprehensive guides, tools, and support to help you succeed with AI to USD products.
+            Access comprehensive tools and support to help you succeed with AI to USD products.
           </p>
         </div>
 

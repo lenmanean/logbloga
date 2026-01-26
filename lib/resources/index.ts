@@ -4,7 +4,6 @@
  */
 
 import type { SearchResult } from './types';
-import { guides, searchGuides } from './guides';
 import { caseStudies, searchCaseStudies } from './case-studies';
 import { tools, searchTools } from './tools';
 import { faqs, searchFAQs } from './faq';
@@ -14,16 +13,6 @@ import { faqs, searchFAQs } from './faq';
  */
 export function searchAllResources(query: string): SearchResult[] {
   const results: SearchResult[] = [];
-
-  // Search guides
-  const guideResults = searchGuides(query);
-  guideResults.forEach(guide => {
-    results.push({
-      type: 'guide',
-      resource: guide,
-      relevanceScore: calculateRelevanceScore(guide, query)
-    });
-  });
 
   // Search case studies
   const caseStudyResults = searchCaseStudies(query);
@@ -65,13 +54,6 @@ export function searchAllResources(query: string): SearchResult[] {
 export function filterByCategory(category: string): SearchResult[] {
   const results: SearchResult[] = [];
 
-  // Filter guides
-  guides
-    .filter(guide => guide.category === category)
-    .forEach(guide => {
-      results.push({ type: 'guide', resource: guide });
-    });
-
   // Filter case studies
   caseStudies
     .filter(study => study.category === category)
@@ -101,13 +83,6 @@ export function filterByCategory(category: string): SearchResult[] {
  */
 export function filterByTag(tag: string): SearchResult[] {
   const results: SearchResult[] = [];
-
-  // Filter guides
-  guides
-    .filter(guide => guide.tags.includes(tag))
-    .forEach(guide => {
-      results.push({ type: 'guide', resource: guide });
-    });
 
   // Filter case studies
   caseStudies
@@ -139,7 +114,6 @@ export function filterByTag(tag: string): SearchResult[] {
 export function getAllCategories(): string[] {
   const categories = new Set<string>();
   
-  guides.forEach(guide => categories.add(guide.category));
   caseStudies.forEach(study => categories.add(study.category));
   tools.forEach(tool => categories.add(tool.category));
   faqs.forEach(faq => categories.add(faq.category));
@@ -153,7 +127,6 @@ export function getAllCategories(): string[] {
 export function getAllTags(): string[] {
   const tags = new Set<string>();
   
-  guides.forEach(guide => guide.tags.forEach(tag => tags.add(tag)));
   caseStudies.forEach(study => study.tags.forEach(tag => tags.add(tag)));
   tools.forEach(tool => tool.tags.forEach(tag => tags.add(tag)));
   faqs.forEach(faq => faq.tags.forEach(tag => tags.add(tag)));
@@ -212,7 +185,6 @@ function calculateRelevanceScore(resource: any, query: string): number {
  */
 export function getResourceUrl(type: SearchResult['type'], slug: string): string {
   const urlMap: Record<SearchResult['type'], string> = {
-    'guide': `/resources/guides/${slug}`,
     'case-study': `/resources/case-studies/${slug}`,
     'tool': `/resources/tools/${slug}`,
     'faq': `/resources/faq#${slug}`
@@ -226,7 +198,6 @@ export function getResourceUrl(type: SearchResult['type'], slug: string): string
  */
 export function getResourceTypeLabel(type: SearchResult['type']): string {
   const labelMap: Record<SearchResult['type'], string> = {
-    'guide': 'Guide',
     'case-study': 'Case Study',
     'tool': 'Tool',
     'faq': 'FAQ'
