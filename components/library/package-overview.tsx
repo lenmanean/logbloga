@@ -54,12 +54,13 @@ export function PackageOverview({ product, progress, className }: PackageOvervie
         </CardHeader>
         {productImage && (
           <CardContent>
-            <div className="relative w-full h-64 rounded-lg overflow-hidden bg-muted">
+            <div className="relative w-full h-80 rounded-lg overflow-hidden bg-muted p-4">
               <Image
                 src={productImage}
                 alt={product.title || 'Package'}
                 fill
-                className="object-cover"
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </div>
           </CardContent>
