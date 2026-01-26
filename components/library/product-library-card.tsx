@@ -14,12 +14,17 @@ import Image from 'next/image';
 interface ProductLibraryCardProps {
   product: Product;
   purchasedDate: string;
+  lastAccessedDate?: string;
 }
 
-export function ProductLibraryCard({ product, purchasedDate }: ProductLibraryCardProps) {
+export function ProductLibraryCard({ product, purchasedDate, lastAccessedDate }: ProductLibraryCardProps) {
   const purchaseDate = purchasedDate
     ? format(new Date(purchasedDate), 'MMM d, yyyy')
     : 'N/A';
+  
+  const lastAccessed = lastAccessedDate
+    ? format(new Date(lastAccessedDate), 'MMM d, yyyy')
+    : null;
 
   const images = product.images as string[] | null | undefined;
   const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
@@ -50,6 +55,11 @@ export function ProductLibraryCard({ product, purchasedDate }: ProductLibraryCar
               <p className="text-sm text-muted-foreground mt-1">
                 Purchased {purchaseDate}
               </p>
+              {lastAccessed && (
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Last Accessed {lastAccessed}
+                </p>
+              )}
             </div>
           </div>
         </CardHeader>

@@ -2,17 +2,36 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Download, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import { getFileTypeIcon } from '@/lib/utils/content';
+import { cn } from '@/lib/utils';
 
 interface DownloadButtonProps {
   productId: string;
   filename: string;
   label?: string;
+  variant?: 'default' | 'secondary' | 'outline' | 'ghost' | 'link' | 'destructive';
+  size?: 'default' | 'sm' | 'lg' | 'icon';
+  className?: string;
 }
 
-export function DownloadButton({ productId, filename, label = 'Download' }: DownloadButtonProps) {
+function extFromFilename(filename: string): string {
+  return filename.split('.').pop()?.toLowerCase() ?? '';
+}
+
+export function DownloadButton({
+  productId,
+  filename,
+  label = 'Download',
+  variant = 'default',
+  size = 'default',
+  className,
+}: DownloadButtonProps) {
   const [isDownloading, setIsDownloading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const fileType = extFromFilename(filename);
+  const FileIcon = getFileTypeIcon(fileType);
 
   const handleDownload = async () => {
     setIsDownloading(true);
@@ -23,21 +42,25 @@ export function DownloadButton({ productId, filename, label = 'Download' }: Down
       const response = await fetch(url);
 
       if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.error || 'Failed to download file');
+        const data = await response.json().catch(() => ({}));
+        const msg =
+          typeof data?.error === 'string'
+            ? data.error
+            : response.status === 403
+              ? 'You do not have access to this file.'
+              : response.status === 404
+                ? 'File not found.'
+                : 'Failed to download file.';
+        throw new Error(msg);
       }
 
-      // Get filename from Content-Disposition header if available
       const contentDisposition = response.headers.get('Content-Disposition');
       let downloadFilename = filename;
       if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename="?([^"]+)"?/);
-        if (filenameMatch) {
-          downloadFilename = filenameMatch[1];
-        }
+        const match = contentDisposition.match(/filename="?([^";\n]+)"?/);
+        if (match) downloadFilename = match[1].trim();
       }
 
-      // Create blob and download
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
@@ -48,8 +71,8 @@ export function DownloadButton({ productId, filename, label = 'Download' }: Down
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
     } catch (err) {
-      console.error('Error downloading file:', err);
-      setError(err instanceof Error ? err.message : 'Failed to download file');
+      console.error('Download error:', err);
+      setError(err instanceof Error ? err.message : 'Failed to download file.');
     } finally {
       setIsDownloading(false);
     }
@@ -60,7 +83,9 @@ export function DownloadButton({ productId, filename, label = 'Download' }: Down
       <Button
         onClick={handleDownload}
         disabled={isDownloading}
-        className="w-full"
+        variant={variant}
+        size={size}
+        className={cn('w-full', className)}
       >
         {isDownloading ? (
           <>
@@ -69,13 +94,15 @@ export function DownloadButton({ productId, filename, label = 'Download' }: Down
           </>
         ) : (
           <>
-            <Download className="h-4 w-4 mr-2" />
+            <FileIcon className="h-4 w-4 mr-2" />
             {label}
           </>
         )}
       </Button>
       {error && (
-        <p className="text-sm text-destructive">{error}</p>
+        <p className="text-sm text-destructive" role="alert">
+          {error}
+        </p>
       )}
     </div>
   );

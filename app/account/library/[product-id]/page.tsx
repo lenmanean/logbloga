@@ -2,11 +2,12 @@ import { redirect, notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { hasProductAccess } from '@/lib/db/access';
 import { getProductById } from '@/lib/db/products';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { DownloadButton } from '@/components/library/download-button';
-import Image from 'next/image';
+import { trackProductView } from '@/lib/db/recently-viewed';
+import { parsePackageLevels } from '@/lib/db/package-levels';
+import { getLevelContent } from '@/lib/data/package-level-content';
 import Link from 'next/link';
+import { Suspense } from 'react';
+import { LibraryPackageTabs } from './library-package-tabs';
 
 export const metadata = {
   title: 'Product Access | Logbloga',
@@ -26,24 +27,26 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
     redirect('/auth/signin?redirect=/account/library/' + productId);
   }
 
-  // Fetch product
   const product = await getProductById(productId);
+  if (!product) notFound();
 
-  if (!product) {
-    notFound();
-  }
-
-  // Check if user has access to this product via completed orders
   const hasAccess = await hasProductAccess(user.id, productId);
-
   if (!hasAccess) {
-    // Redirect to product page to purchase
     redirect(`/ai-to-usd/packages/${product.slug || product.id}`);
   }
 
-  const images = product.images as string[] | null | undefined;
-  const firstImage = Array.isArray(images) && images.length > 0 ? images[0] : null;
-  const productImage = product.package_image || firstImage || '/placeholder-product.png';
+  try {
+    await trackProductView(user.id, productId);
+  } catch (e) {
+    console.error('Error tracking product view:', e);
+  }
+
+  const slug = (product.slug || product.category || '') as string;
+  const parsedLevels = parsePackageLevels(product);
+
+  const level1Data = getLevelContent(slug, 1, parsedLevels?.level1) ?? null;
+  const level2Data = getLevelContent(slug, 2, parsedLevels?.level2) ?? null;
+  const level3Data = getLevelContent(slug, 3, parsedLevels?.level3) ?? null;
 
   return (
     <main className="min-h-screen bg-background">
@@ -57,97 +60,14 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Product Info */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Product Header */}
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between gap-4">
-                  <div className="flex-1">
-                    <CardTitle className="text-2xl">{product.title || product.name || 'Product'}</CardTitle>
-                    <CardDescription className="mt-2">
-                      {product.description || 'Digital product'}
-                    </CardDescription>
-                  </div>
-                </div>
-              </CardHeader>
-              {productImage && (
-                <CardContent>
-                  <div className="relative w-full h-64 rounded-lg overflow-hidden bg-muted">
-                    <Image
-                      src={productImage}
-                      alt={product.title || 'Product'}
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </CardContent>
-              )}
-            </Card>
-
-            {/* Product Details */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Product Details</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {product.category && (
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Category</p>
-                    <Badge variant="secondary">{product.category}</Badge>
-                  </div>
-                )}
-
-                {product.description && (
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">Description</p>
-                    <p className="text-sm">{product.description}</p>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
-            {/* Download Section */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Downloads</CardTitle>
-                <CardDescription>
-                  Access your product files and resources
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <DownloadButton
-                    productId={product.id}
-                    filename="product.zip"
-                    label="Download Product Files"
-                  />
-                  <p className="text-xs text-muted-foreground">
-                    You have lifetime access to this product
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Sidebar - Purchase Info */}
-          <div className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Purchase Information</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Badge variant="secondary">Lifetime Access</Badge>
-                  <p className="text-sm text-muted-foreground mt-2">
-                    You own this product and have lifetime access to all content and updates.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
+        <Suspense fallback={<div className="animate-pulse h-10 bg-muted rounded w-full max-w-2xl" />}>
+          <LibraryPackageTabs
+            product={product}
+            level1Data={level1Data}
+            level2Data={level2Data}
+            level3Data={level3Data}
+          />
+        </Suspense>
       </div>
     </main>
   );

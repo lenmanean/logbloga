@@ -28,6 +28,7 @@ export function LibraryClient({ products }: LibraryClientProps) {
                 key={product.id}
                 product={product}
                 purchasedDate={product.purchasedDate}
+                lastAccessedDate={product.lastAccessedDate}
               />
             ))}
           </div>

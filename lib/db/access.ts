@@ -143,6 +143,7 @@ export async function getUserProductAccess(userId: string): Promise<Product[]> {
 export interface ProductWithPurchaseDate extends Product {
   purchasedDate: string; // ISO date string from order
   orderId: string; // Order ID for reference
+  lastAccessedDate?: string; // ISO date string from recently_viewed_products, optional if never accessed
 }
 
 /**
@@ -211,6 +212,35 @@ export async function getUserProductAccessWithDates(userId: string): Promise<Pro
       if (newDate < existingDate) {
         existing.purchasedDate = orderInfo.date;
         existing.orderId = orderInfo.orderId;
+      }
+    }
+  }
+
+  // Fetch last accessed dates from recently_viewed_products
+  const productIds = Array.from(productMap.keys());
+  if (productIds.length > 0) {
+    const { data: recentlyViewed, error: rvError } = await supabase
+      .from('recently_viewed_products')
+      .select('product_id, viewed_at')
+      .eq('user_id', userId)
+      .in('product_id', productIds);
+
+    if (!rvError && recentlyViewed) {
+      // Create a map of product_id -> most recent viewed_at
+      const lastAccessedMap = new Map<string, string>();
+      for (const entry of recentlyViewed) {
+        const existing = lastAccessedMap.get(entry.product_id);
+        if (!existing || new Date(entry.viewed_at) > new Date(existing)) {
+          lastAccessedMap.set(entry.product_id, entry.viewed_at);
+        }
+      }
+
+      // Add last accessed dates to products
+      for (const product of productMap.values()) {
+        const lastAccessed = lastAccessedMap.get(product.id);
+        if (lastAccessed) {
+          product.lastAccessedDate = lastAccessed;
+        }
       }
     }
   }
