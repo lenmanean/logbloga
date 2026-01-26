@@ -97,13 +97,8 @@ export interface OrderWithItems extends Order {
     unit_price: number;
     total_price: number;
   }>;
-  // DOER coupon fields (added in migration 000020)
-  doer_coupon_code?: string | null;
-  doer_coupon_generated_at?: string | null;
-  doer_coupon_expires_at?: string | null;
-  doer_coupon_used?: boolean | null;
-  doer_coupon_used_at?: string | null;
-  doer_user_id?: string | null;
+  // Note: DOER coupon fields are already part of the base Order type from Supabase
+  // No need to redeclare them here as they would conflict with the base type
 }
 
 // Re-export ProductWithPurchaseDate from access.ts for consistency
