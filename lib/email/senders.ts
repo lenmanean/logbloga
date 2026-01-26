@@ -13,6 +13,8 @@ import type {
   AbandonedCartEmailData,
   OrderStatusUpdateEmailData,
   ProductUpdateEmailData,
+  ContactSubmissionData,
+  ContactConfirmationData,
 } from './types';
 import { OrderConfirmationEmail } from './templates/order-confirmation';
 import { PaymentReceiptEmail } from './templates/payment-receipt';
@@ -20,6 +22,8 @@ import { WelcomeEmail } from './templates/welcome';
 import { AbandonedCartEmail } from './templates/abandoned-cart';
 import { OrderStatusUpdateEmail } from './templates/order-status-update';
 import { ProductUpdateEmail } from './templates/product-update';
+import { ContactSubmissionEmail } from './templates/contact-submission';
+import { ContactConfirmationEmail } from './templates/contact-confirmation';
 
 /**
  * Send order confirmation email
@@ -271,6 +275,80 @@ export async function sendProductUpdate(
     return { success: true, messageId: result.data?.id };
   } catch (error) {
     console.error('Error sending product update email:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send contact submission notification email to support team
+ */
+export async function sendContactSubmissionNotification(
+  data: ContactSubmissionData
+): Promise<EmailResult> {
+  try {
+    const resend = getResendClient();
+    const html = await render(ContactSubmissionEmail({ data }));
+
+    const supportEmail = process.env.CONTACT_NOTIFICATION_EMAIL || 'support@logbloga.com';
+
+    const result = await resend.emails.send({
+      from: getDefaultSender(),
+      to: supportEmail,
+      replyTo: data.email,
+      subject: `New Contact Form Submission: ${data.subject}`,
+      html,
+      tags: [
+        { name: 'email_type', value: 'contact_submission' },
+        { name: 'submission_id', value: data.submissionId },
+      ],
+    });
+
+    if (result.error) {
+      console.error('Error sending contact submission notification email:', result.error);
+      return { success: false, error: result.error.message };
+    }
+
+    return { success: true, messageId: result.data?.id };
+  } catch (error) {
+    console.error('Error sending contact submission notification email:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
+
+/**
+ * Send contact confirmation email to user
+ */
+export async function sendContactConfirmation(
+  data: ContactConfirmationData
+): Promise<EmailResult> {
+  try {
+    const resend = getResendClient();
+    const html = await render(ContactConfirmationEmail({ data }));
+
+    const result = await resend.emails.send({
+      from: getDefaultSender(),
+      to: data.email,
+      subject: 'We received your message - LogBloga',
+      html,
+      tags: [
+        { name: 'email_type', value: 'contact_confirmation' },
+      ],
+    });
+
+    if (result.error) {
+      console.error('Error sending contact confirmation email:', result.error);
+      return { success: false, error: result.error.message };
+    }
+
+    return { success: true, messageId: result.data?.id };
+  } catch (error) {
+    console.error('Error sending contact confirmation email:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Unknown error',

@@ -189,8 +189,7 @@ export default function TermsOfServicePage() {
             If you have any questions about these Terms of Service, please contact us at:
           </p>
           <p className="mb-4">
-            <strong>Email:</strong> support@logbloga.com (for general inquiries)<br />
-            <strong>Legal Inquiries:</strong> legal@logbloga.com<br />
+            <strong>Email:</strong> support@logbloga.com (for all inquiries, including legal matters)<br />
             <strong>Response Time:</strong> We typically respond within 24-48 hours during business days
           </p>
           <p className="mb-4 text-sm text-muted-foreground">

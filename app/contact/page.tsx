@@ -49,25 +49,17 @@ export default function ContactPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">General Inquiries</p>
-                  <a
-                    href="mailto:support@logbloga.com"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    support@logbloga.com
-                  </a>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground">Legal Inquiries</p>
-                  <a
-                    href="mailto:legal@logbloga.com"
-                    className="text-sm text-primary hover:underline"
-                  >
-                    legal@logbloga.com
-                  </a>
-                </div>
+              <div>
+                <p className="text-sm font-medium text-muted-foreground mb-2">Email</p>
+                <a
+                  href="mailto:support@logbloga.com"
+                  className="text-sm text-primary hover:underline"
+                >
+                  support@logbloga.com
+                </a>
+                <p className="text-xs text-muted-foreground mt-2">
+                  For all inquiries, including legal matters
+                </p>
               </div>
             </CardContent>
           </Card>

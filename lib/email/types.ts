@@ -97,3 +97,19 @@ export interface ProductUpdateEmailData {
     description: string | null;
   };
 }
+
+export interface ContactSubmissionData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  ipAddress?: string;
+  submissionId: string;
+  submittedAt: string;
+}
+
+export interface ContactConfirmationData {
+  name: string;
+  email: string;
+  subject: string;
+}

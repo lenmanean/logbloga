@@ -18,10 +18,11 @@ import {
 import { Mail, Send, Loader2 } from 'lucide-react';
 
 const contactFormSchema = z.object({
-  name: z.string().min(1, 'Name is required').min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(1, 'Name is required').min(2, 'Name must be at least 2 characters').max(100, 'Name must be less than 100 characters'),
   email: z.string().email('Please enter a valid email address'),
-  subject: z.string().min(1, 'Please select a subject'),
-  message: z.string().min(10, 'Message must be at least 10 characters').min(1, 'Message is required'),
+  subject: z.string().min(1, 'Please select a subject').min(3, 'Subject must be at least 3 characters').max(200, 'Subject must be less than 200 characters'),
+  message: z.string().min(10, 'Message must be at least 10 characters').min(1, 'Message is required').max(5000, 'Message must be less than 5000 characters'),
+  website: z.string().max(0, 'Spam detected').optional(), // Honeypot field
 });
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
@@ -49,17 +50,48 @@ export function ContactForm() {
     setError(null);
 
     try {
-      // For now, use mailto link. In the future, this can be replaced with an API call
-      const mailtoLink = `mailto:support@logbloga.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(`Name: ${data.name}\nEmail: ${data.email}\n\nMessage:\n${data.message}`)}`;
-      window.location.href = mailtoLink;
-      
-      // Simulate a small delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          email: data.email,
+          subject: data.subject,
+          message: data.message,
+          website: data.website || '', // Honeypot field
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        // Handle rate limiting
+        if (response.status === 429) {
+          const retryAfter = response.headers.get('Retry-After') || '60';
+          setError(`Too many requests. Please wait ${retryAfter} seconds before trying again.`);
+          return;
+        }
+
+        // Handle validation errors
+        if (response.status === 400 && result.errors) {
+          const errorMessages = result.errors.map((err: { field: string; message: string }) => err.message).join(', ');
+          setError(`Validation error: ${errorMessages}`);
+          return;
+        }
+
+        // Handle other errors
+        setError(result.error || 'Something went wrong. Please try again or email us directly at support@logbloga.com');
+        return;
+      }
+
+      // Success
       setIsSubmitted(true);
       reset();
     } catch (err) {
-      setError('Something went wrong. Please try again or email us directly at support@logbloga.com');
+      console.error('Error submitting contact form:', err);
+      setError('Network error. Please check your connection and try again, or email us directly at support@logbloga.com');
     } finally {
       setIsLoading(false);
     }
@@ -181,6 +213,18 @@ export function ContactForm() {
             {errors.message.message}
           </p>
         )}
+      </div>
+
+      {/* Honeypot field - hidden from users, bots will fill it */}
+      <div style={{ display: 'none' }} aria-hidden="true">
+        <Label htmlFor="website">Website</Label>
+        <Input
+          id="website"
+          type="text"
+          {...register('website')}
+          tabIndex={-1}
+          autoComplete="off"
+        />
       </div>
 
       <Button type="submit" disabled={isLoading} className="w-full">

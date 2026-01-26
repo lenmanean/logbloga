@@ -137,3 +137,37 @@ export interface PaginatedResult<T> {
 
 export interface PaginatedBlogResult extends PaginatedResult<BlogPost> {}
 
+// Contact Submission types (migration 000036)
+export interface ContactSubmission {
+  id: string;
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  ip_address: string | null;
+  user_agent: string | null;
+  status: 'pending' | 'read' | 'replied' | 'archived';
+  spam_score: number;
+  metadata: Record<string, any>;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ContactSubmissionInsert {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+  ip_address?: string | null;
+  user_agent?: string | null;
+  status?: 'pending' | 'read' | 'replied' | 'archived';
+  spam_score?: number;
+  metadata?: Record<string, any>;
+}
+
+export interface ContactSubmissionUpdate {
+  status?: 'pending' | 'read' | 'replied' | 'archived';
+  spam_score?: number;
+  metadata?: Record<string, any>;
+}
+
