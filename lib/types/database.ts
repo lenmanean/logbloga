@@ -134,8 +134,6 @@ export interface PaginatedBlogResult extends PaginatedResult<BlogPost> {}
 
 // Contact Submission types (migration 000036)
 // Based on Supabase generated types with stricter constraints
-import type { Database } from './supabase';
-
 export type ContactSubmissionRow = Database['public']['Tables']['contact_submissions']['Row'];
 export type ContactSubmissionInsert = Database['public']['Tables']['contact_submissions']['Insert'];
 export type ContactSubmissionUpdate = Database['public']['Tables']['contact_submissions']['Update'];
