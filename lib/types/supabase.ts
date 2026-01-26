@@ -176,44 +176,6 @@ export type Database = {
         }
         Relationships: []
       }
-      content_progress: {
-        Row: {
-          completed_at: string
-          component: string
-          created_at: string
-          id: string
-          level: number
-          product_id: string
-          user_id: string
-        }
-        Insert: {
-          completed_at?: string
-          component: string
-          created_at?: string
-          id?: string
-          level: number
-          product_id: string
-          user_id: string
-        }
-        Update: {
-          completed_at?: string
-          component?: string
-          created_at?: string
-          id?: string
-          level?: number
-          product_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "content_progress_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       contact_submissions: {
         Row: {
           created_at: string | null
@@ -258,6 +220,44 @@ export type Database = {
           user_agent?: string | null
         }
         Relationships: []
+      }
+      content_progress: {
+        Row: {
+          completed_at: string
+          component: string
+          created_at: string
+          id: string
+          level: number
+          product_id: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string
+          component: string
+          created_at?: string
+          id?: string
+          level: number
+          product_id: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string
+          component?: string
+          created_at?: string
+          id?: string
+          level?: number
+          product_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_progress_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       cookie_consents: {
         Row: {
