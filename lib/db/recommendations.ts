@@ -6,6 +6,19 @@
 import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 import type { Product, ProductRecommendation } from '@/lib/types/database';
 import { getProductById } from './products';
+import type { Database } from '@/lib/types/supabase';
+
+type SupabaseProduct = Database['public']['Tables']['products']['Row'];
+
+/**
+ * Convert Supabase product row to our Product type with proper type constraints
+ */
+function toProduct(row: SupabaseProduct): Product {
+  return {
+    ...row,
+    product_type: (row.product_type as Product['product_type']) ?? null,
+  };
+}
 
 export type RecommendationType = 'upsell' | 'cross-sell' | 'related';
 
@@ -60,7 +73,7 @@ export async function getRecommendationsByProduct(
   }
 
   // Sort products by priority from recommendations
-  const productMap = new Map(products?.map((p) => [p.id, p]) || []);
+  const productMap = new Map(products?.map((p) => [p.id, toProduct(p)]) || []);
   const sortedProducts = recommendations
     .map((rec) => productMap.get(rec.recommended_product_id))
     .filter((p): p is Product => p !== undefined);
@@ -101,7 +114,7 @@ export async function getRecommendationsByCategory(
     throw new Error(`Failed to fetch products by category: ${error.message}`);
   }
 
-  return data || [];
+  return (data || []).map(toProduct);
 }
 
 /**
@@ -173,7 +186,7 @@ export async function getFrequentlyBoughtTogether(
   }
 
   // Maintain order from sortedProducts
-  const productMap = new Map(products?.map((p) => [p.id, p]) || []);
+  const productMap = new Map(products?.map((p) => [p.id, toProduct(p)]) || []);
   return sortedProducts
     .map((id) => productMap.get(id))
     .filter((p): p is Product => p !== undefined);
@@ -210,7 +223,7 @@ export async function getPopularProducts(
     throw new Error(`Failed to fetch popular products: ${error.message}`);
   }
 
-  return data || [];
+  return (data || []).map(toProduct);
 }
 
 /**
