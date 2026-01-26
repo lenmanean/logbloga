@@ -44,27 +44,32 @@ export function PackageOverview({ product, progress, className }: PackageOvervie
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">
-            {product.title || product.name || 'Package'}
-          </CardTitle>
-          <CardDescription className="mt-2">
-            {product.description || 'Digital product package'}
-          </CardDescription>
-        </CardHeader>
-        {productImage && (
-          <CardContent>
-            <div className="relative w-full h-80 rounded-lg overflow-hidden bg-muted p-4">
-              <Image
-                src={productImage}
-                alt={product.title || 'Package'}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              />
+        <CardContent className="p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            {/* Left Column: Header Text */}
+            <div className="flex flex-col justify-center space-y-3">
+              <CardTitle className="text-2xl md:text-3xl">
+                {product.title || product.name || 'Package'}
+              </CardTitle>
+              <CardDescription className="text-base md:text-lg">
+                {product.description || 'Digital product package'}
+              </CardDescription>
             </div>
-          </CardContent>
-        )}
+
+            {/* Right Column: 3D Mockup Image */}
+            {productImage && (
+              <div className="relative w-full h-64 md:h-80 rounded-lg overflow-hidden bg-muted p-4">
+                <Image
+                  src={productImage}
+                  alt={product.title || 'Package'}
+                  fill
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
+                />
+              </div>
+            )}
+          </div>
+        </CardContent>
       </Card>
 
       <Card className="border-primary/20">
