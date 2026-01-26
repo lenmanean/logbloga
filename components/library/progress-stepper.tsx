@@ -30,10 +30,10 @@ export function ProgressStepper({
       'implementation_plan',
       'platform_guides',
       'creative_frameworks',
-      'templates',
       'launch_marketing',
       'troubleshooting',
       'planning',
+      'templates',
     ];
 
     return (
@@ -108,10 +108,10 @@ export function ProgressStepper({
     'implementation_plan',
     'platform_guides',
     'creative_frameworks',
-    'templates',
     'launch_marketing',
     'troubleshooting',
     'planning',
+    'templates',
   ];
 
   return (

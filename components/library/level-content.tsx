@@ -308,72 +308,6 @@ export function LevelContent({
         </ContentSection>
       )}
 
-      {/* Templates & Checklists (always downloadable) */}
-      {templates.length > 0 && (
-        <ContentSection
-          id="section-templates"
-          title="Templates & Checklists"
-          description="Ready-to-use templates, checklists, and resources"
-          icon={FileText}
-        >
-          <div className="space-y-4">
-            <div className="flex items-center justify-end">
-              {!levelProgress.templates && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => handleMarkComplete('templates')}
-                  disabled={isMarkingComplete === 'templates'}
-                >
-                  {isMarkingComplete === 'templates' ? (
-                    'Marking...'
-                  ) : (
-                    <>
-                      <Check className="h-4 w-4 mr-1" />
-                      Mark Complete
-                    </>
-                  )}
-                </Button>
-              )}
-              {levelProgress.templates && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
-              )}
-            </div>
-            {templates.map((t, idx) => {
-              const Icon = getFileTypeIcon(t.type);
-              const label = t.name || formatFileName(t.file);
-              return (
-                <div
-                  key={idx}
-                  className="rounded-lg border bg-muted/30 p-4 space-y-3"
-                >
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-                    <span className="text-sm font-medium">{label}</span>
-                    <Badge variant="secondary" className="text-xs">
-                      {t.type.toUpperCase()}
-                    </Badge>
-                  </div>
-                  {t.description && (
-                    <p className="text-xs text-muted-foreground">
-                      {t.description}
-                    </p>
-                  )}
-                  <DownloadButton
-                    productId={productId}
-                    filename={t.file}
-                    label={`Download ${label}`}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </ContentSection>
-      )}
-
       {/* Launch & Marketing */}
       {launchMarketing.length > 0 && (
         <ContentSection
@@ -592,6 +526,72 @@ export function LevelContent({
                       label={`Download ${label}`}
                     />
                   )}
+                </div>
+              );
+            })}
+          </div>
+        </ContentSection>
+      )}
+
+      {/* Templates & Checklists (always downloadable) */}
+      {templates.length > 0 && (
+        <ContentSection
+          id="section-templates"
+          title="Templates & Checklists"
+          description="Ready-to-use templates, checklists, and resources"
+          icon={FileText}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center justify-end">
+              {!levelProgress.templates && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleMarkComplete('templates')}
+                  disabled={isMarkingComplete === 'templates'}
+                >
+                  {isMarkingComplete === 'templates' ? (
+                    'Marking...'
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-1" />
+                      Mark Complete
+                    </>
+                  )}
+                </Button>
+              )}
+              {levelProgress.templates && (
+                <div className="flex items-center gap-1 text-sm text-primary">
+                  <Check className="h-4 w-4" />
+                  <span>Completed</span>
+                </div>
+              )}
+            </div>
+            {templates.map((t, idx) => {
+              const Icon = getFileTypeIcon(t.type);
+              const label = t.name || formatFileName(t.file);
+              return (
+                <div
+                  key={idx}
+                  className="rounded-lg border bg-muted/30 p-4 space-y-3"
+                >
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                    <span className="text-sm font-medium">{label}</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {t.type.toUpperCase()}
+                    </Badge>
+                  </div>
+                  {t.description && (
+                    <p className="text-xs text-muted-foreground">
+                      {t.description}
+                    </p>
+                  )}
+                  <DownloadButton
+                    productId={productId}
+                    filename={t.file}
+                    label={`Download ${label}`}
+                  />
                 </div>
               );
             })}
