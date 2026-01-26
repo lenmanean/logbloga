@@ -7,7 +7,7 @@ import type { ProductWithPurchaseDate } from '@/lib/types/database';
 
 export const metadata = {
   title: 'Preview Library | Logbloga',
-  description: 'Visual testing - All packages and individual products with mock data',
+  description: 'Visual testing - All packages with mock data',
 };
 
 /**
@@ -69,7 +69,7 @@ export default function PreviewLibraryPage() {
         <div className="mb-8">
           <h1 className="text-3xl font-bold">Preview Library</h1>
           <p className="text-muted-foreground mt-2">
-            Visual testing - All packages and individual products with mock data
+            Visual testing - All packages with mock data
           </p>
         </div>
 
