@@ -138,7 +138,8 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
     const sanitized = DOMPurify.sanitize(html, SANITIZE_CONFIG as any);
     
     if (contentRef.current) {
-      contentRef.current.innerHTML = sanitized;
+      // Convert to string in case DOMPurify returns TrustedHTML
+      contentRef.current.innerHTML = String(sanitized);
       setCodeBlocks(blocks);
     }
   }, [content]);
