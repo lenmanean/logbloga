@@ -155,3 +155,29 @@ export async function upsertProgress(
     component: data.component as LevelComponent,
   };
 }
+
+/**
+ * Delete progress for a specific level and component
+ * Removes the completion entry for the user
+ */
+export async function deleteProgress(
+  userId: string,
+  productId: string,
+  level: 1 | 2 | 3,
+  component: LevelComponent
+): Promise<void> {
+  const supabase = await createServiceRoleClient();
+
+  const { error } = await supabase
+    .from('content_progress')
+    .delete()
+    .eq('user_id', userId)
+    .eq('product_id', productId)
+    .eq('level', level)
+    .eq('component', component);
+
+  if (error) {
+    console.error('Error deleting content progress:', error);
+    throw new Error(`Failed to delete progress: ${error.message}`);
+  }
+}

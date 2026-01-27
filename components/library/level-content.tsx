@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar } from 'lucide-react';
+import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar, X } from 'lucide-react';
 import type { LevelContent } from '@/lib/data/package-level-content';
 import {
   isHostedContent,
@@ -74,6 +74,31 @@ export function LevelContent({
     }
   };
 
+  const handleUnmarkComplete = async (component: LevelComponent) => {
+    if (isMarkingComplete) return;
+    setIsMarkingComplete(component);
+
+    try {
+      const response = await fetch(`/api/library/${productId}/progress`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ level, component }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to unmark as complete');
+      }
+
+      if (onProgressUpdate) {
+        onProgressUpdate();
+      }
+    } catch (error) {
+      console.error('Error unmarking component as complete:', error);
+    } finally {
+      setIsMarkingComplete(null);
+    }
+  };
+
   return (
     <div className={cn('space-y-6', className)}>
       {/* Level Progress Bar */}
@@ -111,7 +136,7 @@ export function LevelContent({
                 </p>
               )}
             </div>
-            {!levelProgress.implementation_plan && (
+            {!levelProgress.implementation_plan ? (
               <Button
                 variant="outline"
                 size="sm"
@@ -128,12 +153,23 @@ export function LevelContent({
                   </>
                 )}
               </Button>
-            )}
-            {levelProgress.implementation_plan && (
-              <div className="flex items-center gap-1 text-sm text-primary flex-shrink-0">
-                <Check className="h-4 w-4" />
-                <span>Completed</span>
-              </div>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleUnmarkComplete('implementation_plan')}
+                disabled={isMarkingComplete === 'implementation_plan'}
+                className="flex-shrink-0"
+              >
+                {isMarkingComplete === 'implementation_plan' ? (
+                  'Unmarking...'
+                ) : (
+                  <>
+                    <X className="h-4 w-4 mr-1" />
+                    Unmark Complete
+                  </>
+                )}
+              </Button>
             )}
           </div>
           {isHostedContent(implementationPlan.type) ? (
@@ -162,7 +198,7 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end">
-              {!levelProgress.platform_guides && (
+              {!levelProgress.platform_guides ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -178,12 +214,22 @@ export function LevelContent({
                     </>
                   )}
                 </Button>
-              )}
-              {levelProgress.platform_guides && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('platform_guides')}
+                  disabled={isMarkingComplete === 'platform_guides'}
+                >
+                  {isMarkingComplete === 'platform_guides' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
               )}
             </div>
             {platformGuides.map((guide, idx) => {
@@ -243,7 +289,7 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end">
-              {!levelProgress.creative_frameworks && (
+              {!levelProgress.creative_frameworks ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -259,12 +305,22 @@ export function LevelContent({
                     </>
                   )}
                 </Button>
-              )}
-              {levelProgress.creative_frameworks && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('creative_frameworks')}
+                  disabled={isMarkingComplete === 'creative_frameworks'}
+                >
+                  {isMarkingComplete === 'creative_frameworks' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
               )}
             </div>
             {creativeFrameworks.map((fw, idx) => {
@@ -318,7 +374,7 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end">
-              {!levelProgress.launch_marketing && (
+              {!levelProgress.launch_marketing ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -334,12 +390,22 @@ export function LevelContent({
                     </>
                   )}
                 </Button>
-              )}
-              {levelProgress.launch_marketing && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('launch_marketing')}
+                  disabled={isMarkingComplete === 'launch_marketing'}
+                >
+                  {isMarkingComplete === 'launch_marketing' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
               )}
             </div>
             {launchMarketing.map((item, idx) => {
@@ -393,7 +459,7 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end">
-              {!levelProgress.troubleshooting && (
+              {!levelProgress.troubleshooting ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -409,12 +475,22 @@ export function LevelContent({
                     </>
                   )}
                 </Button>
-              )}
-              {levelProgress.troubleshooting && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('troubleshooting')}
+                  disabled={isMarkingComplete === 'troubleshooting'}
+                >
+                  {isMarkingComplete === 'troubleshooting' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
               )}
             </div>
             {troubleshooting.map((item, idx) => {
@@ -468,7 +544,7 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end">
-              {!levelProgress.planning && (
+              {!levelProgress.planning ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -484,12 +560,22 @@ export function LevelContent({
                     </>
                   )}
                 </Button>
-              )}
-              {levelProgress.planning && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('planning')}
+                  disabled={isMarkingComplete === 'planning'}
+                >
+                  {isMarkingComplete === 'planning' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
               )}
             </div>
             {planning.map((item, idx) => {
@@ -543,7 +629,7 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end">
-              {!levelProgress.templates && (
+              {!levelProgress.templates ? (
                 <Button
                   variant="outline"
                   size="sm"
@@ -559,12 +645,22 @@ export function LevelContent({
                     </>
                   )}
                 </Button>
-              )}
-              {levelProgress.templates && (
-                <div className="flex items-center gap-1 text-sm text-primary">
-                  <Check className="h-4 w-4" />
-                  <span>Completed</span>
-                </div>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('templates')}
+                  disabled={isMarkingComplete === 'templates'}
+                >
+                  {isMarkingComplete === 'templates' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
               )}
             </div>
             {templates.map((t, idx) => {
