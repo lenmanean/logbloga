@@ -1,15 +1,26 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { GET, POST } from '@/app/api/cart/route';
 import { NextRequest } from 'next/server';
-import { createMockSupabaseClient } from '@/__tests__/utils/mocks/supabase';
 import { createTestCartItem } from '@/__tests__/utils/fixtures/cart';
 
-// Mock Supabase
+// Mock Supabase - products lookup returns a package so POST /api/cart can add it
+const mockProduct = {
+  id: 'prod123',
+  product_type: 'package' as const,
+  active: true,
+};
 vi.mock('@/lib/supabase/server', async () => {
   const actual = await vi.importActual('@/lib/supabase/server');
+  const { createMockSupabaseClient } = await import(
+    '@/__tests__/utils/mocks/supabase'
+  );
   return {
     ...actual,
-    createClient: vi.fn(() => createMockSupabaseClient()),
+    createClient: vi.fn(() =>
+      createMockSupabaseClient({
+        products: { data: mockProduct },
+      })
+    ),
     createServiceRoleClient: vi.fn(() => createMockSupabaseClient()),
   };
 });

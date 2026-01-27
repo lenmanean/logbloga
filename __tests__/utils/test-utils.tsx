@@ -77,6 +77,5 @@ export function createMockResponse() {
   };
 }
 
-// Re-export everything from React Testing Library
+// Re-export everything from React Testing Library (renderWithProviders already exported above)
 export * from '@testing-library/react';
-export { renderWithProviders };

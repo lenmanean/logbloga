@@ -164,64 +164,97 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level1: {
       aiLeverage: 'We use ChatGPT, Canva AI, and Claude, with optional tools like Midjourney or DALL-E. This AI leverage supports personal brand monetization through affiliate marketing, sponsored content, and product sales.',
       implementationPlan: {
-        file: 'social-media-level-1-plan.pdf',
-        type: 'pdf',
+        file: 'social-media-level-1-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for personal brand or simple service'
       },
       platformGuides: [
-        { file: 'buffer-setup-guide.pdf', type: 'pdf', platform: 'Buffer' },
-        { file: 'canva-setup-guide.pdf', type: 'pdf', platform: 'Canva' },
-        { file: 'google-analytics-setup-guide.pdf', type: 'pdf', platform: 'Google Analytics' }
+        { file: 'buffer-setup-guide.md', type: 'md', platform: 'Buffer' },
+        { file: 'canva-setup-guide.md', type: 'md', platform: 'Canva' },
+        { file: 'google-analytics-setup-guide.md', type: 'md', platform: 'Google Analytics' }
       ],
       creativeFrameworks: [
-        { file: 'niche-selection-worksheet.pdf', type: 'pdf', name: 'Niche Selection Worksheet' },
-        { file: 'brand-identity-framework.pdf', type: 'pdf', name: 'Brand Identity Framework' },
-        { file: 'content-direction-framework.pdf', type: 'pdf', name: 'Content Direction Framework' }
+        { file: 'niche-selection-worksheet.md', type: 'md', name: 'Niche Selection Worksheet' },
+        { file: 'brand-identity-framework.md', type: 'md', name: 'Brand Identity Framework' },
+        { file: 'content-direction-framework.md', type: 'md', name: 'Content Direction Framework' }
       ],
       templates: [
         { file: 'content-strategy-template.xlsx', type: 'xlsx', name: 'Content Strategy Template' },
         { file: 'daily-posting-checklist.pdf', type: 'pdf', name: 'Daily Posting Checklist' }
+      ],
+      launchMarketing: [
+        { file: 'social-media-level-1-first-monetization-guide.md', type: 'md', name: 'First Monetization Guide' },
+        { file: 'social-media-level-1-content-growth-checklist.md', type: 'md', name: 'Content Growth Checklist' }
+      ],
+      troubleshooting: [
+        { file: 'social-media-level-1-common-creator-issues.md', type: 'md', name: 'Common Creator Issues' }
+      ],
+      planning: [
+        { file: 'social-media-level-1-creator-income-planning.md', type: 'md', name: 'Creator Income Planning' },
+        { file: 'social-media-level-1-monetization-budget-worksheet.pdf', type: 'pdf', name: 'Monetization Budget Worksheet' }
       ]
     },
     level2: {
       aiLeverage: 'We use ChatGPT, Canva AI, Buffer, Later, and related automation tools. This AI leverage supports scaling content creation and managing 3-5 clients simultaneously. AI multiplies your output (e.g. one hour of AI-assisted work = 10 hours of manual work).',
       implementationPlan: {
-        file: 'social-media-level-2-plan.pdf',
-        type: 'pdf',
+        file: 'social-media-level-2-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for social media management service'
       },
       platformGuides: [
-        { file: 'later-setup-guide.pdf', type: 'pdf', platform: 'Later' },
-        { file: 'metricool-setup-guide.pdf', type: 'pdf', platform: 'Metricool' },
-        { file: 'buffer-paid-setup-guide.pdf', type: 'pdf', platform: 'Buffer' }
+        { file: 'later-setup-guide.md', type: 'md', platform: 'Later' },
+        { file: 'metricool-setup-guide.md', type: 'md', platform: 'Metricool' },
+        { file: 'buffer-paid-setup-guide.md', type: 'md', platform: 'Buffer' }
       ],
       creativeFrameworks: [
-        { file: 'client-onboarding-framework.pdf', type: 'pdf', name: 'Client Onboarding Framework' },
-        { file: 'service-pricing-framework.pdf', type: 'pdf', name: 'Service Pricing Framework' }
+        { file: 'client-onboarding-framework.md', type: 'md', name: 'Client Onboarding Framework' },
+        { file: 'service-pricing-framework.md', type: 'md', name: 'Service Pricing Framework' }
       ],
       templates: [
         { file: 'content-calendar-template.xlsx', type: 'xlsx', name: 'Content Calendar Template' },
         { file: 'client-reporting-template.docx', type: 'docx', name: 'Client Reporting Template' },
         { file: 'client-onboarding-checklist.pdf', type: 'pdf', name: 'Client Onboarding Checklist' }
+      ],
+      launchMarketing: [
+        { file: 'social-media-level-2-first-smm-clients-guide.md', type: 'md', name: 'First SMM Clients Guide' },
+        { file: 'social-media-level-2-service-portfolio-checklist.md', type: 'md', name: 'Service Portfolio Checklist' }
+      ],
+      troubleshooting: [
+        { file: 'social-media-level-2-client-service-issues.md', type: 'md', name: 'Client & Service Issues' }
+      ],
+      planning: [
+        { file: 'social-media-level-2-service-pricing-strategy.md', type: 'md', name: 'Service Pricing Strategy' },
+        { file: 'social-media-level-2-smm-budget-planner.pdf', type: 'pdf', name: 'SMM Budget Planner' }
       ]
     },
     level3: {
       aiLeverage: 'We use Hootsuite, advanced analytics AI, and related workflow tools. This AI leverage supports running a social media agency with a lean team and enterprise-level results.',
       implementationPlan: {
-        file: 'social-media-level-3-plan.pdf',
-        type: 'pdf',
+        file: 'social-media-level-3-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for social media agency'
       },
       platformGuides: [
-        { file: 'hootsuite-setup-guide.pdf', type: 'pdf', platform: 'Hootsuite' },
-        { file: 'advanced-analytics-setup.pdf', type: 'pdf', platform: 'Analytics' }
+        { file: 'hootsuite-setup-guide.md', type: 'md', platform: 'Hootsuite' },
+        { file: 'advanced-analytics-setup.md', type: 'md', platform: 'Analytics' }
       ],
       creativeFrameworks: [
-        { file: 'agency-operations-framework.pdf', type: 'pdf', name: 'Agency Operations Framework' },
-        { file: 'service-suite-development.pdf', type: 'pdf', name: 'Service Suite Development' }
+        { file: 'agency-operations-framework.md', type: 'md', name: 'Agency Operations Framework' },
+        { file: 'service-suite-development.md', type: 'md', name: 'Service Suite Development' }
       ],
       templates: [
         { file: 'team-management-templates.zip', type: 'zip', name: 'Team Management Templates' }
+      ],
+      launchMarketing: [
+        { file: 'social-media-level-3-agency-positioning-guide.md', type: 'md', name: 'Agency Positioning Guide' },
+        { file: 'social-media-level-3-partnership-outreach-strategies.md', type: 'md', name: 'Partnership & Outreach Strategies' }
+      ],
+      troubleshooting: [
+        { file: 'social-media-level-3-agency-operations-issues.md', type: 'md', name: 'Agency Operations Issues' }
+      ],
+      planning: [
+        { file: 'social-media-level-3-agency-revenue-strategy.md', type: 'md', name: 'Agency Revenue Strategy' },
+        { file: 'social-media-level-3-agency-budget-planning.pdf', type: 'pdf', name: 'Agency Budget Planning' }
       ]
     }
   },
@@ -229,20 +262,20 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level1: {
       aiLeverage: 'We use ChatGPT, Claude, Canva AI, AI SEO tools (e.g. Jasper or similar), and AI ad-creation tools. This AI leverage allows a solo operator to deliver services that typically require 2-3 person teams.',
       implementationPlan: {
-        file: 'agency-level-1-plan.pdf',
-        type: 'pdf',
+        file: 'agency-level-1-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for solo agency or one-person operation'
       },
       platformGuides: [
-        { file: 'systeme-io-setup-guide.pdf', type: 'pdf', platform: 'Systeme.io' },
-        { file: 'hubspot-free-setup.pdf', type: 'pdf', platform: 'HubSpot' },
-        { file: 'clickup-free-setup.pdf', type: 'pdf', platform: 'ClickUp' },
-        { file: 'hello-bonsai-setup.pdf', type: 'pdf', platform: 'Hello Bonsai' }
+        { file: 'systeme-io-setup-guide.md', type: 'md', platform: 'Systeme.io' },
+        { file: 'hubspot-free-setup.md', type: 'md', platform: 'HubSpot' },
+        { file: 'clickup-free-setup.md', type: 'md', platform: 'ClickUp' },
+        { file: 'hello-bonsai-setup.md', type: 'md', platform: 'Hello Bonsai' }
       ],
       creativeFrameworks: [
-        { file: 'agency-niche-framework.pdf', type: 'pdf', name: 'Agency Niche Framework' },
-        { file: 'service-package-framework.pdf', type: 'pdf', name: 'Service Package Framework' },
-        { file: 'target-client-framework.pdf', type: 'pdf', name: 'Target Client Framework' }
+        { file: 'agency-niche-framework.md', type: 'md', name: 'Agency Niche Framework' },
+        { file: 'service-package-framework.md', type: 'md', name: 'Service Package Framework' },
+        { file: 'target-client-framework.md', type: 'md', name: 'Target Client Framework' }
       ],
       templates: [
         { file: 'client-onboarding-template.zip', type: 'zip', name: 'Client Onboarding Template' }
@@ -251,20 +284,20 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level2: {
       aiLeverage: 'We use ChatGPT, Claude, AI workflow automation, and related tools. This AI leverage supports scaling service delivery across your team and managing 5-10 clients with a 2-5 person team.',
       implementationPlan: {
-        file: 'agency-level-2-plan.pdf',
-        type: 'pdf',
+        file: 'agency-level-2-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for small agency with 2-5 person team'
       },
       platformGuides: [
-        { file: 'gohighlevel-setup-guide.pdf', type: 'pdf', platform: 'GoHighLevel' },
-        { file: 'hubspot-paid-setup.pdf', type: 'pdf', platform: 'HubSpot' },
-        { file: 'clickup-paid-setup.pdf', type: 'pdf', platform: 'ClickUp' },
-        { file: 'zite-setup-guide.pdf', type: 'pdf', platform: 'Zite' }
+        { file: 'gohighlevel-setup-guide.md', type: 'md', platform: 'GoHighLevel' },
+        { file: 'hubspot-paid-setup.md', type: 'md', platform: 'HubSpot' },
+        { file: 'clickup-paid-setup.md', type: 'md', platform: 'ClickUp' },
+        { file: 'zite-setup-guide.md', type: 'md', platform: 'Zite' }
       ],
       creativeFrameworks: [
-        { file: 'team-management-framework.pdf', type: 'pdf', name: 'Team Management Framework' },
-        { file: 'service-suite-development.pdf', type: 'pdf', name: 'Service Suite Development' },
-        { file: 'client-retention-strategies.pdf', type: 'pdf', name: 'Client Retention Strategies' }
+        { file: 'team-management-framework.md', type: 'md', name: 'Team Management Framework' },
+        { file: 'service-suite-development.md', type: 'md', name: 'Service Suite Development' },
+        { file: 'client-retention-strategies.md', type: 'md', name: 'Client Retention Strategies' }
       ],
       templates: [
         { file: 'agency-operations-templates.zip', type: 'zip', name: 'Agency Operations Templates' }
@@ -273,18 +306,18 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level3: {
       aiLeverage: 'We use enterprise AI platforms, ChatGPT, Claude, and AI analytics tools. This AI leverage supports multi-service delivery and premium offerings.',
       implementationPlan: {
-        file: 'agency-level-3-plan.pdf',
-        type: 'pdf',
+        file: 'agency-level-3-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for established agency with 5+ person team'
       },
       platformGuides: [
-        { file: 'gohighlevel-enterprise-setup.pdf', type: 'pdf', platform: 'GoHighLevel' },
-        { file: 'enterprise-platform-setup.pdf', type: 'pdf', platform: 'Enterprise Platforms' }
+        { file: 'gohighlevel-enterprise-setup.md', type: 'md', platform: 'GoHighLevel' },
+        { file: 'enterprise-platform-setup.md', type: 'md', platform: 'Enterprise Platforms' }
       ],
       creativeFrameworks: [
-        { file: 'enterprise-operations-framework.pdf', type: 'pdf', name: 'Enterprise Operations Framework' },
-        { file: 'team-scaling-guide.pdf', type: 'pdf', name: 'Team Scaling Guide' },
-        { file: 'enterprise-service-development.pdf', type: 'pdf', name: 'Enterprise Service Development' }
+        { file: 'enterprise-operations-framework.md', type: 'md', name: 'Enterprise Operations Framework' },
+        { file: 'team-scaling-guide.md', type: 'md', name: 'Team Scaling Guide' },
+        { file: 'enterprise-service-development.md', type: 'md', name: 'Enterprise Service Development' }
       ],
       templates: [
         { file: 'enterprise-templates.zip', type: 'zip', name: 'Enterprise Templates' }
@@ -295,19 +328,19 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level1: {
       aiLeverage: 'We use ChatGPT, Claude, Canva AI, and Fiverr\'s AI features. This AI leverage supports part-time freelancing and helps you deliver work 2-3x faster.',
       implementationPlan: {
-        file: 'freelancing-level-1-plan.pdf',
-        type: 'pdf',
+        file: 'freelancing-level-1-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for side hustle or part-time freelancing'
       },
       platformGuides: [
-        { file: 'fiverr-profile-setup-guide.pdf', type: 'pdf', platform: 'Fiverr' },
-        { file: 'hello-bonsai-setup-guide.pdf', type: 'pdf', platform: 'Hello Bonsai' },
-        { file: 'paypal-setup-guide.pdf', type: 'pdf', platform: 'PayPal' }
+        { file: 'fiverr-profile-setup-guide.md', type: 'md', platform: 'Fiverr' },
+        { file: 'hello-bonsai-setup-guide.md', type: 'md', platform: 'Hello Bonsai' },
+        { file: 'paypal-setup-guide.md', type: 'md', platform: 'PayPal' }
       ],
       creativeFrameworks: [
-        { file: 'service-definition-framework.pdf', type: 'pdf', name: 'Service Definition Framework' },
-        { file: 'portfolio-creation-framework.pdf', type: 'pdf', name: 'Portfolio Creation Framework' },
-        { file: 'pricing-strategy-worksheet.pdf', type: 'pdf', name: 'Pricing Strategy Worksheet' }
+        { file: 'service-definition-framework.md', type: 'md', name: 'Service Definition Framework' },
+        { file: 'portfolio-creation-framework.md', type: 'md', name: 'Portfolio Creation Framework' },
+        { file: 'pricing-strategy-worksheet.md', type: 'md', name: 'Pricing Strategy Worksheet' }
       ],
       templates: [
         { file: 'gig-listing-template.md', type: 'md', name: 'Gig Listing Template' },
@@ -328,19 +361,19 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level2: {
       aiLeverage: 'We use ChatGPT, Claude, proposal and contract AI tools, and communication automation. This AI leverage supports full-time freelancing and taking on 2-3x more clients.',
       implementationPlan: {
-        file: 'freelancing-level-2-plan.pdf',
-        type: 'pdf',
+        file: 'freelancing-level-2-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for full-time freelancing business'
       },
       platformGuides: [
-        { file: 'upwork-setup-guide.pdf', type: 'pdf', platform: 'Upwork' },
-        { file: 'hello-bonsai-paid-setup.pdf', type: 'pdf', platform: 'Hello Bonsai' },
-        { file: 'stripe-setup-guide.pdf', type: 'pdf', platform: 'Stripe' },
-        { file: 'google-workspace-setup.pdf', type: 'pdf', platform: 'Google Workspace' }
+        { file: 'upwork-setup-guide.md', type: 'md', platform: 'Upwork' },
+        { file: 'hello-bonsai-paid-setup.md', type: 'md', platform: 'Hello Bonsai' },
+        { file: 'stripe-setup-guide.md', type: 'md', platform: 'Stripe' },
+        { file: 'google-workspace-setup.md', type: 'md', platform: 'Google Workspace' }
       ],
       creativeFrameworks: [
-        { file: 'professional-portfolio-framework.pdf', type: 'pdf', name: 'Professional Portfolio Framework' },
-        { file: 'pricing-strategy-advanced.pdf', type: 'pdf', name: 'Pricing Strategy Advanced' }
+        { file: 'professional-portfolio-framework.md', type: 'md', name: 'Professional Portfolio Framework' },
+        { file: 'pricing-strategy-advanced.md', type: 'md', name: 'Pricing Strategy Advanced' }
       ],
       templates: [
         { file: 'proposal-templates.zip', type: 'zip', name: 'Proposal Templates' },
@@ -362,18 +395,18 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
     level3: {
       aiLeverage: 'We use ChatGPT, Claude, advanced AI platforms, and direct-client AI systems. This AI leverage supports premium consulting and positioning.',
       implementationPlan: {
-        file: 'freelancing-level-3-plan.pdf',
-        type: 'pdf',
+        file: 'freelancing-level-3-plan.md',
+        type: 'md',
         description: 'Step-by-step roadmap for premium freelancing or consultant'
       },
       platformGuides: [
-        { file: 'premium-platform-guide.pdf', type: 'pdf', platform: 'Premium Platforms' },
-        { file: 'direct-client-acquisition-guide.pdf', type: 'pdf', platform: 'Direct Client Acquisition' },
-        { file: 'crm-setup-guide.pdf', type: 'pdf', platform: 'CRM' }
+        { file: 'premium-platform-guide.md', type: 'md', platform: 'Premium Platforms' },
+        { file: 'direct-client-acquisition-guide.md', type: 'md', platform: 'Direct Client Acquisition' },
+        { file: 'crm-setup-guide.md', type: 'md', platform: 'CRM' }
       ],
       creativeFrameworks: [
-        { file: 'consultant-positioning-framework.pdf', type: 'pdf', name: 'Consultant Positioning Framework' },
-        { file: 'direct-client-framework.pdf', type: 'pdf', name: 'Direct Client Framework' }
+        { file: 'consultant-positioning-framework.md', type: 'md', name: 'Consultant Positioning Framework' },
+        { file: 'direct-client-framework.md', type: 'md', name: 'Direct Client Framework' }
       ],
       templates: [
         { file: 'business-systems-templates.zip', type: 'zip', name: 'Business Systems Templates' }

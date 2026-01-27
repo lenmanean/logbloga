@@ -1,12 +1,26 @@
 import { vi } from 'vitest';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
+export type MockTableOverrides = Record<
+  string,
+  { data?: any; error?: any }
+>;
+
 /**
  * Create a mock Supabase client
+ * @param tableOverrides - Optional map of table name -> { data, error } for .single() / .maybeSingle() / .then()
  */
-export function createMockSupabaseClient(): Partial<SupabaseClient> {
+export function createMockSupabaseClient(
+  tableOverrides?: MockTableOverrides
+): Partial<SupabaseClient> {
   const mockData: Record<string, any> = {};
   const mockError: Record<string, any> = {};
+  if (tableOverrides) {
+    for (const [table, v] of Object.entries(tableOverrides)) {
+      if (v.data !== undefined) mockData[table] = v.data;
+      if (v.error !== undefined) mockError[table] = v.error;
+    }
+  }
 
   const createMockQuery = (table: string) => {
     return {

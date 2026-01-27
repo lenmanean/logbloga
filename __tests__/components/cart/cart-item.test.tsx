@@ -8,20 +8,24 @@ import { renderWithProviders } from '@/__tests__/utils/test-utils';
 const mockUpdateQuantity = vi.fn();
 const mockRemoveItem = vi.fn();
 
-// Mock useCart hook
-vi.mock('@/contexts/cart-context', () => ({
-  useCart: () => ({
-    updateQuantity: mockUpdateQuantity,
-    removeItem: mockRemoveItem,
-    items: [],
-    isLoading: false,
-    itemCount: 0,
-    total: 0,
-    addItem: vi.fn(),
-    clearCart: vi.fn(),
-    refreshCart: vi.fn(),
-  }),
-}));
+// Mock useCart hook but keep CartProvider for renderWithProviders
+vi.mock('@/contexts/cart-context', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/contexts/cart-context')>();
+  return {
+    ...actual,
+    useCart: () => ({
+      updateQuantity: mockUpdateQuantity,
+      removeItem: mockRemoveItem,
+      items: [],
+      isLoading: false,
+      itemCount: 0,
+      total: 0,
+      addItem: vi.fn(),
+      clearCart: vi.fn(),
+      refreshCart: vi.fn(),
+    }),
+  };
+});
 
 describe('CartItem Component', () => {
   beforeEach(() => {
@@ -51,17 +55,13 @@ describe('CartItem Component', () => {
   it('should call updateQuantity when quantity changes', async () => {
     const user = userEvent.setup();
     const item = createTestCartItem({ quantity: 1 });
-    
+
     renderWithProviders(<CartItem item={item} />);
 
-    // Find the quantity selector input - this depends on QuantitySelector implementation
-    const quantityInput = screen.getByDisplayValue('1');
-    await user.clear(quantityInput);
-    await user.type(quantityInput, '2');
-    await user.tab(); // Trigger blur
+    const increaseButton = screen.getByRole('button', { name: /increase quantity/i });
+    await user.click(increaseButton);
 
-    // The component calls updateQuantity through the hook
-    expect(mockUpdateQuantity).toHaveBeenCalled();
+    expect(mockUpdateQuantity).toHaveBeenCalledWith(item.id, 2);
   });
 
   it('should call removeItem when remove button is clicked', async () => {
