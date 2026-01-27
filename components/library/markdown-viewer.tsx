@@ -119,13 +119,8 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
       return placeholder;
     };
 
-    renderer.blockquote = (quote: string) => {
-      return `<blockquote class="enhanced-blockquote">${quote}</blockquote>`;
-    };
-
-    renderer.table = (header: string, body: string) => {
-      return `<div class="table-wrapper"><table class="enhanced-table"><thead>${header}</thead><tbody>${body}</tbody></table></div>`;
-    };
+    // For blockquote and table, we'll use CSS classes applied via prose classes
+    // The default renderer will be used, and we'll style via Tailwind prose classes
 
     let html: string;
     try {
