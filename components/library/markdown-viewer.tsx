@@ -292,7 +292,7 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
   if (!content) return null;
 
   return (
-    <ScrollArea className={cn('w-full', className)} style={{ maxHeight: '600px' }}>
+    <ScrollArea className={cn('w-full', className)} style={{ height: '600px' }}>
       <div className="pr-4">
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <ReactMarkdown
