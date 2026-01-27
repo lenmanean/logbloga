@@ -279,6 +279,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'client-onboarding-template.zip', type: 'zip', name: 'Client Onboarding Template' }
+      ],
+      launchMarketing: [
+        { file: 'agency-level-1-first-clients-guide.md', type: 'md', name: 'First Agency Clients Guide' },
+        { file: 'agency-level-1-solo-launch-checklist.md', type: 'md', name: 'Solo Launch Checklist' }
+      ],
+      troubleshooting: [
+        { file: 'agency-level-1-solo-operations-issues.md', type: 'md', name: 'Solo Agency Operations Issues' }
+      ],
+      planning: [
+        { file: 'agency-level-1-solo-revenue-strategy.md', type: 'md', name: 'Solo Revenue Strategy' },
+        { file: 'agency-level-1-solo-budget-worksheet.pdf', type: 'pdf', name: 'Solo Agency Budget Worksheet' }
       ]
     },
     level2: {
@@ -301,6 +312,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'agency-operations-templates.zip', type: 'zip', name: 'Agency Operations Templates' }
+      ],
+      launchMarketing: [
+        { file: 'agency-level-2-client-acquisition-scaling-guide.md', type: 'md', name: 'Client Acquisition Scaling Guide' },
+        { file: 'agency-level-2-team-portfolio-checklist.md', type: 'md', name: 'Team & Portfolio Checklist' }
+      ],
+      troubleshooting: [
+        { file: 'agency-level-2-team-client-issues.md', type: 'md', name: 'Team & Client Operations Issues' }
+      ],
+      planning: [
+        { file: 'agency-level-2-team-pricing-revenue-strategy.md', type: 'md', name: 'Team Pricing & Revenue Strategy' },
+        { file: 'agency-level-2-team-budget-planner.pdf', type: 'pdf', name: 'Team Budget Planner' }
       ]
     },
     level3: {
@@ -321,6 +343,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'enterprise-templates.zip', type: 'zip', name: 'Enterprise Templates' }
+      ],
+      launchMarketing: [
+        { file: 'agency-level-3-enterprise-outreach-guide.md', type: 'md', name: 'Enterprise Outreach Guide' },
+        { file: 'agency-level-3-partnership-strategies.md', type: 'md', name: 'Partnership & Strategic Alliances' }
+      ],
+      troubleshooting: [
+        { file: 'agency-level-3-enterprise-operations-issues.md', type: 'md', name: 'Enterprise Operations Issues' }
+      ],
+      planning: [
+        { file: 'agency-level-3-scaling-revenue-strategy.md', type: 'md', name: 'Scaling & Revenue Strategy' },
+        { file: 'agency-level-3-enterprise-budget-planning.pdf', type: 'pdf', name: 'Enterprise Budget Planning' }
       ]
     }
   },

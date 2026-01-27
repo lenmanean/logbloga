@@ -44,15 +44,15 @@
 
 ### 1.3 Content Categories per Level
 
-Every level includes **seven** content categories (Web Apps, Social Media, and Freelancing; Agency retains four until expanded):
+Every level includes **seven** content categories (Web Apps, Social Media, Agency, and Freelancing):
 
 1. **Implementation Plan** — One file per level. Step-by-step roadmap.
 2. **Platform Setup Guides** — One or more guides per level. Account creation, configuration, screenshots.
 3. **Creative Decision Frameworks** — Worksheets, exercises, decision prompts.
 4. **Templates & Checklists** — Ready-to-use resources (docs, spreadsheets, code, ZIPs).
-5. **Launch & Marketing** — Launch checklists, marketing guides, customer acquisition. (Web Apps, Social Media, Freelancing.)
-6. **Troubleshooting** — Common issues, solutions, debugging guides. (Web Apps, Social Media, Freelancing.)
-7. **Time & Budget Planning** — Time investment planners, budget worksheets, success metrics. (Web Apps, Social Media, Freelancing.)
+5. **Launch & Marketing** — Launch checklists, marketing guides, customer acquisition. (Web Apps, Social Media, Agency, Freelancing.)
+6. **Troubleshooting** — Common issues, solutions, debugging guides. (Web Apps, Social Media, Agency, Freelancing.)
+7. **Time & Budget Planning** — Time investment planners, budget worksheets, success metrics. (Web Apps, Social Media, Agency, Freelancing.)
 
 File types used: **MD**, **PDF**, **XLSX**, **DOCX**, **ZIP**. **Format consistency across all packages:** Implementation plans, platform guides, and creative frameworks use **MD** (hosted). Launch & Marketing, Troubleshooting, and Planning guides use **MD**; planning worksheets/calculators use **PDF** (downloadable). **Templates vary by package** (ZIP, MD, XLSX, DOCX, PDF) according to business model, context, and use-case.
 
@@ -294,7 +294,7 @@ This is separate from the implementation plan **file**; the file is the canonica
 ## 5. Agency Package
 
 **Slug:** `agency`  
-**File conventions:** Implementation plans, setup guides, and frameworks use **MD** (hosted). Templates use **ZIP** (multi-file packs).
+**File conventions:** Implementation plans, setup guides, and frameworks use **MD** (hosted). Launch & Marketing, Troubleshooting, and Planning guides use **MD** (hosted); planning worksheets use **PDF** (downloadable). Templates use **ZIP** (multi-file packs).
 
 **Platform setup options (Level 1 & 2):** Level 1 and Level 2 each describe **two** setup paths:
 
@@ -320,9 +320,14 @@ All listed guide **files** are included regardless of path; users choose which p
 | 6 | Creative Framework | `agency-niche-framework.md` | md | Agency Niche Framework |
 | 7 | Creative Framework | `service-package-framework.md` | md | Service Package Framework |
 | 8 | Creative Framework | `target-client-framework.md` | md | Target Client Framework |
-| 9 | Template | `client-onboarding-template.zip` | zip | Client Onboarding Template |
+| 9 | Launch & Marketing | `agency-level-1-first-clients-guide.md` | md | First Agency Clients Guide |
+| 10 | Launch & Marketing | `agency-level-1-solo-launch-checklist.md` | md | Solo Launch Checklist |
+| 11 | Troubleshooting | `agency-level-1-solo-operations-issues.md` | md | Solo Agency Operations Issues |
+| 12 | Planning | `agency-level-1-solo-revenue-strategy.md` | md | Solo Revenue Strategy |
+| 13 | Planning | `agency-level-1-solo-budget-worksheet.pdf` | pdf | Solo Agency Budget Worksheet |
+| 14 | Template | `client-onboarding-template.zip` | zip | Client Onboarding Template |
 
-**Level 1 total: 9 files.**
+**Level 1 total: 14 files.**
 
 ---
 
@@ -343,9 +348,14 @@ All listed guide **files** are included regardless of path; users choose which p
 | 6 | Creative Framework | `team-management-framework.md` | md | Team Management Framework |
 | 7 | Creative Framework | `service-suite-development.md` | md | Service Suite Development |
 | 8 | Creative Framework | `client-retention-strategies.md` | md | Client Retention Strategies |
-| 9 | Template | `agency-operations-templates.zip` | zip | Agency Operations Templates |
+| 9 | Launch & Marketing | `agency-level-2-client-acquisition-scaling-guide.md` | md | Client Acquisition Scaling Guide |
+| 10 | Launch & Marketing | `agency-level-2-team-portfolio-checklist.md` | md | Team & Portfolio Checklist |
+| 11 | Troubleshooting | `agency-level-2-team-client-issues.md` | md | Team & Client Operations Issues |
+| 12 | Planning | `agency-level-2-team-pricing-revenue-strategy.md` | md | Team Pricing & Revenue Strategy |
+| 13 | Planning | `agency-level-2-team-budget-planner.pdf` | pdf | Team Budget Planner |
+| 14 | Template | `agency-operations-templates.zip` | zip | Agency Operations Templates |
 
-**Level 2 total: 9 files.**
+**Level 2 total: 14 files.**
 
 ---
 
@@ -364,13 +374,18 @@ All listed guide **files** are included regardless of path; users choose which p
 | 4 | Creative Framework | `enterprise-operations-framework.md` | md | Enterprise Operations Framework |
 | 5 | Creative Framework | `team-scaling-guide.md` | md | Team Scaling Guide |
 | 6 | Creative Framework | `enterprise-service-development.md` | md | Enterprise Service Development |
-| 7 | Template | `enterprise-templates.zip` | zip | Enterprise Templates |
+| 7 | Launch & Marketing | `agency-level-3-enterprise-outreach-guide.md` | md | Enterprise Outreach Guide |
+| 8 | Launch & Marketing | `agency-level-3-partnership-strategies.md` | md | Partnership & Strategic Alliances |
+| 9 | Troubleshooting | `agency-level-3-enterprise-operations-issues.md` | md | Enterprise Operations Issues |
+| 10 | Planning | `agency-level-3-scaling-revenue-strategy.md` | md | Scaling & Revenue Strategy |
+| 11 | Planning | `agency-level-3-enterprise-budget-planning.pdf` | pdf | Enterprise Budget Planning |
+| 12 | Template | `enterprise-templates.zip` | zip | Enterprise Templates |
 
-**Level 3 total: 7 files.**
+**Level 3 total: 12 files.**
 
 ---
 
-**Agency package total: 25 files** (9 + 9 + 7).
+**Agency package total: 40 files** (14 + 14 + 12).
 
 ---
 
@@ -502,20 +517,20 @@ All listed guide **files** are included regardless of path; users choose which p
 |-------------|---------|---------|---------|-----------|
 | Web Apps    | 15      | 14      | 13      | **42**    |
 | Social Media| 14      | 14      | 11      | **39**    |
-| Agency      | 9       | 9       | 7       | **25**    |
+| Agency      | 14      | 14      | 12      | **40**    |
 | Freelancing | 14      | 15      | 12      | **41**    |
-| **Total**   | **52**  | **52**  | **43**  | **147**   |
+| **Total**   | **57**  | **57**  | **48**  | **162**   |
 
 ### 8.2 File Type Distribution (all packages)
 
 | Type | Use | Count |
 |------|-----|-------|
-| **md** | All packages: implementation plans, platform guides, creative frameworks; Web Apps, Social Media & Freelancing launch/marketing, troubleshooting, planning guides; templates (MD where used) | 124 |
-| **pdf** | Templates (checklists) and planning worksheets/calculators only | 9 |
+| **md** | All packages: implementation plans, platform guides, creative frameworks; Web Apps, Social Media, Agency & Freelancing launch/marketing, troubleshooting, planning guides; templates (MD where used) | 136 |
+| **pdf** | Templates (checklists) and planning worksheets/calculators only | 12 |
 | **zip** | Code templates, multi-file packs | 11 |
 | **xlsx** | Editable templates (content calendar, strategy) | 2 |
 | **docx** | Editable docs (client reporting) | 1 |
-| **Total** | | **147** |
+| **Total** | | **162** |
 
 ### 8.3 Content Category Counts (all levels, all packages)
 
@@ -525,9 +540,9 @@ All listed guide **files** are included regardless of path; users choose which p
 | Platform Setup Guides  | 40          |
 | Creative Frameworks    | 31          |
 | Templates & Checklists | 21 (including ZIP bundles with multiple assets) |
-| Launch & Marketing     | 16 (Web Apps: 5, Social Media: 6, Freelancing: 5) |
-| Troubleshooting        | 9 (Web Apps: 3, Social Media: 3, Freelancing: 3) |
-| Time & Budget Planning | 16 (Web Apps: 5, Social Media: 6, Freelancing: 5) |
+| Launch & Marketing     | 22 (Web Apps: 5, Social Media: 6, Agency: 6, Freelancing: 5) |
+| Troubleshooting        | 12 (Web Apps: 3, Social Media: 3, Agency: 3, Freelancing: 3) |
+| Time & Budget Planning | 22 (Web Apps: 5, Social Media: 6, Agency: 6, Freelancing: 5) |
 
 ### 8.4 Master File List (alphabetical)
 
@@ -539,8 +554,8 @@ Use this for checklists when creating or uploading. Filenames are unique across 
 **Social Media (md, pdf, xlsx, docx, zip):**  
 `advanced-analytics-setup.md`, `agency-operations-framework.md`, `brand-identity-framework.md`, `buffer-paid-setup-guide.md`, `buffer-setup-guide.md`, `canva-setup-guide.md`, `client-onboarding-checklist.pdf`, `client-onboarding-framework.md`, `client-reporting-template.docx`, `content-calendar-template.xlsx`, `content-direction-framework.md`, `content-strategy-template.xlsx`, `daily-posting-checklist.pdf`, `google-analytics-setup-guide.md`, `hootsuite-setup-guide.md`, `later-setup-guide.md`, `metricool-setup-guide.md`, `niche-selection-worksheet.md`, `service-pricing-framework.md`, `service-suite-development.md`, `social-media-level-1-common-creator-issues.md`, `social-media-level-1-content-growth-checklist.md`, `social-media-level-1-creator-income-planning.md`, `social-media-level-1-first-monetization-guide.md`, `social-media-level-1-monetization-budget-worksheet.pdf`, `social-media-level-1-plan.md`, `social-media-level-2-client-service-issues.md`, `social-media-level-2-first-smm-clients-guide.md`, `social-media-level-2-plan.md`, `social-media-level-2-service-portfolio-checklist.md`, `social-media-level-2-service-pricing-strategy.md`, `social-media-level-2-smm-budget-planner.pdf`, `social-media-level-3-agency-budget-planning.pdf`, `social-media-level-3-agency-operations-issues.md`, `social-media-level-3-agency-positioning-guide.md`, `social-media-level-3-agency-revenue-strategy.md`, `social-media-level-3-partnership-outreach-strategies.md`, `social-media-level-3-plan.md`, `team-management-templates.zip`.
 
-**Agency (md, zip):**  
-`agency-level-1-plan.md`, `agency-level-2-plan.md`, `agency-level-3-plan.md`, `agency-niche-framework.md`, `agency-operations-templates.zip`, `client-onboarding-template.zip`, `client-retention-strategies.md`, `clickup-free-setup.md`, `clickup-paid-setup.md`, `enterprise-operations-framework.md`, `enterprise-platform-setup.md`, `enterprise-service-development.md`, `enterprise-templates.zip`, `gohighlevel-enterprise-setup.md`, `gohighlevel-setup-guide.md`, `hello-bonsai-setup.md`, `hubspot-free-setup.md`, `hubspot-paid-setup.md`, `service-package-framework.md`, `service-suite-development.md`, `systeme-io-setup-guide.md`, `target-client-framework.md`, `team-management-framework.md`, `team-scaling-guide.md`, `zite-setup-guide.md`.
+**Agency (md, pdf, zip):**  
+`agency-level-1-first-clients-guide.md`, `agency-level-1-plan.md`, `agency-level-1-solo-budget-worksheet.pdf`, `agency-level-1-solo-launch-checklist.md`, `agency-level-1-solo-operations-issues.md`, `agency-level-1-solo-revenue-strategy.md`, `agency-level-2-client-acquisition-scaling-guide.md`, `agency-level-2-plan.md`, `agency-level-2-team-budget-planner.pdf`, `agency-level-2-team-client-issues.md`, `agency-level-2-team-portfolio-checklist.md`, `agency-level-2-team-pricing-revenue-strategy.md`, `agency-level-3-enterprise-budget-planning.pdf`, `agency-level-3-enterprise-operations-issues.md`, `agency-level-3-enterprise-outreach-guide.md`, `agency-level-3-partnership-strategies.md`, `agency-level-3-plan.md`, `agency-level-3-scaling-revenue-strategy.md`, `agency-niche-framework.md`, `agency-operations-templates.zip`, `client-onboarding-template.zip`, `client-retention-strategies.md`, `clickup-free-setup.md`, `clickup-paid-setup.md`, `enterprise-operations-framework.md`, `enterprise-platform-setup.md`, `enterprise-service-development.md`, `enterprise-templates.zip`, `gohighlevel-enterprise-setup.md`, `gohighlevel-setup-guide.md`, `hello-bonsai-setup.md`, `hubspot-free-setup.md`, `hubspot-paid-setup.md`, `service-package-framework.md`, `service-suite-development.md`, `systeme-io-setup-guide.md`, `target-client-framework.md`, `team-management-framework.md`, `team-scaling-guide.md`, `zite-setup-guide.md`.
 
 **Freelancing (pdf, md, zip):**  
 `business-systems-templates.zip`, `client-communication-templates.md`, `consultant-positioning-framework.md`, `contract-templates.zip`, `crm-setup-guide.md`, `direct-client-acquisition-guide.md`, `direct-client-framework.md`, `fiverr-profile-setup-guide.md`, `freelancing-level-1-common-freelancing-issues.md`, `freelancing-level-1-first-client-acquisition-guide.md`, `freelancing-level-1-plan.md`, `freelancing-level-1-pricing-calculator-worksheet.pdf`, `freelancing-level-1-profile-optimization-checklist.md`, `freelancing-level-1-side-hustle-budget-planner.pdf`, `freelancing-level-2-client-acquisition-strategies.md`, `freelancing-level-2-client-management-issues.md`, `freelancing-level-2-full-time-budget-planner.pdf`, `freelancing-level-2-plan.md`, `freelancing-level-2-portfolio-promotion-guide.md`, `freelancing-level-2-pricing-scaling-strategy.md`, `freelancing-level-3-advanced-business-challenges.md`, `freelancing-level-3-business-financial-planning.pdf`, `freelancing-level-3-partnership-strategies.md`, `freelancing-level-3-plan.md`, `freelancing-level-3-premium-positioning-guide.md`, `freelancing-level-3-premium-pricing-models.md`, `gig-listing-template.md`, `google-workspace-setup.md`, `hello-bonsai-paid-setup.md`, `hello-bonsai-setup-guide.md`, `paypal-setup-guide.md`, `portfolio-creation-framework.md`, `portfolio-showcase-template.md`, `premium-platform-guide.md`, `pricing-strategy-advanced.md`, `pricing-strategy-worksheet.md`, `professional-portfolio-framework.md`, `proposal-templates.zip`, `service-definition-framework.md`, `stripe-setup-guide.md`, `upwork-setup-guide.md`.
