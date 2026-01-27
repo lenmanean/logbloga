@@ -111,10 +111,10 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
     // Configure marked with custom renderer
     const renderer = new marked.Renderer();
     
-    renderer.code = (code: string, language?: string) => {
-      const lang = language || 'text';
+    renderer.code = ({ text, lang }: { text: string; lang?: string }) => {
+      const language = lang || 'text';
       const placeholder = `<div class="syntax-highlight-placeholder" data-index="${blockIndex}"></div>`;
-      blocks.push({ code, language: lang, index: blockIndex });
+      blocks.push({ code: text, language, index: blockIndex });
       blockIndex++;
       return placeholder;
     };
