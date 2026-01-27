@@ -312,6 +312,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       templates: [
         { file: 'gig-listing-template.md', type: 'md', name: 'Gig Listing Template' },
         { file: 'portfolio-showcase-template.md', type: 'md', name: 'Portfolio Showcase Template' }
+      ],
+      launchMarketing: [
+        { file: 'freelancing-level-1-first-client-acquisition-guide.pdf', type: 'pdf', name: 'First Client Acquisition Guide' },
+        { file: 'freelancing-level-1-profile-optimization-checklist.pdf', type: 'pdf', name: 'Profile Optimization Checklist' }
+      ],
+      troubleshooting: [
+        { file: 'freelancing-level-1-common-freelancing-issues.pdf', type: 'pdf', name: 'Common Freelancing Issues' }
+      ],
+      planning: [
+        { file: 'freelancing-level-1-side-hustle-budget-planner.pdf', type: 'pdf', name: 'Side Hustle Budget Planner' },
+        { file: 'freelancing-level-1-pricing-calculator-worksheet.pdf', type: 'pdf', name: 'Pricing Calculator Worksheet' }
       ]
     },
     level2: {
@@ -335,6 +346,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         { file: 'proposal-templates.zip', type: 'zip', name: 'Proposal Templates' },
         { file: 'contract-templates.zip', type: 'zip', name: 'Contract Templates' },
         { file: 'client-communication-templates.md', type: 'md', name: 'Client Communication Templates' }
+      ],
+      launchMarketing: [
+        { file: 'freelancing-level-2-client-acquisition-strategies.pdf', type: 'pdf', name: 'Client Acquisition Strategies' },
+        { file: 'freelancing-level-2-portfolio-promotion-guide.pdf', type: 'pdf', name: 'Portfolio Promotion Guide' }
+      ],
+      troubleshooting: [
+        { file: 'freelancing-level-2-client-management-issues.pdf', type: 'pdf', name: 'Client Management Issues' }
+      ],
+      planning: [
+        { file: 'freelancing-level-2-full-time-budget-planner.pdf', type: 'pdf', name: 'Full-Time Freelancer Budget Planner' },
+        { file: 'freelancing-level-2-pricing-scaling-strategy.pdf', type: 'pdf', name: 'Pricing Scaling Strategy' }
       ]
     },
     level3: {
@@ -355,6 +377,17 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'business-systems-templates.zip', type: 'zip', name: 'Business Systems Templates' }
+      ],
+      launchMarketing: [
+        { file: 'freelancing-level-3-premium-positioning-guide.pdf', type: 'pdf', name: 'Premium Positioning Guide' },
+        { file: 'freelancing-level-3-partnership-strategies.pdf', type: 'pdf', name: 'Partnership Strategies' }
+      ],
+      troubleshooting: [
+        { file: 'freelancing-level-3-advanced-business-challenges.pdf', type: 'pdf', name: 'Advanced Business Challenges' }
+      ],
+      planning: [
+        { file: 'freelancing-level-3-premium-pricing-models.pdf', type: 'pdf', name: 'Premium Pricing Models' },
+        { file: 'freelancing-level-3-business-financial-planning.pdf', type: 'pdf', name: 'Business Financial Planning' }
       ]
     }
   }

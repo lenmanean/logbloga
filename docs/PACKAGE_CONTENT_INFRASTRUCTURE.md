@@ -382,8 +382,13 @@ All listed guide **files** are included regardless of path; users choose which p
 | 7 | Creative Framework | `pricing-strategy-worksheet.pdf` | pdf | Pricing Strategy Worksheet |
 | 8 | Template | `gig-listing-template.md` | md | Gig Listing Template |
 | 9 | Template | `portfolio-showcase-template.md` | md | Portfolio Showcase Template |
+| 10 | Launch & Marketing | `freelancing-level-1-first-client-acquisition-guide.pdf` | pdf | First Client Acquisition Guide |
+| 11 | Launch & Marketing | `freelancing-level-1-profile-optimization-checklist.pdf` | pdf | Profile Optimization Checklist |
+| 12 | Troubleshooting | `freelancing-level-1-common-freelancing-issues.pdf` | pdf | Common Freelancing Issues |
+| 13 | Planning | `freelancing-level-1-side-hustle-budget-planner.pdf` | pdf | Side Hustle Budget Planner |
+| 14 | Planning | `freelancing-level-1-pricing-calculator-worksheet.pdf` | pdf | Pricing Calculator Worksheet |
 
-**Level 1 total: 9 files.**
+**Level 1 total: 14 files.**
 
 ---
 
@@ -406,8 +411,13 @@ All listed guide **files** are included regardless of path; users choose which p
 | 8 | Template | `proposal-templates.zip` | zip | Proposal Templates |
 | 9 | Template | `contract-templates.zip` | zip | Contract Templates |
 | 10 | Template | `client-communication-templates.md` | md | Client Communication Templates |
+| 11 | Launch & Marketing | `freelancing-level-2-client-acquisition-strategies.pdf` | pdf | Client Acquisition Strategies |
+| 12 | Launch & Marketing | `freelancing-level-2-portfolio-promotion-guide.pdf` | pdf | Portfolio Promotion Guide |
+| 13 | Troubleshooting | `freelancing-level-2-client-management-issues.pdf` | pdf | Client Management Issues |
+| 14 | Planning | `freelancing-level-2-full-time-budget-planner.pdf` | pdf | Full-Time Freelancer Budget Planner |
+| 15 | Planning | `freelancing-level-2-pricing-scaling-strategy.pdf` | pdf | Pricing Scaling Strategy |
 
-**Level 2 total: 10 files.**
+**Level 2 total: 15 files.**
 
 ---
 
@@ -427,12 +437,17 @@ All listed guide **files** are included regardless of path; users choose which p
 | 5 | Creative Framework | `consultant-positioning-framework.pdf` | pdf | Consultant Positioning Framework |
 | 6 | Creative Framework | `direct-client-framework.pdf` | pdf | Direct Client Framework |
 | 7 | Template | `business-systems-templates.zip` | zip | Business Systems Templates |
+| 8 | Launch & Marketing | `freelancing-level-3-premium-positioning-guide.pdf` | pdf | Premium Positioning Guide |
+| 9 | Launch & Marketing | `freelancing-level-3-partnership-strategies.pdf` | pdf | Partnership Strategies |
+| 10 | Troubleshooting | `freelancing-level-3-advanced-business-challenges.pdf` | pdf | Advanced Business Challenges |
+| 11 | Planning | `freelancing-level-3-premium-pricing-models.pdf` | pdf | Premium Pricing Models |
+| 12 | Planning | `freelancing-level-3-business-financial-planning.pdf` | pdf | Business Financial Planning |
 
-**Level 3 total: 7 files.**
+**Level 3 total: 12 files.**
 
 ---
 
-**Freelancing package total: 26 files** (9 + 10 + 7).
+**Freelancing package total: 41 files** (14 + 15 + 12).
 
 ---
 
@@ -473,19 +488,19 @@ All listed guide **files** are included regardless of path; users choose which p
 | Web Apps    | 15      | 14      | 13      | **42**    |
 | Social Media| 9       | 9       | 6       | **24**    |
 | Agency      | 9       | 9       | 7       | **25**    |
-| Freelancing | 9       | 10      | 7       | **26**    |
-| **Total**   | **42**  | **42**  | **33**  | **117**   |
+| Freelancing | 14      | 15      | 12      | **41**    |
+| **Total**   | **47**  | **47**  | **38**  | **132**   |
 
 ### 8.2 File Type Distribution (all packages)
 
 | Type | Use | Count |
 |------|-----|-------|
 | **md** | Web Apps plans, guides, frameworks, checklists, launch/marketing, troubleshooting, planning; Freelancing templates | 41 |
-| **pdf** | Social Media, Agency, Freelancing plans, guides, frameworks, checklists | 62 |
+| **pdf** | Social Media, Agency, Freelancing plans, guides, frameworks, checklists, launch/marketing, troubleshooting, planning | 77 |
 | **zip** | Code templates, multi-file packs | 11 |
 | **xlsx** | Editable templates (content calendar, strategy) | 2 |
 | **docx** | Editable docs (client reporting) | 1 |
-| **Total** | | **117** |
+| **Total** | | **132** |
 
 ### 8.3 Content Category Counts (all levels, all packages)
 
@@ -495,9 +510,9 @@ All listed guide **files** are included regardless of path; users choose which p
 | Platform Setup Guides  | 40          |
 | Creative Frameworks    | 31          |
 | Templates & Checklists | 21 (including ZIP bundles with multiple assets) |
-| Launch & Marketing     | 5 (Web Apps only) |
-| Troubleshooting        | 3 (Web Apps only) |
-| Time & Budget Planning | 5 (Web Apps only) |
+| Launch & Marketing     | 10 (Web Apps: 5, Freelancing: 5) |
+| Troubleshooting        | 6 (Web Apps: 3, Freelancing: 3) |
+| Time & Budget Planning | 10 (Web Apps: 5, Freelancing: 5) |
 
 ### 8.4 Master File List (alphabetical)
 
@@ -513,7 +528,7 @@ Use this for checklists when creating or uploading. Filenames are unique across 
 `agency-level-1-plan.pdf`, `agency-level-2-plan.pdf`, `agency-level-3-plan.pdf`, `agency-niche-framework.pdf`, `agency-operations-templates.zip`, `client-onboarding-template.zip`, `client-retention-strategies.pdf`, `clickup-free-setup.pdf`, `clickup-paid-setup.pdf`, `enterprise-operations-framework.pdf`, `enterprise-platform-setup.pdf`, `enterprise-service-development.pdf`, `enterprise-templates.zip`, `gohighlevel-enterprise-setup.pdf`, `gohighlevel-setup-guide.pdf`, `hello-bonsai-setup.pdf`, `hubspot-free-setup.pdf`, `hubspot-paid-setup.pdf`, `service-package-framework.pdf`, `service-suite-development.pdf`, `systeme-io-setup-guide.pdf`, `target-client-framework.pdf`, `team-management-framework.pdf`, `team-scaling-guide.pdf`, `zite-setup-guide.pdf`.
 
 **Freelancing (pdf, md, zip):**  
-`business-systems-templates.zip`, `client-communication-templates.md`, `consultant-positioning-framework.pdf`, `contract-templates.zip`, `crm-setup-guide.pdf`, `direct-client-acquisition-guide.pdf`, `direct-client-framework.pdf`, `fiverr-profile-setup-guide.pdf`, `freelancing-level-1-plan.pdf`, `freelancing-level-2-plan.pdf`, `freelancing-level-3-plan.pdf`, `gig-listing-template.md`, `google-workspace-setup.pdf`, `hello-bonsai-paid-setup.pdf`, `hello-bonsai-setup-guide.pdf`, `paypal-setup-guide.pdf`, `portfolio-creation-framework.pdf`, `portfolio-showcase-template.md`, `premium-platform-guide.pdf`, `pricing-strategy-advanced.pdf`, `pricing-strategy-worksheet.pdf`, `professional-portfolio-framework.pdf`, `proposal-templates.zip`, `service-definition-framework.pdf`, `stripe-setup-guide.pdf`, `upwork-setup-guide.pdf`.
+`business-systems-templates.zip`, `client-communication-templates.md`, `consultant-positioning-framework.pdf`, `contract-templates.zip`, `crm-setup-guide.pdf`, `direct-client-acquisition-guide.pdf`, `direct-client-framework.pdf`, `fiverr-profile-setup-guide.pdf`, `freelancing-level-1-common-freelancing-issues.pdf`, `freelancing-level-1-first-client-acquisition-guide.pdf`, `freelancing-level-1-plan.pdf`, `freelancing-level-1-pricing-calculator-worksheet.pdf`, `freelancing-level-1-profile-optimization-checklist.pdf`, `freelancing-level-1-side-hustle-budget-planner.pdf`, `freelancing-level-2-client-acquisition-strategies.pdf`, `freelancing-level-2-client-management-issues.pdf`, `freelancing-level-2-full-time-budget-planner.pdf`, `freelancing-level-2-plan.pdf`, `freelancing-level-2-portfolio-promotion-guide.pdf`, `freelancing-level-2-pricing-scaling-strategy.pdf`, `freelancing-level-3-advanced-business-challenges.pdf`, `freelancing-level-3-business-financial-planning.pdf`, `freelancing-level-3-partnership-strategies.pdf`, `freelancing-level-3-plan.pdf`, `freelancing-level-3-premium-positioning-guide.pdf`, `freelancing-level-3-premium-pricing-models.pdf`, `gig-listing-template.md`, `google-workspace-setup.pdf`, `hello-bonsai-paid-setup.pdf`, `hello-bonsai-setup-guide.pdf`, `paypal-setup-guide.pdf`, `portfolio-creation-framework.pdf`, `portfolio-showcase-template.md`, `premium-platform-guide.pdf`, `pricing-strategy-advanced.pdf`, `pricing-strategy-worksheet.pdf`, `professional-portfolio-framework.pdf`, `proposal-templates.zip`, `service-definition-framework.pdf`, `stripe-setup-guide.pdf`, `upwork-setup-guide.pdf`.
 
 ---
 
