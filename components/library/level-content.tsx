@@ -186,7 +186,15 @@ export function LevelContent({
                 </div>
               )}
             </div>
-            {platformGuides.map((guide, idx) => {
+            {platformGuides
+              .sort((a, b) => {
+                const aHosted = isHostedContent(a.type);
+                const bHosted = isHostedContent(b.type);
+                if (aHosted && !bHosted) return -1;
+                if (!aHosted && bHosted) return 1;
+                return 0;
+              })
+              .map((guide, idx) => {
               const hosted = isHostedContent(guide.type);
               const Icon = getFileTypeIcon(guide.type);
               return (
@@ -267,7 +275,15 @@ export function LevelContent({
                 </div>
               )}
             </div>
-            {creativeFrameworks.map((fw, idx) => {
+            {creativeFrameworks
+              .sort((a, b) => {
+                const aHosted = isHostedContent(a.type);
+                const bHosted = isHostedContent(b.type);
+                if (aHosted && !bHosted) return -1;
+                if (!aHosted && bHosted) return 1;
+                return 0;
+              })
+              .map((fw, idx) => {
               const hosted = isHostedContent(fw.type);
               const Icon = getFileTypeIcon(fw.type);
               const label = fw.name || formatFileName(fw.file);
@@ -342,7 +358,15 @@ export function LevelContent({
                 </div>
               )}
             </div>
-            {launchMarketing.map((item, idx) => {
+            {launchMarketing
+              .sort((a, b) => {
+                const aHosted = isHostedContent(a.type);
+                const bHosted = isHostedContent(b.type);
+                if (aHosted && !bHosted) return -1;
+                if (!aHosted && bHosted) return 1;
+                return 0;
+              })
+              .map((item, idx) => {
               const hosted = isHostedContent(item.type);
               const Icon = getFileTypeIcon(item.type);
               const label = item.name || formatFileName(item.file);
@@ -417,7 +441,15 @@ export function LevelContent({
                 </div>
               )}
             </div>
-            {troubleshooting.map((item, idx) => {
+            {troubleshooting
+              .sort((a, b) => {
+                const aHosted = isHostedContent(a.type);
+                const bHosted = isHostedContent(b.type);
+                if (aHosted && !bHosted) return -1;
+                if (!aHosted && bHosted) return 1;
+                return 0;
+              })
+              .map((item, idx) => {
               const hosted = isHostedContent(item.type);
               const Icon = getFileTypeIcon(item.type);
               const label = item.name || formatFileName(item.file);
@@ -492,7 +524,15 @@ export function LevelContent({
                 </div>
               )}
             </div>
-            {planning.map((item, idx) => {
+            {planning
+              .sort((a, b) => {
+                const aHosted = isHostedContent(a.type);
+                const bHosted = isHostedContent(b.type);
+                if (aHosted && !bHosted) return -1;
+                if (!aHosted && bHosted) return 1;
+                return 0;
+              })
+              .map((item, idx) => {
               const hosted = isHostedContent(item.type);
               const Icon = getFileTypeIcon(item.type);
               const label = item.name || formatFileName(item.file);
@@ -567,7 +607,15 @@ export function LevelContent({
                 </div>
               )}
             </div>
-            {templates.map((t, idx) => {
+            {templates
+              .sort((a, b) => {
+                const aHosted = isHostedContent(a.type);
+                const bHosted = isHostedContent(b.type);
+                if (aHosted && !bHosted) return -1;
+                if (!aHosted && bHosted) return 1;
+                return 0;
+              })
+              .map((t, idx) => {
               const Icon = getFileTypeIcon(t.type);
               const label = t.name || formatFileName(t.file);
               return (
