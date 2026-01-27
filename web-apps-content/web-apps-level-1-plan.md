@@ -29,12 +29,7 @@ Before starting, ensure you have:
 - Programming experience
 - Technical coding skills
 
-## Timeline
-
-**Week 1**: Direct Cursor to set up the project, basic structure, and Stripe integration  
-**Week 2**: Work with Cursor to implement UI/UX and test functionality  
-**Week 3**: Guide Cursor through deployment and launch preparation  
-**Week 4**: Direct Cursor on marketing setup and optimization
+**Cursor Prompts Available**: Download the [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) file for ready-to-use prompts you can copy and paste into Cursor for each step. These prompts are designed to save you time and ensure clear communication with Cursor.
 
 ## Milestones
 
@@ -100,6 +95,10 @@ Before starting, ensure you have:
 3. **Provide feedback**: Tell Cursor what works and what needs changes
 4. **Request improvements**: Ask Cursor to refine or adjust as needed
 
+### Using Cursor Prompts
+
+For each step in this implementation plan, we've created ready-to-use prompts you can copy and paste directly into Cursor. Download the [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) file to have all prompts in one place. These prompts are designed to save you time and ensure clear, effective communication with Cursor.
+
 ## Step-by-Step Roadmap
 
 ### Phase 1: Project Setup (Days 1-3)
@@ -110,6 +109,8 @@ Before starting, ensure you have:
 2. Direct Cursor to initialize a Next.js project. You can say: *"Create a new Next.js project with TypeScript and Tailwind CSS. Name it 'my-saas-app'"*
 3. Ask Cursor to start the development server
 4. Review the result - Cursor should show you a running application at `http://localhost:3000`
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 **Note**: If Cursor encounters any errors, simply describe the error to Cursor and ask it to fix it.
 
@@ -122,11 +123,15 @@ Before starting, ensure you have:
 
 **Example directive**: *"Set up git, connect to my GitHub repo at [your-repo-url], and make an initial commit"*
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 1.3: Install Dependencies
 
 Direct Cursor to install Stripe dependencies. You can say: *"Install the Stripe packages needed for payment processing"*
 
 Cursor will handle the technical details of which packages to install and how to configure them.
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 ### Phase 2: Stripe Integration (Days 4-7)
 
@@ -140,6 +145,8 @@ Cursor will handle the technical details of which packages to install and how to
 
 Cursor will guide you on where to store these keys and how to use them securely.
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 2.2: Create Stripe Product
 
 1. In Stripe Dashboard, go to Products (you'll do this manually)
@@ -147,6 +154,8 @@ Cursor will guide you on where to store these keys and how to use them securely.
 3. Set name, description, and price for your product
 4. Note the Product ID and Price ID
 5. Share these IDs with Cursor: *"Here are my Stripe Product ID and Price ID: [your-ids]. Use these in the payment integration"*
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 #### Step 2.3: Implement Payment Page
 
@@ -172,11 +181,15 @@ export default function PaymentPage() {
 
 Tell Cursor: *"I want a payment page similar to this example. Build it with proper error handling and user feedback."*
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 2.4: Create API Route for Payment
 
 Direct Cursor: *"Create an API route that handles Stripe checkout session creation. Make sure it's secure and handles errors properly."*
 
 Cursor will create the server-side code needed to process payments securely.
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 ### Phase 3: Landing Page Design (Days 8-10)
 
@@ -186,17 +199,23 @@ Describe your vision to Cursor: *"I want a hero section with a compelling headli
 
 You can also ask Cursor: *"Generate some headline and value proposition options for my [product/service description]"*
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 3.2: Add Features Section
 
 Direct Cursor: *"Add a features section that lists the key benefits of my product. Use icons or images to make it visually appealing and easy to scan."*
 
 Share your key features with Cursor, and it will create an attractive section to display them.
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 3.3: Implement Responsive Design
 
 Ask Cursor: *"Make sure the entire landing page works well on mobile devices. Test it and fix any issues with buttons or layout on smaller screens."*
 
 Cursor will ensure your site looks great on all devices.
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 ### Phase 4: Deployment (Days 11-12)
 
@@ -205,6 +224,8 @@ Cursor will ensure your site looks great on all devices.
 Direct Cursor: *"Prepare the project for deployment. Make sure all code is pushed to GitHub and that sensitive files like .env.local are not included in the repository."*
 
 Cursor will handle the technical details of preparing for deployment.
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 #### Step 4.2: Deploy to Vercel
 
@@ -217,11 +238,15 @@ Cursor will handle the technical details of preparing for deployment.
 
 Ask Cursor: *"Help me understand what environment variables I need to add in Vercel for Stripe to work."*
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 4.3: Test Production
 
 1. Visit your deployed URL (Vercel will provide this)
 2. Test the payment flow using Stripe's test card: `4242 4242 4242 4242`
 3. If anything doesn't work, describe the issue to Cursor and ask it to fix it
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for troubleshooting prompts if you encounter issues.
 
 ### Phase 5: Launch Preparation (Days 13-14)
 
@@ -235,12 +260,16 @@ Work with Cursor to test everything:
 
 Direct Cursor: *"Help me test the entire application thoroughly. Check all the important user flows and fix any issues you find."*
 
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+
 #### Step 5.2: Switch to Live Mode
 
 1. Complete Stripe account verification (you'll do this in Stripe Dashboard)
 2. Get your live mode API keys from Stripe
 3. Direct Cursor: *"Update the environment variables to use live Stripe keys instead of test keys"*
 4. Redeploy on Vercel with the new keys
+
+**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
 
 ## Working with Cursor: Your Development Workflow
 
@@ -312,6 +341,10 @@ After completing Level 1:
 
 ## Resources
 
+### Cursor Prompts
+- [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) - Ready-to-use prompts for each step. Download this file and copy-paste prompts directly into Cursor.
+
+### Documentation (Share with Cursor if needed)
 While you don't need to read these, you can share them with Cursor if needed:
 - [Next.js Documentation](https://nextjs.org/docs) - Share with Cursor for reference
 - [Stripe Documentation](https://stripe.com/docs) - Cursor uses this for payment integration
