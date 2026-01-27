@@ -70,7 +70,10 @@ export async function POST(request: Request, { params }: RouteParams) {
     const body = await request.json();
     const { level, component } = body;
 
-    if (typeof level !== 'number' || ![1, 2, 3].includes(level)) {
+    // Coerce level to number if sent as string (e.g. "1" -> 1)
+    const levelNum = typeof level === 'string' ? parseInt(level, 10) : level;
+
+    if (typeof levelNum !== 'number' || ![1, 2, 3].includes(levelNum)) {
       return NextResponse.json(
         { error: 'Invalid level. Must be 1, 2, or 3.' },
         { status: 400 }
@@ -93,7 +96,7 @@ export async function POST(request: Request, { params }: RouteParams) {
       );
     }
 
-    await upsertProgress(user.id, productId, level as 1 | 2 | 3, component);
+    await upsertProgress(user.id, productId, levelNum as 1 | 2 | 3, component);
 
     const updatedProgress = await getProgress(user.id, productId);
 

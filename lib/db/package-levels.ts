@@ -3,6 +3,13 @@
  * 
  * Provides helper functions for working with package level-based content structure.
  * Supports fetching, parsing, and validating level data from the database.
+ * 
+ * NOTE: Database-stored levels (via `parsePackageLevels` / `validatePackageLevel`) only
+ * support the original four categories: `implementationPlan`, `platformGuides`,
+ * `creativeFrameworks`, and `templates`. The newer categories (`launchMarketing`,
+ * `troubleshooting`, `planning`) are static-only and always come from `package-level-content.ts`.
+ * If these categories are ever persisted in the database, `validatePackageLevel` and
+ * `PackageLevel` interface will need to be extended.
  */
 
 import type { PackageLevels, PackageLevel } from '@/lib/products';

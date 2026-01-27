@@ -83,17 +83,17 @@ File types used: **MD**, **PDF**, **XLSX**, **DOCX**, **ZIP**. **Format consiste
 - **Formats:** PDF, XLSX, DOCX, MD, ZIP (code or multi-file packs).
 - **Role:** Editable templates, checklists, code starters, or bundled assets.
 
-### 2.5 Launch & Marketing (Web Apps, Freelancing)
+### 2.5 Launch & Marketing (Web Apps, Social Media, Agency, Freelancing)
 
 - **Role:** Launch checklists, basic marketing, customer acquisition, enterprise playbooks.
 - **Format:** **All packages** → `.md` (hosted).
 
-### 2.6 Troubleshooting (Web Apps, Freelancing)
+### 2.6 Troubleshooting (Web Apps, Social Media, Agency, Freelancing)
 
 - **Role:** Common issues and solutions, debugging guides.
 - **Format:** **All packages** → `.md` (hosted).
 
-### 2.7 Time & Budget Planning (Web Apps, Freelancing)
+### 2.7 Time & Budget Planning (Web Apps, Social Media, Agency, Freelancing)
 
 - **Role:** Time investment planners, budget worksheets, success metrics, scaling budgets.
 - **Format:** Guides/strategies → `.md` (hosted); worksheets/calculators → `.pdf` (downloadable).
@@ -111,7 +111,8 @@ This is separate from the implementation plan **file**; the file is the canonica
 ## 3. Web Apps Package
 
 **Slug:** `web-apps`  
-**File conventions:** Implementation plans, setup guides, and frameworks use **Markdown (`.md`)**. Templates use **ZIP** (code) or **MD** (checklists).
+**File conventions:** Implementation plans, setup guides, and frameworks use **Markdown (`.md`)**. Templates use **ZIP** (code) or **MD** (checklists).  
+**Note:** Web Apps Level 1 and Level 2 use `.md` for budget planning worksheets (`web-apps-level-1-budget-planning-worksheet.md`, `web-apps-level-2-budget-planning-worksheet.md`) instead of PDF. This is an intentional exception; other packages use PDF for budget worksheets/planners.
 
 ### 3.1 Level 1: Landing Page / Simple Web App
 
