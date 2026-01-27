@@ -494,11 +494,13 @@ All listed guide **files** are included regardless of path; users choose which p
 
 - **Endpoint:** `GET /api/library/[product-id]/download?file={filename}`
 - **Auth:** User must have access to the product (e.g. via order/license). Enforced by `hasProductAccess(userId, productId)`.
-- **Flow:** Resolve `product-id` → check access → stream file from `digital-products/{productId}/{filename}`.
+- **Allowlist:** `file` must be a **flat filename** (no path separators) and must appear in the package’s content allowlist (`package-level-content`). Invalid or disallowed files return 404.
+- **Flow:** Resolve `product-id` → check access → validate `file` against allowlist → stream file from `digital-products/{productId}/{filename}`.
 
 ### 7.3 Filename Rules
 
 - **Exact match:** Use filenames exactly as in this document and in `lib/data/package-level-content.ts`. The UI and download flow use these `file` values.
+- **Flat filenames only:** No path separators (`/` or `\`). All package files live directly under `digital-products/{productId}/`.
 - **Case-sensitive:** Preserve casing (e.g. `web-apps-level-1-plan.md` not `Web-Apps-Level-1-Plan.md`).
 - **Extensions:** Always include correct extension (`.md`, `.pdf`, `.xlsx`, `.docx`, `.zip`).
 

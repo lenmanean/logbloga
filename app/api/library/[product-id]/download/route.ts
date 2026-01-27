@@ -1,29 +1,31 @@
 /**
  * GET /api/library/[product-id]/download
  * Secure download endpoint for digital products.
- * Supports nested paths (e.g. level1/guide.pdf).
+ * Only flat filenames are allowed; each must be in the package allowlist.
  */
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
 import { hasProductAccess } from '@/lib/db/access';
+import { getProductById } from '@/lib/db/products';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getContentType } from '@/lib/utils/content';
+import { getAllowedFilenamesForPackage } from '@/lib/data/package-level-content';
 
 interface RouteParams {
   params: Promise<{ 'product-id': string }>;
 }
 
 /**
- * Validate file path: allow alphanumeric, dots, hyphens, underscores, forward slashes.
- * Reject '..' and backslashes to prevent directory traversal.
+ * Validate file path: allow alphanumeric, dots, hyphens, underscores.
+ * No path separators (flat filenames only); reject '..' and backslashes.
  */
 function isValidFilePath(file: string): boolean {
   if (!file || typeof file !== 'string') return false;
   const t = file.trim();
   if (t.length === 0) return false;
-  if (t.includes('..') || t.includes('\\')) return false;
-  return /^[a-zA-Z0-9_./-]+$/.test(t);
+  if (t.includes('..') || t.includes('\\') || t.includes('/')) return false;
+  return /^[a-zA-Z0-9_.-]+$/.test(t);
 }
 
 export async function GET(request: Request, { params }: RouteParams) {
@@ -43,7 +45,7 @@ export async function GET(request: Request, { params }: RouteParams) {
 
     if (!file) {
       return NextResponse.json(
-        { error: 'File path is required. Use ?file=filename or path/to/file.' },
+        { error: 'File path is required. Use ?file=filename.' },
         { status: 400 }
       );
     }
@@ -63,6 +65,23 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
+    const product = await getProductById(productId);
+    if (!product) {
+      return NextResponse.json(
+        { error: 'Product not found.' },
+        { status: 404 }
+      );
+    }
+
+    const slug = (product.slug ?? product.category ?? '') as string;
+    const allowed = getAllowedFilenamesForPackage(slug);
+    if (allowed.size > 0 && !allowed.has(file)) {
+      return NextResponse.json(
+        { error: 'File not found or could not be downloaded.' },
+        { status: 404 }
+      );
+    }
+
     const supabase = await createServiceRoleClient();
     const filePath = `${productId}/${file}`;
 
@@ -79,12 +98,11 @@ export async function GET(request: Request, { params }: RouteParams) {
     }
 
     const buffer = Buffer.from(await data.arrayBuffer());
-    const baseName = file.split('/').pop() || file;
 
     return new NextResponse(buffer, {
       headers: {
-        'Content-Type': getContentType(baseName),
-        'Content-Disposition': `attachment; filename="${baseName}"`,
+        'Content-Type': getContentType(file),
+        'Content-Disposition': `attachment; filename="${file}"`,
         'Content-Length': buffer.length.toString(),
       },
     });

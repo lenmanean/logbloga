@@ -510,3 +510,44 @@ export function getLevelContent(
 
   return staticContent;
 }
+
+/**
+ * Returns the set of all allowed filenames for a package (all levels).
+ * Used by the download API for allowlist validation.
+ * Package content uses flat filenames only; nested paths are not in the allowlist.
+ */
+export function getAllowedFilenamesForPackage(slug: string): Set<string> {
+  const pkg = packageLevelContent[slug];
+  if (!pkg) return new Set();
+
+  const files = new Set<string>();
+
+  for (const levelKey of ['level1', 'level2', 'level3'] as const) {
+    const level = pkg[levelKey];
+    if (!level) continue;
+
+    if (level.implementationPlan?.file) {
+      files.add(level.implementationPlan.file);
+    }
+    for (const g of level.platformGuides ?? []) {
+      if (g.file) files.add(g.file);
+    }
+    for (const f of level.creativeFrameworks ?? []) {
+      if (f.file) files.add(f.file);
+    }
+    for (const t of level.templates ?? []) {
+      if (t.file) files.add(t.file);
+    }
+    for (const m of level.launchMarketing ?? []) {
+      if (m.file) files.add(m.file);
+    }
+    for (const t of level.troubleshooting ?? []) {
+      if (t.file) files.add(t.file);
+    }
+    for (const p of level.planning ?? []) {
+      if (p.file) files.add(p.file);
+    }
+  }
+
+  return files;
+}

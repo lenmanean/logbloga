@@ -107,9 +107,9 @@ Comprehensive audit of package content infrastructure completed. All critical is
 ### 4.2 download API ✅
 
 - **Auth and access:** ✅ Same pattern as content API
-- **Input validation:** ✅ `isValidFilePath` prevents traversal, allows subpaths
+- **Input validation:** ✅ `isValidFilePath` prevents traversal; flat filenames only (no subpaths)
+- **Allowlist:** ✅ **IMPLEMENTED** — Validates `file` against `getAllowedFilenamesForPackage(slug)`; 404 if not in allowlist
 - **Storage path:** ✅ `digital-products/{productId}/{file}`
-- **Note:** Optional hardening (allowlist validation) documented but not implemented (low priority)
 
 ### 4.3 progress API ✅
 
@@ -137,7 +137,7 @@ Comprehensive audit of package content infrastructure completed. All critical is
 - **Unique constraint:** ✅ `(user_id, product_id, level, component)`
 - **Check constraint:** ✅ All 7 component types allowed (migration 000038)
 - **RLS policies:** ✅ Users CRUD own rows, service role full access
-- **Comment:** ✅ Migration 000038 updates comment correctly (000037 comment is historical)
+- **Comment:** ✅ Migration 000039 ensures column comment lists all 7 components (idempotent)
 
 ### 5.2 content-progress.ts ✅
 
@@ -207,9 +207,9 @@ Comprehensive audit of package content infrastructure completed. All critical is
 
 1. **Doc §2.5–2.7:** ✅ **FIXED** - Updated to include Social Media and Agency
 2. **Web Apps budget worksheets:** ✅ **DOCUMENTED** - Added exception note in Web Apps section
-3. **Download API allowlist:** ⚠️ **ACCEPTED** - Optional hardening, low priority (current validation sufficient)
+3. **Download API allowlist:** ✅ **FIXED** - Validate `file` against package allowlist; flat filenames only
 4. **Progress POST `level`:** ✅ **FIXED** - Added coercion from string to number
-5. **Migration 000037 comment:** ⚠️ **ACCEPTED** - Historical comment, 000038 updates it correctly
+5. **Migration 000037 comment:** ✅ **FIXED** - Migration 000039 updates column comment (idempotent)
 6. **PackageLevel / DB levels:** ✅ **DOCUMENTED** - Added comment explaining static-only limitation
 7. **MD templates:** ✅ **CONFIRMED** - Download-only is intentional (templates are editable resources)
 
@@ -226,6 +226,10 @@ Comprehensive audit of package content infrastructure completed. All critical is
 
 3. **lib/db/package-levels.ts:**
    - Added documentation comment explaining DB level limitations
+
+4. **Optional items (addressed):**
+   - **Download API allowlist:** Added `getAllowedFilenamesForPackage` in package-level-content; download route validates `file` against allowlist, flat filenames only. Returns 404 when not in allowlist.
+   - **Migration 000039:** Ensures `content_progress.component` column comment lists all 7 component types (idempotent).
 
 ---
 
