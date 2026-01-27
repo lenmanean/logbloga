@@ -1,25 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
-import { marked } from 'marked';
-import DOMPurify from 'dompurify';
+import { useState, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { createRoot, Root } from 'react-dom/client';
-
-const SANITIZE_CONFIG = {
-  ALLOWED_TAGS: [
-    'p', 'br', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li',
-    'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre',
-    'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'hr',
-    'div', 'span',
-  ],
-  ALLOWED_ATTR: ['href', 'title', 'target', 'rel', 'src', 'alt', 'width', 'height', 'class'],
-  ALLOW_DATA_ATTR: false,
-} as const;
+import type { Components } from 'react-markdown';
 
 interface MarkdownViewerProps {
   productId: string;
@@ -27,20 +16,11 @@ interface MarkdownViewerProps {
   className?: string;
 }
 
-interface CodeBlock {
-  code: string;
-  language: string;
-  index: number;
-}
-
 export function MarkdownViewer({ productId, filename, className }: MarkdownViewerProps) {
   const [content, setContent] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [codeBlocks, setCodeBlocks] = useState<CodeBlock[]>([]);
   const [isDark, setIsDark] = useState(false);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const rootRefs = useRef<Map<number, Root>>(new Map());
 
   // Detect dark mode
   useEffect(() => {
@@ -54,7 +34,6 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
 
     checkDarkMode();
 
-    // Watch for theme changes
     const observer = new MutationObserver(checkDarkMode);
     if (typeof window !== 'undefined') {
       observer.observe(document.documentElement, {
@@ -101,104 +80,197 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
     return () => { cancelled = true; };
   }, [productId, filename]);
 
-  // Extract code blocks and replace with placeholders
-  useEffect(() => {
-    if (!content || !contentRef.current) return;
-
-    const blocks: CodeBlock[] = [];
-    let blockIndex = 0;
-
-    // Configure marked with custom renderer
-    const renderer = new marked.Renderer();
+  // Custom components for enhanced styling
+  const components: Components = {
+    // Headings with enhanced styling and clear hierarchy
+    h1: ({ children }) => (
+      <h1 className="text-3xl font-bold mb-4 mt-6 pb-2 border-b border-border text-foreground">
+        {children}
+      </h1>
+    ),
+    h2: ({ children }) => (
+      <h2 className="text-2xl font-semibold mb-3 mt-5 text-foreground">
+        {children}
+      </h2>
+    ),
+    h3: ({ children }) => (
+      <h3 className="text-xl font-semibold mb-2 mt-4 text-foreground">
+        {children}
+      </h3>
+    ),
+    h4: ({ children }) => (
+      <h4 className="text-lg font-semibold mb-2 mt-3 text-foreground">
+        {children}
+      </h4>
+    ),
+    h5: ({ children }) => (
+      <h5 className="text-base font-semibold mb-2 mt-3 text-foreground">
+        {children}
+      </h5>
+    ),
+    h6: ({ children }) => (
+      <h6 className="text-sm font-semibold mb-2 mt-2 text-foreground">
+        {children}
+      </h6>
+    ),
     
-    renderer.code = ({ text, lang }: { text: string; lang?: string }) => {
-      const language = lang || 'text';
-      const placeholder = `<div class="syntax-highlight-placeholder" data-index="${blockIndex}"></div>`;
-      blocks.push({ code: text, language, index: blockIndex });
-      blockIndex++;
-      return placeholder;
-    };
-
-    // For blockquote and table, we'll use CSS classes applied via prose classes
-    // The default renderer will be used, and we'll style via Tailwind prose classes
-
-    let html: string;
-    try {
-      html = marked.parse(content, { 
-        renderer,
-        async: false,
-        breaks: true,
-        gfm: true,
-      }) as string;
-    } catch {
-      html = '';
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const sanitized = DOMPurify.sanitize(html, SANITIZE_CONFIG as any);
+    // Paragraphs with proper spacing
+    p: ({ children }) => (
+      <p className="text-foreground/90 leading-relaxed mb-4">
+        {children}
+      </p>
+    ),
     
-    if (contentRef.current) {
-      // Convert to string in case DOMPurify returns TrustedHTML
-      contentRef.current.innerHTML = String(sanitized);
-      setCodeBlocks(blocks);
-    }
-  }, [content]);
-
-  // Render syntax highlighter components for code blocks
-  useEffect(() => {
-    if (!contentRef.current || codeBlocks.length === 0) return;
-
-    // Clean up previous roots
-    rootRefs.current.forEach((root) => {
-      try {
-        root.unmount();
-      } catch (e) {
-        // Ignore unmount errors
+    // Lists with better spacing and indentation
+    ul: ({ children }) => (
+      <ul className="my-4 space-y-2 list-disc pl-6 text-foreground">
+        {children}
+      </ul>
+    ),
+    ol: ({ children }) => (
+      <ol className="my-4 space-y-2 list-decimal pl-6 text-foreground">
+        {children}
+      </ol>
+    ),
+    li: ({ children }) => (
+      <li className="my-1 leading-relaxed">
+        {children}
+      </li>
+    ),
+    
+    // Code blocks with syntax highlighting
+    code: ({ className, children, ...props }) => {
+      const match = /language-(\w+)/.exec(className || '');
+      const language = match ? match[1] : '';
+      const codeString = String(children).replace(/\n$/, '');
+      
+      if (language) {
+        // Code block with syntax highlighting
+        return (
+          <div className="my-4 rounded-lg overflow-hidden">
+            <SyntaxHighlighter
+              language={language}
+              style={isDark ? oneDark : oneLight}
+              customStyle={{
+                margin: 0,
+                borderRadius: '0.5rem',
+                fontSize: '0.875rem',
+                lineHeight: '1.5',
+              }}
+              PreTag="div"
+            >
+              {codeString}
+            </SyntaxHighlighter>
+          </div>
+        );
       }
-    });
-    rootRefs.current.clear();
-
-    const placeholders = contentRef.current.querySelectorAll('.syntax-highlight-placeholder');
-    
-    placeholders.forEach((placeholder, idx) => {
-      const block = codeBlocks[idx];
-      if (!block) return;
-
-      const container = document.createElement('div');
-      container.className = 'syntax-highlighter-container my-4 rounded-lg overflow-hidden';
-      placeholder.replaceWith(container);
-
-      const root = createRoot(container);
-      rootRefs.current.set(block.index, root);
-
-      root.render(
-        <SyntaxHighlighter
-          language={block.language}
-          style={isDark ? oneDark : oneLight}
-          customStyle={{
-            margin: 0,
-            borderRadius: '0.5rem',
-            fontSize: '0.875rem',
-            lineHeight: '1.5',
-          }}
-          PreTag="div"
-        >
-          {block.code}
-        </SyntaxHighlighter>
+      
+      // Inline code
+      return (
+        <code className="text-primary bg-muted/80 px-1.5 py-0.5 rounded text-sm font-mono" {...props}>
+          {children}
+        </code>
       );
-    });
-
-    return () => {
-      rootRefs.current.forEach((root) => {
-        try {
-          root.unmount();
-        } catch (e) {
-          // Ignore unmount errors
-        }
-      });
-      rootRefs.current.clear();
-    };
-  }, [codeBlocks, isDark]);
+    },
+    
+    // Blockquotes with enhanced styling
+    blockquote: ({ children }) => (
+      <blockquote className="border-l-4 border-l-primary bg-muted/50 pl-4 py-2 my-4 italic text-foreground/80">
+        {children}
+      </blockquote>
+    ),
+    
+    // Links with hover effects and security
+    a: ({ href, children }) => {
+      const isExternal = href?.startsWith('http');
+      return (
+        <a 
+          href={href} 
+          className="text-primary no-underline hover:underline font-medium"
+          target={isExternal ? '_blank' : undefined}
+          rel={isExternal ? 'noopener noreferrer' : undefined}
+        >
+          {children}
+        </a>
+      );
+    },
+    
+    // Strong and emphasis
+    strong: ({ children }) => (
+      <strong className="text-foreground font-semibold">
+        {children}
+      </strong>
+    ),
+    em: ({ children }) => (
+      <em className="text-foreground/90 italic">
+        {children}
+      </em>
+    ),
+    
+    // Horizontal rules
+    hr: () => (
+      <hr className="my-6 border-border" />
+    ),
+    
+    // Tables with enhanced styling
+    table: ({ children }) => (
+      <div className="overflow-x-auto my-4">
+        <table className="w-full border-collapse">
+          {children}
+        </table>
+      </div>
+    ),
+    thead: ({ children }) => (
+      <thead className="bg-muted">
+        {children}
+      </thead>
+    ),
+    tbody: ({ children }) => (
+      <tbody className="[&_tr:nth-child(even)]:bg-muted/30">
+        {children}
+      </tbody>
+    ),
+    tr: ({ children }) => (
+      <tr>
+        {children}
+      </tr>
+    ),
+    th: ({ children }) => (
+      <th className="px-4 py-2 text-left font-semibold border border-border bg-muted">
+        {children}
+      </th>
+    ),
+    td: ({ children }) => (
+      <td className="px-4 py-2 border border-border">
+        {children}
+      </td>
+    ),
+    
+    // Images
+    img: ({ src, alt }) => (
+      <img 
+        src={src} 
+        alt={alt} 
+        className="rounded-lg shadow-md my-4 max-w-full h-auto"
+      />
+    ),
+    
+    // Task lists (from remark-gfm)
+    input: ({ checked, ...props }) => {
+      if (props.type === 'checkbox') {
+        return (
+          <input
+            type="checkbox"
+            checked={checked || false}
+            disabled
+            className="mr-2 accent-primary"
+            {...props}
+          />
+        );
+      }
+      return <input {...props} />;
+    },
+  };
 
   if (loading) {
     return (
@@ -222,38 +294,14 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
   return (
     <ScrollArea className={cn('w-full', className)} style={{ maxHeight: '600px' }}>
       <div className="pr-4">
-        <div
-          ref={contentRef}
-          className={cn(
-            'prose prose-lg dark:prose-invert max-w-none',
-            'prose-headings:font-bold prose-headings:text-foreground',
-            'prose-h1:text-3xl prose-h1:mb-4 prose-h1:mt-6 prose-h1:border-b prose-h1:border-border prose-h1:pb-2',
-            'prose-h2:text-2xl prose-h2:mb-3 prose-h2:mt-5 prose-h2:font-semibold',
-            'prose-h3:text-xl prose-h3:mb-2 prose-h3:mt-4 prose-h3:font-semibold',
-            'prose-h4:text-lg prose-h4:mb-2 prose-h4:mt-3',
-            'prose-p:text-foreground/90 prose-p:leading-relaxed prose-p:mb-4',
-            'prose-a:text-primary prose-a:no-underline hover:prose-a:underline prose-a:font-medium',
-            'prose-strong:text-foreground prose-strong:font-semibold',
-            'prose-code:text-primary prose-code:bg-muted/80 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:font-mono prose-code:before:content-none prose-code:after:content-none',
-            'prose-pre:bg-muted prose-pre:border prose-pre:border-border prose-pre:rounded-lg prose-pre:p-4 prose-pre:overflow-x-auto prose-pre:my-4',
-            'prose-pre code:bg-transparent prose-pre code:text-foreground prose-pre code:p-0',
-            'prose-img:rounded-lg prose-img:shadow-md prose-img:my-4',
-            'prose-blockquote:border-l-4 prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:pl-4 prose-blockquote:py-2 prose-blockquote:my-4 prose-blockquote:italic',
-            'prose-ul:my-4 prose-ul:space-y-2 prose-ul:list-disc prose-ul:pl-6',
-            'prose-ol:my-4 prose-ol:space-y-2 prose-ol:list-decimal prose-ol:pl-6',
-            'prose-li:my-1 prose-li:leading-relaxed',
-            'prose-hr:my-6 prose-hr:border-border',
-            'prose-table:w-full prose-table:my-4',
-            'prose-thead:bg-muted prose-th:px-4 prose-th:py-2 prose-th:text-left prose-th:font-semibold prose-th:border prose-th:border-border',
-            'prose-td:px-4 prose-td:py-2 prose-td:border prose-td:border-border',
-            'prose-tbody tr:nth-child(even):bg-muted/30',
-            '[&_.enhanced-blockquote]:border-l-4 [&_.enhanced-blockquote]:border-l-primary [&_.enhanced-blockquote]:bg-muted/50 [&_.enhanced-blockquote]:pl-4 [&_.enhanced-blockquote]:py-2 [&_.enhanced-blockquote]:my-4 [&_.enhanced-blockquote]:italic',
-            '[&_.table-wrapper]:overflow-x-auto [&_.table-wrapper]:my-4',
-            '[&_.enhanced-table]:w-full [&_.enhanced-table]:border-collapse [&_.enhanced-table_th]:px-4 [&_.enhanced-table_th]:py-2 [&_.enhanced-table_th]:bg-muted [&_.enhanced-table_th]:font-semibold [&_.enhanced-table_th]:border [&_.enhanced-table_th]:border-border',
-            '[&_.enhanced-table_td]:px-4 [&_.enhanced-table_td]:py-2 [&_.enhanced-table_td]:border [&_.enhanced-table_td]:border-border',
-            '[&_.enhanced-table_tr:nth-child(even)]:bg-muted/30',
-          )}
-        />
+        <div className="prose prose-lg dark:prose-invert max-w-none">
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={components}
+          >
+            {content}
+          </ReactMarkdown>
+        </div>
       </div>
     </ScrollArea>
   );
