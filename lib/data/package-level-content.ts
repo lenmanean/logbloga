@@ -314,11 +314,11 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         { file: 'portfolio-showcase-template.md', type: 'md', name: 'Portfolio Showcase Template' }
       ],
       launchMarketing: [
-        { file: 'freelancing-level-1-first-client-acquisition-guide.pdf', type: 'pdf', name: 'First Client Acquisition Guide' },
-        { file: 'freelancing-level-1-profile-optimization-checklist.pdf', type: 'pdf', name: 'Profile Optimization Checklist' }
+        { file: 'freelancing-level-1-first-client-acquisition-guide.md', type: 'md', name: 'First Client Acquisition Guide' },
+        { file: 'freelancing-level-1-profile-optimization-checklist.md', type: 'md', name: 'Profile Optimization Checklist' }
       ],
       troubleshooting: [
-        { file: 'freelancing-level-1-common-freelancing-issues.pdf', type: 'pdf', name: 'Common Freelancing Issues' }
+        { file: 'freelancing-level-1-common-freelancing-issues.md', type: 'md', name: 'Common Freelancing Issues' }
       ],
       planning: [
         { file: 'freelancing-level-1-side-hustle-budget-planner.pdf', type: 'pdf', name: 'Side Hustle Budget Planner' },
@@ -348,15 +348,15 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         { file: 'client-communication-templates.md', type: 'md', name: 'Client Communication Templates' }
       ],
       launchMarketing: [
-        { file: 'freelancing-level-2-client-acquisition-strategies.pdf', type: 'pdf', name: 'Client Acquisition Strategies' },
-        { file: 'freelancing-level-2-portfolio-promotion-guide.pdf', type: 'pdf', name: 'Portfolio Promotion Guide' }
+        { file: 'freelancing-level-2-client-acquisition-strategies.md', type: 'md', name: 'Client Acquisition Strategies' },
+        { file: 'freelancing-level-2-portfolio-promotion-guide.md', type: 'md', name: 'Portfolio Promotion Guide' }
       ],
       troubleshooting: [
-        { file: 'freelancing-level-2-client-management-issues.pdf', type: 'pdf', name: 'Client Management Issues' }
+        { file: 'freelancing-level-2-client-management-issues.md', type: 'md', name: 'Client Management Issues' }
       ],
       planning: [
         { file: 'freelancing-level-2-full-time-budget-planner.pdf', type: 'pdf', name: 'Full-Time Freelancer Budget Planner' },
-        { file: 'freelancing-level-2-pricing-scaling-strategy.pdf', type: 'pdf', name: 'Pricing Scaling Strategy' }
+        { file: 'freelancing-level-2-pricing-scaling-strategy.md', type: 'md', name: 'Pricing Scaling Strategy' }
       ]
     },
     level3: {
@@ -379,14 +379,14 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         { file: 'business-systems-templates.zip', type: 'zip', name: 'Business Systems Templates' }
       ],
       launchMarketing: [
-        { file: 'freelancing-level-3-premium-positioning-guide.pdf', type: 'pdf', name: 'Premium Positioning Guide' },
-        { file: 'freelancing-level-3-partnership-strategies.pdf', type: 'pdf', name: 'Partnership Strategies' }
+        { file: 'freelancing-level-3-premium-positioning-guide.md', type: 'md', name: 'Premium Positioning Guide' },
+        { file: 'freelancing-level-3-partnership-strategies.md', type: 'md', name: 'Partnership Strategies' }
       ],
       troubleshooting: [
-        { file: 'freelancing-level-3-advanced-business-challenges.pdf', type: 'pdf', name: 'Advanced Business Challenges' }
+        { file: 'freelancing-level-3-advanced-business-challenges.md', type: 'md', name: 'Advanced Business Challenges' }
       ],
       planning: [
-        { file: 'freelancing-level-3-premium-pricing-models.pdf', type: 'pdf', name: 'Premium Pricing Models' },
+        { file: 'freelancing-level-3-premium-pricing-models.md', type: 'md', name: 'Premium Pricing Models' },
         { file: 'freelancing-level-3-business-financial-planning.pdf', type: 'pdf', name: 'Business Financial Planning' }
       ]
     }
