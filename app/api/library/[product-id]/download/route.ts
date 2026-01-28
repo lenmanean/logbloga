@@ -2,6 +2,7 @@
  * GET /api/library/[product-id]/download
  * Secure download endpoint for digital products.
  * Only flat filenames are allowed; each must be in the package allowlist.
+ * Includes watermarking and download tracking for piracy protection.
  */
 
 import { NextResponse } from 'next/server';
@@ -11,6 +12,13 @@ import { getProductById } from '@/lib/db/products';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { getContentType } from '@/lib/utils/content';
 import { getAllowedFilenamesForPackage } from '@/lib/data/package-level-content';
+import { 
+  createWatermarkData, 
+  generateDownloadToken,
+  watermarkMarkdown,
+  generateFileMetadata 
+} from '@/lib/security/watermarking';
+import { logDownload } from '@/lib/db/download-tracking';
 
 interface RouteParams {
   params: Promise<{ 'product-id': string }>;
@@ -82,6 +90,47 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
+    // Get user's order for this product to create watermark
+    // Query order_items directly to find the order that contains this product
+    const supabaseForOrders = await createServiceRoleClient();
+    const { data: orderItem, error: orderItemError } = await supabaseForOrders
+      .from('order_items')
+      .select('order_id, order:orders!inner(id, status, user_id)')
+      .eq('product_id', productId)
+      .eq('order.user_id', user.id)
+      .eq('order.status', 'completed')
+      .limit(1)
+      .maybeSingle();
+    
+    // Order ID is optional - watermark will still work without it
+    const orderId = orderItem?.order_id || '';
+
+    // Generate download token and watermark data
+    const downloadToken = generateDownloadToken(user.id, productId, file);
+    const watermarkData = createWatermarkData(user.id, orderId, productId, file);
+
+    // Get client IP and user agent for tracking
+    const ipAddress = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+                     request.headers.get('x-real-ip') ||
+                     'unknown';
+    const userAgent = request.headers.get('user-agent') || null;
+    const referer = request.headers.get('referer') || null;
+
+    // Log the download (async, don't wait)
+    logDownload({
+      userId: user.id,
+      productId,
+      filename: file,
+      downloadToken,
+      ipAddress,
+      userAgent,
+      referer,
+      orderId: orderId || null,
+      watermarkData,
+    }).catch(err => {
+      console.error('Failed to log download (non-blocking):', err);
+    });
+
     const supabase = await createServiceRoleClient();
     const filePath = `${productId}/${file}`;
 
@@ -97,15 +146,30 @@ export async function GET(request: Request, { params }: RouteParams) {
       );
     }
 
-    const buffer = Buffer.from(await data.arrayBuffer());
+    let buffer = Buffer.from(await data.arrayBuffer());
+    const contentType = getContentType(file);
+    const fileExtension = file.split('.').pop()?.toLowerCase() || '';
 
-    return new NextResponse(buffer, {
-      headers: {
-        'Content-Type': getContentType(file),
-        'Content-Disposition': `attachment; filename="${file}"`,
-        'Content-Length': buffer.length.toString(),
-      },
-    });
+    // Apply watermarking based on file type
+    if (fileExtension === 'md' || contentType === 'text/markdown') {
+      // Watermark Markdown files
+      const content = buffer.toString('utf-8');
+      const watermarkedContent = watermarkMarkdown(content, watermarkData);
+      buffer = Buffer.from(watermarkedContent, 'utf-8');
+    }
+    // For PDF, ZIP, and other binary files, watermarking would require
+    // specialized libraries (pdf-lib, adm-zip, etc.) - can be added later
+    // For now, metadata is tracked in download_logs
+
+    // Add custom headers with watermark info (for tracking if file is shared)
+    const headers: Record<string, string> = {
+      'Content-Type': contentType,
+      'Content-Disposition': `attachment; filename="${file}"`,
+      'Content-Length': buffer.length.toString(),
+      'X-Download-Token': downloadToken, // For tracking if file is shared
+    };
+
+    return new NextResponse(buffer, { headers });
   } catch (err) {
     if (err instanceof Error && err.message.includes('Unauthorized')) {
       throw err;
