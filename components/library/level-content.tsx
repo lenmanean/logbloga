@@ -139,14 +139,12 @@ export function LevelContent({
               )}
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
-              {level === 1 && (
-                <SectionDownloadButton
-                  productId={productId}
-                  files={[implementationPlan]}
-                  sectionTitle="Implementation Plan"
-                  level={level}
-                />
-              )}
+              <SectionDownloadButton
+                productId={productId}
+                files={[implementationPlan]}
+                sectionTitle="Implementation Plan"
+                level={level}
+              />
               {!levelProgress.implementation_plan ? (
                 <Button
                   variant="outline"
@@ -208,14 +206,12 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end gap-2">
-              {level === 1 && (
-                <SectionDownloadButton
-                  productId={productId}
-                  files={filterMarkdownFiles(platformGuides)}
-                  sectionTitle="Platform Setup Guides"
-                  level={level}
-                />
-              )}
+              <SectionDownloadButton
+                productId={productId}
+                files={filterMarkdownFiles(platformGuides)}
+                sectionTitle="Platform Setup Guides"
+                level={level}
+              />
               {!levelProgress.platform_guides ? (
                 <Button
                   variant="outline"
@@ -307,14 +303,12 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end gap-2">
-              {level === 1 && (
-                <SectionDownloadButton
-                  productId={productId}
-                  files={filterMarkdownFiles(creativeFrameworks)}
-                  sectionTitle="Creative Decision Frameworks"
-                  level={level}
-                />
-              )}
+              <SectionDownloadButton
+                productId={productId}
+                files={filterMarkdownFiles(creativeFrameworks)}
+                sectionTitle="Creative Decision Frameworks"
+                level={level}
+              />
               {!levelProgress.creative_frameworks ? (
                 <Button
                   variant="outline"
@@ -400,14 +394,12 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end gap-2">
-              {level === 1 && (
-                <SectionDownloadButton
-                  productId={productId}
-                  files={filterMarkdownFiles(launchMarketing)}
-                  sectionTitle="Launch & Marketing"
-                  level={level}
-                />
-              )}
+              <SectionDownloadButton
+                productId={productId}
+                files={filterMarkdownFiles(launchMarketing)}
+                sectionTitle="Launch & Marketing"
+                level={level}
+              />
               {!levelProgress.launch_marketing ? (
                 <Button
                   variant="outline"
@@ -493,10 +485,10 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end gap-2">
-              {level === 1 && troubleshooting.length > 0 && (
+              {troubleshooting.length > 0 && (
                 <SectionDownloadButton
                   productId={productId}
-                  files={[troubleshooting[0]]}
+                  files={filterMarkdownFiles(troubleshooting)}
                   sectionTitle="Troubleshooting"
                   level={level}
                 />
@@ -586,14 +578,12 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end gap-2">
-              {level === 1 && (
-                <SectionDownloadButton
-                  productId={productId}
-                  files={filterMarkdownFiles(planning)}
-                  sectionTitle="Time & Budget Planning"
-                  level={level}
-                />
-              )}
+              <SectionDownloadButton
+                productId={productId}
+                files={filterMarkdownFiles(planning)}
+                sectionTitle="Time & Budget Planning"
+                level={level}
+              />
               {!levelProgress.planning ? (
                 <Button
                   variant="outline"
@@ -679,14 +669,12 @@ export function LevelContent({
         >
           <div className="space-y-4">
             <div className="flex items-center justify-end gap-2">
-              {level === 1 && (
-                <SectionDownloadButton
-                  productId={productId}
-                  files={filterMarkdownFiles(templates)}
-                  sectionTitle="Templates & Checklists"
-                  level={level}
-                />
-              )}
+              <SectionDownloadButton
+                productId={productId}
+                files={filterMarkdownFiles(templates)}
+                sectionTitle="Templates & Checklists"
+                level={level}
+              />
               {!levelProgress.templates ? (
                 <Button
                   variant="outline"

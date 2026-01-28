@@ -34,11 +34,6 @@ export function SectionDownloadButton({
   const [downloadingFile, setDownloadingFile] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Only show for Level 1
-  if (level !== 1) {
-    return null;
-  }
-
   // Filter to only markdown files
   const markdownFiles = files.filter((file) => {
     const ext = file.file.split('.').pop()?.toLowerCase();
