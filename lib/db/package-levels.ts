@@ -1,15 +1,32 @@
 /**
  * Package Levels Database Helpers
- * 
- * Provides helper functions for working with package level-based content structure.
- * Supports fetching, parsing, and validating level data from the database.
- * 
- * NOTE: Database-stored levels (via `parsePackageLevels` / `validatePackageLevel`) only
- * support the original four categories: `implementationPlan`, `platformGuides`,
- * `creativeFrameworks`, and `templates`. The newer categories (`launchMarketing`,
- * `troubleshooting`, `planning`) are static-only and always come from `package-level-content.ts`.
- * If these categories are ever persisted in the database, `validatePackageLevel` and
- * `PackageLevel` interface will need to be extended.
+ *
+ * HYBRID CONTENT ARCHITECTURE:
+ *
+ * Database-stored levels (products.levels JSONB) support 4 categories:
+ *   - implementationPlan
+ *   - platformGuides
+ *   - creativeFrameworks
+ *   - templates
+ *
+ * Static-only categories (package-level-content.ts) are 3 additional:
+ *   - launchMarketing
+ *   - troubleshooting
+ *   - planning
+ *
+ * The static categories were added after the initial database design and remain
+ * in code for simplicity and version control. The getLevelContent() function in
+ * package-level-content.ts merges both sources, with database taking precedence
+ * for the 4 supported categories.
+ *
+ * EXTENDING THIS SYSTEM:
+ * To add database support for the 3 static categories, you would need to:
+ * 1. Update the PackageLevel interface in lib/products.ts
+ * 2. Update validatePackageLevel() in this file
+ * 3. Update database migration to include new fields
+ * 4. Update getLevelContent() merge logic
+ *
+ * For template replication: This same hybrid approach works for all packages.
  */
 
 import type { PackageLevels, PackageLevel } from '@/lib/products';
@@ -94,6 +111,10 @@ function validatePackageLevel(levelData: any, expectedLevel: 1 | 2 | 3): Package
     console.warn(`Package level ${expectedLevel} missing implementation plan`);
     return null;
   }
+
+  // NOTE: Only 4 categories validated from database.
+  // launchMarketing, troubleshooting, and planning are static-only.
+  // See file header for architecture details.
 
   // Parse schedule (trackable timeline) - default to empty array
   const rawSchedule = levelData.schedule;

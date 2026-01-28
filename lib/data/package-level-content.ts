@@ -1,10 +1,21 @@
 /**
  * Package Level Content Data
- * 
- * This file contains the complete content structure for each level of each package.
- * Used to display accurate content information when database data is incomplete.
- * 
- * Canonical content structure; see docs/PACKAGE_CONTENT_INFRASTRUCTURE.md
+ *
+ * HYBRID CONTENT ARCHITECTURE:
+ * This file contains the COMPLETE content structure for each package level.
+ * It serves as both the source of truth for static-only categories AND the
+ * fallback for database-stored categories.
+ *
+ * Categories by Storage:
+ * - Database-capable (can be edited via DB): implementationPlan, platformGuides,
+ *   creativeFrameworks, templates
+ * - Static-only (always from this file): launchMarketing, troubleshooting, planning
+ * - Always static: aiLeverage (descriptive text)
+ *
+ * See docs/PACKAGE_CONTENT_INFRASTRUCTURE.md for architecture details.
+ * See lib/db/package-levels.ts for database validation logic.
+ *
+ * Used by: getLevelContent() merges this with database data (DB takes precedence).
  */
 
 export interface LevelContent {
@@ -68,20 +79,20 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         description: 'Step-by-step roadmap for building a simple single-page app or landing page SaaS'
       },
       platformGuides: [
-        { file: 'nextjs-simple-setup-guide.md', type: 'md', platform: 'Next.js' },
-        { file: 'vercel-deployment-guide.md', type: 'md', platform: 'Vercel' },
-        { file: 'stripe-basic-setup.md', type: 'md', platform: 'Stripe' },
-        { file: 'github-setup-guide.md', type: 'md', platform: 'GitHub' }
+        { file: 'nextjs-simple-setup-guide.md', type: 'md', platform: 'Next.js', description: 'Create Next.js project, understand structure, run development server' },
+        { file: 'vercel-deployment-guide.md', type: 'md', platform: 'Vercel', description: 'Connect repository, configure environment variables, deploy to production' },
+        { file: 'stripe-basic-setup.md', type: 'md', platform: 'Stripe', description: 'Create Stripe account, obtain API keys, integrate basic payment processing' },
+        { file: 'github-setup-guide.md', type: 'md', platform: 'GitHub', description: 'Initialize repository, connect to remote, push code to GitHub' }
       ],
       creativeFrameworks: [
-        { file: 'idea-generation-framework.md', type: 'md', name: 'Idea Generation Framework' },
-        { file: 'value-proposition-worksheet.md', type: 'md', name: 'Value Proposition Worksheet' },
-        { file: 'simple-mvp-framework.md', type: 'md', name: 'Simple MVP Framework' }
+        { file: 'idea-generation-framework.md', type: 'md', name: 'Idea Generation Framework', description: 'Generate and evaluate SaaS ideas with market potential' },
+        { file: 'value-proposition-worksheet.md', type: 'md', name: 'Value Proposition Worksheet', description: 'Define your unique value and target audience' },
+        { file: 'simple-mvp-framework.md', type: 'md', name: 'Simple MVP Framework', description: 'Scope and build a minimal viable product' }
       ],
       templates: [
-        { file: 'basic-starter-template.zip', type: 'zip', name: 'Basic Starter Template' },
-        { file: 'mvp-checklist.md', type: 'md', name: 'MVP Checklist' },
-        { file: 'web-apps-level-1-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
+        { file: 'basic-starter-template.zip', type: 'zip', name: 'Basic Starter Template', description: 'Minimal Next.js starter with Stripe payment integration' },
+        { file: 'mvp-checklist.md', type: 'md', name: 'MVP Checklist', description: 'Checklist to validate your MVP before launch' },
+        { file: 'web-apps-level-1-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation', description: 'Copy-paste ready prompts for Cursor, ChatGPT, GitHub Copilot' }
       ],
       launchMarketing: [
         { file: 'web-apps-level-1-launch-checklist.md', type: 'md', name: 'Launch Checklist' },
@@ -103,20 +114,20 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         description: 'Step-by-step roadmap for building a medium complexity SaaS'
       },
       platformGuides: [
-        { file: 'nextjs-saas-starter-setup.md', type: 'md', platform: 'Next.js' },
-        { file: 'supabase-setup-guide.md', type: 'md', platform: 'Supabase' },
-        { file: 'stripe-integration-guide.md', type: 'md', platform: 'Stripe' },
-        { file: 'vercel-advanced-deployment.md', type: 'md', platform: 'Vercel' }
+        { file: 'nextjs-saas-starter-setup.md', type: 'md', platform: 'Next.js', description: 'Next.js SaaS project with auth and database structure' },
+        { file: 'supabase-setup-guide.md', type: 'md', platform: 'Supabase', description: 'Create project, database, auth, RLS, and storage' },
+        { file: 'stripe-integration-guide.md', type: 'md', platform: 'Stripe', description: 'Subscriptions, webhooks, customer portal' },
+        { file: 'vercel-advanced-deployment.md', type: 'md', platform: 'Vercel', description: 'Advanced config, env, edge, custom domains' }
       ],
       creativeFrameworks: [
-        { file: 'mvp-development-framework.md', type: 'md', name: 'MVP Development Framework' },
-        { file: 'go-to-market-strategy.md', type: 'md', name: 'Go-to-Market Strategy' },
-        { file: 'pricing-strategy-saas.md', type: 'md', name: 'Pricing Strategy for SaaS' }
+        { file: 'mvp-development-framework.md', type: 'md', name: 'MVP Development Framework', description: 'Systematic MVP development with phases and deliverables' },
+        { file: 'go-to-market-strategy.md', type: 'md', name: 'Go-to-Market Strategy', description: 'Launch and market your SaaS effectively' },
+        { file: 'pricing-strategy-saas.md', type: 'md', name: 'Pricing Strategy for SaaS', description: 'Price tiers and subscription models' }
       ],
       templates: [
-        { file: 'saas-starter-template.zip', type: 'zip', name: 'SaaS Starter Template' },
-        { file: 'development-milestones-checklist.md', type: 'md', name: 'Development Milestones Checklist' },
-        { file: 'web-apps-level-2-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
+        { file: 'saas-starter-template.zip', type: 'zip', name: 'SaaS Starter Template', description: 'Next.js + Supabase + Stripe subscription starter' },
+        { file: 'development-milestones-checklist.md', type: 'md', name: 'Development Milestones Checklist', description: 'Track development milestones and deliverables' },
+        { file: 'web-apps-level-2-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation', description: 'Copy-paste ready prompts for SaaS implementation' }
       ],
       launchMarketing: [
         { file: 'web-apps-level-2-customer-acquisition-guide.md', type: 'md', name: 'Customer Acquisition Guide' }
@@ -137,19 +148,19 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
         description: 'Step-by-step roadmap for building a complex SaaS like DOER'
       },
       platformGuides: [
-        { file: 'advanced-supabase-setup.md', type: 'md', platform: 'Supabase' },
-        { file: 'ai-integration-guide.md', type: 'md', platform: 'AI Services' },
-        { file: 'third-party-integrations-guide.md', type: 'md', platform: 'Third-Party APIs' },
-        { file: 'vercel-edge-functions.md', type: 'md', platform: 'Vercel' }
+        { file: 'advanced-supabase-setup.md', type: 'md', platform: 'Supabase', description: 'Complex schema, RLS, real-time, multi-tenant patterns' },
+        { file: 'ai-integration-guide.md', type: 'md', platform: 'AI Services', description: 'OpenAI, Anthropic, keys, prompts, cost management' },
+        { file: 'third-party-integrations-guide.md', type: 'md', platform: 'Third-Party APIs', description: 'Architecture, webhooks, auth, retries' },
+        { file: 'vercel-edge-functions.md', type: 'md', platform: 'Vercel', description: 'Edge functions use cases, deploy, optimize' }
       ],
       creativeFrameworks: [
-        { file: 'advanced-mvp-framework.md', type: 'md', name: 'Advanced MVP Framework' },
-        { file: 'scaling-strategy.md', type: 'md', name: 'Scaling Strategy' }
+        { file: 'advanced-mvp-framework.md', type: 'md', name: 'Advanced MVP Framework', description: 'Enterprise-ready MVP with multi-tenancy and AI' },
+        { file: 'scaling-strategy.md', type: 'md', name: 'Scaling Strategy', description: 'Scale infrastructure, team, and operations' }
       ],
       templates: [
-        { file: 'advanced-saas-template.zip', type: 'zip', name: 'Advanced SaaS Template' },
-        { file: 'ai-integration-examples.zip', type: 'zip', name: 'AI Integration Examples' },
-        { file: 'web-apps-level-3-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
+        { file: 'advanced-saas-template.zip', type: 'zip', name: 'Advanced SaaS Template', description: 'AI, multi-tenant, integrations starter' },
+        { file: 'ai-integration-examples.zip', type: 'zip', name: 'AI Integration Examples', description: 'OpenAI, Anthropic, prompts, code patterns' },
+        { file: 'web-apps-level-3-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation', description: 'Copy-paste ready prompts for enterprise implementation' }
       ],
       launchMarketing: [
         { file: 'web-apps-level-3-enterprise-marketing-playbook.md', type: 'md', name: 'Enterprise Marketing Playbook' },

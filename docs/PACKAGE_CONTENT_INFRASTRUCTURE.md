@@ -5,7 +5,13 @@
 **Sources:** `lib/data/package-level-content.ts`, `lib/data/package-level-titles.ts`, package UI (`components/ui/package-levels-content.tsx`, `components/ui/whats-included.tsx`). Pricing from database (migration `000026_optimize_package_pricing.sql`).
 
 **Last Updated:** January 27, 2026  
-**Status:** Web Apps Package - ✅ IMPLEMENTED (all 42 files created and uploaded to Supabase Storage)
+**Implementation status** (as of January 27, 2026):
+- Web Apps Package - ✅ FULLY IMPLEMENTED (all 45 files created, documented, and uploaded)
+  - Infrastructure reviewed and validated
+  - Documentation updated with AI Prompts files
+  - Database architecture documented
+  - File counts corrected (42 → 45)
+  - Ready to serve as template for other packages
 
 ---
 
@@ -44,15 +50,17 @@
 
 ### 1.3 Content Categories per Level
 
-Every level includes **seven** content categories (Web Apps, Social Media, Agency, and Freelancing):
+Every level includes **seven** content categories (Web Apps, Social Media, Agency, and Freelancing). **7 Categories** (in UI display order):
 
 1. **Implementation Plan** — One file per level. Step-by-step roadmap.
-2. **Platform Setup Guides** — One or more guides per level. Account creation, configuration, screenshots.
-3. **Creative Decision Frameworks** — Worksheets, exercises, decision prompts.
-4. **Templates & Checklists** — Ready-to-use resources (docs, spreadsheets, code, ZIPs).
-5. **Launch & Marketing** — Launch checklists, marketing guides, customer acquisition. (Web Apps, Social Media, Agency, Freelancing.)
-6. **Troubleshooting** — Common issues, solutions, debugging guides. (Web Apps, Social Media, Agency, Freelancing.)
-7. **Time & Budget Planning** — Time investment planners, budget worksheets, success metrics. (Web Apps, Social Media, Agency, Freelancing.)
+2. **Platform Setup Guides** — One or more guides per level (4 files per level typical). Account creation, configuration, screenshots.
+3. **Creative Decision Frameworks** — Worksheets, exercises, decision prompts (2–3 files per level).
+4. **Launch & Marketing** — Launch checklists, marketing guides, customer acquisition (1–2 files per level). (Web Apps, Social Media, Agency, Freelancing.)
+5. **Troubleshooting** — Common issues, solutions, debugging guides (1 file per level). (Web Apps, Social Media, Agency, Freelancing.)
+6. **Time & Budget Planning** — Time investment planners, budget worksheets, success metrics (1–2 files per level). (Web Apps, Social Media, Agency, Freelancing.)
+7. **Templates & Checklists** — Ready-to-use resources (docs, spreadsheets, code, ZIPs; 3+ files per level, includes AI Prompts).
+
+**Note:** This order reflects the natural user workflow — users access templates/checklists throughout their journey, making them easily accessible at the end of each level.
 
 File types used: **MD**, **PDF**, **XLSX**, **DOCX**, **ZIP**. **Format consistency across all packages:** Implementation plans, platform guides, and creative frameworks use **MD** (hosted). Launch & Marketing, Troubleshooting, and Planning guides use **MD**; planning worksheets/calculators use **PDF** (downloadable). **Templates vary by package** (ZIP, MD, XLSX, DOCX, PDF) according to business model, context, and use-case.
 
@@ -106,13 +114,38 @@ Levels can optionally store a **schedule** (trackable timeline) in the database:
 
 This is separate from the implementation plan **file**; the file is the canonical content.
 
+### 2.9 Database vs Static Content Architecture
+
+**Hybrid Approach:** Package content uses a hybrid storage model:
+
+**Database-Stored (JSONB in products.levels):**
+- `implementationPlan` (file, type, description)
+- `platformGuides` (array of guides)
+- `creativeFrameworks` (array of frameworks)
+- `templates` (array of templates)
+
+**Static-Only (in package-level-content.ts):**
+- `launchMarketing` (array of guides)
+- `troubleshooting` (array of guides)
+- `planning` (array of guides)
+- `aiLeverage` (description text)
+
+**Rationale:** The database approach was designed for the original 4 categories. The 3 additional categories (Launch & Marketing, Troubleshooting, Planning) were added later and remain static-only for simplicity. This allows the first 4 categories to be edited via database if needed, while the latter 3 remain version-controlled in code.
+
+**Merge Strategy:** The `getLevelContent()` function merges database data with static content, with database taking precedence for the 4 supported categories.
+
+**For Template Replication:** This architecture is reusable for all packages. The same hybrid approach applies to Social Media, Agency, and Freelancing packages.
+
 ---
 
 ## 3. Web Apps Package
 
 **Slug:** `web-apps`  
-**File conventions:** Implementation plans, setup guides, and frameworks use **Markdown (`.md`)**. Templates use **ZIP** (code) or **MD** (checklists).  
-**Note:** Web Apps Level 1 and Level 2 use `.md` for budget planning worksheets (`web-apps-level-1-budget-planning-worksheet.md`, `web-apps-level-2-budget-planning-worksheet.md`) instead of PDF. This is an intentional exception; other packages use PDF for budget worksheets/planners.
+**File conventions:** Implementation plans, setup guides, and frameworks use **Markdown (`.md`)**. Templates use **ZIP** (code) or **MD** (checklists).
+
+**AI Prompts Innovation:** Each level includes a dedicated AI Prompts file with copy-paste ready prompts for non-technical users. These files provide step-by-step instructions for using AI coding assistants (Cursor, ChatGPT, GitHub Copilot) to implement each phase of the plan. This is a key differentiator that democratizes technical implementation.
+
+**Note:** Web Apps uses `.md` for budget planning worksheets instead of PDF to enable in-browser viewing and a better user experience. This design decision applies to all packages going forward — MD files allow users to view content immediately without downloading, while still providing PDF download options. Other file types (XLSX, DOCX, ZIP) remain as specified for their specific use cases.
 
 ### 3.1 Level 1: Landing Page / Simple Web App
 
@@ -133,13 +166,14 @@ This is separate from the implementation plan **file**; the file is the canonica
 | 8 | Creative Framework | `simple-mvp-framework.md` | md | Simple MVP Framework |
 | 9 | Template | `basic-starter-template.zip` | zip | Basic Starter Template — minimal Next.js starter |
 | 10 | Template | `mvp-checklist.md` | md | MVP Checklist |
-| 11 | Launch & Marketing | `web-apps-level-1-launch-checklist.md` | md | Launch Checklist |
-| 12 | Launch & Marketing | `web-apps-level-1-basic-marketing-guide.md` | md | Basic Marketing Guide |
-| 13 | Troubleshooting | `web-apps-level-1-common-issues-solutions.md` | md | Common Issues & Solutions |
-| 14 | Planning | `web-apps-level-1-time-investment-planner.md` | md | Time Investment Planner |
-| 15 | Planning | `web-apps-level-1-budget-planning-worksheet.md` | md | Budget Planning Worksheet |
+| 11 | Template | `web-apps-level-1-ai-prompts.md` | md | AI Prompts for Implementation |
+| 12 | Launch & Marketing | `web-apps-level-1-launch-checklist.md` | md | Launch Checklist |
+| 13 | Launch & Marketing | `web-apps-level-1-basic-marketing-guide.md` | md | Basic Marketing Guide |
+| 14 | Troubleshooting | `web-apps-level-1-common-issues-solutions.md` | md | Common Issues & Solutions |
+| 15 | Planning | `web-apps-level-1-time-investment-planner.md` | md | Time Investment Planner |
+| 16 | Planning | `web-apps-level-1-budget-planning-worksheet.md` | md | Budget Planning Worksheet |
 
-**Level 1 total: 15 files.**
+**Level 1 total: 16 files.**
 
 ---
 
@@ -162,12 +196,13 @@ This is separate from the implementation plan **file**; the file is the canonica
 | 8 | Creative Framework | `pricing-strategy-saas.md` | md | Pricing Strategy for SaaS |
 | 9 | Template | `saas-starter-template.zip` | zip | SaaS Starter Template — Next.js + Supabase + Stripe |
 | 10 | Template | `development-milestones-checklist.md` | md | Development Milestones Checklist |
-| 11 | Launch & Marketing | `web-apps-level-2-customer-acquisition-guide.md` | md | Customer Acquisition Guide |
-| 12 | Troubleshooting | `web-apps-level-2-troubleshooting-debugging-guide.md` | md | Troubleshooting & Debugging Guide |
-| 13 | Planning | `web-apps-level-2-success-metrics-dashboard.md` | md | Success Metrics Dashboard |
-| 14 | Planning | `web-apps-level-2-budget-planning-worksheet.md` | md | Budget Planning Worksheet |
+| 11 | Template | `web-apps-level-2-ai-prompts.md` | md | AI Prompts for Implementation |
+| 12 | Launch & Marketing | `web-apps-level-2-customer-acquisition-guide.md` | md | Customer Acquisition Guide |
+| 13 | Troubleshooting | `web-apps-level-2-troubleshooting-debugging-guide.md` | md | Troubleshooting & Debugging Guide |
+| 14 | Planning | `web-apps-level-2-success-metrics-dashboard.md` | md | Success Metrics Dashboard |
+| 15 | Planning | `web-apps-level-2-budget-planning-worksheet.md` | md | Budget Planning Worksheet |
 
-**Level 2 total: 14 files.**
+**Level 2 total: 15 files.**
 
 ---
 
@@ -189,16 +224,17 @@ This is separate from the implementation plan **file**; the file is the canonica
 | 7 | Creative Framework | `scaling-strategy.md` | md | Scaling Strategy |
 | 8 | Template | `advanced-saas-template.zip` | zip | Advanced SaaS Template — AI, multi-tenant, integrations |
 | 9 | Template | `ai-integration-examples.zip` | zip | AI Integration Examples — OpenAI, Anthropic, prompts, patterns |
-| 10 | Launch & Marketing | `web-apps-level-3-enterprise-marketing-playbook.md` | md | Enterprise Marketing Playbook |
-| 11 | Launch & Marketing | `web-apps-level-3-partnership-strategy.md` | md | Partnership Strategy |
-| 12 | Troubleshooting | `web-apps-level-3-advanced-troubleshooting-guide.md` | md | Advanced Troubleshooting Guide |
-| 13 | Planning | `web-apps-level-3-scaling-operations-budget.md` | md | Scaling Operations Budget |
+| 10 | Template | `web-apps-level-3-ai-prompts.md` | md | AI Prompts for Implementation |
+| 11 | Launch & Marketing | `web-apps-level-3-enterprise-marketing-playbook.md` | md | Enterprise Marketing Playbook |
+| 12 | Launch & Marketing | `web-apps-level-3-partnership-strategy.md` | md | Partnership Strategy |
+| 13 | Troubleshooting | `web-apps-level-3-advanced-troubleshooting-guide.md` | md | Advanced Troubleshooting Guide |
+| 14 | Planning | `web-apps-level-3-scaling-operations-budget.md` | md | Scaling Operations Budget |
 
-**Level 3 total: 13 files.**
+**Level 3 total: 14 files.**
 
 ---
 
-**Web Apps package total: 42 files** (15 + 14 + 13).
+**Web Apps package total: 45 files** (16 + 15 + 14).
 
 ---
 

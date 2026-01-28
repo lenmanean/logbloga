@@ -1,8 +1,13 @@
 /**
  * Upload Web Apps Package Files to Supabase Storage
- * 
- * This script uploads all 42 files for the Web Apps package to Supabase Storage
+ *
+ * This script uploads all 45 files for the Web Apps package to Supabase Storage
  * at the path: digital-products/{productId}/{filename}
+ *
+ * File list is derived from getAllowedFilenamesForPackage('web-apps'), which
+ * includes all files from package-level-content.ts (implementation plans,
+ * platform guides, creative frameworks, templates including AI Prompts,
+ * launch/marketing, troubleshooting, planning).
  */
 
 import { createClient } from '@supabase/supabase-js';
