@@ -171,7 +171,7 @@ async function renderToken(
       // For unknown tokens, try to render text if available
       if (token.text) {
         return renderText(
-          token.text,
+          sanitizeText(token.text),
           page,
           helveticaFont,
           margin,
@@ -337,7 +337,7 @@ function renderCode(
   yPosition: number,
   lineHeight: number
 ): RenderResult {
-  const code = token.text || '';
+  const code = sanitizeText(token.text || '');
   const fontSize = 9;
   const padding = 10;
   const lines = code.split('\n');
@@ -581,6 +581,52 @@ function renderText(
 }
 
 /**
+ * Remove or replace emojis and unsupported Unicode characters
+ */
+function sanitizeText(text: string): string {
+  if (!text) return '';
+  
+  // Replace common emojis with text equivalents
+  const emojiMap: Record<string, string> = {
+    '✅': '[✓]',
+    '❌': '[X]',
+    '⚠️': '[!]',
+    'ℹ️': '[i]',
+    '📝': '[Note]',
+    '🔗': '[Link]',
+    '💡': '[Tip]',
+    '🚀': '[Launch]',
+    '⚡': '[Fast]',
+    '🎯': '[Target]',
+    '📊': '[Chart]',
+    '🔒': '[Lock]',
+    '🔓': '[Unlock]',
+    '⭐': '[Star]',
+    '💻': '[Code]',
+    '📱': '[Mobile]',
+    '🌐': '[Web]',
+    '💰': '[Money]',
+    '📈': '[Up]',
+    '📉': '[Down]',
+  };
+
+  let sanitized = text;
+  
+  // Replace known emojis
+  for (const [emoji, replacement] of Object.entries(emojiMap)) {
+    sanitized = sanitized.replace(new RegExp(emoji, 'g'), replacement);
+  }
+  
+  // Remove any remaining emojis and non-printable characters
+  // Keep only printable ASCII and common Unicode characters
+  sanitized = sanitized.replace(/[\u{1F300}-\u{1F9FF}]/gu, ''); // Emoji range
+  sanitized = sanitized.replace(/[\u{2600}-\u{26FF}]/gu, ''); // Miscellaneous Symbols
+  sanitized = sanitized.replace(/[\u{2700}-\u{27BF}]/gu, ''); // Dingbats
+  
+  return sanitized;
+}
+
+/**
  * Render inline tokens (text, emphasis, strong, links, code)
  */
 function renderInlineTokens(tokens: MarkdownToken[]): string {
@@ -590,25 +636,25 @@ function renderInlineTokens(tokens: MarkdownToken[]): string {
     .map((token) => {
       switch (token.type) {
         case 'text':
-          return token.text || '';
+          return sanitizeText(token.text || '');
         case 'strong':
           return renderInlineTokens(token.tokens || []);
         case 'em':
           return renderInlineTokens(token.tokens || []);
         case 'code':
-          return token.text || '';
+          return sanitizeText(token.text || '');
         case 'link':
           const linkText = renderInlineTokens(token.tokens || []);
           return `${linkText} (${token.href || ''})`;
         case 'image':
-          return `[Image: ${token.text || token.alt || ''}]`;
+          return `[Image: ${sanitizeText(token.text || token.alt || '')}]`;
         case 'br':
           return '\n';
         default:
           if (token.tokens) {
             return renderInlineTokens(token.tokens);
           }
-          return token.text || '';
+          return sanitizeText(token.text || '');
       }
     })
     .join('');
