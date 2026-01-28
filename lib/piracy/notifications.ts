@@ -29,12 +29,13 @@ export async function notifyPiracyDetected(report: PiracyReport): Promise<void> 
   try {
     const { getResendClient, getDefaultSender } = await import('@/lib/email/client');
     const resend = getResendClient();
+    const fromEmail = getDefaultSender();
 
     const confidence = calculateConfidence(report);
     const confidenceLabel = confidence > 70 ? 'HIGH' : confidence > 40 ? 'MEDIUM' : 'LOW';
 
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'noreply@logbloga.com',
+      from: fromEmail,
       to: adminEmail,
       subject: `🚨 Piracy Detected: ${report.platform} - ${confidenceLabel} Confidence`,
       html: `
@@ -103,16 +104,17 @@ export async function notifyDailySummary(
 ): Promise<void> {
   const adminEmail = process.env.ADMIN_EMAIL || process.env.RESEND_FROM_EMAIL;
   
-  if (!adminEmail || !process.env.RESEND_API_KEY) {
+  if (!adminEmail) {
     return;
   }
 
   try {
     const { getResendClient, getDefaultSender } = await import('@/lib/email/client');
     const resend = getResendClient();
+    const fromEmail = getDefaultSender();
 
     await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'noreply@logbloga.com',
+      from: fromEmail,
       to: adminEmail,
       subject: `Daily Piracy Monitoring Summary - ${new Date().toLocaleDateString()}`,
       html: `
