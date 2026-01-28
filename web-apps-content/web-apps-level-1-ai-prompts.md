@@ -1,15 +1,15 @@
-# Web Apps Level 1: Cursor Prompts
+# Web Apps Level 1: AI Prompts for Implementation
 
 ## How to Use This File
 
-This file contains ready-to-use prompts you can copy and paste directly into Cursor for each step of the Web Apps Level 1 implementation plan. Each prompt is designed to be:
+This file contains ready-to-use prompts you can copy and paste directly into your AI coding assistant (such as Cursor, GitHub Copilot, or ChatGPT) for each step of the Web Apps Level 1 implementation plan. Each prompt is designed to be:
 
 - **Copy-paste ready**: No editing required
-- **Context-aware**: Includes all necessary information for Cursor
-- **Specific**: Clear instructions for what Cursor should do
-- **Complete**: Contains everything Cursor needs to complete the task
+- **Context-aware**: Includes all necessary information for your AI tool
+- **Specific**: Clear instructions for what should be done
+- **Complete**: Contains everything needed to complete the task
 
-Simply find the step you're working on, copy the prompt, and paste it into Cursor. Cursor will handle all the technical implementation.
+Simply find the step you're working on, copy the prompt, and paste it into your AI assistant. The AI will handle all the technical implementation.
 
 ---
 
@@ -19,12 +19,12 @@ Simply find the step you're working on, copy the prompt, and paste it into Curso
 
 **When to use**: At the start of Phase 1, when setting up your project for the first time.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Create a new Next.js project with TypeScript and Tailwind CSS. Name it 'my-saas-app'. Use the latest version of Next.js with the App Router. After creating the project, start the development server so I can verify it's working at http://localhost:3000.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Initialize Next.js project with TypeScript and Tailwind CSS
 - Set up the project structure with App Router
 - Configure Tailwind CSS
@@ -39,12 +39,12 @@ Create a new Next.js project with TypeScript and Tailwind CSS. Name it 'my-saas-
 
 **Before using this prompt**: Create a new repository on GitHub first (private or public), then copy the repository URL.
 
-**Prompt to paste into Cursor** (replace `[your-repo-url]` with your actual GitHub repository URL):
+**Prompt to paste into your AI tool** (replace `[your-repo-url]` with your actual GitHub repository URL):
 ```
 Initialize git in this project and connect it to my GitHub repository at [your-repo-url]. Set up the remote, make an initial commit with all current files, and push to the main branch. Use a commit message like "Initial commit: Next.js project setup".
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Initialize git repository
 - Add remote origin
 - Stage all files
@@ -57,12 +57,12 @@ Initialize git in this project and connect it to my GitHub repository at [your-r
 
 **When to use**: After setting up the project and GitHub, before starting Stripe integration.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Install the Stripe packages needed for payment processing in this Next.js project. Install both the client-side and server-side Stripe packages, and make sure they're compatible with Next.js App Router and TypeScript.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Install `@stripe/stripe-js` for client-side
 - Install `@stripe/react-stripe-js` for React components
 - Install `stripe` for server-side API routes
@@ -79,12 +79,12 @@ Install the Stripe packages needed for payment processing in this Next.js projec
 
 **Before using this prompt**: Have your Stripe Publishable key and Secret key ready from the Stripe Dashboard.
 
-**Prompt to paste into Cursor** (replace `[publishable-key]` and `[secret-key]` with your actual keys):
+**Prompt to paste into your AI tool** (replace `[publishable-key]` and `[secret-key]` with your actual keys):
 ```
 I have my Stripe API keys. Help me store them securely as environment variables in this Next.js project. My publishable key is [publishable-key] and my secret key is [secret-key]. Create a .env.local file with these keys using the proper naming convention for Next.js (NEXT_PUBLIC_ for client-side keys). Also create a .env.example file as a template, and make sure .env.local is in .gitignore so it's not committed to the repository.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Create `.env.local` file with your Stripe keys
 - Use proper Next.js environment variable naming (`NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and `STRIPE_SECRET_KEY`)
 - Create `.env.example` template file
@@ -99,12 +99,12 @@ I have my Stripe API keys. Help me store them securely as environment variables 
 
 **Before using this prompt**: Create a product in Stripe Dashboard and note the Product ID and Price ID.
 
-**Prompt to paste into Cursor** (replace `[product-id]` and `[price-id]` with your actual IDs):
+**Prompt to paste into your AI tool** (replace `[product-id]` and `[price-id]` with your actual IDs):
 ```
 I've created a product in Stripe with Product ID [product-id] and Price ID [price-id]. Set up the code to use these IDs in the payment integration. Store them as environment variables or constants where appropriate, and make sure they're ready to be used in the payment flow.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Store Product ID and Price ID appropriately
 - Set up constants or environment variables for these IDs
 - Prepare them for use in payment integration
@@ -116,7 +116,7 @@ I've created a product in Stripe with Product ID [product-id] and Price ID [pric
 
 **When to use**: When you're ready to create the payment page component with Stripe Elements.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Create a payment page component that uses Stripe Elements to collect payment information. The page should be located at app/payment/page.tsx. Include:
 
@@ -130,7 +130,7 @@ Create a payment page component that uses Stripe Elements to collect payment inf
 Use the Stripe publishable key from environment variables. Make sure the component is a client component and follows Next.js App Router best practices.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Create `app/payment/page.tsx` with Stripe Elements
 - Set up proper Stripe configuration
 - Implement form with card input fields
@@ -145,7 +145,7 @@ Use the Stripe publishable key from environment variables. Make sure the compone
 
 **When to use**: After creating the payment page, when you need the server-side API to handle payment processing.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Create an API route at app/api/create-checkout-session/route.ts that handles Stripe checkout session creation. The route should:
 
@@ -160,7 +160,7 @@ Create an API route at app/api/create-checkout-session/route.ts that handles Str
 Make sure it's secure and handles all error cases appropriately.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Create API route with proper structure
 - Set up Stripe server-side client
 - Implement checkout session creation
@@ -177,7 +177,7 @@ Make sure it's secure and handles all error cases appropriately.
 
 **When to use**: When you're ready to create the main hero section of your landing page.
 
-**Prompt to paste into Cursor** (customize the product description):
+**Prompt to paste into your AI tool** (customize the product description):
 ```
 Create a hero section for the landing page at app/page.tsx. The hero section should include:
 
@@ -196,7 +196,7 @@ Make it visually appealing and conversion-focused. Use a clean, modern design wi
 Generate 5 headline and value proposition options for my [product/service description]. Make them compelling, clear, and focused on the benefits to the customer. Each should be suitable for a hero section of a landing page.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Create or update hero section in `app/page.tsx`
 - Design compelling layout with headline and CTA
 - Apply modern styling with Tailwind CSS
@@ -209,9 +209,9 @@ Generate 5 headline and value proposition options for my [product/service descri
 
 **When to use**: After the hero section, when you want to showcase your product's key benefits.
 
-**Before using this prompt**: Have a list of your key features/benefits ready to share with Cursor.
+**Before using this prompt**: Have a list of your key features/benefits ready to share.
 
-**Prompt to paste into Cursor** (replace with your actual features):
+**Prompt to paste into your AI tool** (replace with your actual features):
 ```
 Add a features section to the landing page that displays the key benefits of my product. The features are:
 - [Feature 1: Brief description]
@@ -230,7 +230,7 @@ The section should:
 Make it visually engaging with good use of spacing, typography, and optional icons.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Create features section component
 - Design attractive layout (grid or list)
 - Add icons or visual elements
@@ -244,7 +244,7 @@ Make it visually engaging with good use of spacing, typography, and optional ico
 
 **When to use**: After creating the landing page sections, to ensure everything works well on mobile devices.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Review the entire landing page and ensure it's fully responsive for mobile devices. Check and fix:
 
@@ -259,7 +259,7 @@ Review the entire landing page and ensure it's fully responsive for mobile devic
 Test the responsive design and fix any issues with buttons, layout, or text on smaller screens. Use Tailwind CSS responsive utilities appropriately.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Review all components for mobile responsiveness
 - Fix text sizing issues
 - Ensure buttons are touch-friendly
@@ -275,7 +275,7 @@ Test the responsive design and fix any issues with buttons, layout, or text on s
 
 **When to use**: Before deploying to Vercel, to ensure the project is ready.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Prepare this project for deployment to Vercel. Ensure:
 
@@ -290,7 +290,7 @@ Prepare this project for deployment to Vercel. Ensure:
 Verify everything is ready for deployment and fix any issues.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Check git status and ensure code is committed
 - Verify .gitignore includes .env.local
 - Check for .env.example
@@ -307,12 +307,12 @@ Verify everything is ready for deployment and fix any issues.
 
 **Before using this prompt**: You'll be adding environment variables in the Vercel dashboard manually, but this prompt helps you understand what's needed.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Help me understand what environment variables I need to add in Vercel for Stripe to work in production. List all the environment variables required, their exact names (matching what we use in the code), and explain what each one is for. Also explain the difference between test mode and live mode keys, and when I should switch to live mode.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - List all required environment variables
 - Provide exact variable names
 - Explain each variable's purpose
@@ -325,7 +325,7 @@ Help me understand what environment variables I need to add in Vercel for Stripe
 
 **When to use**: After deployment, if you encounter any issues with the production site.
 
-**Prompt to paste into Cursor** (describe the specific issue):
+**Prompt to paste into your AI tool** (describe the specific issue):
 ```
 I've deployed the site to Vercel, but I'm experiencing [describe the issue]. The payment flow [or other functionality] isn't working as expected. Help me troubleshoot this issue. Check:
 
@@ -338,7 +338,7 @@ I've deployed the site to Vercel, but I'm experiencing [describe the issue]. The
 Help me identify and fix the problem.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Analyze the described issue
 - Check common deployment problems
 - Verify environment variable setup
@@ -354,7 +354,7 @@ Help me identify and fix the problem.
 
 **When to use**: Before going live, to thoroughly test the entire application.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Help me test the entire application thoroughly. Check all the important user flows:
 
@@ -370,7 +370,7 @@ Help me test the entire application thoroughly. Check all the important user flo
 Identify any issues and fix them. Provide a testing checklist of what to verify.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Guide through comprehensive testing
 - Test payment flows
 - Verify mobile experience
@@ -386,7 +386,7 @@ Identify any issues and fix them. Provide a testing checklist of what to verify.
 
 **Before using this prompt**: Complete Stripe account verification and obtain your live mode API keys.
 
-**Prompt to paste into Cursor** (replace with your live keys):
+**Prompt to paste into your AI tool** (replace with your live keys):
 ```
 Update the environment variables to use live Stripe keys instead of test keys. My new live publishable key is [live-publishable-key] and my live secret key is [live-secret-key]. 
 
@@ -399,7 +399,7 @@ Update:
 Make sure everything is configured correctly for live payments.
 ```
 
-**What Cursor will do**:
+**What the AI will do**:
 - Update .env.local with live keys
 - Guide on updating Vercel environment variables
 - Verify code configuration
@@ -414,7 +414,7 @@ Make sure everything is configured correctly for live payments.
 
 **When to use**: Whenever you encounter an error or issue.
 
-**Prompt to paste into Cursor** (describe the specific error):
+**Prompt to paste into your AI tool** (describe the specific error):
 ```
 I'm getting this error: [paste error message here]
 
@@ -423,9 +423,9 @@ Can you explain what this error means and help me fix it? Show me the specific s
 
 ### Code Review and Optimization
 
-**When to use**: When you want Cursor to review and improve existing code.
+**When to use**: When you want your AI assistant to review and improve existing code.
 
-**Prompt to paste into Cursor**:
+**Prompt to paste into your AI tool**:
 ```
 Review the [component/file name] and suggest improvements for:
 1. Code quality and best practices
@@ -441,7 +441,7 @@ Implement any critical improvements.
 
 **When to use**: When you want to add functionality beyond the basic implementation.
 
-**Prompt to paste into Cursor** (describe the feature):
+**Prompt to paste into your AI tool** (describe the feature):
 ```
 I want to add [feature description] to my application. Help me implement this feature following the same patterns and best practices used in the rest of the codebase. Make sure it integrates well with the existing Stripe payment flow and landing page design.
 ```
@@ -451,11 +451,11 @@ I want to add [feature description] to my application. Help me implement this fe
 ## Tips for Using These Prompts
 
 1. **Copy the entire prompt**: Don't edit it unless you need to add specific information (like API keys or feature lists)
-2. **Provide context**: If Cursor asks for clarification, provide additional details about your specific needs
-3. **Review the output**: Always review what Cursor creates and test it before moving to the next step
-4. **Ask for help**: If something doesn't work, paste the error message to Cursor and ask for help
+2. **Provide context**: If your AI assistant asks for clarification, provide additional details about your specific needs
+3. **Review the output**: Always review what the AI creates and test it before moving to the next step
+4. **Ask for help**: If something doesn't work, paste the error message and ask for help
 5. **Customize when needed**: Feel free to modify prompts to match your specific product or design preferences
 
 ---
 
-**Remember**: These prompts are designed to work with Cursor as your lead developer. You're the director - provide vision, make decisions, and review the work. Cursor handles all the technical implementation!
+**Remember**: These prompts are designed to work with AI tools as your coding assistant. You're the director - provide vision, make decisions, and review the work. The AI handles all the technical implementation!

@@ -82,7 +82,11 @@ export async function GET(request: Request, { params }: RouteParams) {
     return new NextResponse(text, {
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'private, max-age=300',
+        // Use stale-while-revalidate for better UX while ensuring fresh content
+        'Cache-Control': 'private, no-cache, must-revalidate',
+        // Prevent CDN caching to ensure content updates are immediately visible
+        'CDN-Cache-Control': 'no-store',
+        'Vercel-CDN-Cache-Control': 'no-store',
       },
     });
   } catch (err) {

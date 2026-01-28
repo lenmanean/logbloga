@@ -20,7 +20,9 @@
     "db:migrate:status": "supabase migration list",
     "db:reset": "supabase db reset",
     "db:seed": "supabase db seed",
-    "stripe:sync": "tsx scripts/sync-products-to-stripe.ts"
+    "stripe:sync": "tsx scripts/sync-products-to-stripe.ts",
+    "content:upload": "tsx scripts/upload-web-apps-files.ts",
+    "content:deploy": "tsx scripts/upload-web-apps-files.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

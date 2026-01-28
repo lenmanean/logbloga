@@ -91,7 +91,8 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       planning: [
         { file: 'web-apps-level-1-time-investment-planner.md', type: 'md', name: 'Time Investment Planner' },
-        { file: 'web-apps-level-1-budget-planning-worksheet.md', type: 'md', name: 'Budget Planning Worksheet' }
+        { file: 'web-apps-level-1-budget-planning-worksheet.md', type: 'md', name: 'Budget Planning Worksheet' },
+        { file: 'web-apps-level-1-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
       ]
     },
     level2: {

@@ -23,7 +23,7 @@ Before starting, ensure you have:
 
 **AI Tools (Optional but Recommended)**: AI tools like Cursor, ChatGPT, or GitHub Copilot can significantly accelerate development. If you're new to programming or want to speed up your workflow, consider using one of these tools.
 
-**AI Prompts Available (for non-technical users)**: If you're using AI tools like Cursor to build your application, download the [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) file for ready-to-use prompts you can copy and paste into your AI tool for each step.
+**AI Prompts Available (for non-technical users)**: If you're using AI tools like Cursor to build your application, download the [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) file for ready-to-use prompts you can copy and paste into your AI tool for each step.
 
 ## Milestones
 
@@ -83,7 +83,7 @@ If you're using AI tools as your primary development method:
 4. **Request improvements**: Ask AI to refine or adjust as needed
 
 **Using AI Prompts**:
-For each step in this implementation plan, we've created ready-to-use prompts you can copy and paste directly into your AI tool. Download the [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) file to have all prompts in one place. These prompts are designed to save you time and ensure clear, effective communication with AI tools.
+For each step in this implementation plan, we've created ready-to-use prompts you can copy and paste directly into your AI tool. Download the [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) file to have all prompts in one place. These prompts are designed to save you time and ensure clear, effective communication with AI tools.
 
 ### For Technical Users
 
@@ -120,7 +120,7 @@ npm run dev
 
 Verify the application is running at `http://localhost:3000`.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 1.2: Set Up GitHub Repository
 
@@ -139,7 +139,7 @@ git branch -M main
 git push -u origin main
 ```
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 1.3: Install Dependencies
 
@@ -152,7 +152,7 @@ Install the Stripe packages needed for payment processing.
 npm install @stripe/stripe-js @stripe/react-stripe-js stripe
 ```
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ### Phase 2: Stripe Integration (Days 4-7)
 
@@ -172,7 +172,7 @@ STRIPE_SECRET_KEY=sk_test_...
 ```
 Add `.env.local` to your `.gitignore` file to keep keys secure.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 2.2: Create Stripe Product
 
@@ -184,7 +184,7 @@ Add `.env.local` to your `.gitignore` file to keep keys secure.
 
 **Option B (Manual)**: Store these IDs as environment variables or constants in your code for use in the payment integration.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 2.3: Implement Payment Page
 
@@ -214,7 +214,7 @@ export default function PaymentPage() {
 
 Then create the `CheckoutForm` component with Stripe Elements form fields.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 2.4: Create API Route for Payment
 
@@ -228,7 +228,7 @@ Create an API route that handles Stripe checkout session creation securely.
 - Handles errors appropriately
 - Returns the session ID to the client
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ### Phase 3: Landing Page Design (Days 8-10)
 
@@ -245,7 +245,7 @@ Create a hero section with a compelling headline, value proposition, call-to-act
 - Modern styling using Tailwind CSS
 - Responsive design
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 3.2: Add Features Section
 
@@ -259,7 +259,7 @@ Add a features section that displays the key benefits of your product.
 - Is easy to scan and read
 - Matches your overall design
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 3.3: Implement Responsive Design
 
@@ -274,7 +274,7 @@ Ensure the entire landing page works well on mobile devices and all screen sizes
 - Verify text is readable on mobile
 - Test navigation and interactions on mobile devices
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ### Phase 4: Deployment (Days 11-12)
 
@@ -290,7 +290,7 @@ Prepare the project for deployment to Vercel.
 - Create a `.env.example` file showing required environment variables
 - Run `npm run build` to verify the project builds successfully
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 4.2: Deploy to Vercel
 
@@ -305,7 +305,7 @@ Prepare the project for deployment to Vercel.
 
 **Option B (Manual)**: Add the environment variables listed above in Vercel's project settings.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 4.3: Test Production
 
@@ -317,7 +317,7 @@ Prepare the project for deployment to Vercel.
 
 **Option B (Manual)**: Check browser console for errors, verify environment variables are set correctly in Vercel, and review the troubleshooting guide.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for troubleshooting prompts if you encounter issues.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for troubleshooting prompts if you encounter issues.
 
 ### Phase 5: Launch Preparation (Days 13-14)
 
@@ -333,7 +333,7 @@ Test everything thoroughly:
 
 **Option B (Manual)**: Manually test each scenario, check mobile responsiveness, verify page load times, and test error cases.
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 5.2: Switch to Live Mode
 
@@ -349,7 +349,7 @@ Test everything thoroughly:
 
 4. Redeploy on Vercel with the new keys
 
-**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ## AI-Assisted Development Workflow
 
@@ -418,7 +418,7 @@ After completing Level 1:
 ## Resources
 
 ### AI Prompts (for non-technical users)
-- [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) - Ready-to-use prompts for each step. Download this file and copy-paste prompts directly into your AI tool.
+- [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) - Ready-to-use prompts for each step. Download this file and copy-paste prompts directly into your AI tool.
 
 ### Documentation
 Reference documentation for the technologies used:
