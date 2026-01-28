@@ -337,34 +337,118 @@ export type Database = {
         }
         Relationships: []
       }
-      download_logs: {
+      dmca_takedown_requests: {
         Row: {
-          downloaded_at: string | null
+          counter_notification_deadline: string | null
+          counter_notification_received: boolean | null
+          created_at: string | null
           id: string
-          ip_address: unknown
-          order_item_id: string
-          user_agent: string | null
+          piracy_report_id: string | null
+          platform: string
+          platform_request_id: string | null
+          request_body: Json
+          response_body: Json | null
+          response_received_at: string | null
+          response_text: string | null
+          status: string
+          submitted_at: string | null
+          updated_at: string | null
         }
         Insert: {
-          downloaded_at?: string | null
+          counter_notification_deadline?: string | null
+          counter_notification_received?: boolean | null
+          created_at?: string | null
           id?: string
-          ip_address?: unknown
-          order_item_id: string
-          user_agent?: string | null
+          piracy_report_id?: string | null
+          platform: string
+          platform_request_id?: string | null
+          request_body: Json
+          response_body?: Json | null
+          response_received_at?: string | null
+          response_text?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string | null
         }
         Update: {
-          downloaded_at?: string | null
+          counter_notification_deadline?: string | null
+          counter_notification_received?: boolean | null
+          created_at?: string | null
           id?: string
-          ip_address?: unknown
-          order_item_id?: string
-          user_agent?: string | null
+          piracy_report_id?: string | null
+          platform?: string
+          platform_request_id?: string | null
+          request_body?: Json
+          response_body?: Json | null
+          response_received_at?: string | null
+          response_text?: string | null
+          status?: string
+          submitted_at?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "download_logs_order_item_id_fkey"
-            columns: ["order_item_id"]
+            foreignKeyName: "dmca_takedown_requests_piracy_report_id_fkey"
+            columns: ["piracy_report_id"]
             isOneToOne: false
-            referencedRelation: "order_items"
+            referencedRelation: "piracy_reports"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      download_logs: {
+        Row: {
+          created_at: string | null
+          download_token: string
+          filename: string
+          id: string
+          ip_address: unknown
+          order_id: string | null
+          product_id: string
+          referer: string | null
+          user_agent: string | null
+          user_id: string
+          watermark_data: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          download_token: string
+          filename: string
+          id?: string
+          ip_address?: unknown
+          order_id?: string | null
+          product_id: string
+          referer?: string | null
+          user_agent?: string | null
+          user_id: string
+          watermark_data?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          download_token?: string
+          filename?: string
+          id?: string
+          ip_address?: unknown
+          order_id?: string | null
+          product_id?: string
+          referer?: string | null
+          user_agent?: string | null
+          user_id?: string
+          watermark_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "download_logs_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "download_logs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]
@@ -636,6 +720,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      piracy_reports: {
+        Row: {
+          content_type: string
+          created_at: string | null
+          detected_at: string | null
+          download_token: string | null
+          id: string
+          infringing_url: string
+          metadata: Json | null
+          notes: string | null
+          platform: string
+          resolved_at: string | null
+          status: string
+          takedown_request_id: string | null
+          takedown_sent_at: string | null
+          updated_at: string | null
+          user_id: string | null
+          watermark_token: string | null
+        }
+        Insert: {
+          content_type: string
+          created_at?: string | null
+          detected_at?: string | null
+          download_token?: string | null
+          id?: string
+          infringing_url: string
+          metadata?: Json | null
+          notes?: string | null
+          platform: string
+          resolved_at?: string | null
+          status?: string
+          takedown_request_id?: string | null
+          takedown_sent_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          watermark_token?: string | null
+        }
+        Update: {
+          content_type?: string
+          created_at?: string | null
+          detected_at?: string | null
+          download_token?: string | null
+          id?: string
+          infringing_url?: string
+          metadata?: Json | null
+          notes?: string | null
+          platform?: string
+          resolved_at?: string | null
+          status?: string
+          takedown_request_id?: string | null
+          takedown_sent_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          watermark_token?: string | null
+        }
+        Relationships: []
       }
       product_recommendations: {
         Row: {
