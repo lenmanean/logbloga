@@ -1,10 +1,15 @@
 -- Migration: Download Tracking and Watermarking
 -- Creates tables for tracking downloads and detecting piracy
 
--- Drop existing download_logs table if it exists with wrong schema
-DROP TABLE IF EXISTS download_logs CASCADE;
-
 -- Download logs table
+-- Check if table exists, if so drop it first to ensure clean schema
+DO $$
+BEGIN
+  IF EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'download_logs') THEN
+    DROP TABLE download_logs CASCADE;
+  END IF;
+END $$;
+
 CREATE TABLE download_logs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
