@@ -147,14 +147,20 @@ export async function getProductDownloadStats(productId: string): Promise<Downlo
       userFileMap.set(key, new Set());
     }
     if (download.ip_address) {
-      userFileMap.get(key)!.add(download.ip_address);
+      const ipAddress = typeof download.ip_address === 'string' 
+        ? download.ip_address 
+        : String(download.ip_address);
+      userFileMap.get(key)!.add(ipAddress);
     }
 
     if (download.ip_address) {
-      if (!ipUserMap.has(download.ip_address)) {
-        ipUserMap.set(download.ip_address, new Set());
+      const ipAddress = typeof download.ip_address === 'string' 
+        ? download.ip_address 
+        : String(download.ip_address);
+      if (!ipUserMap.has(ipAddress)) {
+        ipUserMap.set(ipAddress, new Set());
       }
-      ipUserMap.get(download.ip_address)!.add(download.user_id);
+      ipUserMap.get(ipAddress)!.add(download.user_id);
     }
   });
 
@@ -216,7 +222,12 @@ export async function detectSuspiciousActivity(userId: string): Promise<{
   }
 
   // Check for multiple IP addresses
-  const uniqueIPs = new Set(downloads.map(d => d.ip_address).filter(Boolean));
+  const uniqueIPs = new Set(
+    downloads
+      .map(d => d.ip_address)
+      .filter(Boolean)
+      .map(ip => typeof ip === 'string' ? ip : String(ip))
+  );
   if (uniqueIPs.size > 3) {
     reasons.push('Multiple IP addresses detected');
   }
