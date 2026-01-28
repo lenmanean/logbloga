@@ -109,48 +109,145 @@ If you're coding yourself and using AI for assistance:
 
 #### Step 1.1: Initialize Next.js Project
 
-**Option A (Using AI Tools)**: If you're using AI tools like Cursor, prompt them: *"Create a new Next.js project with TypeScript and Tailwind CSS. Name it 'my-saas-app'. Use the latest version with the App Router."* Then ask AI to start the development server.
+**Time Estimate**: 30 minutes  
+**Prerequisites**: Node.js 18+ installed  
+**Expected Outcome**: Next.js project with TypeScript and Tailwind CSS running locally
 
-**Option B (Manual)**: Open your terminal and run:
-```bash
-npx create-next-app@latest my-saas-app --typescript --tailwind --app
-cd my-saas-app
-npm run dev
-```
+### Sub-Step 1.1.1: Create Next.js Project
+**File Path**: Project root (e.g. `my-saas-app/`)  
+**Purpose**: Bootstrap Next.js with TypeScript and Tailwind
 
-Verify the application is running at `http://localhost:3000`.
+**Option A (Using AI Tools)**: *"Create a new Next.js project named my-saas-app with TypeScript, Tailwind CSS, and App Router. Use the latest create-next-app."*
+
+**Option B (Manual)**:
+1. Run: `npx create-next-app@latest my-saas-app --typescript --tailwind --app`
+2. Choose options: TypeScript Yes, ESLint Yes, Tailwind Yes, App Router, src/ No, import alias @/*
+3. Wait for installation
+4. `cd my-saas-app`
+
+**Testing Checklist**: [ ] Project created; [ ] No errors
+
+### Sub-Step 1.1.2: Start Development Server
+**File Path**: Terminal  
+**Purpose**: Verify project runs
+
+**Option A (Using AI Tools)**: *"Start the Next.js development server and verify it runs at http://localhost:3000."*
+
+**Option B (Manual)**:
+1. Run: `npm run dev`
+2. Open http://localhost:3000 in browser
+3. Verify default Next.js page loads
+4. Check terminal for "Ready" message
+
+**Testing Checklist**: [ ] Server runs; [ ] Page loads at localhost:3000
+
+### Sub-Step 1.1.3: Verify Project Structure
+**File Path**: Project folder  
+**Purpose**: Confirm folder structure is correct
+
+**Option A (Using AI Tools)**: *"Verify the project has app/ folder, app/layout.tsx, app/page.tsx, and public/ folder. Check package.json has next, react, typescript dependencies."*
+
+**Option B (Manual)**:
+1. Check folders: app/, public/, node_modules/
+2. Check files: app/layout.tsx, app/page.tsx, package.json, tsconfig.json
+3. Verify package.json has next, react, react-dom, typescript
+4. Document structure if needed
+
+**Testing Checklist**: [ ] Structure correct; [ ] Dependencies present
 
 **AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 1.2: Set Up GitHub Repository
 
-1. Create a new repository on GitHub (private or public) in your browser
-2. Initialize git and connect to your repository:
+**Time Estimate**: 15 minutes  
+**Prerequisites**: GitHub account; Step 1.1 completed  
+**Expected Outcome**: Project connected to GitHub; initial commit pushed
 
-**Option A (Using AI Tools)**: Prompt your AI tool: *"Initialize git in this project and connect it to my GitHub repository at [your-repo-url]. Make an initial commit and push to the main branch."*
+### Sub-Step 1.2.1: Create GitHub Repository
+**File Path**: GitHub.com  
+**Purpose**: Create empty repository
 
-**Option B (Manual)**: Run these commands in your terminal:
-```bash
-git init
-git remote add origin [your-repo-url]
-git add .
-git commit -m "Initial commit: Next.js project setup"
-git branch -M main
-git push -u origin main
-```
+**Option A (Using AI Tools)**: *"I need to create a GitHub repository. Walk me through: go to github.com, click New repository, name it my-saas-app, choose private or public, create. Copy the repository URL."*
+
+**Option B (Manual)**:
+1. Go to github.com; sign in
+2. Click "+" > New repository
+3. Name: my-saas-app (or your choice)
+4. Choose private or public
+5. Do not initialize with README
+6. Click Create repository
+7. Copy repository URL (e.g. https://github.com/username/my-saas-app.git)
+
+**Testing Checklist**: [ ] Repository created; [ ] URL copied
+
+### Sub-Step 1.2.2: Initialize Git and Connect to Repository
+**File Path**: Terminal, project root  
+**Purpose**: Initialize git and add remote
+
+**Option A (Using AI Tools)**: *"Initialize git in this project and connect to my GitHub repository at [your-repo-url]. Make an initial commit and push to main branch."*
+
+**Option B (Manual)**:
+1. Run: `git init`
+2. Run: `git remote add origin [your-repo-url]`
+3. Run: `git add .`
+4. Run: `git commit -m "Initial commit: Next.js project setup"`
+5. Run: `git branch -M main`
+6. Run: `git push -u origin main`
+7. Verify: check GitHub; files should appear
+
+**Testing Checklist**: [ ] Git initialized; [ ] Code pushed to GitHub
+
+### Sub-Step 1.2.3: Verify .gitignore
+**File Path**: `.gitignore`  
+**Purpose**: Ensure sensitive files are not committed
+
+**Option A (Using AI Tools)**: *"Check .gitignore includes node_modules/, .env*.local, .next/, and other Next.js defaults. Add .env.local if not present."*
+
+**Option B (Manual)**:
+1. Check .gitignore exists
+2. Verify it includes: node_modules/, .env*.local, .next/, .vercel/
+3. Add .env.local if missing
+4. Test: create .env.local; verify git status doesn't show it
+
+**Security Considerations**: Never commit .env.local with API keys  
+**Testing Checklist**: [ ] .gitignore correct; [ ] .env.local ignored
 
 **AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 1.3: Install Dependencies
 
-Install the Stripe packages needed for payment processing.
+**Time Estimate**: 5 minutes  
+**Prerequisites**: Step 1.1 completed  
+**Expected Outcome**: Stripe packages installed
 
-**Option A (Using AI Tools)**: Prompt your AI tool: *"Install the Stripe packages needed for payment processing in this Next.js project. Install both client-side and server-side packages."*
+### Sub-Step 1.3.1: Install Stripe Packages
+**File Path**: Terminal, `package.json`  
+**Purpose**: Add Stripe client and server packages
 
-**Option B (Manual)**: Run:
-```bash
-npm install @stripe/stripe-js @stripe/react-stripe-js stripe
-```
+**Option A (Using AI Tools)**: *"Install Stripe packages: @stripe/stripe-js for client, @stripe/react-stripe-js for React components, stripe for server-side. Run npm install."*
+
+**Option B (Manual)**:
+1. Run: `npm install @stripe/stripe-js @stripe/react-stripe-js stripe`
+2. Wait for installation
+3. Verify package.json includes all three packages
+4. Check node_modules/ has stripe folders
+
+**Testing Checklist**: [ ] Packages installed; [ ] No errors
+
+### Sub-Step 1.3.2: Verify Installation
+**File Path**: `package.json`  
+**Purpose**: Confirm packages are in dependencies
+
+**Option A (Using AI Tools)**: *"Check package.json: verify @stripe/stripe-js, @stripe/react-stripe-js, and stripe are in dependencies. Version numbers should be present."*
+
+**Option B (Manual)**:
+1. Open package.json
+2. Check dependencies section
+3. Verify all three Stripe packages listed
+4. Note versions (should be latest)
+5. Document if needed
+
+**Testing Checklist**: [ ] All packages in package.json
 
 **AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
@@ -190,13 +287,27 @@ Add `.env.local` to your `.gitignore` file to keep keys secure.
 
 Create a payment page that uses Stripe Elements to collect payment information.
 
-**Option A (Using AI Tools)**: Prompt your AI tool: *"Create a payment page at app/payment/page.tsx that uses Stripe Elements to collect payment information. Make it user-friendly, secure, and include proper error handling and user feedback."*
+**Time Estimate**: 2–3 hours  
+**Prerequisites**: Steps 2.1 and 2.2 completed; Stripe keys configured  
+**Expected Outcome**: Payment page with Stripe Elements, form validation, error handling, loading states, and success/failure pages
 
-**Option B (Manual)**: Create `app/payment/page.tsx` with Stripe Elements integration:
+### Sub-Step 2.3.1: Create Payment Page Route
+**File Path**: `app/payment/page.tsx`  
+**Purpose**: Create page that wraps Stripe Elements provider
 
+**Option A (Using AI Tools)**: *"Create app/payment/page.tsx: use 'use client'. Import loadStripe from @stripe/stripe-js and Elements from @stripe/react-stripe-js. Create stripePromise with NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY. Wrap CheckoutForm in <Elements stripe={stripePromise}>."*
+
+**Option B (Manual)**:
+1. Create app/payment/page.tsx
+2. Add 'use client' at top
+3. Import loadStripe, Elements
+4. const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!)
+5. Return <Elements stripe={stripePromise}><CheckoutForm /></Elements>
+6. Test: visit /payment; verify no errors
+
+**Code Structure Example**:
 ```typescript
 'use client';
-
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { CheckoutForm } from '@/components/CheckoutForm';
@@ -212,7 +323,157 @@ export default function PaymentPage() {
 }
 ```
 
-Then create the `CheckoutForm` component with Stripe Elements form fields.
+**Testing Checklist**: [ ] Page loads; [ ] No console errors
+
+### Sub-Step 2.3.2: Set Up Stripe Elements Provider
+**File Path**: `app/payment/page.tsx`  
+**Purpose**: Initialize Stripe with publishable key
+
+**Option A (Using AI Tools)**: *"In payment page, ensure stripePromise is created with loadStripe and NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY. Verify the key is in .env.local. Elements provider should wrap the form."*
+
+**Option B (Manual)**:
+1. Verify .env.local has NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+2. Ensure loadStripe is called once (not in component render)
+3. Wrap form in <Elements stripe={stripePromise}>
+4. Test: check browser console for Stripe initialization
+
+**Security Considerations**: Use publishable key (pk_test_) only; never secret key in client  
+**Testing Checklist**: [ ] Stripe initializes; [ ] No key errors
+
+### Sub-Step 2.3.3: Create CheckoutForm Component
+**File Path**: `components/CheckoutForm.tsx`  
+**Purpose**: Form with Stripe Elements (CardElement, etc.)
+
+**Option A (Using AI Tools)**: *"Create components/CheckoutForm.tsx: use 'use client'. Import useStripe, useElements, CardElement from @stripe/react-stripe-js. Create form with CardElement, email input, submit button. Handle form submission."*
+
+**Option B (Manual)**:
+1. Create components/CheckoutForm.tsx
+2. Import useStripe, useElements, CardElement
+3. const stripe = useStripe(); const elements = useElements()
+4. Form: email input, <CardElement />, submit button
+5. onSubmit: e.preventDefault(); if (!stripe || !elements) return
+6. Test: render form; verify CardElement appears
+
+**Code Structure Example**:
+```typescript
+'use client';
+import { useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
+
+export function CheckoutForm() {
+  const stripe = useStripe();
+  const elements = useElements();
+  // ... form implementation
+}
+```
+
+**Testing Checklist**: [ ] Form renders; [ ] CardElement visible
+
+### Sub-Step 2.3.4: Add Form Validation
+**File Path**: `components/CheckoutForm.tsx`  
+**Purpose**: Validate email and card before submit
+
+**Option A (Using AI Tools)**: *"Add validation: email format check, card completeness check (use CardElement onChange). Show error messages below inputs. Disable submit if invalid."*
+
+**Option B (Manual)**:
+1. Add email validation: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+2. Add CardElement onChange: setCardError if incomplete
+3. Show error messages: {emailError && <span>{emailError}</span>}
+4. Disable submit if !emailValid || cardError
+5. Test: submit invalid email; verify error shown
+
+**Testing Checklist**: [ ] Validation works; [ ] Errors displayed
+
+### Sub-Step 2.3.5: Implement Error Handling
+**File Path**: `components/CheckoutForm.tsx`  
+**Purpose**: Handle Stripe errors and display messages
+
+**Option A (Using AI Tools)**: *"Add error handling: catch errors from stripe.confirmCardPayment or API calls. Display user-friendly messages (e.g. 'Card declined', 'Payment failed'). Show errors in UI, not console."*
+
+**Option B (Manual)**:
+1. Add error state: const [error, setError] = useState<string | null>(null)
+2. In try/catch: catch (err) { setError(err.message || 'Payment failed') }
+3. Display: {error && <div className="text-red-500">{error}</div>}
+4. Map Stripe errors to friendly messages
+5. Test: use test card 4000000000000002 (declined); verify error shown
+
+**Testing Checklist**: [ ] Errors caught; [ ] User-friendly messages shown
+
+### Sub-Step 2.3.6: Add Loading States
+**File Path**: `components/CheckoutForm.tsx`  
+**Purpose**: Show loading during payment processing
+
+**Option A (Using AI Tools)**: *"Add loading state: const [loading, setLoading] = useState(false). Set loading=true on submit, false on complete. Disable submit button when loading. Show spinner or 'Processing...' text."*
+
+**Option B (Manual)**:
+1. Add loading state
+2. On submit: setLoading(true)
+3. Disable button: disabled={loading || !stripe}
+4. Show: {loading ? 'Processing...' : 'Pay'}
+5. After payment: setLoading(false)
+6. Test: submit payment; verify loading state
+
+**Testing Checklist**: [ ] Loading state shown; [ ] Button disabled during processing
+
+### Sub-Step 2.3.7: Create Success Page
+**File Path**: `app/payment/success/page.tsx`  
+**Purpose**: Thank you page after successful payment
+
+**Option A (Using AI Tools)**: *"Create app/payment/success/page.tsx: thank you message, order confirmation, link to home. Check URL params for session_id if needed. Style with Tailwind."*
+
+**Option B (Manual)**:
+1. Create app/payment/success/page.tsx
+2. Display: "Payment successful! Thank you."
+3. Optional: show session_id or order details
+4. Add link to home page
+5. Style with Tailwind
+6. Test: complete payment; verify redirect to success
+
+**Testing Checklist**: [ ] Success page loads; [ ] Message clear
+
+### Sub-Step 2.3.8: Add Failure Handling
+**File Path**: `app/payment/cancel/page.tsx` or error handling  
+**Purpose**: Handle canceled or failed payments
+
+**Option A (Using AI Tools)**: *"Create app/payment/cancel/page.tsx for canceled payments. Or handle in CheckoutForm: if payment fails, show error and allow retry. Add 'Try again' button."*
+
+**Option B (Manual)**:
+1. Create cancel page: "Payment canceled"
+2. Or: in CheckoutForm, on error show retry button
+3. Allow user to fix card and resubmit
+4. Test: cancel payment; verify cancel page or error handling
+
+**Testing Checklist**: [ ] Cancel handled; [ ] Retry works
+
+### Sub-Step 2.3.9: Implement Payment Confirmation
+**File Path**: `components/CheckoutForm.tsx`  
+**Purpose**: Call API to create session, then redirect to Stripe Checkout or confirm card payment
+
+**Option A (Using AI Tools)**: *"In CheckoutForm onSubmit: call POST /api/create-checkout-session (or handle card payment with stripe.confirmCardPayment). On success, redirect to success page. Handle errors."*
+
+**Option B (Manual)**:
+1. On submit: fetch('/api/create-checkout-session', { method: 'POST', body: JSON.stringify({ priceId }) })
+2. Get session.url from response
+3. Redirect: window.location.href = session.url (for Checkout) or handle card payment
+4. On error: show error message
+5. Test: submit payment; verify redirect or confirmation
+
+**Security Considerations**: Never handle card data directly; use Stripe Checkout or Elements  
+**Testing Checklist**: [ ] Payment flow works; [ ] Redirects correctly
+
+### Sub-Step 2.3.10: Test with Stripe Test Cards
+**File Path**: Browser, Stripe test cards  
+**Purpose**: Verify payment flow with test cards
+
+**Option A (Using AI Tools)**: *"Test payment page with Stripe test cards: 4242 4242 4242 4242 (success), 4000000000000002 (declined), 4000000000009995 (insufficient funds). Verify success, error handling, and redirects work."*
+
+**Option B (Manual)**:
+1. Use test card: 4242 4242 4242 4242, any future date, any CVC
+2. Test success: complete payment; verify success page
+3. Test declined: use 4000000000000002; verify error shown
+4. Test other scenarios if needed
+5. Document test cards in README
+
+**Testing Checklist**: [ ] Success card works; [ ] Declined card shows error; [ ] All flows tested
 
 **AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
@@ -220,13 +481,171 @@ Then create the `CheckoutForm` component with Stripe Elements form fields.
 
 Create an API route that handles Stripe checkout session creation securely.
 
-**Option A (Using AI Tools)**: Prompt your AI tool: *"Create an API route at app/api/create-checkout-session/route.ts that handles Stripe checkout session creation. Make sure it's secure, handles errors properly, and uses the Stripe secret key from environment variables."*
+**Time Estimate**: 1–2 hours  
+**Prerequisites**: Step 2.3 completed; Stripe secret key in env  
+**Expected Outcome**: Secure API route that creates checkout sessions, validates requests, handles errors, and returns session URL
 
-**Option B (Manual)**: Create `app/api/create-checkout-session/route.ts` that:
-- Uses the Stripe secret key from environment variables
-- Creates a checkout session with your product/price IDs
-- Handles errors appropriately
-- Returns the session ID to the client
+### Sub-Step 2.4.1: Create API Route File
+**File Path**: `app/api/create-checkout-session/route.ts`  
+**Purpose**: POST endpoint for creating Stripe checkout sessions
+
+**Option A (Using AI Tools)**: *"Create app/api/create-checkout-session/route.ts: export async function POST(req). Get request body (await req.json()). Import Stripe from 'stripe' and initialize with STRIPE_SECRET_KEY from env."*
+
+**Option B (Manual)**:
+1. Create app/api/create-checkout-session/route.ts
+2. Export async function POST(req: Request)
+3. Import Stripe from 'stripe'
+4. const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+5. Get body: const { priceId } = await req.json()
+6. Test: verify route exists
+
+**Code Structure Example**:
+```typescript
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+export async function POST(req: Request) {
+  // ... implementation
+}
+```
+
+**Security Considerations**: Never expose secret key; use env variable only  
+**Testing Checklist**: [ ] Route file created; [ ] Stripe initialized
+
+### Sub-Step 2.4.2: Set Up Stripe Client Initialization
+**File Path**: `app/api/create-checkout-session/route.ts`  
+**Purpose**: Initialize Stripe with secret key from env
+
+**Option A (Using AI Tools)**: *"In API route, initialize Stripe client: const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2024-11-20.acacia' }). Verify STRIPE_SECRET_KEY is in .env.local (not committed)."*
+
+**Option B (Manual)**:
+1. Check .env.local has STRIPE_SECRET_KEY=sk_test_...
+2. Initialize: const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+3. Use latest API version (optional)
+4. Verify: console.log('Stripe initialized') (remove after test)
+5. Test: call API; verify no key errors
+
+**Security Considerations**: Secret key must never be in code or git  
+**Testing Checklist**: [ ] Stripe client initialized; [ ] No key errors
+
+### Sub-Step 2.4.3: Implement Authentication Check (Optional)
+**File Path**: API route  
+**Purpose**: Verify user is authenticated if needed
+
+**Option A (Using AI Tools)**: *"If payment requires auth: check for session or token in request. Return 401 if not authenticated. For public payments, skip this step."*
+
+**Option B (Manual)**:
+1. If auth needed: get session from cookies or headers
+2. If !session: return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+3. For public: skip this step
+4. Test: call without auth (if required); expect 401
+
+**Testing Checklist**: [ ] Auth check works if needed
+
+### Sub-Step 2.4.4: Create Checkout Session with Metadata
+**File Path**: API route  
+**Purpose**: Create Stripe checkout session with product/price
+
+**Option A (Using AI Tools)**: *"Create checkout session: const session = await stripe.checkout.sessions.create({ mode: 'payment', line_items: [{ price: priceId, quantity: 1 }], success_url: `${origin}/payment/success`, cancel_url: `${origin}/payment`, metadata: { userId: user.id } }). Return { url: session.url }."*
+
+**Option B (Manual)**:
+1. Get priceId from body
+2. Get origin from headers or env
+3. const session = await stripe.checkout.sessions.create({ mode: 'payment', line_items: [{ price: priceId, quantity: 1 }], success_url: `${origin}/payment/success?session_id={CHECKOUT_SESSION_ID}`, cancel_url: `${origin}/payment`, metadata: {} })
+4. Return NextResponse.json({ url: session.url })
+5. Test: call API; verify session.url returned
+
+**Testing Checklist**: [ ] Session created; [ ] URL returned
+
+### Sub-Step 2.4.5: Add Error Handling
+**File Path**: API route  
+**Purpose**: Handle Stripe errors and return user-friendly messages
+
+**Option A (Using AI Tools)**: *"Wrap Stripe calls in try/catch. On error: log full error server-side; return 500 with generic message to client. Handle specific errors (invalid price, network) if needed."*
+
+**Option B (Manual)**:
+1. Wrap in try/catch
+2. catch (error) { console.error(error); return NextResponse.json({ error: 'Failed to create session' }, { status: 500 }) }
+3. Never expose Stripe error details to client
+4. Log errors for debugging
+5. Test: use invalid priceId; verify error handled
+
+**Testing Checklist**: [ ] Errors caught; [ ] User-friendly message returned
+
+### Sub-Step 2.4.6: Implement Request Validation
+**File Path**: API route  
+**Purpose**: Validate request body (priceId required, etc.)
+
+**Option A (Using AI Tools)**: *"Validate request: check priceId exists and is string. If invalid, return 400 with error message. Use Zod schema if preferred."*
+
+**Option B (Manual)**:
+1. Check body has priceId
+2. If !priceId: return NextResponse.json({ error: 'priceId required' }, { status: 400 })
+3. Validate priceId format (starts with price_)
+4. Test: call without priceId; expect 400
+
+**Security Considerations**: Validate all inputs; never trust client  
+**Testing Checklist**: [ ] Validation works; [ ] 400 on invalid input
+
+### Sub-Step 2.4.7: Add Rate Limiting (Optional)
+**File Path**: API route or middleware  
+**Purpose**: Prevent abuse
+
+**Option A (Using AI Tools)**: *"Add rate limiting: limit to 10 requests per IP per minute. Use library or simple counter. Return 429 with Retry-After on limit."*
+
+**Option B (Manual)**:
+1. Install rate limit library or implement simple counter
+2. Check IP request count
+3. If > limit: return 429 { error: 'Too many requests', retryAfter: 60 }
+4. Test: make many requests; verify limit enforced
+5. Optional: skip for MVP
+
+**Testing Checklist**: [ ] Rate limit works if implemented
+
+### Sub-Step 2.4.8: Create Response Handling
+**File Path**: API route  
+**Purpose**: Return proper JSON response
+
+**Option A (Using AI Tools)**: *"Return response: NextResponse.json({ url: session.url }, { status: 200 }). Set proper headers (Content-Type: application/json). Handle CORS if needed."*
+
+**Option B (Manual)**:
+1. Return NextResponse.json({ url: session.url })
+2. Ensure status 200
+3. Headers set automatically by Next.js
+4. Test: call API; verify JSON response with url
+
+**Testing Checklist**: [ ] Response format correct; [ ] URL in response
+
+### Sub-Step 2.4.9: Add Logging
+**File Path**: API route  
+**Purpose**: Log successful sessions for debugging
+
+**Option A (Using AI Tools)**: *"Add logging: console.log('Checkout session created', { sessionId: session.id, priceId }). Log errors. Optional: send to logging service."*
+
+**Option B (Manual)**:
+1. Log success: console.log('Session created', session.id)
+2. Log errors in catch block
+3. Optional: structured logging
+4. Test: create session; verify logged
+5. Remove sensitive data from logs
+
+**Testing Checklist**: [ ] Logging works; [ ] No sensitive data logged
+
+### Sub-Step 2.4.10: Test Webhook Integration (Optional)
+**File Path**: Stripe Dashboard, webhook endpoint  
+**Purpose**: Verify webhook receives payment events
+
+**Option A (Using AI Tools)**: *"Set up webhook in Stripe Dashboard: endpoint /api/webhooks/stripe, events checkout.session.completed. Test with Stripe CLI: stripe listen --forward-to localhost:3000/api/webhooks/stripe. Trigger test event."*
+
+**Option B (Manual)**:
+1. Create webhook endpoint (optional for Level 1)
+2. In Stripe Dashboard: Webhooks > Add endpoint
+3. URL: https://yoursite.com/api/webhooks/stripe
+4. Events: checkout.session.completed
+5. Test locally with Stripe CLI
+6. Document webhook setup
+
+**Testing Checklist**: [ ] Webhook receives events if implemented
 
 **AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-ai-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 

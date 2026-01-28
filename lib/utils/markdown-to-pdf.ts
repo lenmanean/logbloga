@@ -243,7 +243,7 @@ function renderParagraph(
     return { yPosition, page };
   }
 
-  const text = renderInlineTokens(token.tokens);
+  const text = renderInlineTokens(token.tokens || []);
   const fontSize = 10;
   const lines = wrapText(text, contentWidth, fontSize, font);
   const textHeight = lines.length * lineHeight;
@@ -393,7 +393,7 @@ function renderBlockquote(
     return { yPosition, page };
   }
 
-  const quoteText = renderInlineTokens(token.tokens);
+  const quoteText = renderInlineTokens(token.tokens || []);
   const fontSize = 10;
   const indent = 20;
   const lines = wrapText(quoteText, contentWidth - indent, fontSize, font);
@@ -451,7 +451,8 @@ function renderTable(
   let maxHeaderHeight = rowHeight;
 
   for (let i = 0; i < header.length; i++) {
-    const cell = renderInlineTokens(header[i] || []);
+    const cellTokens = Array.isArray(header[i]) ? header[i] : [];
+    const cell = renderInlineTokens(cellTokens);
     const cellHeight = Math.ceil(cell.length / 30) * lineHeight + cellPadding * 2;
 
     // Draw cell background
@@ -495,7 +496,8 @@ function renderTable(
     let currentRowHeight = rowHeight;
 
     for (let i = 0; i < row.length; i++) {
-      const cell = renderInlineTokens(row[i] || []);
+      const cellTokens = Array.isArray(row[i]) ? row[i] : [];
+      const cell = renderInlineTokens(cellTokens);
       const cellHeight = Math.ceil(cell.length / 30) * lineHeight + cellPadding * 2;
 
       // Draw cell border
@@ -629,8 +631,8 @@ function sanitizeText(text: string): string {
 /**
  * Render inline tokens (text, emphasis, strong, links, code)
  */
-function renderInlineTokens(tokens: MarkdownToken[]): string {
-  if (!tokens || tokens.length === 0) return '';
+function renderInlineTokens(tokens: MarkdownToken[] | undefined | null): string {
+  if (!tokens || !Array.isArray(tokens) || tokens.length === 0) return '';
 
   return tokens
     .map((token) => {
@@ -651,7 +653,7 @@ function renderInlineTokens(tokens: MarkdownToken[]): string {
         case 'br':
           return '\n';
         default:
-          if (token.tokens) {
+          if (token.tokens && Array.isArray(token.tokens)) {
             return renderInlineTokens(token.tokens);
           }
           return sanitizeText(token.text || '');

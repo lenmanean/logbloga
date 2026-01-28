@@ -2,14 +2,20 @@
 
 ## How to Use This File
 
-This file contains ready-to-use prompts you can copy and paste directly into your AI coding assistant (such as Cursor, GitHub Copilot, or ChatGPT) for each step of the Web Apps Level 1 implementation plan. Each prompt is designed to be:
+**IMPORTANT UPDATE**: The Web Apps Level 1 implementation plan has been enhanced with detailed sub-steps. Each major step now includes 5-10 sub-steps with specific **Option A (Using AI Tools)** prompts that are more detailed and comprehensive than the prompts in this file.
 
-- **Copy-paste ready**: No editing required
-- **Context-aware**: Includes all necessary information for your AI tool
-- **Specific**: Clear instructions for what should be done
-- **Complete**: Contains everything needed to complete the task
+**Recommended Approach**: 
+1. Refer to the enhanced [Web Apps Level 1 Implementation Plan](web-apps-level-1-plan.md) for the most up-to-date, detailed prompts
+2. Each sub-step in the plan includes an **Option A (Using AI Tools)** prompt that you can copy directly
+3. These enhanced prompts include specific file paths, code structure examples, security considerations, and testing checklists
 
-Simply find the step you're working on, copy the prompt, and paste it into your AI assistant. The AI will handle all the technical implementation.
+**This file** contains simplified prompts for quick reference, but the enhanced plan provides more comprehensive guidance.
+
+---
+
+## Quick Reference Prompts
+
+For detailed, step-by-step prompts with file paths and implementation details, please refer to the enhanced implementation plan. Below are simplified prompts for quick reference:
 
 ---
 
