@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type MouseEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -183,10 +183,25 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
     // Links with hover effects and security
     a: ({ href, children }) => {
       const isExternal = href?.startsWith('http');
+      // Check if this is a relative markdown file link (e.g., web-apps-level-1-ai-prompts.md)
+      const isRelativeMarkdownLink = href && !isExternal && /\.(md|markdown)$/i.test(href);
+      
+      const handleClick = (e: MouseEvent) => {
+        if (isRelativeMarkdownLink) {
+          e.preventDefault();
+          // Scroll to the planning section where markdown files are displayed
+          const planningSection = document.getElementById('section-planning');
+          if (planningSection) {
+            planningSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      };
+      
       return (
         <a 
           href={href} 
-          className="text-primary no-underline hover:underline font-medium"
+          onClick={handleClick}
+          className="text-primary no-underline hover:underline font-medium cursor-pointer"
           target={isExternal ? '_blank' : undefined}
           rel={isExternal ? 'noopener noreferrer' : undefined}
         >
