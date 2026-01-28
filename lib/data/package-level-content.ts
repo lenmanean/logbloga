@@ -80,7 +80,8 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'basic-starter-template.zip', type: 'zip', name: 'Basic Starter Template' },
-        { file: 'mvp-checklist.md', type: 'md', name: 'MVP Checklist' }
+        { file: 'mvp-checklist.md', type: 'md', name: 'MVP Checklist' },
+        { file: 'web-apps-level-1-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
       ],
       launchMarketing: [
         { file: 'web-apps-level-1-launch-checklist.md', type: 'md', name: 'Launch Checklist' },
@@ -91,8 +92,7 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       planning: [
         { file: 'web-apps-level-1-time-investment-planner.md', type: 'md', name: 'Time Investment Planner' },
-        { file: 'web-apps-level-1-budget-planning-worksheet.md', type: 'md', name: 'Budget Planning Worksheet' },
-        { file: 'web-apps-level-1-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
+        { file: 'web-apps-level-1-budget-planning-worksheet.md', type: 'md', name: 'Budget Planning Worksheet' }
       ]
     },
     level2: {

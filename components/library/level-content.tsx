@@ -619,7 +619,7 @@ export function LevelContent({
         </ContentSection>
       )}
 
-      {/* Templates & Checklists (always downloadable) */}
+      {/* Templates & Checklists */}
       {templates.length > 0 && (
         <ContentSection
           id="section-templates"
@@ -664,6 +664,7 @@ export function LevelContent({
               )}
             </div>
             {templates.map((t, idx) => {
+              const hosted = isHostedContent(t.type);
               const Icon = getFileTypeIcon(t.type);
               const label = t.name || formatFileName(t.file);
               return (
@@ -683,11 +684,19 @@ export function LevelContent({
                       {t.description}
                     </p>
                   )}
-                  <DownloadButton
-                    productId={productId}
-                    filename={t.file}
-                    label={`Download ${label}`}
-                  />
+                  {hosted ? (
+                    <MarkdownViewer
+                      productId={productId}
+                      filename={t.file}
+                      className="mt-2"
+                    />
+                  ) : (
+                    <DownloadButton
+                      productId={productId}
+                      filename={t.file}
+                      label={`Download ${label}`}
+                    />
+                  )}
                 </div>
               );
             })}

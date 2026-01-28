@@ -189,10 +189,13 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
       const handleClick = (e: MouseEvent) => {
         if (isRelativeMarkdownLink) {
           e.preventDefault();
-          // Scroll to the planning section where markdown files are displayed
+          // Try to scroll to templates section first (where AI prompts file is),
+          // then planning section as fallback
+          const templatesSection = document.getElementById('section-templates');
           const planningSection = document.getElementById('section-planning');
-          if (planningSection) {
-            planningSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const targetSection = templatesSection || planningSection;
+          if (targetSection) {
+            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
           }
         }
       };
