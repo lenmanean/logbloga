@@ -107,7 +107,11 @@ export async function getUserDownloads(
 
   return (data || []).map(record => ({
     ...record,
-    watermark_data: record.watermark_data ? JSON.parse(record.watermark_data) : null,
+    watermark_data: record.watermark_data 
+      ? (typeof record.watermark_data === 'string' 
+          ? JSON.parse(record.watermark_data) 
+          : record.watermark_data) as WatermarkData | null
+      : null,
   })) as DownloadRecord[];
 }
 
@@ -256,6 +260,10 @@ export async function getDownloadByToken(downloadToken: string): Promise<Downloa
 
   return {
     ...data,
-    watermark_data: data.watermark_data ? JSON.parse(data.watermark_data) : null,
+    watermark_data: data.watermark_data 
+      ? (typeof data.watermark_data === 'string' 
+          ? JSON.parse(data.watermark_data) 
+          : data.watermark_data) as WatermarkData | null
+      : null,
   } as DownloadRecord;
 }
