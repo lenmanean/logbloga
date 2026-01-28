@@ -120,9 +120,43 @@ export const PlatformHandlers: Record<string, {
     apiEndpoint: 'https://api.github.com/repos/[owner]/[repo]/issues',
     submit: async (report, content) => {
       // GitHub DMCA via their API
-      // Requires GitHub token and proper formatting
-      console.log('GitHub DMCA submission not yet automated');
-      return 'manual-submission-required';
+      // Extract repo owner/name from URL
+      const match = report.infringing_url.match(/github\.com\/([^\/]+)\/([^\/]+)/);
+      if (!match) {
+        console.log('Invalid GitHub URL for DMCA');
+        return 'manual-submission-required';
+      }
+
+      const [owner, repo] = [match[1], match[2]];
+      const githubToken = process.env.GITHUB_TOKEN;
+
+      // GitHub API allows creating issues without auth, but with token we get higher rate limits
+      try {
+        const response = await fetch(`https://api.github.com/repos/${owner}/${repo}/issues`, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/vnd.github.v3+json',
+            'Content-Type': 'application/json',
+            ...(githubToken && { 'Authorization': `token ${githubToken}` }),
+          },
+          body: JSON.stringify({
+            title: `DMCA Takedown Request - ${report.infringing_url}`,
+            body: content.body,
+            labels: ['dmca', 'copyright'],
+          }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          return data.number.toString(); // Issue number as request ID
+        } else {
+          console.error('GitHub API error:', await response.text());
+          return 'manual-submission-required';
+        }
+      } catch (error) {
+        console.error('Error submitting GitHub DMCA:', error);
+        return 'manual-submission-required';
+      }
     },
   },
   cloudflare: {

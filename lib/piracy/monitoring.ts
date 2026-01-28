@@ -109,29 +109,58 @@ export async function identifyPiracySource(content: string): Promise<{
 
 /**
  * Search for package content on web platforms
- * This is a placeholder - actual implementation would use:
- * - Google Custom Search API
- * - Web scraping (with proper rate limiting and robots.txt respect)
- * - Platform-specific APIs
+ * Uses free APIs: Google Custom Search (100 queries/day), GitHub (free), Reddit (free)
  */
 export async function searchForPiracy(
   searchTerms: string[],
   platforms?: string[]
 ): Promise<Array<{ url: string; platform: string; title: string; snippet: string }>> {
-  // Placeholder implementation
-  // In production, this would:
-  // 1. Use Google Custom Search API with site-specific searches
-  // 2. Search file sharing sites (Mega, MediaFire, etc.)
-  // 3. Search marketplace sites (eBay, Etsy, Gumroad)
-  // 4. Search social media (Reddit, Discord, Telegram)
-  // 5. Search paste sites (Pastebin, GitHub Gists)
+  const results: Array<{ url: string; platform: string; title: string; snippet: string }> = [];
+
+  // Search GitHub (free, 5,000 requests/hour)
+  try {
+    const { searchGitHubFree } = await import('./search-engines/github-free');
+    const githubResults = await searchGitHubFree(searchTerms);
+    results.push(...githubResults);
+  } catch (error) {
+    console.error('Error searching GitHub:', error);
+  }
+
+  // Search Reddit (free, 60 requests/minute)
+  try {
+    const { searchRedditFree } = await import('./search-engines/reddit-free');
+    const redditResults = await searchRedditFree(searchTerms);
+    results.push(...redditResults);
+  } catch (error) {
+    console.error('Error searching Reddit:', error);
+  }
+
+  // Search Google (free tier: 100 queries/day)
+  // Only use if API keys are configured
+  const googleApiKey = process.env.GOOGLE_SEARCH_API_KEY;
+  const googleEngineId = process.env.GOOGLE_SEARCH_ENGINE_ID;
   
-  console.log('Piracy search not yet implemented. Would search for:', searchTerms);
-  return [];
+  if (googleApiKey && googleEngineId) {
+    try {
+      const { searchGoogleFree } = await import('./search-engines/google-free');
+      const googleResults = await searchGoogleFree(searchTerms, googleApiKey, googleEngineId);
+      results.push(...googleResults);
+    } catch (error) {
+      console.error('Error searching Google:', error);
+    }
+  }
+
+  // Remove duplicates based on URL
+  const uniqueResults = Array.from(
+    new Map(results.map(r => [r.url, r])).values()
+  );
+
+  return uniqueResults;
 }
 
 /**
  * Monitor known piracy platforms
+ * Uses free APIs and smart rotation to stay within limits
  */
 export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
   const supabase = await createServiceRoleClient();
@@ -149,8 +178,19 @@ export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
 
   const reports: PiracyReport[] = [];
 
-  // Search for each product
-  for (const product of products) {
+  // Smart rotation: Only search 3-4 products per day to stay within Google's free tier
+  // This ensures all products get searched regularly
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+  let productsToSearch = products;
+
+  // If Google API is configured, use smart rotation
+  if (process.env.GOOGLE_SEARCH_API_KEY && process.env.GOOGLE_SEARCH_ENGINE_ID) {
+    const { getProductsToSearchToday } = await import('./search-engines/google-free');
+    productsToSearch = getProductsToSearchToday(products, dayOfYear);
+  }
+
+  // Search for selected products
+  for (const product of productsToSearch) {
     // Filter out null values and ensure all terms are strings
     const searchTerms: string[] = [
       product.title,
@@ -183,7 +223,7 @@ export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
           notes: `Auto-detected: ${result.title}`,
         });
 
-        reports.push({
+        const newReport: PiracyReport = {
           id: reportId,
           infringing_url: result.url,
           platform: result.platform,
@@ -193,6 +233,14 @@ export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
           watermark_token: sourceInfo?.watermarkData?.downloadToken,
           download_token: sourceInfo?.downloadToken,
           user_id: sourceInfo?.userId,
+        };
+
+        reports.push(newReport);
+
+        // Send email notification (async, don't wait)
+        const { notifyPiracyDetected } = await import('./notifications');
+        notifyPiracyDetected(newReport).catch(err => {
+          console.error('Failed to send notification:', err);
         });
       }
     }
