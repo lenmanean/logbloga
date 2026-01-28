@@ -181,12 +181,19 @@ export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
   // Smart rotation: Only search 3-4 products per day to stay within Google's free tier
   // This ensures all products get searched regularly
   const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
-  let productsToSearch = products;
+  
+  // Filter out products without slugs (required for search)
+  const productsWithSlugs = products.filter(
+    (p): p is { id: string; title: string | null; slug: string } => 
+      p.slug !== null && typeof p.slug === 'string'
+  );
+  
+  let productsToSearch = productsWithSlugs;
 
   // If Google API is configured, use smart rotation
   if (process.env.GOOGLE_SEARCH_API_KEY && process.env.GOOGLE_SEARCH_ENGINE_ID) {
     const { getProductsToSearchToday } = await import('./search-engines/google-free');
-    productsToSearch = getProductsToSearchToday(products, dayOfYear);
+    productsToSearch = getProductsToSearchToday(productsWithSlugs, dayOfYear);
   }
 
   // Search for selected products

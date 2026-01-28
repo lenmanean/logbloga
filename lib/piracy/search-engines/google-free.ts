@@ -90,9 +90,9 @@ function detectPlatform(url: string): string {
  * Rotates through products so each gets searched every few days
  */
 export function getProductsToSearchToday(
-  allProducts: Array<{ id: string; title: string | null; slug: string | null }>,
+  allProducts: Array<{ id: string; title: string | null; slug: string }>,
   dayOfYear: number
-): Array<{ id: string; title: string | null; slug: string | null }> {
+): Array<{ id: string; title: string | null; slug: string }> {
   if (allProducts.length === 0) return [];
 
   // Rotate through products: search 3-4 products per day
