@@ -211,6 +211,7 @@ export async function detectSuspiciousActivity(userId: string): Promise<{
   // Check for rapid bulk downloads
   if (downloads.length > 20) {
     const recentDownloads = downloads.filter(d => {
+      if (!d.created_at) return false;
       const downloadTime = new Date(d.created_at).getTime();
       const oneHourAgo = Date.now() - 60 * 60 * 1000;
       return downloadTime > oneHourAgo;
@@ -235,11 +236,15 @@ export async function detectSuspiciousActivity(userId: string): Promise<{
   // Check for downloading all files in short time
   const uniqueFiles = new Set(downloads.map(d => d.filename)).size;
   if (uniqueFiles > 30 && downloads.length > 30) {
-    const timeSpan = new Date(downloads[0].created_at).getTime() - 
-                     new Date(downloads[downloads.length - 1].created_at).getTime();
-    const hours = timeSpan / (1000 * 60 * 60);
-    if (hours < 24) {
-      reasons.push('All files downloaded in less than 24 hours');
+    const firstDownload = downloads[0];
+    const lastDownload = downloads[downloads.length - 1];
+    if (firstDownload.created_at && lastDownload.created_at) {
+      const timeSpan = new Date(firstDownload.created_at).getTime() - 
+                       new Date(lastDownload.created_at).getTime();
+      const hours = timeSpan / (1000 * 60 * 60);
+      if (hours < 24) {
+        reasons.push('All files downloaded in less than 24 hours');
+      }
     }
   }
 
