@@ -1,9 +1,10 @@
 /**
  * Markdown to PDF Converter
  * Converts markdown content to PDF with proper formatting and structure preservation
+ * Uses pdf-lib for serverless compatibility
  */
 
-import PDFDocument from 'pdfkit';
+import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import { marked } from 'marked';
 
 interface MarkdownToken {
@@ -16,390 +17,567 @@ interface MarkdownToken {
  * Preserves structure: headings, paragraphs, lists, code blocks, blockquotes, tables, links
  */
 export async function markdownToPDF(markdown: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    try {
-      const doc = new PDFDocument({
-        margin: 50,
-        size: 'LETTER',
-        info: {
-          Title: 'Document',
-          Author: 'Logbloga',
-        },
-      });
+  try {
+    // Create a new PDF document
+    const pdfDoc = await PDFDocument.create();
+    
+    // Embed standard fonts (these work in serverless)
+    const helveticaFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+    const helveticaBoldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const helveticaObliqueFont = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
+    const courierFont = await pdfDoc.embedFont(StandardFonts.Courier);
 
-      const buffers: Buffer[] = [];
+    // Page setup
+    const pageWidth = 612; // Letter size width in points
+    const pageHeight = 792; // Letter size height in points
+    const margin = 50;
+    const contentWidth = pageWidth - margin * 2;
 
-      doc.on('data', buffers.push.bind(buffers));
-      doc.on('end', () => {
-        const pdfBuffer = Buffer.concat(buffers);
-        resolve(pdfBuffer);
-      });
-      doc.on('error', reject);
+    let page = pdfDoc.addPage([pageWidth, pageHeight]);
+    let yPosition = pageHeight - margin;
+    const lineHeight = 12;
+    const paragraphSpacing = 6;
 
-      // Parse markdown
-      const tokens = marked.lexer(markdown);
-      renderTokens(doc, tokens);
-
-      doc.end();
-    } catch (error) {
-      reject(error);
+    // Parse markdown
+    const tokens = marked.lexer(markdown);
+    
+    // Render tokens
+    for (const token of tokens) {
+      const result = await renderToken(
+        token,
+        page,
+        pdfDoc,
+        helveticaFont,
+        helveticaBoldFont,
+        helveticaObliqueFont,
+        courierFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+      
+      yPosition = result.yPosition;
+      
+      // Check if we need a new page
+      if (yPosition < margin + 50) {
+        page = pdfDoc.addPage([pageWidth, pageHeight]);
+        yPosition = pageHeight - margin;
+      }
     }
-  });
-}
 
-/**
- * Render markdown tokens to PDF
- */
-function renderTokens(doc: InstanceType<typeof PDFDocument>, tokens: MarkdownToken[]): void {
-  for (const token of tokens) {
-    switch (token.type) {
-      case 'heading':
-        renderHeading(doc, token);
-        break;
-      case 'paragraph':
-        renderParagraph(doc, token);
-        break;
-      case 'list':
-        renderList(doc, token);
-        break;
-      case 'code':
-        renderCode(doc, token);
-        break;
-      case 'blockquote':
-        renderBlockquote(doc, token);
-        break;
-      case 'table':
-        renderTable(doc, token);
-        break;
-      case 'hr':
-        renderHorizontalRule(doc);
-        break;
-      case 'html':
-        // Skip HTML tokens or render as plain text
-        if (token.text) {
-          renderText(doc, token.text, 10);
-        }
-        break;
-      case 'space':
-        // Skip spaces
-        break;
-      default:
-        // For unknown tokens, try to render text if available
-        if (token.text) {
-          renderText(doc, token.text, 10);
-          doc.moveDown();
-        }
-    }
+    // Generate PDF bytes
+    const pdfBytes = await pdfDoc.save();
+    return Buffer.from(pdfBytes);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    throw error;
   }
 }
 
-/**
- * Render heading (h1-h6)
- */
-function renderHeading(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
+interface RenderResult {
+  yPosition: number;
+  page: any;
+}
+
+async function renderToken(
+  token: MarkdownToken,
+  page: any,
+  pdfDoc: any,
+  helveticaFont: any,
+  helveticaBoldFont: any,
+  helveticaObliqueFont: any,
+  courierFont: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): Promise<RenderResult> {
+  const paragraphSpacing = 6;
+
+  switch (token.type) {
+    case 'heading':
+      return renderHeading(
+        token,
+        page,
+        helveticaBoldFont,
+        helveticaFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+    case 'paragraph':
+      return renderParagraph(
+        token,
+        page,
+        helveticaFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight,
+        paragraphSpacing
+      );
+    case 'list':
+      return renderList(
+        token,
+        page,
+        helveticaFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+    case 'code':
+      return renderCode(
+        token,
+        page,
+        courierFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+    case 'blockquote':
+      return renderBlockquote(
+        token,
+        page,
+        helveticaObliqueFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+    case 'table':
+      return renderTable(
+        token,
+        page,
+        helveticaBoldFont,
+        helveticaFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+    case 'hr':
+      return renderHorizontalRule(
+        page,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight
+      );
+    default:
+      // For unknown tokens, try to render text if available
+      if (token.text) {
+        return renderText(
+          token.text,
+          page,
+          helveticaFont,
+          margin,
+          contentWidth,
+          yPosition,
+          lineHeight,
+          paragraphSpacing
+        );
+      }
+      return { yPosition, page };
+  }
+}
+
+function renderHeading(
+  token: MarkdownToken,
+  page: any,
+  boldFont: any,
+  normalFont: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): RenderResult {
   const level = token.depth || 1;
   const sizes = [24, 20, 16, 14, 12, 11];
-  const size = sizes[Math.min(level - 1, sizes.length - 1)] || 11;
+  const fontSize = sizes[Math.min(level - 1, sizes.length - 1)] || 11;
+  const text = renderInlineTokens(token.tokens || []);
 
-  // Add spacing before heading (except first)
-  if (doc.y > 50) {
-    doc.moveDown(0.5);
-  }
+  const paragraphSpacing = 6;
+  yPosition -= paragraphSpacing;
 
-  doc
-    .fontSize(size)
-    .font('Helvetica-Bold')
-    .text(renderInlineTokens(token.tokens || []), {
-      align: 'left',
-    })
-    .font('Helvetica')
-    .moveDown(0.5);
+  const textHeight = (fontSize * text.split('\n').length);
+  page.drawText(text, {
+    x: margin,
+    y: yPosition - fontSize,
+    size: fontSize,
+    font: boldFont,
+    color: rgb(0, 0, 0),
+    maxWidth: contentWidth,
+  });
 
   // Add border for h1
   if (level === 1) {
-    const currentY = doc.y;
-    doc
-      .moveUp(0.3)
-      .strokeColor('#cccccc')
-      .lineWidth(1)
-      .moveTo(50, currentY - 5)
-      .lineTo(doc.page.width - 50, currentY - 5)
-      .stroke()
-      .moveTo(50, currentY);
+    page.drawLine({
+      start: { x: margin, y: yPosition - fontSize - 5 },
+      end: { x: margin + contentWidth, y: yPosition - fontSize - 5 },
+      thickness: 1,
+      color: rgb(0.8, 0.8, 0.8),
+    });
   }
+
+  yPosition -= textHeight + paragraphSpacing * 2;
+
+  return { yPosition, page };
 }
 
-/**
- * Render paragraph
- */
-function renderParagraph(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
+function renderParagraph(
+  token: MarkdownToken,
+  page: any,
+  font: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number,
+  paragraphSpacing: number
+): RenderResult {
   if (!token.tokens || token.tokens.length === 0) {
-    doc.moveDown(0.5);
-    return;
+    yPosition -= paragraphSpacing;
+    return { yPosition, page };
   }
 
-  doc
-    .fontSize(10)
-    .font('Helvetica')
-    .text(renderInlineTokens(token.tokens), {
-      align: 'left',
-      lineGap: 2,
-    })
-    .moveDown();
+  const text = renderInlineTokens(token.tokens);
+  const fontSize = 10;
+  const lines = wrapText(text, contentWidth, fontSize, font);
+  const textHeight = lines.length * lineHeight;
+
+  let currentY = yPosition;
+  for (const line of lines) {
+    page.drawText(line, {
+      x: margin,
+      y: currentY - fontSize,
+      size: fontSize,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+    currentY -= lineHeight;
+  }
+
+  yPosition -= textHeight + paragraphSpacing;
+
+  return { yPosition, page };
 }
 
-/**
- * Render list (ordered or unordered)
- */
-function renderList(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
+function renderList(
+  token: MarkdownToken,
+  page: any,
+  font: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): RenderResult {
   const isOrdered = token.ordered || false;
   const start = token.start || 1;
   let itemNumber = start;
+  const indent = 20;
+  const bulletX = margin + indent;
+  const textX = bulletX + 15;
+  const fontSize = 10;
 
   for (const item of token.items || []) {
-    const indent = 20;
-    const bulletX = 50 + indent;
-    const textX = bulletX + 15;
-
-    // Get current Y position
-    const currentY = doc.y;
-
-    // Check if we need a new page
-    if (currentY > doc.page.height - 100) {
-      doc.addPage();
-    }
+    const itemText = item.tokens ? renderInlineTokens(item.tokens) : '';
+    const lines = wrapText(itemText, contentWidth - indent - 15, fontSize, font);
+    const itemHeight = lines.length * lineHeight + 4;
 
     // Draw bullet or number
-    doc.fontSize(10).font('Helvetica');
     if (isOrdered) {
-      doc.text(`${itemNumber}.`, bulletX, currentY);
+      page.drawText(`${itemNumber}.`, {
+        x: bulletX,
+        y: yPosition - fontSize,
+        size: fontSize,
+        font: font,
+        color: rgb(0, 0, 0),
+      });
     } else {
-      doc.text('•', bulletX, currentY);
+      page.drawText('•', {
+        x: bulletX,
+        y: yPosition - fontSize,
+        size: fontSize,
+        font: font,
+        color: rgb(0, 0, 0),
+      });
     }
 
     // Render list item content
-    if (item.tokens && item.tokens.length > 0) {
-      const itemText = renderInlineTokens(item.tokens);
-      doc.text(itemText, textX, currentY, {
-        width: doc.page.width - textX - 50,
-        lineGap: 2,
+    let currentY = yPosition;
+    for (const line of lines) {
+      page.drawText(line, {
+        x: textX,
+        y: currentY - fontSize,
+        size: fontSize,
+        font: font,
+        color: rgb(0, 0, 0),
       });
+      currentY -= lineHeight;
     }
 
-    // Move down for next item
-    doc.moveDown(0.8);
-
-    if (isOrdered) {
-      itemNumber++;
-    }
+    yPosition -= itemHeight + 4;
+    if (isOrdered) itemNumber++;
   }
 
-  doc.moveDown(0.5);
+  yPosition -= 6;
+
+  return { yPosition, page };
 }
 
-/**
- * Render code block
- */
-function renderCode(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
+function renderCode(
+  token: MarkdownToken,
+  page: any,
+  font: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): RenderResult {
   const code = token.text || '';
-  const language = token.lang || '';
-
-  // Add spacing
-  doc.moveDown(0.5);
-
-  const startY = doc.y;
-  const margin = 50;
-  const width = doc.page.width - margin * 2;
+  const fontSize = 9;
   const padding = 10;
-
-  // Calculate text height
-  doc.fontSize(9).font('Courier');
   const lines = code.split('\n');
-  const lineHeight = 12;
-  const totalHeight = lines.length * lineHeight + padding * 2;
-
-  // Check if we need a new page
-  if (startY + totalHeight > doc.page.height - 50) {
-    doc.addPage();
-  }
+  const textHeight = lines.length * lineHeight + padding * 2;
 
   // Draw background
-  doc
-    .rect(margin, doc.y, width, totalHeight)
-    .fillColor('#f5f5f5')
-    .fill()
-    .fillColor('black');
+  page.drawRectangle({
+    x: margin,
+    y: yPosition - textHeight,
+    width: contentWidth,
+    height: textHeight,
+    color: rgb(0.96, 0.96, 0.96),
+  });
 
   // Draw border
-  doc
-    .strokeColor('#cccccc')
-    .lineWidth(1)
-    .rect(margin, doc.y, width, totalHeight)
-    .stroke();
+  page.drawRectangle({
+    x: margin,
+    y: yPosition - textHeight,
+    width: contentWidth,
+    height: textHeight,
+    borderColor: rgb(0.8, 0.8, 0.8),
+    borderWidth: 1,
+  });
 
   // Render code
-  let y = doc.y + padding;
+  let currentY = yPosition - padding;
   for (const line of lines) {
-    doc.text(line || ' ', margin + padding, y, {
-      width: width - padding * 2,
+    page.drawText(line || ' ', {
+      x: margin + padding,
+      y: currentY - fontSize,
+      size: fontSize,
+      font: font,
+      color: rgb(0, 0, 0),
     });
-    y += lineHeight;
+    currentY -= lineHeight;
   }
 
-  doc.y = startY + totalHeight;
-  doc.moveDown(0.5);
+  yPosition -= textHeight + 6;
+
+  return { yPosition, page };
 }
 
-/**
- * Render blockquote
- */
-function renderBlockquote(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
-  doc.moveDown(0.5);
+function renderBlockquote(
+  token: MarkdownToken,
+  page: any,
+  font: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): RenderResult {
+  if (!token.tokens || token.tokens.length === 0) {
+    return { yPosition, page };
+  }
 
-  const startY = doc.y;
-  const margin = 50;
+  const quoteText = renderInlineTokens(token.tokens);
+  const fontSize = 10;
   const indent = 20;
+  const lines = wrapText(quoteText, contentWidth - indent, fontSize, font);
+  const textHeight = lines.length * lineHeight + 10;
 
   // Draw left border
-  doc
-    .strokeColor('#4a90e2')
-    .lineWidth(4)
-    .moveTo(margin, startY)
-    .lineTo(margin, startY + 30)
-    .stroke()
-    .strokeColor('black');
+  page.drawLine({
+    start: { x: margin, y: yPosition },
+    end: { x: margin, y: yPosition - textHeight },
+    thickness: 4,
+    color: rgb(0.29, 0.56, 0.89),
+  });
 
   // Render content
-  if (token.tokens && token.tokens.length > 0) {
-    const quoteText = renderInlineTokens(token.tokens);
-    doc
-      .fontSize(10)
-      .font('Helvetica-Oblique')
-      .fillColor('#666666')
-      .text(quoteText, margin + indent, startY, {
-        width: doc.page.width - margin - indent - 50,
-        lineGap: 2,
-      })
-      .font('Helvetica')
-      .fillColor('black');
+  let currentY = yPosition;
+  for (const line of lines) {
+    page.drawText(line, {
+      x: margin + indent,
+      y: currentY - fontSize,
+      size: fontSize,
+      font: font,
+      color: rgb(0.4, 0.4, 0.4),
+    });
+    currentY -= lineHeight;
   }
 
-  doc.moveDown(0.5);
+  yPosition -= textHeight + 6;
+
+  return { yPosition, page };
 }
 
-/**
- * Render table
- */
-function renderTable(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
-  doc.moveDown(0.5);
-
-  const margin = 50;
-  const tableWidth = doc.page.width - margin * 2;
+function renderTable(
+  token: MarkdownToken,
+  page: any,
+  boldFont: any,
+  normalFont: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): RenderResult {
   const header = token.header || [];
   const rows = token.rows || [];
 
-  if (header.length === 0) return;
+  if (header.length === 0) return { yPosition, page };
 
-  // Calculate column widths
   const colCount = header.length;
-  const colWidth = tableWidth / colCount;
-
-  let startY = doc.y;
-
-  // Check if we need a new page
-  if (startY > doc.page.height - 150) {
-    doc.addPage();
-    startY = doc.y;
-  }
+  const colWidth = contentWidth / colCount;
+  const fontSize = 10;
+  const cellPadding = 5;
+  const rowHeight = 20;
 
   // Render header
-  doc.fontSize(10).font('Helvetica-Bold');
   let x = margin;
-  let maxRowHeight = 15;
+  let maxHeaderHeight = rowHeight;
 
   for (let i = 0; i < header.length; i++) {
     const cell = renderInlineTokens(header[i] || []);
-    const cellHeight = Math.ceil(cell.length / 30) * 12 + 10;
+    const cellHeight = Math.ceil(cell.length / 30) * lineHeight + cellPadding * 2;
 
     // Draw cell background
-    doc
-      .rect(x, startY, colWidth, cellHeight)
-      .fillColor('#f0f0f0')
-      .fill()
-      .fillColor('black');
+    page.drawRectangle({
+      x: x,
+      y: yPosition - cellHeight,
+      width: colWidth,
+      height: cellHeight,
+      color: rgb(0.94, 0.94, 0.94),
+    });
 
     // Draw cell border
-    doc
-      .strokeColor('#cccccc')
-      .lineWidth(0.5)
-      .rect(x, startY, colWidth, cellHeight)
-      .stroke();
+    page.drawRectangle({
+      x: x,
+      y: yPosition - cellHeight,
+      width: colWidth,
+      height: cellHeight,
+      borderColor: rgb(0.8, 0.8, 0.8),
+      borderWidth: 0.5,
+    });
 
     // Draw cell text
-    doc.text(cell, x + 5, startY + 5, {
-      width: colWidth - 10,
-      align: 'left',
+    page.drawText(cell, {
+      x: x + cellPadding,
+      y: yPosition - fontSize - cellPadding,
+      size: fontSize,
+      font: boldFont,
+      color: rgb(0, 0, 0),
+      maxWidth: colWidth - cellPadding * 2,
     });
 
     x += colWidth;
-    maxRowHeight = Math.max(maxRowHeight, cellHeight);
+    maxHeaderHeight = Math.max(maxHeaderHeight, cellHeight);
   }
 
-  startY += maxRowHeight;
+  yPosition -= maxHeaderHeight;
 
   // Render rows
-  doc.font('Helvetica');
   for (const row of rows) {
-    // Check if we need a new page
-    if (startY > doc.page.height - 100) {
-      doc.addPage();
-      startY = doc.y;
-    }
-
     x = margin;
-    let rowHeight = 15;
+    let currentRowHeight = rowHeight;
 
     for (let i = 0; i < row.length; i++) {
       const cell = renderInlineTokens(row[i] || []);
-      const cellHeight = Math.ceil(cell.length / 30) * 12 + 10;
+      const cellHeight = Math.ceil(cell.length / 30) * lineHeight + cellPadding * 2;
 
       // Draw cell border
-      doc
-        .strokeColor('#cccccc')
-        .lineWidth(0.5)
-        .rect(x, startY, colWidth, cellHeight)
-        .stroke();
+      page.drawRectangle({
+        x: x,
+        y: yPosition - cellHeight,
+        width: colWidth,
+        height: cellHeight,
+        borderColor: rgb(0.8, 0.8, 0.8),
+        borderWidth: 0.5,
+      });
 
       // Draw cell text
-      doc.text(cell, x + 5, startY + 5, {
-        width: colWidth - 10,
-        align: 'left',
+      page.drawText(cell, {
+        x: x + cellPadding,
+        y: yPosition - fontSize - cellPadding,
+        size: fontSize,
+        font: normalFont,
+        color: rgb(0, 0, 0),
+        maxWidth: colWidth - cellPadding * 2,
       });
 
       x += colWidth;
-      rowHeight = Math.max(rowHeight, cellHeight);
+      currentRowHeight = Math.max(currentRowHeight, cellHeight);
     }
 
-    startY += rowHeight;
+    yPosition -= currentRowHeight;
   }
 
-  doc.y = startY;
-  doc.moveDown(0.5);
+  yPosition -= 6;
+
+  return { yPosition, page };
 }
 
-/**
- * Render horizontal rule
- */
-function renderHorizontalRule(doc: InstanceType<typeof PDFDocument>): void {
-  doc.moveDown(0.5);
-  const y = doc.y;
-  doc
-    .strokeColor('#cccccc')
-    .lineWidth(1)
-    .moveTo(50, y)
-    .lineTo(doc.page.width - 50, y)
-    .stroke();
-  doc.moveDown(0.5);
+function renderHorizontalRule(
+  page: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number
+): RenderResult {
+  yPosition -= 6;
+  page.drawLine({
+    start: { x: margin, y: yPosition },
+    end: { x: margin + contentWidth, y: yPosition },
+    thickness: 1,
+    color: rgb(0.8, 0.8, 0.8),
+  });
+  yPosition -= 6;
+
+  return { yPosition, page };
+}
+
+function renderText(
+  text: string,
+  page: any,
+  font: any,
+  margin: number,
+  contentWidth: number,
+  yPosition: number,
+  lineHeight: number,
+  paragraphSpacing: number
+): RenderResult {
+  const fontSize = 10;
+  const lines = wrapText(text, contentWidth, fontSize, font);
+  const textHeight = lines.length * lineHeight;
+
+  let currentY = yPosition;
+  for (const line of lines) {
+    page.drawText(line, {
+      x: margin,
+      y: currentY - fontSize,
+      size: fontSize,
+      font: font,
+      color: rgb(0, 0, 0),
+    });
+    currentY -= lineHeight;
+  }
+
+  yPosition -= textHeight + paragraphSpacing;
+
+  return { yPosition, page };
 }
 
 /**
@@ -437,11 +615,30 @@ function renderInlineTokens(tokens: MarkdownToken[]): string {
 }
 
 /**
- * Render plain text with word wrapping
+ * Simple text wrapping (basic implementation)
  */
-function renderText(doc: InstanceType<typeof PDFDocument>, text: string, fontSize: number): void {
-  doc.fontSize(fontSize).font('Helvetica').text(text, {
-    align: 'left',
-    lineGap: 2,
-  });
+function wrapText(text: string, maxWidth: number, fontSize: number, font: any): string[] {
+  // Simple word wrapping - split by spaces and combine words until line exceeds maxWidth
+  const words = text.split(' ');
+  const lines: string[] = [];
+  let currentLine = '';
+
+  for (const word of words) {
+    const testLine = currentLine ? `${currentLine} ${word}` : word;
+    // Approximate width: each character is roughly fontSize * 0.6 points wide
+    const estimatedWidth = testLine.length * fontSize * 0.6;
+
+    if (estimatedWidth > maxWidth && currentLine) {
+      lines.push(currentLine);
+      currentLine = word;
+    } else {
+      currentLine = testLine;
+    }
+  }
+
+  if (currentLine) {
+    lines.push(currentLine);
+  }
+
+  return lines.length > 0 ? lines : [text];
 }
