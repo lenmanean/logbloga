@@ -7,11 +7,13 @@ import {
   isHostedContent,
   getFileTypeIcon,
   formatFileName,
+  filterMarkdownFiles,
   type LevelComponent,
 } from '@/lib/utils/content';
 import { ContentSection } from '@/components/library/content-section';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
 import { DownloadButton } from '@/components/library/download-button';
+import { SectionDownloadButton } from '@/components/library/section-download-button';
 import { ProgressStepper } from '@/components/library/progress-stepper';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -136,41 +138,49 @@ export function LevelContent({
                 </p>
               )}
             </div>
-            {!levelProgress.implementation_plan ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleMarkComplete('implementation_plan')}
-                disabled={isMarkingComplete === 'implementation_plan'}
-                className="flex-shrink-0"
-              >
-                {isMarkingComplete === 'implementation_plan' ? (
-                  'Marking...'
-                ) : (
-                  <>
-                    <Check className="h-4 w-4 mr-1" />
-                    Mark Complete
-                  </>
-                )}
-              </Button>
-            ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => handleUnmarkComplete('implementation_plan')}
-                disabled={isMarkingComplete === 'implementation_plan'}
-                className="flex-shrink-0"
-              >
-                {isMarkingComplete === 'implementation_plan' ? (
-                  'Unmarking...'
-                ) : (
-                  <>
-                    <X className="h-4 w-4 mr-1" />
-                    Unmark Complete
-                  </>
-                )}
-              </Button>
-            )}
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {level === 1 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={[implementationPlan]}
+                  sectionTitle="Implementation Plan"
+                  level={level}
+                />
+              )}
+              {!levelProgress.implementation_plan ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleMarkComplete('implementation_plan')}
+                  disabled={isMarkingComplete === 'implementation_plan'}
+                >
+                  {isMarkingComplete === 'implementation_plan' ? (
+                    'Marking...'
+                  ) : (
+                    <>
+                      <Check className="h-4 w-4 mr-1" />
+                      Mark Complete
+                    </>
+                  )}
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleUnmarkComplete('implementation_plan')}
+                  disabled={isMarkingComplete === 'implementation_plan'}
+                >
+                  {isMarkingComplete === 'implementation_plan' ? (
+                    'Unmarking...'
+                  ) : (
+                    <>
+                      <X className="h-4 w-4 mr-1" />
+                      Unmark Complete
+                    </>
+                  )}
+                </Button>
+              )}
+            </div>
           </div>
           {isHostedContent(implementationPlan.type) ? (
             <MarkdownViewer
@@ -197,7 +207,15 @@ export function LevelContent({
           icon={Settings}
         >
           <div className="space-y-4">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+              {level === 1 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={filterMarkdownFiles(platformGuides)}
+                  sectionTitle="Platform Setup Guides"
+                  level={level}
+                />
+              )}
               {!levelProgress.platform_guides ? (
                 <Button
                   variant="outline"
@@ -288,7 +306,15 @@ export function LevelContent({
           icon={Lightbulb}
         >
           <div className="space-y-4">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+              {level === 1 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={filterMarkdownFiles(creativeFrameworks)}
+                  sectionTitle="Creative Decision Frameworks"
+                  level={level}
+                />
+              )}
               {!levelProgress.creative_frameworks ? (
                 <Button
                   variant="outline"
@@ -373,7 +399,15 @@ export function LevelContent({
           icon={Rocket}
         >
           <div className="space-y-4">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+              {level === 1 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={filterMarkdownFiles(launchMarketing)}
+                  sectionTitle="Launch & Marketing"
+                  level={level}
+                />
+              )}
               {!levelProgress.launch_marketing ? (
                 <Button
                   variant="outline"
@@ -458,7 +492,15 @@ export function LevelContent({
           icon={Wrench}
         >
           <div className="space-y-4">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+              {level === 1 && troubleshooting.length > 0 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={[troubleshooting[0]]}
+                  sectionTitle="Troubleshooting"
+                  level={level}
+                />
+              )}
               {!levelProgress.troubleshooting ? (
                 <Button
                   variant="outline"
@@ -543,7 +585,15 @@ export function LevelContent({
           icon={Calendar}
         >
           <div className="space-y-4">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+              {level === 1 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={filterMarkdownFiles(planning)}
+                  sectionTitle="Time & Budget Planning"
+                  level={level}
+                />
+              )}
               {!levelProgress.planning ? (
                 <Button
                   variant="outline"
@@ -628,7 +678,15 @@ export function LevelContent({
           icon={FileText}
         >
           <div className="space-y-4">
-            <div className="flex items-center justify-end">
+            <div className="flex items-center justify-end gap-2">
+              {level === 1 && (
+                <SectionDownloadButton
+                  productId={productId}
+                  files={filterMarkdownFiles(templates)}
+                  sectionTitle="Templates & Checklists"
+                  level={level}
+                />
+              )}
               {!levelProgress.templates ? (
                 <Button
                   variant="outline"

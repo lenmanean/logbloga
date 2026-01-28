@@ -100,3 +100,12 @@ export const LEVEL_COMPONENT_LABELS: Record<LevelComponent, string> = {
 export function isValidLevelComponent(value: string): value is LevelComponent {
   return LEVEL_COMPONENTS.includes(value as LevelComponent);
 }
+
+/**
+ * Filter array of files to only include markdown files.
+ */
+export function filterMarkdownFiles<T extends { file: string; type: string }>(
+  files: T[]
+): T[] {
+  return files.filter((file) => isHostedContent(file.type));
+}
