@@ -2,12 +2,11 @@
 
 ## Overview
 
-This implementation plan guides you (as the director) in working with **Cursor as your lead developer** to build a simple single-page application or landing page SaaS with Stripe payment integration. **You don't need any coding knowledge** - Cursor will handle all the technical implementation. Your role is to provide vision, make decisions, and direct Cursor to build your application.
+This implementation plan guides you through building a simple single-page application or landing page SaaS with Stripe payment integration. Whether you're coding yourself or using AI tools to assist, this plan provides a clear roadmap to success.
 
-**Your Role**: Director - Provide vision, make decisions, review work, give feedback  
-**Cursor's Role**: Lead Developer - Handles all code generation, implementation, debugging, and technical execution
+**AI-Assisted Development**: If you're using AI tools (like Cursor, ChatGPT, or GitHub Copilot), they can significantly accelerate development, reducing build time from 6-8 weeks to 2-4 weeks. AI tools can handle code generation, provide suggestions, and assist with debugging.
 
-Working together, Cursor will build your application in **2-4 weeks** instead of the traditional 6-8 weeks, reaching market faster.
+**Traditional Development**: If you prefer to code manually, this plan provides all the steps and technical details you need. You can still use AI tools for assistance with specific tasks, boilerplate code, or when you get stuck.
 
 **Expected Outcome**: A functional, deployed web application with payment processing that can generate $500-$2,000/month in revenue.
 
@@ -15,89 +14,94 @@ Working together, Cursor will build your application in **2-4 weeks** instead of
 
 Before starting, ensure you have:
 
-- **Cursor installed and configured** on your computer (this is your primary development tool)
 - A **GitHub account** (free tier is sufficient)
 - A **Vercel account** (free tier is sufficient)
 - A **Stripe account** (test mode to start)
-- **Node.js 18+ installed** (Cursor can help you install this if needed)
+- **Node.js 18+ installed** (or use AI tools to help with installation)
+- A code editor (VS Code, Cursor, or your preferred editor)
 - Basic computer skills (opening applications, using a web browser)
-- Willingness to communicate clearly with Cursor
 
-**You do NOT need**:
-- Knowledge of HTML, CSS, or JavaScript
-- Understanding of React or Next.js
-- Programming experience
-- Technical coding skills
+**AI Tools (Optional but Recommended)**: AI tools like Cursor, ChatGPT, or GitHub Copilot can significantly accelerate development. If you're new to programming or want to speed up your workflow, consider using one of these tools.
 
-**Cursor Prompts Available**: Download the [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) file for ready-to-use prompts you can copy and paste into Cursor for each step. These prompts are designed to save you time and ensure clear communication with Cursor.
+**AI Prompts Available (for non-technical users)**: If you're using AI tools like Cursor to build your application, download the [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) file for ready-to-use prompts you can copy and paste into your AI tool for each step.
 
 ## Milestones
 
 ### Milestone 1: Project Foundation (Days 1-3)
-- [ ] Direct Cursor to initialize Next.js project
-- [ ] Work with Cursor to set up GitHub repository
-- [ ] Guide Cursor to configure development environment
-- [ ] Review Cursor's work on basic project structure
+- [ ] Initialize Next.js project
+- [ ] Set up GitHub repository
+- [ ] Configure development environment
+- [ ] Review basic project structure
 
 ### Milestone 2: Core Features (Days 4-7)
-- [ ] Describe your vision to Cursor for the landing page design
-- [ ] Set up Stripe account and provide API keys to Cursor
-- [ ] Direct Cursor to integrate Stripe payment processing
-- [ ] Ask Cursor to create payment success/failure pages
+- [ ] Design and implement landing page
+- [ ] Set up Stripe account and configure API keys
+- [ ] Integrate Stripe payment processing
+- [ ] Create payment success/failure pages
 
 ### Milestone 3: Polish & Testing (Days 8-10)
-- [ ] Request Cursor to add error handling
-- [ ] Direct Cursor to implement responsive design
-- [ ] Test payment flows with Cursor's help
-- [ ] Ask Cursor to optimize performance
+- [ ] Add error handling
+- [ ] Implement responsive design
+- [ ] Test payment flows thoroughly
+- [ ] Optimize performance
 
 ### Milestone 4: Deployment (Days 11-12)
-- [ ] Guide Cursor through Vercel deployment process
-- [ ] Provide environment variables to Cursor for configuration
-- [ ] Test production deployment with Cursor
-- [ ] Optionally direct Cursor to set up custom domain
+- [ ] Prepare project for Vercel deployment
+- [ ] Configure environment variables
+- [ ] Test production deployment
+- [ ] Optionally set up custom domain
 
 ### Milestone 5: Launch (Days 13-14)
-- [ ] Review final testing with Cursor
+- [ ] Complete final testing
 - [ ] Complete launch checklist
 - [ ] Go live!
 
-## Director's Guide: Working with Cursor
+## Working with AI Tools
 
-### Effective Communication
+AI tools can significantly accelerate your development process, whether you're new to programming or an experienced developer. Here's how to effectively incorporate AI into your workflow.
 
-**Be Specific**: Instead of "make it better," say "make the button larger and change the color to blue"
+### For Non-Technical Users
 
-**Provide Context**: Share your vision and goals. For example: "I want a landing page that converts visitors into paying customers"
+If you're using AI tools as your primary development method:
 
-**Give Feedback**: Review what Cursor creates and provide specific feedback: "The headline is good, but make it more compelling"
+**Effective Communication with AI**:
+- **Be Specific**: Instead of "make it better," say "make the button larger and change the color to blue"
+- **Provide Context**: Share your vision and goals. For example: "I want a landing page that converts visitors into paying customers"
+- **Give Feedback**: Review what AI creates and provide specific feedback: "The headline is good, but make it more compelling"
+- **Ask Questions**: If you don't understand something AI suggests, ask for clarification
 
-**Ask Questions**: If you don't understand something Cursor suggests, ask for clarification
-
-### What to Direct Cursor On
-
+**What to Direct AI On**:
 - **What to build**: Describe features, pages, and functionality you want
 - **How it should look**: Share design preferences, colors, layout ideas
 - **What it should do**: Explain user flows and business logic
 - **When to test**: Request testing at key milestones
 
-### What Cursor Handles
-
-- **All code writing**: Cursor generates all the code
-- **Technical implementation**: Cursor handles all technical details
-- **Error fixing**: Cursor debugs and fixes issues
-- **Best practices**: Cursor follows coding standards and best practices
-
-### Reviewing Cursor's Work
-
-1. **Test the functionality**: Try using what Cursor built
+**Reviewing AI-Generated Work**:
+1. **Test the functionality**: Try using what AI built
 2. **Check the appearance**: Review how it looks
-3. **Provide feedback**: Tell Cursor what works and what needs changes
-4. **Request improvements**: Ask Cursor to refine or adjust as needed
+3. **Provide feedback**: Tell AI what works and what needs changes
+4. **Request improvements**: Ask AI to refine or adjust as needed
 
-### Using Cursor Prompts
+**Using AI Prompts**:
+For each step in this implementation plan, we've created ready-to-use prompts you can copy and paste directly into your AI tool. Download the [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) file to have all prompts in one place. These prompts are designed to save you time and ensure clear, effective communication with AI tools.
 
-For each step in this implementation plan, we've created ready-to-use prompts you can copy and paste directly into Cursor. Download the [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) file to have all prompts in one place. These prompts are designed to save you time and ensure clear, effective communication with Cursor.
+### For Technical Users
+
+If you're coding yourself and using AI for assistance:
+
+**How AI Can Help**:
+- **Boilerplate Generation**: Generate starter code, components, and file structures
+- **Code Suggestions**: Get suggestions for implementations, patterns, and best practices
+- **Debugging Assistance**: Get help understanding errors and finding solutions
+- **Documentation**: Generate comments, README files, and code explanations
+- **Refactoring**: Get suggestions for improving code structure and performance
+
+**Best Practices**:
+- Use AI to generate initial code, then review and customize it
+- Ask AI to explain complex concepts or unfamiliar patterns
+- Use AI for repetitive tasks like creating similar components
+- Always review and test AI-generated code before using it in production
+- Use AI to learn new technologies or frameworks faster
 
 ## Step-by-Step Roadmap
 
@@ -105,68 +109,97 @@ For each step in this implementation plan, we've created ready-to-use prompts yo
 
 #### Step 1.1: Initialize Next.js Project
 
-1. Open Cursor on your computer
-2. Direct Cursor to initialize a Next.js project. You can say: *"Create a new Next.js project with TypeScript and Tailwind CSS. Name it 'my-saas-app'"*
-3. Ask Cursor to start the development server
-4. Review the result - Cursor should show you a running application at `http://localhost:3000`
+**Option A (Using AI Tools)**: If you're using AI tools like Cursor, prompt them: *"Create a new Next.js project with TypeScript and Tailwind CSS. Name it 'my-saas-app'. Use the latest version with the App Router."* Then ask AI to start the development server.
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Open your terminal and run:
+```bash
+npx create-next-app@latest my-saas-app --typescript --tailwind --app
+cd my-saas-app
+npm run dev
+```
 
-**Note**: If Cursor encounters any errors, simply describe the error to Cursor and ask it to fix it.
+Verify the application is running at `http://localhost:3000`.
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 1.2: Set Up GitHub Repository
 
-1. Create a new repository on GitHub (private or public) - you'll do this manually in your browser
-2. Direct Cursor to initialize git in your project. Say: *"Initialize git and connect this project to my GitHub repository"*
-3. Provide Cursor with your repository URL when it asks
-4. Ask Cursor to make the initial commit and push to GitHub
+1. Create a new repository on GitHub (private or public) in your browser
+2. Initialize git and connect to your repository:
 
-**Example directive**: *"Set up git, connect to my GitHub repo at [your-repo-url], and make an initial commit"*
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Initialize git in this project and connect it to my GitHub repository at [your-repo-url]. Make an initial commit and push to the main branch."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Run these commands in your terminal:
+```bash
+git init
+git remote add origin [your-repo-url]
+git add .
+git commit -m "Initial commit: Next.js project setup"
+git branch -M main
+git push -u origin main
+```
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 1.3: Install Dependencies
 
-Direct Cursor to install Stripe dependencies. You can say: *"Install the Stripe packages needed for payment processing"*
+Install the Stripe packages needed for payment processing.
 
-Cursor will handle the technical details of which packages to install and how to configure them.
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Install the Stripe packages needed for payment processing in this Next.js project. Install both client-side and server-side packages."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Run:
+```bash
+npm install @stripe/stripe-js @stripe/react-stripe-js stripe
+```
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ### Phase 2: Stripe Integration (Days 4-7)
 
 #### Step 2.1: Stripe Account Setup
 
-1. Sign up at [stripe.com](https://stripe.com) - you'll do this manually
-2. Complete account verification in Stripe Dashboard
-3. Navigate to Developers > API keys in Stripe
-4. Copy your **Publishable key** and **Secret key** (test mode)
-5. Tell Cursor: *"I have my Stripe API keys. Help me store them securely as environment variables"*
+1. Sign up at [stripe.com](https://stripe.com) and complete account verification
+2. Navigate to Developers > API keys in Stripe Dashboard
+3. Copy your **Publishable key** and **Secret key** (test mode)
+4. Store them securely as environment variables:
 
-Cursor will guide you on where to store these keys and how to use them securely.
+**Option A (Using AI Tools)**: Prompt your AI tool: *"I have my Stripe API keys. Help me store them securely as environment variables. My publishable key is [key] and my secret key is [key]."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Create a `.env.local` file in your project root:
+```env
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+```
+Add `.env.local` to your `.gitignore` file to keep keys secure.
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 2.2: Create Stripe Product
 
-1. In Stripe Dashboard, go to Products (you'll do this manually)
-2. Click "Add product"
-3. Set name, description, and price for your product
-4. Note the Product ID and Price ID
-5. Share these IDs with Cursor: *"Here are my Stripe Product ID and Price ID: [your-ids]. Use these in the payment integration"*
+1. In Stripe Dashboard, go to Products and click "Add product"
+2. Set name, description, and price for your product
+3. Note the Product ID and Price ID
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option A (Using AI Tools)**: Share these IDs with your AI tool: *"Here are my Stripe Product ID and Price ID: [your-ids]. Use these in the payment integration."*
+
+**Option B (Manual)**: Store these IDs as environment variables or constants in your code for use in the payment integration.
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 2.3: Implement Payment Page
 
-Direct Cursor to create a payment page. You can say: *"Create a payment page that uses Stripe Elements to collect payment information. Make it user-friendly and secure."*
+Create a payment page that uses Stripe Elements to collect payment information.
 
-**Reference for Cursor** (you can show this to Cursor if needed):
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Create a payment page at app/payment/page.tsx that uses Stripe Elements to collect payment information. Make it user-friendly, secure, and include proper error handling and user feedback."*
+
+**Option B (Manual)**: Create `app/payment/page.tsx` with Stripe Elements integration:
+
 ```typescript
 'use client';
 
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
+import { CheckoutForm } from '@/components/CheckoutForm';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -179,53 +212,85 @@ export default function PaymentPage() {
 }
 ```
 
-Tell Cursor: *"I want a payment page similar to this example. Build it with proper error handling and user feedback."*
+Then create the `CheckoutForm` component with Stripe Elements form fields.
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 2.4: Create API Route for Payment
 
-Direct Cursor: *"Create an API route that handles Stripe checkout session creation. Make sure it's secure and handles errors properly."*
+Create an API route that handles Stripe checkout session creation securely.
 
-Cursor will create the server-side code needed to process payments securely.
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Create an API route at app/api/create-checkout-session/route.ts that handles Stripe checkout session creation. Make sure it's secure, handles errors properly, and uses the Stripe secret key from environment variables."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Create `app/api/create-checkout-session/route.ts` that:
+- Uses the Stripe secret key from environment variables
+- Creates a checkout session with your product/price IDs
+- Handles errors appropriately
+- Returns the session ID to the client
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ### Phase 3: Landing Page Design (Days 8-10)
 
 #### Step 3.1: Design Hero Section
 
-Describe your vision to Cursor: *"I want a hero section with a compelling headline, value proposition, call-to-action button, and professional imagery. Make it visually appealing and conversion-focused."*
+Create a hero section with a compelling headline, value proposition, call-to-action button, and professional imagery.
 
-You can also ask Cursor: *"Generate some headline and value proposition options for my [product/service description]"*
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Create a hero section for the landing page with a compelling headline, value proposition, call-to-action button, and professional styling. Make it visually appealing and conversion-focused."* You can also ask AI to generate headline options for your product/service.
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Design and implement the hero section in `app/page.tsx` with:
+- Compelling headline and subheading
+- Value proposition
+- Prominent CTA button linking to payment page
+- Modern styling using Tailwind CSS
+- Responsive design
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 3.2: Add Features Section
 
-Direct Cursor: *"Add a features section that lists the key benefits of my product. Use icons or images to make it visually appealing and easy to scan."*
+Add a features section that displays the key benefits of your product.
 
-Share your key features with Cursor, and it will create an attractive section to display them.
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Add a features section that lists these key benefits: [list your features]. Use icons or images to make it visually appealing and easy to scan."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Create a features section component that:
+- Displays your key features/benefits in a grid or list layout
+- Uses icons or images for visual appeal
+- Is easy to scan and read
+- Matches your overall design
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 3.3: Implement Responsive Design
 
-Ask Cursor: *"Make sure the entire landing page works well on mobile devices. Test it and fix any issues with buttons or layout on smaller screens."*
+Ensure the entire landing page works well on mobile devices and all screen sizes.
 
-Cursor will ensure your site looks great on all devices.
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Review the landing page and ensure it's fully responsive for mobile devices. Check text sizes, button sizes, layout, and spacing. Fix any issues with buttons or layout on smaller screens."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: 
+- Test the page on various screen sizes
+- Use Tailwind CSS responsive utilities (sm:, md:, lg:)
+- Ensure buttons are touch-friendly (minimum 44x44px)
+- Verify text is readable on mobile
+- Test navigation and interactions on mobile devices
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 ### Phase 4: Deployment (Days 11-12)
 
 #### Step 4.1: Prepare for Vercel
 
-Direct Cursor: *"Prepare the project for deployment. Make sure all code is pushed to GitHub and that sensitive files like .env.local are not included in the repository."*
+Prepare the project for deployment to Vercel.
 
-Cursor will handle the technical details of preparing for deployment.
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Prepare this project for deployment to Vercel. Ensure all code is pushed to GitHub and that sensitive files like .env.local are in .gitignore."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: 
+- Ensure all code is committed and pushed to GitHub
+- Verify `.env.local` is in `.gitignore`
+- Create a `.env.example` file showing required environment variables
+- Run `npm run build` to verify the project builds successfully
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 4.2: Deploy to Vercel
 
@@ -236,62 +301,73 @@ Cursor will handle the technical details of preparing for deployment.
    - `STRIPE_SECRET_KEY` (from your Stripe dashboard)
 4. Click Deploy!
 
-Ask Cursor: *"Help me understand what environment variables I need to add in Vercel for Stripe to work."*
+**Option A (Using AI Tools)**: If you need help understanding environment variables, ask your AI tool: *"What environment variables do I need to add in Vercel for Stripe to work in production?"*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Add the environment variables listed above in Vercel's project settings.
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 4.3: Test Production
 
 1. Visit your deployed URL (Vercel will provide this)
 2. Test the payment flow using Stripe's test card: `4242 4242 4242 4242`
-3. If anything doesn't work, describe the issue to Cursor and ask it to fix it
+3. If anything doesn't work:
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for troubleshooting prompts if you encounter issues.
+**Option A (Using AI Tools)**: Describe the issue to your AI tool and ask for help fixing it.
+
+**Option B (Manual)**: Check browser console for errors, verify environment variables are set correctly in Vercel, and review the troubleshooting guide.
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for troubleshooting prompts if you encounter issues.
 
 ### Phase 5: Launch Preparation (Days 13-14)
 
 #### Step 5.1: Final Testing
 
-Work with Cursor to test everything:
+Test everything thoroughly:
 - [ ] Test all payment scenarios (success, failure, cancellation)
 - [ ] Verify mobile experience works correctly
 - [ ] Check that pages load quickly
 - [ ] Test error handling (what happens if something goes wrong?)
 
-Direct Cursor: *"Help me test the entire application thoroughly. Check all the important user flows and fix any issues you find."*
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Help me test the entire application thoroughly. Check all the important user flows and fix any issues you find."*
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**Option B (Manual)**: Manually test each scenario, check mobile responsiveness, verify page load times, and test error cases.
+
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
 #### Step 5.2: Switch to Live Mode
 
-1. Complete Stripe account verification (you'll do this in Stripe Dashboard)
+1. Complete Stripe account verification in Stripe Dashboard
 2. Get your live mode API keys from Stripe
-3. Direct Cursor: *"Update the environment variables to use live Stripe keys instead of test keys"*
+3. Update environment variables to use live keys:
+
+**Option A (Using AI Tools)**: Prompt your AI tool: *"Update the environment variables to use live Stripe keys instead of test keys. My live publishable key is [key] and live secret key is [key]."*
+
+**Option B (Manual)**: Update environment variables in Vercel with your live Stripe keys:
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` (live key)
+- `STRIPE_SECRET_KEY` (live key)
+
 4. Redeploy on Vercel with the new keys
 
-**Cursor Prompt Available**: See [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into Cursor for this step.
+**AI Prompt Available (for non-technical users)**: See [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) for a ready-to-use prompt you can copy and paste into your AI tool for this step.
 
-## Working with Cursor: Your Development Workflow
+## AI-Assisted Development Workflow
 
-### Cursor as Your Lead Developer
+### How AI Can Help Your Development
 
-**Cursor handles**:
-- Writing all code (React components, API routes, styling)
-- Implementing features based on your descriptions
-- Debugging and fixing errors
-- Following best practices and coding standards
-- Optimizing performance
-- Ensuring security best practices
+Whether you're new to programming or an experienced developer, AI tools can accelerate your workflow:
 
-**You handle**:
-- Providing vision and direction
-- Making business and design decisions
-- Reviewing what Cursor builds
-- Testing functionality
-- Giving feedback for improvements
-- Managing the overall project timeline
+**For Non-Technical Users**:
+- AI can handle code generation, implementation, and debugging
+- You provide vision, make decisions, and review the work
+- AI follows best practices and coding standards automatically
 
-### Effective Prompting Examples
+**For Technical Users**:
+- AI assists with boilerplate code, suggestions, and repetitive tasks
+- You maintain control over architecture and implementation
+- AI helps you learn new technologies faster and debug issues
+
+### Effective AI Prompting (for Non-Technical Users)
 
 **Good prompts**:
 - *"Create a payment page with a clean, modern design. Include fields for email, card number, expiry, and CVC. Add a submit button and show loading state while processing."*
@@ -311,7 +387,7 @@ Provide more detail when:
 - You have brand guidelines to follow
 - You want to match an existing design
 
-Let Cursor decide when:
+Let AI or your own expertise handle:
 - Technical implementation details
 - Code structure and organization
 - Best practices and optimizations
@@ -328,7 +404,7 @@ Your implementation is complete when you can verify:
 5. ✅ Error messages are clear and helpful (if something goes wrong)
 6. ✅ Website loads quickly and feels responsive
 
-**Note**: You don't need to check technical metrics like Lighthouse scores - Cursor handles performance optimization. Focus on whether the site works well for your users.
+**Note**: Focus on whether the site works well for your users. If using AI tools, they can help with performance optimization. If coding manually, consider running Lighthouse audits for performance insights.
 
 ## Next Steps
 
@@ -336,32 +412,39 @@ After completing Level 1:
 
 1. Monitor your application - watch for user signups and payments
 2. Gather feedback from early users
-3. Work with Cursor to iterate on design and functionality based on feedback
+3. Iterate on design and functionality based on feedback (use AI tools if helpful)
 4. Consider upgrading to Level 2 for more advanced features (user accounts, subscriptions, etc.)
 
 ## Resources
 
-### Cursor Prompts
-- [Web Apps Level 1 Cursor Prompts](web-apps-level-1-cursor-prompts.md) - Ready-to-use prompts for each step. Download this file and copy-paste prompts directly into Cursor.
+### AI Prompts (for non-technical users)
+- [Web Apps Level 1 AI Prompts](web-apps-level-1-cursor-prompts.md) - Ready-to-use prompts for each step. Download this file and copy-paste prompts directly into your AI tool.
 
-### Documentation (Share with Cursor if needed)
-While you don't need to read these, you can share them with Cursor if needed:
-- [Next.js Documentation](https://nextjs.org/docs) - Share with Cursor for reference
-- [Stripe Documentation](https://stripe.com/docs) - Cursor uses this for payment integration
-- [Vercel Documentation](https://vercel.com/docs) - Cursor references this for deployment
-- [Tailwind CSS Documentation](https://tailwindcss.com/docs) - Cursor uses this for styling
+### Documentation
+Reference documentation for the technologies used:
+- [Next.js Documentation](https://nextjs.org/docs) - Framework documentation
+- [Stripe Documentation](https://stripe.com/docs) - Payment integration guide
+- [Vercel Documentation](https://vercel.com/docs) - Deployment guide
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs) - Styling framework
 
 ## Troubleshooting
 
 If you encounter issues:
 
-1. **Describe the problem clearly to Cursor**: "When I try to make a payment, I see an error message that says..."
-2. **Show Cursor any error messages**: Copy and paste error text to Cursor
-3. **Ask Cursor to explain**: "Can you explain what this error means and how to fix it?"
-4. **Request step-by-step help**: "Walk me through fixing this issue"
+**Option A (Using AI Tools)**: 
+1. Describe the problem clearly to your AI tool: "When I try to make a payment, I see an error message that says..."
+2. Show AI any error messages: Copy and paste error text
+3. Ask AI to explain: "Can you explain what this error means and how to fix it?"
+4. Request step-by-step help: "Walk me through fixing this issue"
 
-Common issues and solutions are also covered in the troubleshooting guide. Refer to `web-apps-level-1-common-issues-solutions.md` for detailed help, or ask Cursor to reference it.
+**Option B (Manual)**: 
+1. Check browser console for error messages
+2. Review the troubleshooting guide: `web-apps-level-1-common-issues-solutions.md`
+3. Check documentation for the specific technology causing issues
+4. Verify environment variables and configuration are correct
+
+Common issues and solutions are covered in the troubleshooting guide. Refer to `web-apps-level-1-common-issues-solutions.md` for detailed help.
 
 ---
 
-**Remember**: You're the director, Cursor is your developer. Focus on communicating your vision clearly, making decisions, and reviewing the work. Cursor will handle all the technical implementation. This collaborative approach makes building web applications accessible to everyone, regardless of technical background!
+**Remember**: Whether you're coding yourself or using AI tools, focus on clear communication, making informed decisions, and thoroughly testing your application. This plan provides a flexible roadmap that works for both technical and non-technical users, making web application development accessible to everyone!
