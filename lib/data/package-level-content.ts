@@ -115,7 +115,8 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'saas-starter-template.zip', type: 'zip', name: 'SaaS Starter Template' },
-        { file: 'development-milestones-checklist.md', type: 'md', name: 'Development Milestones Checklist' }
+        { file: 'development-milestones-checklist.md', type: 'md', name: 'Development Milestones Checklist' },
+        { file: 'web-apps-level-2-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
       ],
       launchMarketing: [
         { file: 'web-apps-level-2-customer-acquisition-guide.md', type: 'md', name: 'Customer Acquisition Guide' }
@@ -147,7 +148,8 @@ export const packageLevelContent: Record<string, PackageLevelContent> = {
       ],
       templates: [
         { file: 'advanced-saas-template.zip', type: 'zip', name: 'Advanced SaaS Template' },
-        { file: 'ai-integration-examples.zip', type: 'zip', name: 'AI Integration Examples' }
+        { file: 'ai-integration-examples.zip', type: 'zip', name: 'AI Integration Examples' },
+        { file: 'web-apps-level-3-ai-prompts.md', type: 'md', name: 'AI Prompts for Implementation' }
       ],
       launchMarketing: [
         { file: 'web-apps-level-3-enterprise-marketing-playbook.md', type: 'md', name: 'Enterprise Marketing Playbook' },
