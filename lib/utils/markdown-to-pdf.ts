@@ -50,7 +50,7 @@ export async function markdownToPDF(markdown: string): Promise<Buffer> {
 /**
  * Render markdown tokens to PDF
  */
-function renderTokens(doc: PDFDocument, tokens: MarkdownToken[]): void {
+function renderTokens(doc: InstanceType<typeof PDFDocument>, tokens: MarkdownToken[]): void {
   for (const token of tokens) {
     switch (token.type) {
       case 'heading':
@@ -96,7 +96,7 @@ function renderTokens(doc: PDFDocument, tokens: MarkdownToken[]): void {
 /**
  * Render heading (h1-h6)
  */
-function renderHeading(doc: PDFDocument, token: MarkdownToken): void {
+function renderHeading(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
   const level = token.depth || 1;
   const sizes = [24, 20, 16, 14, 12, 11];
   const size = sizes[Math.min(level - 1, sizes.length - 1)] || 11;
@@ -132,7 +132,7 @@ function renderHeading(doc: PDFDocument, token: MarkdownToken): void {
 /**
  * Render paragraph
  */
-function renderParagraph(doc: PDFDocument, token: MarkdownToken): void {
+function renderParagraph(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
   if (!token.tokens || token.tokens.length === 0) {
     doc.moveDown(0.5);
     return;
@@ -151,7 +151,7 @@ function renderParagraph(doc: PDFDocument, token: MarkdownToken): void {
 /**
  * Render list (ordered or unordered)
  */
-function renderList(doc: PDFDocument, token: MarkdownToken): void {
+function renderList(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
   const isOrdered = token.ordered || false;
   const start = token.start || 1;
   let itemNumber = start;
@@ -200,7 +200,7 @@ function renderList(doc: PDFDocument, token: MarkdownToken): void {
 /**
  * Render code block
  */
-function renderCode(doc: PDFDocument, token: MarkdownToken): void {
+function renderCode(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
   const code = token.text || '';
   const language = token.lang || '';
 
@@ -253,7 +253,7 @@ function renderCode(doc: PDFDocument, token: MarkdownToken): void {
 /**
  * Render blockquote
  */
-function renderBlockquote(doc: PDFDocument, token: MarkdownToken): void {
+function renderBlockquote(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
   doc.moveDown(0.5);
 
   const startY = doc.y;
@@ -290,7 +290,7 @@ function renderBlockquote(doc: PDFDocument, token: MarkdownToken): void {
 /**
  * Render table
  */
-function renderTable(doc: PDFDocument, token: MarkdownToken): void {
+function renderTable(doc: InstanceType<typeof PDFDocument>, token: MarkdownToken): void {
   doc.moveDown(0.5);
 
   const margin = 50;
@@ -390,7 +390,7 @@ function renderTable(doc: PDFDocument, token: MarkdownToken): void {
 /**
  * Render horizontal rule
  */
-function renderHorizontalRule(doc: PDFDocument): void {
+function renderHorizontalRule(doc: InstanceType<typeof PDFDocument>): void {
   doc.moveDown(0.5);
   const y = doc.y;
   doc
@@ -439,7 +439,7 @@ function renderInlineTokens(tokens: MarkdownToken[]): string {
 /**
  * Render plain text with word wrapping
  */
-function renderText(doc: PDFDocument, text: string, fontSize: number): void {
+function renderText(doc: InstanceType<typeof PDFDocument>, text: string, fontSize: number): void {
   doc.fontSize(fontSize).font('Helvetica').text(text, {
     align: 'left',
     lineGap: 2,
