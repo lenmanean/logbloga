@@ -50,19 +50,34 @@ export function SectionDownloadButton({
 
     try {
       const url = `/api/library/${productId}/pdf?file=${encodeURIComponent(filename)}`;
+      console.log('Initiating PDF download:', { url, filename, productId });
+      
       const response = await fetch(url);
 
       if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        const msg =
-          typeof data?.error === 'string'
-            ? data.error
-            : response.status === 403
-              ? 'You do not have access to this file.'
-              : response.status === 404
-                ? 'File not found.'
-                : 'Failed to generate PDF.';
-        throw new Error(msg);
+        let errorMessage = 'Failed to generate PDF.';
+        try {
+          const data = await response.json();
+          errorMessage = typeof data?.error === 'string' ? data.error : errorMessage;
+          console.error('PDF API error:', { status: response.status, error: data });
+        } catch (parseError) {
+          // If response is not JSON, use status-based message
+          if (response.status === 403) {
+            errorMessage = 'You do not have access to this file.';
+          } else if (response.status === 404) {
+            errorMessage = 'File not found.';
+          } else if (response.status === 500) {
+            errorMessage = 'Server error while generating PDF.';
+          }
+          console.error('PDF API error (non-JSON):', { status: response.status, parseError });
+        }
+        throw new Error(errorMessage);
+      }
+
+      const contentType = response.headers.get('Content-Type');
+      if (!contentType || !contentType.includes('application/pdf')) {
+        console.error('Unexpected content type:', contentType);
+        throw new Error('Server returned invalid content type. Expected PDF.');
       }
 
       const contentDisposition = response.headers.get('Content-Disposition');
@@ -73,6 +88,15 @@ export function SectionDownloadButton({
       }
 
       const blob = await response.blob();
+      if (blob.size === 0) {
+        throw new Error('Received empty PDF file.');
+      }
+
+      console.log('PDF generated successfully, initiating download:', { 
+        size: blob.size, 
+        filename: downloadFilename 
+      });
+
       const blobUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = blobUrl;
@@ -81,9 +105,14 @@ export function SectionDownloadButton({
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(blobUrl);
+      
+      console.log('PDF download initiated successfully');
     } catch (err) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to download PDF.';
       console.error('PDF download error:', err);
-      setError(err instanceof Error ? err.message : 'Failed to download PDF.');
+      setError(errorMessage);
+      // Keep error visible for a bit longer
+      setTimeout(() => setError(null), 10000);
     } finally {
       setDownloadingFile(null);
     }
@@ -98,11 +127,17 @@ export function SectionDownloadButton({
     return (
       <div className="space-y-1">
         <Button
-          onClick={() => handleDownload(file.file)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Download button clicked:', file.file);
+            handleDownload(file.file);
+          }}
           disabled={isDownloading}
           variant={variant}
           size={size}
           className={cn('flex-shrink-0', className)}
+          type="button"
         >
           {isDownloading ? (
             <>
@@ -116,8 +151,8 @@ export function SectionDownloadButton({
             </>
           )}
         </Button>
-        {error && downloadingFile === file.file && (
-          <p className="text-xs text-destructive" role="alert">
+        {error && (
+          <p className="text-xs text-destructive font-medium" role="alert">
             {error}
           </p>
         )}
@@ -158,7 +193,11 @@ export function SectionDownloadButton({
             return (
               <DropdownMenuItem
                 key={file.file}
-                onClick={() => handleDownload(file.file)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  console.log('Download menu item clicked:', file.file);
+                  handleDownload(file.file);
+                }}
                 disabled={isDownloading}
                 className="cursor-pointer"
               >
@@ -175,8 +214,8 @@ export function SectionDownloadButton({
           })}
         </DropdownMenuContent>
       </DropdownMenu>
-      {error && downloadingFile && (
-        <p className="text-xs text-destructive" role="alert">
+      {error && (
+        <p className="text-xs text-destructive font-medium" role="alert">
           {error}
         </p>
       )}
