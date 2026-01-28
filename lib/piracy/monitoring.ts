@@ -151,12 +151,13 @@ export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
 
   // Search for each product
   for (const product of products) {
-    const searchTerms = [
+    // Filter out null values and ensure all terms are strings
+    const searchTerms: string[] = [
       product.title,
       product.slug,
       `"${product.title}"`,
       `"${product.slug}"`,
-    ];
+    ].filter((term): term is string => typeof term === 'string' && term.length > 0);
 
     const results = await searchForPiracy(searchTerms);
     
