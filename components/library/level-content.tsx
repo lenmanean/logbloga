@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar, X, Expand } from 'lucide-react';
+import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar, X, Maximize2 } from 'lucide-react';
 import type { LevelContent } from '@/lib/data/package-level-content';
 import {
   isHostedContent,
@@ -188,7 +188,7 @@ export function LevelContent({
                   aria-label="Expand document view"
                   title="Expanded view"
                 >
-                  <Expand className="h-4 w-4" />
+                  <Maximize2 className="h-4 w-4" />
                 </Button>
               )}
             </div>

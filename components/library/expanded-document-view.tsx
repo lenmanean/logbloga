@@ -1,11 +1,13 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
 import { cn } from '@/lib/utils';
+
+const EXIT_DURATION_MS = 200;
 
 interface ExpandedDocumentViewProps {
   productId: string;
@@ -24,11 +26,23 @@ export function ExpandedDocumentView({
   title,
   onClose,
 }: ExpandedDocumentViewProps) {
+  const [isClosing, setIsClosing] = useState(false);
+  const exitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const requestClose = useCallback(() => {
+    if (isClosing) return;
+    setIsClosing(true);
+    exitTimeoutRef.current = setTimeout(() => {
+      exitTimeoutRef.current = null;
+      onClose();
+    }, EXIT_DURATION_MS);
+  }, [isClosing, onClose]);
+
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') requestClose();
     },
-    [onClose]
+    [requestClose]
   );
 
   useEffect(() => {
@@ -38,6 +52,7 @@ export function ExpandedDocumentView({
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener('keydown', handleEscape);
+      if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
     };
   }, [handleEscape]);
 
@@ -46,10 +61,11 @@ export function ExpandedDocumentView({
       role="dialog"
       aria-modal="true"
       aria-label={`Expanded view: ${title}`}
-      data-state="open"
+      data-state={isClosing ? 'closed' : 'open'}
       className={cn(
         'fixed inset-0 z-[100] flex flex-col bg-background',
         'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
         'duration-200 ease-out'
       )}
     >
@@ -59,7 +75,7 @@ export function ExpandedDocumentView({
         <Button
           variant="ghost"
           size="icon"
-          onClick={onClose}
+          onClick={requestClose}
           aria-label="Close expanded view"
           className="shrink-0"
         >
