@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
-import { parseHeadings, buildTocTree, type TocEntry, type TocNode } from '@/lib/utils/markdown-toc';
+import { buildTocTree, type TocEntry, type TocNode } from '@/lib/utils/markdown-toc';
 import { cn } from '@/lib/utils';
 
 /** Normalize query, split into words; require every word (length >= 2) to appear in heading (case-insensitive). */
@@ -68,6 +68,10 @@ export function ExpandedDocumentView({
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set());
 
+  const handleHeadingsParsed = useCallback((entries: TocEntry[]) => {
+    setHeadings(entries);
+  }, []);
+
   // Fetch markdown once
   useEffect(() => {
     let cancelled = false;
@@ -82,7 +86,7 @@ export function ExpandedDocumentView({
       .then((text) => {
         if (cancelled) return;
         setContent(text);
-        setHeadings(parseHeadings(text));
+        setHeadings([]);
       })
       .catch((e) => {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load');
@@ -140,18 +144,20 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const scrollParent = getScrollParent(el);
-    const scrollMargin = 16; // align with scroll-mt-4 on headings
-    if (scrollParent) {
-      const elRect = el.getBoundingClientRect();
-      const parentRect = scrollParent.getBoundingClientRect();
-      const top = Math.max(0, scrollParent.scrollTop + elRect.top - parentRect.top - scrollMargin);
-      scrollParent.scrollTo({ top, behavior: 'smooth' });
-    } else {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    requestAnimationFrame(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const scrollParent = getScrollParent(el);
+      const scrollMargin = 16;
+      if (scrollParent) {
+        const elRect = el.getBoundingClientRect();
+        const parentRect = scrollParent.getBoundingClientRect();
+        const top = Math.max(0, scrollParent.scrollTop + elRect.top - parentRect.top - scrollMargin);
+        scrollParent.scrollTo({ top, behavior: 'smooth' });
+      } else {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
   };
 
   function TocTreeRow({
@@ -166,8 +172,8 @@ export function ExpandedDocumentView({
     const pl = depth === 0 ? 2 : 2 + depth * 8;
 
     return (
-      <div className="space-y-0.5 min-w-0 overflow-hidden">
-        <div className="flex items-center gap-0.5 min-w-0 rounded-md group overflow-hidden">
+      <div className="space-y-0.5 overflow-hidden" style={{ minWidth: 0, maxWidth: '100%' }}>
+        <div className="flex items-center gap-0.5 rounded-md group overflow-hidden" style={{ minWidth: 0 }}>
           {hasChildren ? (
             <button
               type="button"
@@ -192,17 +198,17 @@ export function ExpandedDocumentView({
             type="button"
             onClick={() => scrollToHeading(node.entry.id)}
             className={cn(
-              'flex-1 min-w-0 text-left text-sm py-1.5 pr-2 rounded-md truncate overflow-hidden',
+              'flex-1 min-w-0 text-left text-sm py-1.5 pr-2 rounded-md overflow-hidden text-ellipsis whitespace-nowrap',
               'hover:bg-muted hover:text-foreground transition-colors',
               depth === 0 && 'font-medium'
             )}
-            style={{ paddingLeft: hasChildren ? 0 : pl }}
+            style={{ paddingLeft: hasChildren ? 0 : pl, maxWidth: '100%' }}
           >
             {node.entry.text}
           </button>
         </div>
         {hasChildren && isExpanded && (
-          <div className="border-l border-border/50 ml-2.5 pl-0.5 min-w-0 overflow-hidden">
+          <div className="border-l border-border/50 ml-2.5 pl-0.5 overflow-hidden" style={{ minWidth: 0, maxWidth: '100%' }}>
             {node.children.map((child) => (
               <TocTreeRow key={child.entry.id} node={child} depth={depth + 1} />
             ))}
@@ -239,9 +245,12 @@ export function ExpandedDocumentView({
 
       {/* Sidebar + main content */}
       <div className="flex-1 flex min-h-0">
-        {/* Left sidebar: search + TOC */}
-        <aside className="w-64 min-w-0 flex-shrink-0 border-r border-border flex flex-col bg-muted/30 overflow-hidden">
-          <div className="p-2 border-b border-border flex-shrink-0">
+        {/* Left sidebar: search + TOC — fixed width so text cannot overflow */}
+        <aside
+          className="flex-shrink-0 border-r border-border flex flex-col bg-muted/30 overflow-hidden"
+          style={{ width: 256 }}
+        >
+          <div className="p-2 border-b border-border flex-shrink-0 overflow-hidden" style={{ width: 256 }}>
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -254,8 +263,8 @@ export function ExpandedDocumentView({
               />
             </div>
           </div>
-          <ScrollArea className="flex-1 min-h-0 min-w-0">
-            <div className="p-2 space-y-0.5 min-w-0 overflow-hidden">
+          <ScrollArea className="flex-1 min-h-0 overflow-hidden" style={{ width: 256 }}>
+            <div className="p-2 space-y-0.5 overflow-hidden" style={{ width: 256, boxSizing: 'border-box' }}>
               {loading ? (
                 <p className="text-sm text-muted-foreground px-2 py-4">Loading…</p>
               ) : headings.length === 0 ? (
@@ -269,13 +278,14 @@ export function ExpandedDocumentView({
                     type="button"
                     onClick={() => scrollToHeading(entry.id)}
                     className={cn(
-                      'w-full min-w-0 text-left text-sm py-1.5 px-2 rounded-md truncate block overflow-hidden',
+                      'w-full text-left text-sm py-1.5 px-2 rounded-md block overflow-hidden text-ellipsis whitespace-nowrap max-w-full',
                       'hover:bg-muted hover:text-foreground transition-colors',
                       entry.depth === 1 && 'font-medium pl-2',
                       entry.depth === 2 && 'pl-4',
                       entry.depth === 3 && 'pl-6',
                       entry.depth >= 4 && 'pl-8'
                     )}
+                    style={{ minWidth: 0 }}
                   >
                     {entry.text}
                   </button>
@@ -303,6 +313,7 @@ export function ExpandedDocumentView({
                 productId={productId}
                 filename={filename}
                 content={content}
+                onHeadingsParsed={handleHeadingsParsed}
                 className="h-full"
                 height="100%"
               />

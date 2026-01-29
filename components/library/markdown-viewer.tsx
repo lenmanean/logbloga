@@ -6,7 +6,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
-import { slugify } from '@/lib/utils/markdown-toc';
+import { slugify, type TocEntry } from '@/lib/utils/markdown-toc';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Components } from 'react-markdown';
@@ -29,19 +29,26 @@ interface MarkdownViewerProps {
   height?: string;
   /** When provided, use this content and do not fetch (e.g. from Expanded View) */
   content?: string | null;
+  /** Called with heading entries (id, depth, text) after render so TOC can use exact DOM ids */
+  onHeadingsParsed?: (entries: TocEntry[]) => void;
 }
 
-export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp }: MarkdownViewerProps) {
+export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp, onHeadingsParsed }: MarkdownViewerProps) {
   const [content, setContent] = useState<string | null>(contentProp ?? null);
   const [loading, setLoading] = useState(typeof contentProp !== 'string');
   const [error, setError] = useState<string | null>(null);
   const [isDark, setIsDark] = useState(false);
   const headingIdsRef = useRef<Set<string>>(new Set());
+  const headingEntriesRef = useRef<TocEntry[]>([]);
+  const lastContentSentRef = useRef<string | null>(null);
   const prevContentRef = useRef<string | null>(null);
   if (content !== prevContentRef.current) {
     prevContentRef.current = content;
     headingIdsRef.current.clear();
+    headingEntriesRef.current = [];
+    lastContentSentRef.current = null;
   }
+  headingEntriesRef.current = [];
 
   // Detect dark mode
   useEffect(() => {
@@ -112,6 +119,15 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     if (typeof contentProp === 'string') setContent(contentProp);
   }, [contentProp]);
 
+  // Report heading entries after render so expanded view TOC uses exact DOM ids
+  useEffect(() => {
+    if (content && onHeadingsParsed && lastContentSentRef.current !== content && headingEntriesRef.current.length > 0) {
+      lastContentSentRef.current = content;
+      onHeadingsParsed([...headingEntriesRef.current]);
+      headingEntriesRef.current = [];
+    }
+  }, [content, onHeadingsParsed]);
+
   // Unique id for heading (matches parseHeadings in markdown-toc so TOC links work)
   const getHeadingId = (children: React.ReactNode): string => {
     const text = flattenHeadingText(children);
@@ -128,9 +144,11 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
 
   // Custom components for enhanced styling
   const components: Components = {
-    // Headings with id for TOC navigation (same slugify/uniqueness as parseHeadings)
+    // Headings with id for TOC navigation; report to parent so TOC uses exact DOM ids
     h1: ({ children }) => {
+      const text = flattenHeadingText(children);
       const id = getHeadingId(children);
+      headingEntriesRef.current.push({ id, depth: 1, text });
       return (
         <h1 id={id} className="text-3xl font-bold mb-4 mt-6 pb-2 border-b border-border text-foreground scroll-mt-4">
           {children}
@@ -138,7 +156,9 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
       );
     },
     h2: ({ children }) => {
+      const text = flattenHeadingText(children);
       const id = getHeadingId(children);
+      headingEntriesRef.current.push({ id, depth: 2, text });
       return (
         <h2 id={id} className="text-2xl font-semibold mb-3 mt-5 text-foreground scroll-mt-4">
           {children}
@@ -146,7 +166,9 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
       );
     },
     h3: ({ children }) => {
+      const text = flattenHeadingText(children);
       const id = getHeadingId(children);
+      headingEntriesRef.current.push({ id, depth: 3, text });
       return (
         <h3 id={id} className="text-xl font-semibold mb-2 mt-4 text-foreground scroll-mt-4">
           {children}
@@ -154,7 +176,9 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
       );
     },
     h4: ({ children }) => {
+      const text = flattenHeadingText(children);
       const id = getHeadingId(children);
+      headingEntriesRef.current.push({ id, depth: 4, text });
       return (
         <h4 id={id} className="text-lg font-semibold mb-2 mt-3 text-foreground scroll-mt-4">
           {children}
@@ -162,7 +186,9 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
       );
     },
     h5: ({ children }) => {
+      const text = flattenHeadingText(children);
       const id = getHeadingId(children);
+      headingEntriesRef.current.push({ id, depth: 5, text });
       return (
         <h5 id={id} className="text-base font-semibold mb-2 mt-3 text-foreground scroll-mt-4">
           {children}
@@ -170,7 +196,9 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
       );
     },
     h6: ({ children }) => {
+      const text = flattenHeadingText(children);
       const id = getHeadingId(children);
+      headingEntriesRef.current.push({ id, depth: 6, text });
       return (
         <h6 id={id} className="text-sm font-semibold mb-2 mt-2 text-foreground scroll-mt-4">
           {children}
