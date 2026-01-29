@@ -132,18 +132,8 @@ export function ExpandedDocumentView({
         else if (!container) console.warn('[TOC scroll] Scroll container ref not set');
       }
       if (!el) return;
-      if (container?.contains(el)) {
-        const scrollMargin = 16;
-        const elRect = el.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-        const top = Math.max(
-          0,
-          container.scrollTop + elRect.top - containerRect.top - scrollMargin
-        );
-        container.scrollTo({ top, behavior: 'smooth' });
-      } else {
-        el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
-      }
+      // Use scrollIntoView so the browser scrolls the nearest scrollable ancestor (our overflow div)
+      el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
     });
   };
 
