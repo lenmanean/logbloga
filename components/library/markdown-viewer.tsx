@@ -14,9 +14,11 @@ interface MarkdownViewerProps {
   productId: string;
   filename: string;
   className?: string;
+  /** Height for the scroll area (e.g. '600px' or '100%' for full height in expanded view) */
+  height?: string;
 }
 
-export function MarkdownViewer({ productId, filename, className }: MarkdownViewerProps) {
+export function MarkdownViewer({ productId, filename, className, height = '600px' }: MarkdownViewerProps) {
   const [content, setContent] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -310,7 +312,7 @@ export function MarkdownViewer({ productId, filename, className }: MarkdownViewe
   if (!content) return null;
 
   return (
-    <ScrollArea className={cn('w-full', className)} style={{ height: '600px' }}>
+    <ScrollArea className={cn('w-full', className)} style={{ height }}>
       <div className="pr-4">
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <ReactMarkdown

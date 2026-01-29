@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar, X } from 'lucide-react';
+import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar, X, Expand } from 'lucide-react';
 import type { LevelContent } from '@/lib/data/package-level-content';
 import {
   isHostedContent,
@@ -15,6 +15,7 @@ import { MarkdownViewer } from '@/components/library/markdown-viewer';
 import { DownloadButton } from '@/components/library/download-button';
 import { SectionDownloadButton } from '@/components/library/section-download-button';
 import { ProgressStepper } from '@/components/library/progress-stepper';
+import { ExpandedDocumentView } from '@/components/library/expanded-document-view';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -40,6 +41,7 @@ export function LevelContent({
   className,
 }: LevelContentProps) {
   const [isMarkingComplete, setIsMarkingComplete] = useState<string | null>(null);
+  const [isExpandedViewOpen, setIsExpandedViewOpen] = useState(false);
   const {
     implementationPlan,
     platformGuides,
@@ -178,6 +180,17 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              {level === 1 && isHostedContent(implementationPlan.type) && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setIsExpandedViewOpen(true)}
+                  aria-label="Expand document view"
+                  title="Expanded view"
+                >
+                  <Expand className="h-4 w-4" />
+                </Button>
+              )}
             </div>
           </div>
           {isHostedContent(implementationPlan.type) ? (
@@ -191,6 +204,14 @@ export function LevelContent({
               productId={productId}
               filename={implementationPlan.file}
               label={`Download ${formatFileName(implementationPlan.file)}`}
+            />
+          )}
+          {level === 1 && isExpandedViewOpen && isHostedContent(implementationPlan.type) && (
+            <ExpandedDocumentView
+              productId={productId}
+              filename={implementationPlan.file}
+              title="Implementation Plan"
+              onClose={() => setIsExpandedViewOpen(false)}
             />
           )}
         </div>
