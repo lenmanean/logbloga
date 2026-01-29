@@ -1,13 +1,11 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
 import { cn } from '@/lib/utils';
-
-const EXIT_DURATION_MS = 220;
 
 interface ExpandedDocumentViewProps {
   productId: string;
@@ -18,7 +16,7 @@ interface ExpandedDocumentViewProps {
 
 /**
  * Full-viewport overlay that expands the document over all page elements
- * (tabs, header, nav). Uses opacity + scale transitions so exit animation runs reliably.
+ * (tabs, header, nav). Smooth fade-in on open; closes immediately (no exit animation).
  */
 export function ExpandedDocumentView({
   productId,
@@ -26,11 +24,9 @@ export function ExpandedDocumentView({
   title,
   onClose,
 }: ExpandedDocumentViewProps) {
-  const [isClosing, setIsClosing] = useState(false);
   const [hasEntered, setHasEntered] = useState(false);
-  const exitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Trigger enter animation after first paint (opacity 0 -> 1, scale 0.95 -> 1)
+  // Smooth enter animation only (opacity 0 -> 1, scale 0.98 -> 1)
   useEffect(() => {
     const t = requestAnimationFrame(() => {
       setHasEntered(true);
@@ -38,20 +34,11 @@ export function ExpandedDocumentView({
     return () => cancelAnimationFrame(t);
   }, []);
 
-  const requestClose = useCallback(() => {
-    if (isClosing) return;
-    setIsClosing(true);
-    exitTimeoutRef.current = setTimeout(() => {
-      exitTimeoutRef.current = null;
-      onClose();
-    }, EXIT_DURATION_MS);
-  }, [isClosing, onClose]);
-
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'Escape') requestClose();
+      if (e.key === 'Escape') onClose();
     },
-    [requestClose]
+    [onClose]
   );
 
   useEffect(() => {
@@ -61,11 +48,8 @@ export function ExpandedDocumentView({
     return () => {
       document.body.style.overflow = prev;
       window.removeEventListener('keydown', handleEscape);
-      if (exitTimeoutRef.current) clearTimeout(exitTimeoutRef.current);
     };
   }, [handleEscape]);
-
-  const isVisible = hasEntered && !isClosing;
 
   const overlay = (
     <div
@@ -75,7 +59,7 @@ export function ExpandedDocumentView({
       className={cn(
         'fixed inset-0 z-[100] flex flex-col bg-background',
         'transition-opacity transition-transform duration-200 ease-out',
-        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'
+        hasEntered ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'
       )}
     >
       {/* Toolbar: title + close */}
@@ -84,7 +68,7 @@ export function ExpandedDocumentView({
         <Button
           variant="ghost"
           size="icon"
-          onClick={requestClose}
+          onClick={onClose}
           aria-label="Close expanded view"
           className="shrink-0"
         >
