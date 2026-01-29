@@ -1,14 +1,25 @@
 'use client';
 
-import { useState, useEffect, type MouseEvent } from 'react';
+import React, { useState, useEffect, useRef, type MouseEvent } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { oneDark, oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
+import { slugify } from '@/lib/utils/markdown-toc';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Components } from 'react-markdown';
+
+function flattenHeadingText(node: React.ReactNode): string {
+  if (typeof node === 'string') return node;
+  if (Array.isArray(node)) return node.map(flattenHeadingText).join('');
+  if (React.isValidElement(node)) {
+    const props = node.props as { children?: React.ReactNode };
+    if (props?.children != null) return flattenHeadingText(props.children);
+  }
+  return String(node ?? '');
+}
 
 interface MarkdownViewerProps {
   productId: string;
@@ -16,13 +27,21 @@ interface MarkdownViewerProps {
   className?: string;
   /** Height for the scroll area (e.g. '600px' or '100%' for full height in expanded view) */
   height?: string;
+  /** When provided, use this content and do not fetch (e.g. from Expanded View) */
+  content?: string | null;
 }
 
-export function MarkdownViewer({ productId, filename, className, height = '600px' }: MarkdownViewerProps) {
-  const [content, setContent] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp }: MarkdownViewerProps) {
+  const [content, setContent] = useState<string | null>(contentProp ?? null);
+  const [loading, setLoading] = useState(typeof contentProp !== 'string');
   const [error, setError] = useState<string | null>(null);
   const [isDark, setIsDark] = useState(false);
+  const headingIdsRef = useRef<Set<string>>(new Set());
+  const prevContentRef = useRef<string | null>(null);
+  if (content !== prevContentRef.current) {
+    prevContentRef.current = content;
+    headingIdsRef.current.clear();
+  }
 
   // Detect dark mode
   useEffect(() => {
@@ -54,6 +73,12 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
   }, []);
 
   useEffect(() => {
+    if (typeof contentProp === 'string') {
+      setContent(contentProp);
+      setLoading(false);
+      setError(null);
+      return;
+    }
     let cancelled = false;
 
     async function fetchContent() {
@@ -80,41 +105,78 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
 
     fetchContent();
     return () => { cancelled = true; };
-  }, [productId, filename]);
+  }, [productId, filename, contentProp]);
+
+  // When content is provided externally, keep it in sync
+  useEffect(() => {
+    if (typeof contentProp === 'string') setContent(contentProp);
+  }, [contentProp]);
+
+  // Unique id for heading (matches parseHeadings in markdown-toc so TOC links work)
+  const getHeadingId = (children: React.ReactNode): string => {
+    const text = flattenHeadingText(children);
+    let baseId = slugify(text);
+    let id = baseId;
+    let n = 1;
+    while (headingIdsRef.current.has(id)) {
+      n += 1;
+      id = `${baseId}-${n}`;
+    }
+    headingIdsRef.current.add(id);
+    return id;
+  };
 
   // Custom components for enhanced styling
   const components: Components = {
-    // Headings with enhanced styling and clear hierarchy
-    h1: ({ children }) => (
-      <h1 className="text-3xl font-bold mb-4 mt-6 pb-2 border-b border-border text-foreground">
-        {children}
-      </h1>
-    ),
-    h2: ({ children }) => (
-      <h2 className="text-2xl font-semibold mb-3 mt-5 text-foreground">
-        {children}
-      </h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="text-xl font-semibold mb-2 mt-4 text-foreground">
-        {children}
-      </h3>
-    ),
-    h4: ({ children }) => (
-      <h4 className="text-lg font-semibold mb-2 mt-3 text-foreground">
-        {children}
-      </h4>
-    ),
-    h5: ({ children }) => (
-      <h5 className="text-base font-semibold mb-2 mt-3 text-foreground">
-        {children}
-      </h5>
-    ),
-    h6: ({ children }) => (
-      <h6 className="text-sm font-semibold mb-2 mt-2 text-foreground">
-        {children}
-      </h6>
-    ),
+    // Headings with id for TOC navigation (same slugify/uniqueness as parseHeadings)
+    h1: ({ children }) => {
+      const id = getHeadingId(children);
+      return (
+        <h1 id={id} className="text-3xl font-bold mb-4 mt-6 pb-2 border-b border-border text-foreground scroll-mt-4">
+          {children}
+        </h1>
+      );
+    },
+    h2: ({ children }) => {
+      const id = getHeadingId(children);
+      return (
+        <h2 id={id} className="text-2xl font-semibold mb-3 mt-5 text-foreground scroll-mt-4">
+          {children}
+        </h2>
+      );
+    },
+    h3: ({ children }) => {
+      const id = getHeadingId(children);
+      return (
+        <h3 id={id} className="text-xl font-semibold mb-2 mt-4 text-foreground scroll-mt-4">
+          {children}
+        </h3>
+      );
+    },
+    h4: ({ children }) => {
+      const id = getHeadingId(children);
+      return (
+        <h4 id={id} className="text-lg font-semibold mb-2 mt-3 text-foreground scroll-mt-4">
+          {children}
+        </h4>
+      );
+    },
+    h5: ({ children }) => {
+      const id = getHeadingId(children);
+      return (
+        <h5 id={id} className="text-base font-semibold mb-2 mt-3 text-foreground scroll-mt-4">
+          {children}
+        </h5>
+      );
+    },
+    h6: ({ children }) => {
+      const id = getHeadingId(children);
+      return (
+        <h6 id={id} className="text-sm font-semibold mb-2 mt-2 text-foreground scroll-mt-4">
+          {children}
+        </h6>
+      );
+    },
     
     // Paragraphs with proper spacing
     p: ({ children }) => (
