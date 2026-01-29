@@ -128,14 +128,8 @@ export function ExpandedDocumentView({
         if (!container) return;
         const el = container.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
         if (!el) return;
-        const scrollMargin = 16;
-        const elRect = el.getBoundingClientRect();
-        const containerRect = container.getBoundingClientRect();
-        const top = Math.max(
-          0,
-          container.scrollTop + elRect.top - containerRect.top - scrollMargin
-        );
-        container.scrollTo({ top, behavior: 'smooth' });
+        // scrollIntoView scrolls the nearest scrollable ancestor (our container), so it works reliably
+        el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
       });
     });
   };
@@ -297,9 +291,9 @@ export function ExpandedDocumentView({
           </ScrollArea>
         </aside>
 
-        {/* Main document — plain overflow div with ref so we can scroll it directly */}
-        <div className="flex-1 min-w-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden">
-          <div className="h-full max-w-4xl mx-auto">
+        {/* Main document — min-h-0 so flex child shrinks and scroll container has overflow */}
+        <div className="flex-1 min-w-0 min-h-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden">
+          <div className="h-full min-h-0 max-w-4xl mx-auto">
             {error ? (
               <p className="text-sm text-destructive py-8">{error}</p>
             ) : loading || content === null ? (
