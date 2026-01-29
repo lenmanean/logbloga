@@ -123,17 +123,23 @@ export function ExpandedDocumentView({
 
   const scrollToHeading = (id: string) => {
     requestAnimationFrame(() => {
-      const el = document.getElementById(id);
       const container = documentScrollRef.current;
-      if (!el || !container || !container.contains(el)) return;
-      const scrollMargin = 16;
-      const elRect = el.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      const top = Math.max(
-        0,
-        container.scrollTop + elRect.top - containerRect.top - scrollMargin
-      );
-      container.scrollTo({ top, behavior: 'smooth' });
+      const el =
+        container?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ??
+        document.getElementById(id);
+      if (!el) return;
+      if (container?.contains(el)) {
+        const scrollMargin = 16;
+        const elRect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        const top = Math.max(
+          0,
+          container.scrollTop + elRect.top - containerRect.top - scrollMargin
+        );
+        container.scrollTo({ top, behavior: 'smooth' });
+      } else {
+        el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
+      }
     });
   };
 
