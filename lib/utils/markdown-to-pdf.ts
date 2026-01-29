@@ -624,6 +624,18 @@ function sanitizeText(text: string): string {
     '\u201D': '"',   // Right double quote
     '\u2018': "'",   // Left single quote
     '\u2019': "'",   // Right single quote
+    // Box-drawing (WinAnsi cannot encode; use Unicode escapes for keys)
+    '\u2500': '-',   // Horizontal
+    '\u2502': '|',   // Vertical
+    '\u250C': '+',   // Down + right
+    '\u2510': '+',   // Down + left
+    '\u2514': '+',   // Up + right
+    '\u2518': '+',   // Up + left
+    '\u251C': '|',   // Vertical + right (tree branch)
+    '\u2524': '|',   // Vertical + left
+    '\u252C': '+',   // Down + horizontal
+    '\u2534': '+',   // Up + horizontal
+    '\u253C': '+',   // Vertical + horizontal
   };
 
   let sanitized = text;
@@ -632,6 +644,9 @@ function sanitizeText(text: string): string {
   for (const [emoji, replacement] of Object.entries(emojiMap)) {
     sanitized = sanitized.replace(new RegExp(emoji, 'g'), replacement);
   }
+  
+  // Strip any remaining box-drawing / block elements (U+2500..U+257F)
+  sanitized = sanitized.replace(/[\u2500-\u257F]/g, ' ');
   
   // Remove any remaining emojis and non-printable characters
   // Keep only printable ASCII and common Unicode characters
