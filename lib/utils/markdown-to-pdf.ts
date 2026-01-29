@@ -588,7 +588,7 @@ function renderText(
 function sanitizeText(text: string): string {
   if (!text) return '';
   
-  // Replace common emojis with text equivalents
+  // Replace common emojis and special characters with text equivalents
   const emojiMap: Record<string, string> = {
     '✅': '[✓]',
     '❌': '[X]',
@@ -610,11 +610,25 @@ function sanitizeText(text: string): string {
     '💰': '[Money]',
     '📈': '[Up]',
     '📉': '[Down]',
+    '→': '->',  // Arrow
+    '←': '<-',  // Left arrow
+    '↑': '^',   // Up arrow
+    '↓': 'v',   // Down arrow
+    '⇒': '=>',  // Double arrow
+    '⇐': '<=',  // Double left arrow
+    '•': '*',   // Bullet point (handled separately in lists, but good to have)
+    '–': '-',   // En dash
+    '—': '-',   // Em dash
+    '…': '...',  // Ellipsis
+    '"': '"',   // Left double quote
+    '"': '"',   // Right double quote
+    ''': "'",   // Left single quote
+    ''': "'",   // Right single quote
   };
 
   let sanitized = text;
   
-  // Replace known emojis
+  // Replace known emojis and special characters
   for (const [emoji, replacement] of Object.entries(emojiMap)) {
     sanitized = sanitized.replace(new RegExp(emoji, 'g'), replacement);
   }
