@@ -31,9 +31,11 @@ interface MarkdownViewerProps {
   content?: string | null;
   /** Called with heading entries (id, depth, text) after render so TOC can use exact DOM ids */
   onHeadingsParsed?: (entries: TocEntry[]) => void;
+  /** When provided (e.g. expanded view), use a plain overflow div instead of ScrollArea so parent can scroll it reliably */
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
 }
 
-export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp, onHeadingsParsed }: MarkdownViewerProps) {
+export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp, onHeadingsParsed, scrollContainerRef }: MarkdownViewerProps) {
   const [content, setContent] = useState<string | null>(contentProp ?? null);
   const [loading, setLoading] = useState(typeof contentProp !== 'string');
   const [error, setError] = useState<string | null>(null);
@@ -401,18 +403,31 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
 
   if (!content) return null;
 
+  const inner = (
+    <div className="pr-4">
+      <div className="prose prose-lg dark:prose-invert max-w-none">
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+          {content}
+        </ReactMarkdown>
+      </div>
+    </div>
+  );
+
+  if (scrollContainerRef) {
+    return (
+      <div
+        ref={scrollContainerRef}
+        className={cn('w-full overflow-auto', className)}
+        style={{ height }}
+      >
+        {inner}
+      </div>
+    );
+  }
+
   return (
     <ScrollArea className={cn('w-full', className)} style={{ height }}>
-      <div className="pr-4">
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <ReactMarkdown
-            remarkPlugins={[remarkGfm]}
-            components={components}
-          >
-            {content}
-          </ReactMarkdown>
-        </div>
-      </div>
+      {inner}
     </ScrollArea>
   );
 }

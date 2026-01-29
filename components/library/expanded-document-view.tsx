@@ -20,8 +20,6 @@ function headingMatchesSearch(headingText: string, query: string): boolean {
   return words.every((word) => text.includes(word));
 }
 
-const DOCUMENT_VIEWPORT_SELECTOR = '[data-radix-scroll-area-viewport]';
-
 interface ExpandedDocumentViewProps {
   productId: string;
   filename: string;
@@ -46,7 +44,7 @@ export function ExpandedDocumentView({
   const [headings, setHeadings] = useState<TocEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set());
-  const mainContentRef = useRef<HTMLDivElement>(null);
+  const documentScrollRef = useRef<HTMLDivElement>(null);
 
   const handleHeadingsParsed = useCallback((entries: TocEntry[]) => {
     setHeadings(entries);
@@ -124,27 +122,18 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    // Double rAF so layout/paint are done and getBoundingClientRect is accurate
     requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const container = mainContentRef.current;
-        if (!container?.contains(el)) return;
-        const viewport = container.querySelector<HTMLElement>(DOCUMENT_VIEWPORT_SELECTOR);
-        const scrollMargin = 16;
-        if (viewport) {
-          const elRect = el.getBoundingClientRect();
-          const viewportRect = viewport.getBoundingClientRect();
-          const top = Math.max(
-            0,
-            viewport.scrollTop + elRect.top - viewportRect.top - scrollMargin
-          );
-          viewport.scrollTo({ top, behavior: 'smooth' });
-        } else {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      });
+      const el = document.getElementById(id);
+      const container = documentScrollRef.current;
+      if (!el || !container || !container.contains(el)) return;
+      const scrollMargin = 16;
+      const elRect = el.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const top = Math.max(
+        0,
+        container.scrollTop + elRect.top - containerRect.top - scrollMargin
+      );
+      container.scrollTo({ top, behavior: 'smooth' });
     });
   };
 
@@ -287,11 +276,8 @@ export function ExpandedDocumentView({
           </ScrollArea>
         </aside>
 
-        {/* Main document — ref so we can find the document viewport for scroll-to-heading */}
-        <div
-          ref={mainContentRef}
-          className="flex-1 min-w-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden"
-        >
+        {/* Main document — plain overflow div with ref so we can scroll it directly */}
+        <div className="flex-1 min-w-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden">
           <div className="h-full max-w-4xl mx-auto">
             {error ? (
               <p className="text-sm text-destructive py-8">{error}</p>
@@ -305,6 +291,7 @@ export function ExpandedDocumentView({
                 filename={filename}
                 content={content}
                 onHeadingsParsed={handleHeadingsParsed}
+                scrollContainerRef={documentScrollRef}
                 className="h-full"
                 height="100%"
               />
