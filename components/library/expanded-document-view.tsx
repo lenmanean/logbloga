@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -20,28 +20,7 @@ function headingMatchesSearch(headingText: string, query: string): boolean {
   return words.every((word) => text.includes(word));
 }
 
-/** Find the scrollable parent (e.g. ScrollArea viewport) so we can scroll within it. */
-function getScrollParent(el: HTMLElement): HTMLElement | null {
-  // Prefer Radix ScrollArea viewport so we always scroll the document panel
-  let parent = el.parentElement;
-  while (parent) {
-    if (parent.getAttribute('data-radix-scroll-area-viewport') !== null) {
-      return parent;
-    }
-    parent = parent.parentElement;
-  }
-  // Fallback: first ancestor with overflow scroll/auto
-  parent = el.parentElement;
-  while (parent) {
-    const style = getComputedStyle(parent);
-    const overflow = style.overflow + style.overflowY;
-    if (/(auto|scroll|overlay)/.test(overflow) && parent.scrollHeight > parent.clientHeight) {
-      return parent;
-    }
-    parent = parent.parentElement;
-  }
-  return null;
-}
+const DOCUMENT_VIEWPORT_SELECTOR = '[data-radix-scroll-area-viewport]';
 
 interface ExpandedDocumentViewProps {
   productId: string;
@@ -67,6 +46,7 @@ export function ExpandedDocumentView({
   const [headings, setHeadings] = useState<TocEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set());
+  const mainContentRef = useRef<HTMLDivElement>(null);
 
   const handleHeadingsParsed = useCallback((entries: TocEntry[]) => {
     setHeadings(entries);
@@ -144,19 +124,27 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
+    // Double rAF so layout/paint are done and getBoundingClientRect is accurate
     requestAnimationFrame(() => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const scrollParent = getScrollParent(el);
-      const scrollMargin = 16;
-      if (scrollParent) {
-        const elRect = el.getBoundingClientRect();
-        const parentRect = scrollParent.getBoundingClientRect();
-        const top = Math.max(0, scrollParent.scrollTop + elRect.top - parentRect.top - scrollMargin);
-        scrollParent.scrollTo({ top, behavior: 'smooth' });
-      } else {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+      requestAnimationFrame(() => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const container = mainContentRef.current;
+        if (!container?.contains(el)) return;
+        const viewport = container.querySelector<HTMLElement>(DOCUMENT_VIEWPORT_SELECTOR);
+        const scrollMargin = 16;
+        if (viewport) {
+          const elRect = el.getBoundingClientRect();
+          const viewportRect = viewport.getBoundingClientRect();
+          const top = Math.max(
+            0,
+            viewport.scrollTop + elRect.top - viewportRect.top - scrollMargin
+          );
+          viewport.scrollTo({ top, behavior: 'smooth' });
+        } else {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
     });
   };
 
@@ -299,8 +287,11 @@ export function ExpandedDocumentView({
           </ScrollArea>
         </aside>
 
-        {/* Main document */}
-        <div className="flex-1 min-w-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden">
+        {/* Main document — ref so we can find the document viewport for scroll-to-heading */}
+        <div
+          ref={mainContentRef}
+          className="flex-1 min-w-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden"
+        >
           <div className="h-full max-w-4xl mx-auto">
             {error ? (
               <p className="text-sm text-destructive py-8">{error}</p>
