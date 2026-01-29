@@ -123,9 +123,6 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    if (typeof window !== 'undefined') {
-      console.log('[TOC scroll] click id:', id);
-    }
     const scrollMargin = 16;
     setTimeout(() => {
       requestAnimationFrame(() => {
@@ -139,7 +136,7 @@ export function ExpandedDocumentView({
           0,
           container.scrollTop + elRect.top - containerRect.top - scrollMargin
         );
-        container.scrollTop = top;
+        container.scrollTo({ top, behavior: 'smooth' });
       });
     }, 100);
   };
