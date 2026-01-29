@@ -14,6 +14,7 @@ import { ContentSection } from '@/components/library/content-section';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
 import { DownloadButton } from '@/components/library/download-button';
 import { SectionDownloadButton } from '@/components/library/section-download-button';
+import { SectionExpandButton } from '@/components/library/section-expand-button';
 import { ProgressStepper } from '@/components/library/progress-stepper';
 import { ExpandedDocumentView } from '@/components/library/expanded-document-view';
 import { Badge } from '@/components/ui/badge';
@@ -41,7 +42,11 @@ export function LevelContent({
   className,
 }: LevelContentProps) {
   const [isMarkingComplete, setIsMarkingComplete] = useState<string | null>(null);
-  const [isExpandedViewOpen, setIsExpandedViewOpen] = useState(false);
+  const [expandedDoc, setExpandedDoc] = useState<{
+    sectionId: LevelComponent;
+    filename: string;
+    title: string;
+  } | null>(null);
   const {
     implementationPlan,
     platformGuides,
@@ -52,8 +57,10 @@ export function LevelContent({
     planning = [],
   } = levelData;
   const levelProgress = progress[`level${level}` as keyof ProgressMap];
+  const isWebApps = slug === 'web-apps';
   const isImplementationPlanExpanded =
-    level === 1 && isExpandedViewOpen && isHostedContent(implementationPlan.type);
+    expandedDoc?.sectionId === 'implementation_plan' &&
+    expandedDoc?.filename === implementationPlan.file;
 
   const handleMarkComplete = async (component: LevelComponent) => {
     if (isMarkingComplete) return;
@@ -182,11 +189,17 @@ export function LevelContent({
                   )}
                 </Button>
               )}
-              {level === 1 && isHostedContent(implementationPlan.type) && (
+              {isWebApps && isHostedContent(implementationPlan.type) && (
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setIsExpandedViewOpen(true)}
+                  onClick={() =>
+                    setExpandedDoc({
+                      sectionId: 'implementation_plan',
+                      filename: implementationPlan.file,
+                      title: 'Implementation Plan',
+                    })
+                  }
                   aria-label="Expand document view"
                   title="Expanded view"
                 >
@@ -213,14 +226,6 @@ export function LevelContent({
               label={`Download ${formatFileName(implementationPlan.file)}`}
             />
           )}
-          {isImplementationPlanExpanded && (
-            <ExpandedDocumentView
-              productId={productId}
-              filename={implementationPlan.file}
-              title="Implementation Plan"
-              onClose={() => setIsExpandedViewOpen(false)}
-            />
-          )}
         </div>
       </ContentSection>
 
@@ -239,6 +244,16 @@ export function LevelContent({
                 files={filterMarkdownFiles(platformGuides)}
                 sectionTitle="Platform Setup Guides"
                 level={level}
+              />
+              <SectionExpandButton
+                productId={productId}
+                files={platformGuides}
+                sectionTitle="Platform Setup Guides"
+                sectionId="platform_guides"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({ sectionId: 'platform_guides', filename, title })
+                }
               />
               {!levelProgress.platform_guides ? (
                 <Button
@@ -301,7 +316,12 @@ export function LevelContent({
                       {guide.description}
                     </p>
                   )}
-                  {hosted ? (
+                  {expandedDoc?.sectionId === 'platform_guides' &&
+                  expandedDoc?.filename === guide.file ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Viewing in expanded mode.
+                    </p>
+                  ) : hosted ? (
                     <MarkdownViewer
                       productId={productId}
                       filename={guide.file}
@@ -336,6 +356,20 @@ export function LevelContent({
                 files={filterMarkdownFiles(creativeFrameworks)}
                 sectionTitle="Creative Decision Frameworks"
                 level={level}
+              />
+              <SectionExpandButton
+                productId={productId}
+                files={creativeFrameworks}
+                sectionTitle="Creative Decision Frameworks"
+                sectionId="creative_frameworks"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'creative_frameworks',
+                    filename,
+                    title,
+                  })
+                }
               />
               {!levelProgress.creative_frameworks ? (
                 <Button
@@ -392,7 +426,12 @@ export function LevelContent({
                       {fw.description}
                     </p>
                   )}
-                  {hosted ? (
+                  {expandedDoc?.sectionId === 'creative_frameworks' &&
+                  expandedDoc?.filename === fw.file ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Viewing in expanded mode.
+                    </p>
+                  ) : hosted ? (
                     <MarkdownViewer
                       productId={productId}
                       filename={fw.file}
@@ -427,6 +466,20 @@ export function LevelContent({
                 files={filterMarkdownFiles(launchMarketing)}
                 sectionTitle="Launch & Marketing"
                 level={level}
+              />
+              <SectionExpandButton
+                productId={productId}
+                files={launchMarketing}
+                sectionTitle="Launch & Marketing"
+                sectionId="launch_marketing"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'launch_marketing',
+                    filename,
+                    title,
+                  })
+                }
               />
               {!levelProgress.launch_marketing ? (
                 <Button
@@ -483,7 +536,12 @@ export function LevelContent({
                       {item.description}
                     </p>
                   )}
-                  {hosted ? (
+                  {expandedDoc?.sectionId === 'launch_marketing' &&
+                  expandedDoc?.filename === item.file ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Viewing in expanded mode.
+                    </p>
+                  ) : hosted ? (
                     <MarkdownViewer
                       productId={productId}
                       filename={item.file}
@@ -521,6 +579,20 @@ export function LevelContent({
                   level={level}
                 />
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={troubleshooting}
+                sectionTitle="Troubleshooting"
+                sectionId="troubleshooting"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'troubleshooting',
+                    filename,
+                    title,
+                  })
+                }
+              />
               {!levelProgress.troubleshooting ? (
                 <Button
                   variant="outline"
@@ -576,7 +648,12 @@ export function LevelContent({
                       {item.description}
                     </p>
                   )}
-                  {hosted ? (
+                  {expandedDoc?.sectionId === 'troubleshooting' &&
+                  expandedDoc?.filename === item.file ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Viewing in expanded mode.
+                    </p>
+                  ) : hosted ? (
                     <MarkdownViewer
                       productId={productId}
                       filename={item.file}
@@ -611,6 +688,20 @@ export function LevelContent({
                 files={filterMarkdownFiles(planning)}
                 sectionTitle="Time & Budget Planning"
                 level={level}
+              />
+              <SectionExpandButton
+                productId={productId}
+                files={planning}
+                sectionTitle="Time & Budget Planning"
+                sectionId="planning"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'planning',
+                    filename,
+                    title,
+                  })
+                }
               />
               {!levelProgress.planning ? (
                 <Button
@@ -667,7 +758,12 @@ export function LevelContent({
                       {item.description}
                     </p>
                   )}
-                  {hosted ? (
+                  {expandedDoc?.sectionId === 'planning' &&
+                  expandedDoc?.filename === item.file ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Viewing in expanded mode.
+                    </p>
+                  ) : hosted ? (
                     <MarkdownViewer
                       productId={productId}
                       filename={item.file}
@@ -702,6 +798,20 @@ export function LevelContent({
                 files={filterMarkdownFiles(templates)}
                 sectionTitle="Templates & Checklists"
                 level={level}
+              />
+              <SectionExpandButton
+                productId={productId}
+                files={templates}
+                sectionTitle="Templates & Checklists"
+                sectionId="templates"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'templates',
+                    filename,
+                    title,
+                  })
+                }
               />
               {!levelProgress.templates ? (
                 <Button
@@ -758,7 +868,12 @@ export function LevelContent({
                       {t.description}
                     </p>
                   )}
-                  {hosted ? (
+                  {expandedDoc?.sectionId === 'templates' &&
+                  expandedDoc?.filename === t.file ? (
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Viewing in expanded mode.
+                    </p>
+                  ) : hosted ? (
                     <MarkdownViewer
                       productId={productId}
                       filename={t.file}
@@ -776,6 +891,16 @@ export function LevelContent({
             })}
           </div>
         </ContentSection>
+      )}
+
+      {expandedDoc !== null && (
+        <ExpandedDocumentView
+          key={`${expandedDoc.sectionId}:${expandedDoc.filename}`}
+          productId={productId}
+          filename={expandedDoc.filename}
+          title={expandedDoc.title}
+          onClose={() => setExpandedDoc(null)}
+        />
       )}
     </div>
   );
