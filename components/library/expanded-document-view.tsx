@@ -124,18 +124,25 @@ export function ExpandedDocumentView({
   const scrollToHeading = (id: string) => {
     console.log('[TOC scroll] click id:', id);
     requestAnimationFrame(() => {
-      const container = documentScrollRef.current;
-      const el =
-        container?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ??
-        document.getElementById(id);
-      if (process.env.NODE_ENV === 'development') {
-        if (!el) console.warn('[TOC scroll] No element found for id:', id);
-        else if (!container) console.warn('[TOC scroll] Scroll container ref not set');
-        else console.log('[TOC scroll] scrolling to element, container.scrollHeight:', container.scrollHeight, 'clientHeight:', container.clientHeight);
-      }
-      if (!el) return;
-      // Use scrollIntoView so the browser scrolls the nearest scrollable ancestor (our overflow div)
-      el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
+      requestAnimationFrame(() => {
+        const container = documentScrollRef.current;
+        const el =
+          container?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ??
+          document.getElementById(id);
+        if (!el) return;
+        const scrollMargin = 16;
+        if (container?.contains(el)) {
+          const elRect = el.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          const top = Math.max(
+            0,
+            container.scrollTop + elRect.top - containerRect.top - scrollMargin
+          );
+          container.scrollTo({ top, behavior: 'smooth' });
+        } else {
+          el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
+        }
+      });
     });
   };
 
