@@ -45,6 +45,7 @@ export function ExpandedDocumentView({
   const [searchQuery, setSearchQuery] = useState('');
   const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set());
   const documentScrollRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
 
   const handleHeadingsParsed = useCallback((entries: TocEntry[]) => {
     setHeadings(entries);
@@ -136,13 +137,28 @@ export function ExpandedDocumentView({
   }
 
   const scrollToHeading = (id: string) => {
+    if (typeof window !== 'undefined') {
+      console.log('[TOC scroll] click id:', id);
+    }
     const scrollMargin = 16;
     setTimeout(() => {
-      // Find element by ID (only one exists when expanded overlay is open)
-      const el = document.getElementById(id);
-      if (!el) return;
+      // Only look inside the overlay so we never scroll the page behind it
+      const overlay = overlayRef.current;
+      if (!overlay) return;
+      const el = overlay?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ?? null;
+      if (!el) {
+        if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+          console.warn('[TOC scroll] element not found in overlay:', id);
+        }
+        return;
+      }
       const container = getScrollParent(el);
-      if (!container) return;
+      if (!container) {
+        if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+          console.warn('[TOC scroll] no scroll parent for:', id);
+        }
+        return;
+      }
       const elRect = el.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       const top = Math.max(
@@ -150,6 +166,9 @@ export function ExpandedDocumentView({
         container.scrollTop + elRect.top - containerRect.top - scrollMargin
       );
       container.scrollTo({ top, behavior: 'smooth' });
+      if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+        console.log('[TOC scroll]', id, 'scrollHeight', container.scrollHeight, 'clientHeight', container.clientHeight, 'top', top);
+      }
     }, 50);
   };
 
@@ -231,6 +250,7 @@ export function ExpandedDocumentView({
 
   const overlay = (
     <div
+      ref={overlayRef}
       role="dialog"
       aria-modal="true"
       aria-label={`Expanded view: ${title}`}
