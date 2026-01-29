@@ -40,14 +40,15 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
   const [loading, setLoading] = useState(typeof contentProp !== 'string');
   const [error, setError] = useState<string | null>(null);
   const [isDark, setIsDark] = useState(false);
-  const headingIdsRef = useRef<Set<string>>(new Set());
   const headingEntriesRef = useRef<TocEntry[]>([]);
+  /** Stable id per heading index so re-renders don't change IDs (TOC must match DOM). */
+  const assignedIdsRef = useRef<string[]>([]);
   const lastContentSentRef = useRef<string | null>(null);
   const prevContentRef = useRef<string | null>(null);
   if (content !== prevContentRef.current) {
     prevContentRef.current = content;
-    headingIdsRef.current.clear();
     headingEntriesRef.current = [];
+    assignedIdsRef.current = [];
     lastContentSentRef.current = null;
   }
   headingEntriesRef.current = [];
@@ -130,17 +131,21 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     }
   }, [content, onHeadingsParsed]);
 
-  // Unique id for heading (matches parseHeadings in markdown-toc so TOC links work)
-  const getHeadingId = (children: React.ReactNode): string => {
+  /** Stable id per heading index so first-render IDs match DOM after re-renders (TOC scroll works). */
+  const getStableHeadingId = (children: React.ReactNode, depth: number): string => {
+    const index = headingEntriesRef.current.length;
+    const assigned = assignedIdsRef.current;
+    if (assigned[index] != null) return assigned[index];
     const text = flattenHeadingText(children);
     let baseId = slugify(text);
     let id = baseId;
     let n = 1;
-    while (headingIdsRef.current.has(id)) {
+    const used = new Set(assigned.slice(0, index));
+    while (used.has(id)) {
       n += 1;
       id = `${baseId}-${n}`;
     }
-    headingIdsRef.current.add(id);
+    assigned[index] = id;
     return id;
   };
 
@@ -149,7 +154,7 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     // Headings with id for TOC navigation; report to parent so TOC uses exact DOM ids
     h1: ({ children }) => {
       const text = flattenHeadingText(children);
-      const id = getHeadingId(children);
+      const id = getStableHeadingId(children, 1);
       headingEntriesRef.current.push({ id, depth: 1, text });
       return (
         <h1 id={id} className="text-3xl font-bold mb-4 mt-6 pb-2 border-b border-border text-foreground scroll-mt-4">
@@ -159,7 +164,7 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     },
     h2: ({ children }) => {
       const text = flattenHeadingText(children);
-      const id = getHeadingId(children);
+      const id = getStableHeadingId(children, 2);
       headingEntriesRef.current.push({ id, depth: 2, text });
       return (
         <h2 id={id} className="text-2xl font-semibold mb-3 mt-5 text-foreground scroll-mt-4">
@@ -169,7 +174,7 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     },
     h3: ({ children }) => {
       const text = flattenHeadingText(children);
-      const id = getHeadingId(children);
+      const id = getStableHeadingId(children, 3);
       headingEntriesRef.current.push({ id, depth: 3, text });
       return (
         <h3 id={id} className="text-xl font-semibold mb-2 mt-4 text-foreground scroll-mt-4">
@@ -179,7 +184,7 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     },
     h4: ({ children }) => {
       const text = flattenHeadingText(children);
-      const id = getHeadingId(children);
+      const id = getStableHeadingId(children, 4);
       headingEntriesRef.current.push({ id, depth: 4, text });
       return (
         <h4 id={id} className="text-lg font-semibold mb-2 mt-3 text-foreground scroll-mt-4">
@@ -189,7 +194,7 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     },
     h5: ({ children }) => {
       const text = flattenHeadingText(children);
-      const id = getHeadingId(children);
+      const id = getStableHeadingId(children, 5);
       headingEntriesRef.current.push({ id, depth: 5, text });
       return (
         <h5 id={id} className="text-base font-semibold mb-2 mt-3 text-foreground scroll-mt-4">
@@ -199,7 +204,7 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     },
     h6: ({ children }) => {
       const text = flattenHeadingText(children);
-      const id = getHeadingId(children);
+      const id = getStableHeadingId(children, 6);
       headingEntriesRef.current.push({ id, depth: 6, text });
       return (
         <h6 id={id} className="text-sm font-semibold mb-2 mt-2 text-foreground scroll-mt-4">
