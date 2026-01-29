@@ -27,14 +27,12 @@ interface SectionExpandButtonProps {
 export function SectionExpandButton({
   files,
   sectionId,
-  slug,
+  slug: _slug,
   onExpand,
   variant = 'outline',
   size = 'sm',
   className,
 }: SectionExpandButtonProps) {
-  if (slug !== 'web-apps') return null;
-
   const markdownFiles = filterMarkdownFiles(files);
   if (markdownFiles.length === 0) return null;
 

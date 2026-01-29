@@ -7,7 +7,9 @@
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
 import { hasProductAccess } from '@/lib/db/access';
+import { getProductById } from '@/lib/db/products';
 import { createServiceRoleClient } from '@/lib/supabase/server';
+import { getAllowedFilenamesForPackage } from '@/lib/data/package-level-content';
 
 interface RouteParams {
   params: Promise<{ 'product-id': string }>;
@@ -59,6 +61,23 @@ export async function GET(request: Request, { params }: RouteParams) {
       return NextResponse.json(
         { error: 'You do not have access to this product. Please purchase it first.' },
         { status: 403 }
+      );
+    }
+
+    const product = await getProductById(productId);
+    if (!product) {
+      return NextResponse.json(
+        { error: 'Product not found.' },
+        { status: 404 }
+      );
+    }
+
+    const slug = (product.slug ?? product.category ?? '') as string;
+    const allowed = getAllowedFilenamesForPackage(slug);
+    if (allowed.size > 0 && !allowed.has(filename)) {
+      return NextResponse.json(
+        { error: 'File not found or could not be downloaded.' },
+        { status: 404 }
       );
     }
 

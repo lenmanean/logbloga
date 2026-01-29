@@ -57,7 +57,6 @@ export function LevelContent({
     planning = [],
   } = levelData;
   const levelProgress = progress[`level${level}` as keyof ProgressMap];
-  const isWebApps = slug === 'web-apps';
   const isImplementationPlanExpanded =
     expandedDoc?.sectionId === 'implementation_plan' &&
     expandedDoc?.filename === implementationPlan.file;
@@ -189,7 +188,7 @@ export function LevelContent({
                   )}
                 </Button>
               )}
-              {isWebApps && isHostedContent(implementationPlan.type) && (
+              {isHostedContent(implementationPlan.type) && (
                 <Button
                   variant="outline"
                   size="sm"

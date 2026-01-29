@@ -50,6 +50,8 @@ copy-paste ready prompts for each implementation step.
 
 For Web Apps, ZIPs are built from source dirs under `web-apps-content/<name>/`. Run `npm run content:build-zips` before upload. Each template dir should include README and `.env.example`; see [WEB_APPS_ZIP_AUDIT.md](WEB_APPS_ZIP_AUDIT.md) and [TERMINOLOGY_STYLE_GUIDE.md](TERMINOLOGY_STYLE_GUIDE.md) for structure and terminology.
 
+Freelancing (and other packages) may have their own template ZIPs and source dirs; structure and README conventions follow the same principles as Web Apps. See [PACKAGE_CONTENT_INFRASTRUCTURE.md](PACKAGE_CONTENT_INFRASTRUCTURE.md) Section 7.7 for the Freelancing upload workflow.
+
 ## Terminology
 
 Use the terms defined in [TERMINOLOGY_STYLE_GUIDE.md](TERMINOLOGY_STYLE_GUIDE.md) for consistency across all package content.

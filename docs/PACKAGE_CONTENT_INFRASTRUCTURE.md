@@ -562,7 +562,11 @@ All listed guide **files** are included regardless of path; users choose which p
 
 ### 7.6 Expanded Document View
 
-For packages that use the library level view (currently Web Apps): hosted MD can be opened in an **expanded overlay** with table of contents (TOC) and word-based search; download remains for non-hosted files (ZIP, PDF, etc.). No change to storage or API; purely frontend UX.
+For **all package products** (Web Apps, Social Media, Agency, Freelancing): hosted MD can be opened in an **expanded overlay** with table of contents (TOC) and word-based search; download remains for non-hosted files (ZIP, PDF, etc.). No change to storage or API; purely frontend UX.
+
+### 7.7 Freelancing Upload Workflow
+
+Source files live in `freelancing-content/` at repo root. Run `npx tsx scripts/build-freelancing-zips.ts` to build the three ZIPs from source dirs (`proposal-templates/`, `contract-templates/`, `business-systems-templates/`). Run `npx tsx scripts/upload-freelancing-files.ts` to upload all 41 files to `digital-products/{productId}/`. Same allowlist and path rules as Web Apps.
 
 ---
 
