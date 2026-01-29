@@ -122,6 +122,9 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[TOC scroll] click id:', id);
+    }
     requestAnimationFrame(() => {
       const container = documentScrollRef.current;
       const el =
@@ -130,6 +133,7 @@ export function ExpandedDocumentView({
       if (process.env.NODE_ENV === 'development') {
         if (!el) console.warn('[TOC scroll] No element found for id:', id);
         else if (!container) console.warn('[TOC scroll] Scroll container ref not set');
+        else console.log('[TOC scroll] scrolling to element, container.scrollHeight:', container.scrollHeight, 'clientHeight:', container.clientHeight);
       }
       if (!el) return;
       // Use scrollIntoView so the browser scrolls the nearest scrollable ancestor (our overflow div)
