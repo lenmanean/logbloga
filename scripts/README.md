@@ -195,3 +195,37 @@ npx tsx scripts/revalidate-package-pages.ts
 - To force immediate UI updates (instead of waiting for ISR 1-hour revalidation)
 
 **Note:** If the app is not running or REVALIDATE_SECRET is not set, some revalidations may fail. Pages will still update via ISR within 1 hour automatically.
+
+---
+
+## Web Apps Content ZIPs
+
+### `build-web-apps-zips.ts`
+
+Builds the four Web Apps template ZIPs from their source directories under `web-apps-content/`. Run before upload to refresh ZIPs from source.
+
+**Usage:**
+```bash
+npm run content:build-zips
+# or
+npx tsx scripts/build-web-apps-zips.ts
+```
+
+**What it does:**
+- Zips `basic-starter-template/`, `saas-starter-template/`, `advanced-saas-template/`, `ai-integration-examples/`
+- Writes `web-apps-content/<name>.zip` for each
+- Extracting a ZIP gives a top-level folder with the same name and contents
+
+**When to use:**
+- After changing any file inside a template or examples directory
+- Before running `content:upload` so the uploaded ZIPs match the source
+
+### `audit-web-apps-zips.ts`
+
+Lists contents of each Web Apps ZIP source directory and key-file checks. Use to verify inventory.
+
+**Usage:**
+```bash
+npx tsx scripts/audit-web-apps-zips.ts
+npx tsx scripts/audit-web-apps-zips.ts --json
+```

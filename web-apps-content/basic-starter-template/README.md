@@ -26,7 +26,7 @@ A minimal Next.js starter template for building a simple landing page SaaS with 
    npm install
    ```
 
-3. Set up environment variables:
+3. Set up environment variables: Copy `.env.example` to `.env.local` and add your Stripe keys (see below).
    ```bash
    cp .env.example .env.local
    ```
@@ -61,10 +61,11 @@ A minimal Next.js starter template for building a simple landing page SaaS with 
 │   └── globals.css               # Global styles
 ├── components/
 │   └── CheckoutForm.tsx          # Stripe checkout form
-├── public/                       # Static assets
 ├── .env.example                  # Environment variables template
 ├── next.config.ts                # Next.js config
 ├── package.json                  # Dependencies
+├── postcss.config.mjs            # PostCSS config
+├── tailwind.config.ts            # Tailwind config
 └── tsconfig.json                 # TypeScript config
 ```
 
