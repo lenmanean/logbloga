@@ -20,6 +20,29 @@ function headingMatchesSearch(headingText: string, query: string): boolean {
   return words.every((word) => text.includes(word));
 }
 
+/** Find the scrollable parent (e.g. ScrollArea viewport) so we can scroll within it. */
+function getScrollParent(el: HTMLElement): HTMLElement | null {
+  // Prefer Radix ScrollArea viewport so we always scroll the document panel
+  let parent = el.parentElement;
+  while (parent) {
+    if (parent.getAttribute('data-radix-scroll-area-viewport') !== null) {
+      return parent;
+    }
+    parent = parent.parentElement;
+  }
+  // Fallback: first ancestor with overflow scroll/auto
+  parent = el.parentElement;
+  while (parent) {
+    const style = getComputedStyle(parent);
+    const overflow = style.overflow + style.overflowY;
+    if (/(auto|scroll|overlay)/.test(overflow) && parent.scrollHeight > parent.clientHeight) {
+      return parent;
+    }
+    parent = parent.parentElement;
+  }
+  return null;
+}
+
 interface ExpandedDocumentViewProps {
   productId: string;
   filename: string;
@@ -117,7 +140,18 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const el = document.getElementById(id);
+    if (!el) return;
+    const scrollParent = getScrollParent(el);
+    const scrollMargin = 16; // align with scroll-mt-4 on headings
+    if (scrollParent) {
+      const elRect = el.getBoundingClientRect();
+      const parentRect = scrollParent.getBoundingClientRect();
+      const top = Math.max(0, scrollParent.scrollTop + elRect.top - parentRect.top - scrollMargin);
+      scrollParent.scrollTo({ top, behavior: 'smooth' });
+    } else {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   function TocTreeRow({
@@ -132,8 +166,8 @@ export function ExpandedDocumentView({
     const pl = depth === 0 ? 2 : 2 + depth * 8;
 
     return (
-      <div className="space-y-0.5">
-        <div className="flex items-center gap-0.5 min-w-0 rounded-md group">
+      <div className="space-y-0.5 min-w-0 overflow-hidden">
+        <div className="flex items-center gap-0.5 min-w-0 rounded-md group overflow-hidden">
           {hasChildren ? (
             <button
               type="button"
@@ -152,13 +186,13 @@ export function ExpandedDocumentView({
               )}
             </button>
           ) : (
-            <span className="w-5 shrink-0" aria-hidden />
+            <span className="w-5 shrink-0 flex-shrink-0" aria-hidden />
           )}
           <button
             type="button"
             onClick={() => scrollToHeading(node.entry.id)}
             className={cn(
-              'flex-1 text-left text-sm py-1.5 pr-2 rounded-md truncate min-w-0',
+              'flex-1 min-w-0 text-left text-sm py-1.5 pr-2 rounded-md truncate overflow-hidden',
               'hover:bg-muted hover:text-foreground transition-colors',
               depth === 0 && 'font-medium'
             )}
@@ -168,7 +202,7 @@ export function ExpandedDocumentView({
           </button>
         </div>
         {hasChildren && isExpanded && (
-          <div className="border-l border-border/50 ml-2.5 pl-0.5">
+          <div className="border-l border-border/50 ml-2.5 pl-0.5 min-w-0 overflow-hidden">
             {node.children.map((child) => (
               <TocTreeRow key={child.entry.id} node={child} depth={depth + 1} />
             ))}
@@ -206,8 +240,8 @@ export function ExpandedDocumentView({
       {/* Sidebar + main content */}
       <div className="flex-1 flex min-h-0">
         {/* Left sidebar: search + TOC */}
-        <aside className="w-64 flex-shrink-0 border-r border-border flex flex-col bg-muted/30">
-          <div className="p-2 border-b border-border">
+        <aside className="w-64 min-w-0 flex-shrink-0 border-r border-border flex flex-col bg-muted/30 overflow-hidden">
+          <div className="p-2 border-b border-border flex-shrink-0">
             <div className="relative">
               <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
@@ -220,8 +254,8 @@ export function ExpandedDocumentView({
               />
             </div>
           </div>
-          <ScrollArea className="flex-1">
-            <div className="p-2 space-y-0.5">
+          <ScrollArea className="flex-1 min-h-0 min-w-0">
+            <div className="p-2 space-y-0.5 min-w-0 overflow-hidden">
               {loading ? (
                 <p className="text-sm text-muted-foreground px-2 py-4">Loading…</p>
               ) : headings.length === 0 ? (
@@ -235,7 +269,7 @@ export function ExpandedDocumentView({
                     type="button"
                     onClick={() => scrollToHeading(entry.id)}
                     className={cn(
-                      'w-full text-left text-sm py-1.5 px-2 rounded-md truncate block',
+                      'w-full min-w-0 text-left text-sm py-1.5 px-2 rounded-md truncate block overflow-hidden',
                       'hover:bg-muted hover:text-foreground transition-colors',
                       entry.depth === 1 && 'font-medium pl-2',
                       entry.depth === 2 && 'pl-4',
