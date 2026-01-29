@@ -122,16 +122,21 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        const container = documentScrollRef.current;
-        if (!container) return;
-        const el = container.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
-        if (!el) return;
-        // scrollIntoView scrolls the nearest scrollable ancestor (our container), so it works reliably
-        el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
-      });
-    });
+    // Small delay so layout is settled, then scroll our container explicitly
+    const scrollMargin = 16;
+    setTimeout(() => {
+      const container = documentScrollRef.current;
+      if (!container) return;
+      const el = container.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+      if (!el) return;
+      const elRect = el.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      const top = Math.max(
+        0,
+        container.scrollTop + elRect.top - containerRect.top - scrollMargin
+      );
+      container.scrollTo({ top, behavior: 'smooth' });
+    }, 50);
   };
 
   function TocTreeRow({
@@ -291,13 +296,13 @@ export function ExpandedDocumentView({
           </ScrollArea>
         </aside>
 
-        {/* Main document — min-h-0 so flex child shrinks and scroll container has overflow */}
-        <div className="flex-1 min-w-0 min-h-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden">
-          <div className="h-full min-h-0 max-w-4xl mx-auto">
+        {/* Main document — flex column so scroll area gets bounded height and can scroll */}
+        <div className="flex-1 min-w-0 min-h-0 px-4 py-4 md:px-6 md:py-6 overflow-hidden flex flex-col">
+          <div className="flex-1 min-h-0 max-w-4xl mx-auto w-full flex flex-col">
             {error ? (
               <p className="text-sm text-destructive py-8">{error}</p>
             ) : loading || content === null ? (
-              <div className="flex items-center justify-center h-full">
+              <div className="flex items-center justify-center flex-1">
                 <p className="text-sm text-muted-foreground">Loading document…</p>
               </div>
             ) : (
@@ -307,7 +312,7 @@ export function ExpandedDocumentView({
                 content={content}
                 onHeadingsParsed={handleHeadingsParsed}
                 scrollContainerRef={documentScrollRef}
-                className="h-full"
+                className="flex-1 min-h-0"
                 height="100%"
               />
             )}
