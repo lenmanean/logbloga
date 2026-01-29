@@ -122,26 +122,20 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    console.log('[TOC scroll] click id:', id);
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         const container = documentScrollRef.current;
-        const el =
-          container?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ??
-          document.getElementById(id);
+        if (!container) return;
+        const el = container.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
         if (!el) return;
         const scrollMargin = 16;
-        if (container?.contains(el)) {
-          const elRect = el.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          const top = Math.max(
-            0,
-            container.scrollTop + elRect.top - containerRect.top - scrollMargin
-          );
-          container.scrollTo({ top, behavior: 'smooth' });
-        } else {
-          el.scrollIntoView({ block: 'start', behavior: 'smooth', inline: 'nearest' });
-        }
+        const elRect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        const top = Math.max(
+          0,
+          container.scrollTop + elRect.top - containerRect.top - scrollMargin
+        );
+        container.scrollTo({ top, behavior: 'smooth' });
       });
     });
   };

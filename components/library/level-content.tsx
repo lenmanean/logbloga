@@ -52,6 +52,8 @@ export function LevelContent({
     planning = [],
   } = levelData;
   const levelProgress = progress[`level${level}` as keyof ProgressMap];
+  const isImplementationPlanExpanded =
+    level === 1 && isExpandedViewOpen && isHostedContent(implementationPlan.type);
 
   const handleMarkComplete = async (component: LevelComponent) => {
     if (isMarkingComplete) return;
@@ -194,11 +196,16 @@ export function LevelContent({
             </div>
           </div>
           {isHostedContent(implementationPlan.type) ? (
-            <MarkdownViewer
-              productId={productId}
-              filename={implementationPlan.file}
-              className="mt-4"
-            />
+            // When expanded overlay is open, don't mount the inline viewer to avoid duplicate IDs and two scrollbars
+            isImplementationPlanExpanded ? (
+              <p className="mt-4 text-sm text-muted-foreground">Viewing in expanded mode.</p>
+            ) : (
+              <MarkdownViewer
+                productId={productId}
+                filename={implementationPlan.file}
+                className="mt-4"
+              />
+            )
           ) : (
             <DownloadButton
               productId={productId}
@@ -206,7 +213,7 @@ export function LevelContent({
               label={`Download ${formatFileName(implementationPlan.file)}`}
             />
           )}
-          {level === 1 && isExpandedViewOpen && isHostedContent(implementationPlan.type) && (
+          {isImplementationPlanExpanded && (
             <ExpandedDocumentView
               productId={productId}
               filename={implementationPlan.file}
