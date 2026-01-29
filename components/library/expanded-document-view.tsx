@@ -121,14 +121,28 @@ export function ExpandedDocumentView({
     });
   };
 
+  /** Find the scrollable ancestor of el (overflow-auto or overflow-scroll). */
+  function getScrollParent(el: HTMLElement): HTMLElement | null {
+    let parent: HTMLElement | null = el.parentElement;
+    while (parent) {
+      const style = getComputedStyle(parent);
+      const overflowY = style.overflowY;
+      if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
+        return parent;
+      }
+      parent = parent.parentElement;
+    }
+    return null;
+  }
+
   const scrollToHeading = (id: string) => {
-    // Small delay so layout is settled, then scroll our container explicitly
     const scrollMargin = 16;
     setTimeout(() => {
-      const container = documentScrollRef.current;
-      if (!container) return;
-      const el = container.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+      // Find element by ID (only one exists when expanded overlay is open)
+      const el = document.getElementById(id);
       if (!el) return;
+      const container = getScrollParent(el);
+      if (!container) return;
       const elRect = el.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       const top = Math.max(
