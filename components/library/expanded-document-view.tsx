@@ -122,9 +122,7 @@ export function ExpandedDocumentView({
   };
 
   const scrollToHeading = (id: string) => {
-    if (process.env.NODE_ENV === 'development') {
-      console.log('[TOC scroll] click id:', id);
-    }
+    console.log('[TOC scroll] click id:', id);
     requestAnimationFrame(() => {
       const container = documentScrollRef.current;
       const el =
@@ -152,14 +150,34 @@ export function ExpandedDocumentView({
     const isExpanded = expandedIds.has(node.entry.id);
     const pl = depth === 0 ? 2 : 2 + depth * 8;
 
+    const handleRowClick = (e: React.MouseEvent) => {
+      if ((e.target as HTMLElement).closest('button[aria-expanded]')) return;
+      scrollToHeading(node.entry.id);
+    };
+
     return (
       <div className="space-y-0.5 overflow-hidden" style={{ minWidth: 0, maxWidth: '100%' }}>
-        <div className="flex items-center gap-0.5 rounded-md group overflow-hidden" style={{ minWidth: 0 }}>
+        <div
+          role="button"
+          tabIndex={0}
+          onClick={handleRowClick}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              handleRowClick(e as unknown as React.MouseEvent);
+            }
+          }}
+          className="flex items-center gap-0.5 rounded-md group overflow-hidden cursor-pointer"
+          style={{ minWidth: 0 }}
+        >
           {hasChildren ? (
             <button
               type="button"
               aria-expanded={isExpanded}
-              onClick={() => toggleExpanded(node.entry.id)}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleExpanded(node.entry.id);
+              }}
               className={cn(
                 'shrink-0 p-0.5 rounded hover:bg-muted text-muted-foreground',
                 'flex items-center justify-center'
@@ -175,9 +193,7 @@ export function ExpandedDocumentView({
           ) : (
             <span className="w-5 shrink-0 flex-shrink-0" aria-hidden />
           )}
-          <button
-            type="button"
-            onClick={() => scrollToHeading(node.entry.id)}
+          <span
             className={cn(
               'flex-1 min-w-0 text-left text-sm py-1.5 pr-2 rounded-md overflow-hidden text-ellipsis whitespace-nowrap',
               'hover:bg-muted hover:text-foreground transition-colors',
@@ -186,7 +202,7 @@ export function ExpandedDocumentView({
             style={{ paddingLeft: hasChildren ? 0 : pl, maxWidth: '100%' }}
           >
             {node.entry.text}
-          </button>
+          </span>
         </div>
         {hasChildren && isExpanded && (
           <div className="border-l border-border/50 ml-2.5 pl-0.5 overflow-hidden" style={{ minWidth: 0, maxWidth: '100%' }}>
