@@ -26,6 +26,8 @@
 - **AI leverage** (not "AI integration" or "AI usage") — Describes how AI accelerates work
 - **Progress tracking** (not "Completion tracking") — User progress through content
 - **Watermarking** (not "DRM" or "Copy protection") — Copyright protection feature
+- **Expanded view** (or "Expanded document view") — Overlay view for hosted MD with TOC and search
+- **Template package** or **Reference package** — Web Apps as the template for UX and structure for other packages
 
 ## Abbreviations
 - MD (markdown files)

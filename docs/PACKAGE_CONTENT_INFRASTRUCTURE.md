@@ -236,6 +236,14 @@ This is separate from the implementation plan **file**; the file is the canonica
 
 **Web Apps package total: 45 files** (16 + 15 + 14).
 
+### 3.4 Web Apps as Template
+
+**Web Apps is the reference implementation** for package UX and structure.
+
+**Same across packages:** User experience (library page, level tabs, section layout, expand button, download button, progress stepper, mark complete), navigation (overview, level1/2/3, section anchors), and structure (seven categories, hybrid DB/static content, allowlist-based download).
+
+**Different per package:** Context, volume, and file types (e.g. Social Media, Agency, Freelancing may have different template types or counts). When replicating to other packages, match Web Apps’ UX and navigation; content and file lists follow package-level-content and level plans.
+
 ---
 
 ## 4. Social Media Package
@@ -546,6 +554,16 @@ All listed guide **files** are included regardless of path; users choose which p
 - **Product ID:** One per package product. All level files for that package live under the same `productId` folder.
 - **DOER coupon:** 6 months free DOER Pro; separate from file delivery. Shown on product page, order confirmation, and account library.
 
+### 7.5 ZIP Workflow (Web Apps)
+
+1. **Source dirs:** Under `web-apps-content/<name>/` (e.g. `basic-starter-template/`, `saas-starter-template/`).
+2. **Build ZIPs:** Run `npm run content:build-zips` or `npx tsx scripts/build-web-apps-zips.ts` to produce `web-apps-content/<name>.zip`.
+3. **Upload:** Run the upload script to push root `.md` and `.zip` files to `digital-products/{productId}/`. See [scripts/README.md](../scripts/README.md) for build and audit scripts.
+
+### 7.6 Expanded Document View
+
+For packages that use the library level view (currently Web Apps): hosted MD can be opened in an **expanded overlay** with table of contents (TOC) and word-based search; download remains for non-hosted files (ZIP, PDF, etc.). No change to storage or API; purely frontend UX.
+
 ---
 
 ## 8. Summary Tables
@@ -554,22 +572,22 @@ All listed guide **files** are included regardless of path; users choose which p
 
 | Package      | Level 1 | Level 2 | Level 3 | **Total** |
 |-------------|---------|---------|---------|-----------|
-| Web Apps    | 15      | 14      | 13      | **42**    |
+| Web Apps    | 16      | 15      | 14      | **45**    |
 | Social Media| 14      | 14      | 11      | **39**    |
 | Agency      | 14      | 14      | 12      | **40**    |
 | Freelancing | 14      | 15      | 12      | **41**    |
-| **Total**   | **57**  | **57**  | **48**  | **162**   |
+| **Total**   | **58**  | **58**  | **49**  | **165**   |
 
 ### 8.2 File Type Distribution (all packages)
 
 | Type | Use | Count |
 |------|-----|-------|
-| **md** | All packages: implementation plans, platform guides, creative frameworks; Web Apps, Social Media, Agency & Freelancing launch/marketing, troubleshooting, planning guides; templates (MD where used) | 136 |
+| **md** | All packages: implementation plans, platform guides, creative frameworks; Web Apps, Social Media, Agency & Freelancing launch/marketing, troubleshooting, planning guides; templates (MD where used) | 139 |
 | **pdf** | Templates (checklists) and planning worksheets/calculators only | 12 |
 | **zip** | Code templates, multi-file packs | 11 |
 | **xlsx** | Editable templates (content calendar, strategy) | 2 |
 | **docx** | Editable docs (client reporting) | 1 |
-| **Total** | | **162** |
+| **Total** | | **165** |
 
 ### 8.3 Content Category Counts (all levels, all packages)
 
@@ -588,7 +606,7 @@ All listed guide **files** are included regardless of path; users choose which p
 Use this for checklists when creating or uploading. Filenames are unique across packages unless otherwise noted; same name in different packages = different file (e.g. `service-suite-development.md` in Social Media L3 vs Agency L2).
 
 **Web Apps (md, zip):**  
-`advanced-mvp-framework.md`, `advanced-saas-template.zip`, `advanced-supabase-setup.md`, `ai-integration-examples.zip`, `ai-integration-guide.md`, `basic-starter-template.zip`, `development-milestones-checklist.md`, `github-setup-guide.md`, `go-to-market-strategy.md`, `idea-generation-framework.md`, `mvp-checklist.md`, `mvp-development-framework.md`, `nextjs-saas-starter-setup.md`, `nextjs-simple-setup-guide.md`, `pricing-strategy-saas.md`, `saas-starter-template.zip`, `scaling-strategy.md`, `simple-mvp-framework.md`, `stripe-basic-setup.md`, `stripe-integration-guide.md`, `supabase-setup-guide.md`, `third-party-integrations-guide.md`, `value-proposition-worksheet.md`, `vercel-advanced-deployment.md`, `vercel-deployment-guide.md`, `vercel-edge-functions.md`, `web-apps-level-1-basic-marketing-guide.md`, `web-apps-level-1-budget-planning-worksheet.md`, `web-apps-level-1-common-issues-solutions.md`, `web-apps-level-1-launch-checklist.md`, `web-apps-level-1-plan.md`, `web-apps-level-1-time-investment-planner.md`, `web-apps-level-2-budget-planning-worksheet.md`, `web-apps-level-2-customer-acquisition-guide.md`, `web-apps-level-2-plan.md`, `web-apps-level-2-success-metrics-dashboard.md`, `web-apps-level-2-troubleshooting-debugging-guide.md`, `web-apps-level-3-advanced-troubleshooting-guide.md`, `web-apps-level-3-enterprise-marketing-playbook.md`, `web-apps-level-3-partnership-strategy.md`, `web-apps-level-3-plan.md`, `web-apps-level-3-scaling-operations-budget.md`.
+`advanced-mvp-framework.md`, `advanced-saas-template.zip`, `advanced-supabase-setup.md`, `ai-integration-examples.zip`, `ai-integration-guide.md`, `basic-starter-template.zip`, `development-milestones-checklist.md`, `github-setup-guide.md`, `go-to-market-strategy.md`, `idea-generation-framework.md`, `mvp-checklist.md`, `mvp-development-framework.md`, `nextjs-saas-starter-setup.md`, `nextjs-simple-setup-guide.md`, `pricing-strategy-saas.md`, `saas-starter-template.zip`, `scaling-strategy.md`, `simple-mvp-framework.md`, `stripe-basic-setup.md`, `stripe-integration-guide.md`, `supabase-setup-guide.md`, `third-party-integrations-guide.md`, `value-proposition-worksheet.md`, `vercel-advanced-deployment.md`, `vercel-deployment-guide.md`, `vercel-edge-functions.md`, `web-apps-level-1-ai-prompts.md`, `web-apps-level-1-basic-marketing-guide.md`, `web-apps-level-1-budget-planning-worksheet.md`, `web-apps-level-1-common-issues-solutions.md`, `web-apps-level-1-launch-checklist.md`, `web-apps-level-1-plan.md`, `web-apps-level-1-time-investment-planner.md`, `web-apps-level-2-ai-prompts.md`, `web-apps-level-2-budget-planning-worksheet.md`, `web-apps-level-2-customer-acquisition-guide.md`, `web-apps-level-2-plan.md`, `web-apps-level-2-success-metrics-dashboard.md`, `web-apps-level-2-troubleshooting-debugging-guide.md`, `web-apps-level-3-ai-prompts.md`, `web-apps-level-3-advanced-troubleshooting-guide.md`, `web-apps-level-3-enterprise-marketing-playbook.md`, `web-apps-level-3-partnership-strategy.md`, `web-apps-level-3-plan.md`, `web-apps-level-3-scaling-operations-budget.md`.
 
 **Social Media (md, pdf, xlsx, docx, zip):**  
 `advanced-analytics-setup.md`, `agency-operations-framework.md`, `brand-identity-framework.md`, `buffer-paid-setup-guide.md`, `buffer-setup-guide.md`, `canva-setup-guide.md`, `client-onboarding-checklist.pdf`, `client-onboarding-framework.md`, `client-reporting-template.docx`, `content-calendar-template.xlsx`, `content-direction-framework.md`, `content-strategy-template.xlsx`, `daily-posting-checklist.pdf`, `google-analytics-setup-guide.md`, `hootsuite-setup-guide.md`, `later-setup-guide.md`, `metricool-setup-guide.md`, `niche-selection-worksheet.md`, `service-pricing-framework.md`, `service-suite-development.md`, `social-media-level-1-common-creator-issues.md`, `social-media-level-1-content-growth-checklist.md`, `social-media-level-1-creator-income-planning.md`, `social-media-level-1-first-monetization-guide.md`, `social-media-level-1-monetization-budget-worksheet.pdf`, `social-media-level-1-plan.md`, `social-media-level-2-client-service-issues.md`, `social-media-level-2-first-smm-clients-guide.md`, `social-media-level-2-plan.md`, `social-media-level-2-service-portfolio-checklist.md`, `social-media-level-2-service-pricing-strategy.md`, `social-media-level-2-smm-budget-planner.pdf`, `social-media-level-3-agency-budget-planning.pdf`, `social-media-level-3-agency-operations-issues.md`, `social-media-level-3-agency-positioning-guide.md`, `social-media-level-3-agency-revenue-strategy.md`, `social-media-level-3-partnership-outreach-strategies.md`, `social-media-level-3-plan.md`, `team-management-templates.zip`.
@@ -606,6 +624,7 @@ Use this for checklists when creating or uploading. Filenames are unique across 
 | Date       | Change |
 |------------|--------|
 | Jan 2025   | Initial version; file list aligned with `package-level-content.ts` and rundown specs |
+| Jan 2026   | Web Apps 45 files, ZIP remediation, expanded view; Web Apps as template; file count corrections (8.1/8.2). |
 
 ---
 

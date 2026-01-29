@@ -1,5 +1,7 @@
 # Web Apps Package ZIP Audit Report
 
+**Post-remediation status is authoritative;** pre-remediation checklists below are historical.
+
 **Scope:** Web Apps package only (`lib/data/package-level-content.ts` — `packageLevelContent['web-apps']`).
 
 **ZIP files (4 total):**

@@ -1,5 +1,9 @@
 # Content Authoring Guide for Packages
 
+## Expanded Document View
+
+Hosted markdown can be opened in an **expanded view** (overlay with table of contents and search). Use clear headings in MD so the TOC and search work well; cross-references and “see Templates section” remain as today.
+
 ## Cross-References Between Files
 
 ### Current Implementation
@@ -41,6 +45,10 @@ copy-paste ready prompts for each implementation step.
 - Platform guides: `{platform}-{feature}-setup-guide.md`
 - Package-specific: `{package}-level-{n}-{content-type}.md`
 - AI prompts: `{package}-level-{n}-ai-prompts.md`
+
+## Templates (ZIP)
+
+For Web Apps, ZIPs are built from source dirs under `web-apps-content/<name>/`. Run `npm run content:build-zips` before upload. Each template dir should include README and `.env.example`; see [WEB_APPS_ZIP_AUDIT.md](WEB_APPS_ZIP_AUDIT.md) and [TERMINOLOGY_STYLE_GUIDE.md](TERMINOLOGY_STYLE_GUIDE.md) for structure and terminology.
 
 ## Terminology
 
