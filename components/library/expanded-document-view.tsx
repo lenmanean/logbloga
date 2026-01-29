@@ -127,6 +127,10 @@ export function ExpandedDocumentView({
       const el =
         container?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ??
         document.getElementById(id);
+      if (process.env.NODE_ENV === 'development') {
+        if (!el) console.warn('[TOC scroll] No element found for id:', id);
+        else if (!container) console.warn('[TOC scroll] Scroll container ref not set');
+      }
       if (!el) return;
       if (container?.contains(el)) {
         const scrollMargin = 16;
