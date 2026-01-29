@@ -57,3 +57,38 @@ export function parseHeadings(markdown: string): TocEntry[] {
 
   return entries;
 }
+
+export interface TocNode {
+  entry: TocEntry;
+  children: TocNode[];
+}
+
+/**
+ * Build a tree from flat heading entries by depth.
+ * Root array holds top-level nodes (shallowest depth present).
+ * Deeper headings become children of the previous shallower heading.
+ */
+export function buildTocTree(entries: TocEntry[]): TocNode[] {
+  if (entries.length === 0) return [];
+
+  const roots: TocNode[] = [];
+  const stack: TocNode[] = []; // stack of nodes for each depth level
+
+  for (const entry of entries) {
+    const node: TocNode = { entry, children: [] };
+
+    while (stack.length > 0 && stack[stack.length - 1].entry.depth >= entry.depth) {
+      stack.pop();
+    }
+
+    if (stack.length === 0) {
+      roots.push(node);
+    } else {
+      stack[stack.length - 1].children.push(node);
+    }
+
+    stack.push(node);
+  }
+
+  return roots;
+}

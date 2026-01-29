@@ -2,13 +2,23 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Search } from 'lucide-react';
+import { X, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
-import { parseHeadings, type TocEntry } from '@/lib/utils/markdown-toc';
+import { parseHeadings, buildTocTree, type TocEntry, type TocNode } from '@/lib/utils/markdown-toc';
 import { cn } from '@/lib/utils';
+
+/** Normalize query, split into words; require every word (length >= 2) to appear in heading (case-insensitive). */
+function headingMatchesSearch(headingText: string, query: string): boolean {
+  const normalized = query.trim().replace(/\s+/g, ' ').toLowerCase();
+  if (!normalized) return true;
+  const words = normalized.split(/\s+/).filter((w) => w.length >= 2);
+  if (words.length === 0) return true;
+  const text = headingText.toLowerCase();
+  return words.every((word) => text.includes(word));
+}
 
 interface ExpandedDocumentViewProps {
   productId: string;
@@ -33,6 +43,7 @@ export function ExpandedDocumentView({
   const [error, setError] = useState<string | null>(null);
   const [headings, setHeadings] = useState<TocEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(() => new Set());
 
   // Fetch markdown once
   useEffect(() => {
@@ -59,6 +70,14 @@ export function ExpandedDocumentView({
     return () => { cancelled = true; };
   }, [productId, filename]);
 
+  // Default: top-level nodes expanded when headings load
+  useEffect(() => {
+    if (headings.length === 0) return;
+    const tree = buildTocTree(headings);
+    const rootIds = tree.map((n) => n.entry.id);
+    setExpandedIds(new Set(rootIds));
+  }, [headings]);
+
   // Smooth enter animation only (opacity 0 -> 1, scale 0.98 -> 1)
   useEffect(() => {
     const t = requestAnimationFrame(() => setHasEntered(true));
@@ -82,13 +101,82 @@ export function ExpandedDocumentView({
     };
   }, [handleEscape]);
 
-  const filteredHeadings = searchQuery.trim()
-    ? headings.filter((h) => h.text.toLowerCase().includes(searchQuery.toLowerCase()))
+  const trimmedQuery = searchQuery.trim();
+  const filteredHeadings = trimmedQuery
+    ? headings.filter((h) => headingMatchesSearch(h.text, searchQuery))
     : headings;
+
+  const tocTree = buildTocTree(headings);
+  const toggleExpanded = (id: string) => {
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
 
   const scrollToHeading = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  function TocTreeRow({
+    node,
+    depth,
+  }: {
+    node: TocNode;
+    depth: number;
+  }) {
+    const hasChildren = node.children.length > 0;
+    const isExpanded = expandedIds.has(node.entry.id);
+    const pl = depth === 0 ? 2 : 2 + depth * 8;
+
+    return (
+      <div className="space-y-0.5">
+        <div className="flex items-center gap-0.5 min-w-0 rounded-md group">
+          {hasChildren ? (
+            <button
+              type="button"
+              aria-expanded={isExpanded}
+              onClick={() => toggleExpanded(node.entry.id)}
+              className={cn(
+                'shrink-0 p-0.5 rounded hover:bg-muted text-muted-foreground',
+                'flex items-center justify-center'
+              )}
+              aria-label={isExpanded ? 'Collapse' : 'Expand'}
+            >
+              {isExpanded ? (
+                <ChevronDown className="h-4 w-4" />
+              ) : (
+                <ChevronRight className="h-4 w-4" />
+              )}
+            </button>
+          ) : (
+            <span className="w-5 shrink-0" aria-hidden />
+          )}
+          <button
+            type="button"
+            onClick={() => scrollToHeading(node.entry.id)}
+            className={cn(
+              'flex-1 text-left text-sm py-1.5 pr-2 rounded-md truncate min-w-0',
+              'hover:bg-muted hover:text-foreground transition-colors',
+              depth === 0 && 'font-medium'
+            )}
+            style={{ paddingLeft: hasChildren ? 0 : pl }}
+          >
+            {node.entry.text}
+          </button>
+        </div>
+        {hasChildren && isExpanded && (
+          <div className="border-l border-border/50 ml-2.5 pl-0.5">
+            {node.children.map((child) => (
+              <TocTreeRow key={child.entry.id} node={child} depth={depth + 1} />
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   const overlay = (
     <div
@@ -138,9 +226,9 @@ export function ExpandedDocumentView({
                 <p className="text-sm text-muted-foreground px-2 py-4">Loading…</p>
               ) : headings.length === 0 ? (
                 <p className="text-sm text-muted-foreground px-2 py-4">No sections</p>
-              ) : filteredHeadings.length === 0 ? (
-                <p className="text-sm text-muted-foreground px-2 py-4">No matching sections</p>
-              ) : (
+              ) : trimmedQuery && filteredHeadings.length === 0 ? (
+                <p className="text-sm text-muted-foreground px-2 py-4">No results found.</p>
+              ) : trimmedQuery ? (
                 filteredHeadings.map((entry) => (
                   <button
                     key={entry.id}
@@ -157,6 +245,10 @@ export function ExpandedDocumentView({
                   >
                     {entry.text}
                   </button>
+                ))
+              ) : (
+                tocTree.map((node) => (
+                  <TocTreeRow key={node.entry.id} node={node} depth={0} />
                 ))
               )}
             </div>
