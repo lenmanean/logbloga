@@ -122,54 +122,26 @@ export function ExpandedDocumentView({
     });
   };
 
-  /** Find the scrollable ancestor of el (overflow-auto or overflow-scroll). */
-  function getScrollParent(el: HTMLElement): HTMLElement | null {
-    let parent: HTMLElement | null = el.parentElement;
-    while (parent) {
-      const style = getComputedStyle(parent);
-      const overflowY = style.overflowY;
-      if (overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay') {
-        return parent;
-      }
-      parent = parent.parentElement;
-    }
-    return null;
-  }
-
   const scrollToHeading = (id: string) => {
     if (typeof window !== 'undefined') {
       console.log('[TOC scroll] click id:', id);
     }
     const scrollMargin = 16;
     setTimeout(() => {
-      // Only look inside the overlay so we never scroll the page behind it
-      const overlay = overlayRef.current;
-      if (!overlay) return;
-      const el = overlay?.querySelector<HTMLElement>(`#${CSS.escape(id)}`) ?? null;
-      if (!el) {
-        if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-          console.warn('[TOC scroll] element not found in overlay:', id);
-        }
-        return;
-      }
-      const container = getScrollParent(el);
-      if (!container) {
-        if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-          console.warn('[TOC scroll] no scroll parent for:', id);
-        }
-        return;
-      }
-      const elRect = el.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      const top = Math.max(
-        0,
-        container.scrollTop + elRect.top - containerRect.top - scrollMargin
-      );
-      container.scrollTo({ top, behavior: 'smooth' });
-      if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-        console.log('[TOC scroll]', id, 'scrollHeight', container.scrollHeight, 'clientHeight', container.clientHeight, 'top', top);
-      }
-    }, 50);
+      requestAnimationFrame(() => {
+        const container = documentScrollRef.current;
+        if (!container) return;
+        const el = container.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+        if (!el) return;
+        const elRect = el.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        const top = Math.max(
+          0,
+          container.scrollTop + elRect.top - containerRect.top - scrollMargin
+        );
+        container.scrollTop = top;
+      });
+    }, 100);
   };
 
   function TocTreeRow({

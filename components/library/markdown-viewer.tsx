@@ -417,7 +417,8 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
     return (
       <div
         ref={scrollContainerRef}
-        className={cn('w-full overflow-auto min-h-0', className)}
+        data-document-scroll
+        className={cn('w-full overflow-y-auto overflow-x-hidden min-h-0', className)}
         style={{ height }}
       >
         {inner}
