@@ -54,12 +54,15 @@ export async function markdownToPDF(markdown: string): Promise<Buffer> {
         margin,
         contentWidth,
         yPosition,
-        lineHeight
+        lineHeight,
+        pageWidth,
+        pageHeight
       );
       
       yPosition = result.yPosition;
+      page = result.page;
       
-      // Check if we need a new page
+      // Check if we need a new page before next token
       if (yPosition < margin + 50) {
         page = pdfDoc.addPage([pageWidth, pageHeight]);
         yPosition = pageHeight - margin;
@@ -91,7 +94,9 @@ async function renderToken(
   margin: number,
   contentWidth: number,
   yPosition: number,
-  lineHeight: number
+  lineHeight: number,
+  pageWidth: number,
+  pageHeight: number
 ): Promise<RenderResult> {
   const paragraphSpacing = 6;
 
@@ -100,64 +105,82 @@ async function renderToken(
       return renderHeading(
         token,
         page,
+        pdfDoc,
         helveticaBoldFont,
-        helveticaFont,
-        margin,
-        contentWidth,
-        yPosition,
-        lineHeight
-      );
-    case 'paragraph':
-      return renderParagraph(
-        token,
-        page,
         helveticaFont,
         margin,
         contentWidth,
         yPosition,
         lineHeight,
-        paragraphSpacing
+        pageWidth,
+        pageHeight
+      );
+    case 'paragraph':
+      return renderParagraph(
+        token,
+        page,
+        pdfDoc,
+        helveticaFont,
+        margin,
+        contentWidth,
+        yPosition,
+        lineHeight,
+        paragraphSpacing,
+        pageWidth,
+        pageHeight
       );
     case 'list':
       return renderList(
         token,
         page,
+        pdfDoc,
         helveticaFont,
         margin,
         contentWidth,
         yPosition,
-        lineHeight
+        lineHeight,
+        pageWidth,
+        pageHeight
       );
     case 'code':
       return renderCode(
         token,
         page,
+        pdfDoc,
         courierFont,
         margin,
         contentWidth,
         yPosition,
-        lineHeight
+        lineHeight,
+        pageWidth,
+        pageHeight
       );
     case 'blockquote':
       return renderBlockquote(
         token,
         page,
+        pdfDoc,
         helveticaObliqueFont,
         margin,
         contentWidth,
         yPosition,
-        lineHeight
+        lineHeight,
+        pageWidth,
+        pageHeight
       );
     case 'table':
       return renderTable(
         token,
         page,
+        pdfDoc,
         helveticaBoldFont,
         helveticaFont,
         margin,
         contentWidth,
         yPosition,
-        lineHeight
+        lineHeight,
+        pageWidth,
+        pageHeight
       );
     case 'hr':
       return renderHorizontalRule(
@@ -173,12 +196,15 @@ async function renderToken(
         return renderText(
           sanitizeText(token.text),
           page,
+          pdfDoc,
           helveticaFont,
           margin,
           contentWidth,
           yPosition,
           lineHeight,
-          paragraphSpacing
+          paragraphSpacing,
+          pageWidth,
+          pageHeight
         );
       }
       return { yPosition, page };
@@ -188,42 +214,54 @@ async function renderToken(
 function renderHeading(
   token: MarkdownToken,
   page: any,
+  pdfDoc: any,
   boldFont: any,
   normalFont: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
-  lineHeight: number
+  lineHeight: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   const level = token.depth || 1;
   const sizes = [24, 20, 16, 14, 12, 11];
   const fontSize = sizes[Math.min(level - 1, sizes.length - 1)] || 11;
+  const headingLineHeight = fontSize + 2;
   const text = renderInlineTokens(token.tokens || []);
+  const lines = wrapText(text, contentWidth, fontSize, boldFont);
+  const textHeight = lines.length * headingLineHeight;
 
   const paragraphSpacing = 6;
   yPosition -= paragraphSpacing;
 
-  const textHeight = (fontSize * text.split('\n').length);
-  page.drawText(text, {
-    x: margin,
-    y: yPosition - fontSize,
-    size: fontSize,
-    font: boldFont,
-    color: rgb(0, 0, 0),
-    maxWidth: contentWidth,
-  });
+  let currentY = yPosition;
+  for (const line of lines) {
+    if (currentY - headingLineHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - margin;
+    }
+    page.drawText(line, {
+      x: margin,
+      y: currentY - fontSize,
+      size: fontSize,
+      font: boldFont,
+      color: rgb(0, 0, 0),
+    });
+    currentY -= headingLineHeight;
+  }
 
-  // Add border for h1
+  // Add border for h1 (under last heading line)
   if (level === 1) {
     page.drawLine({
-      start: { x: margin, y: yPosition - fontSize - 5 },
-      end: { x: margin + contentWidth, y: yPosition - fontSize - 5 },
+      start: { x: margin, y: currentY - 5 },
+      end: { x: margin + contentWidth, y: currentY - 5 },
       thickness: 1,
       color: rgb(0.8, 0.8, 0.8),
     });
   }
 
-  yPosition -= textHeight + paragraphSpacing * 2;
+  yPosition = currentY - paragraphSpacing * 2;
 
   return { yPosition, page };
 }
@@ -231,12 +269,15 @@ function renderHeading(
 function renderParagraph(
   token: MarkdownToken,
   page: any,
+  pdfDoc: any,
   font: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
   lineHeight: number,
-  paragraphSpacing: number
+  paragraphSpacing: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   if (!token.tokens || token.tokens.length === 0) {
     yPosition -= paragraphSpacing;
@@ -246,10 +287,13 @@ function renderParagraph(
   const text = renderInlineTokens(token.tokens || []);
   const fontSize = 10;
   const lines = wrapText(text, contentWidth, fontSize, font);
-  const textHeight = lines.length * lineHeight;
 
   let currentY = yPosition;
   for (const line of lines) {
+    if (currentY - lineHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - margin;
+    }
     page.drawText(line, {
       x: margin,
       y: currentY - fontSize,
@@ -260,7 +304,7 @@ function renderParagraph(
     currentY -= lineHeight;
   }
 
-  yPosition -= textHeight + paragraphSpacing;
+  yPosition = currentY - paragraphSpacing;
 
   return { yPosition, page };
 }
@@ -268,11 +312,14 @@ function renderParagraph(
 function renderList(
   token: MarkdownToken,
   page: any,
+  pdfDoc: any,
   font: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
-  lineHeight: number
+  lineHeight: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   const isOrdered = token.ordered || false;
   const start = token.start || 1;
@@ -281,11 +328,18 @@ function renderList(
   const bulletX = margin + indent;
   const textX = bulletX + 15;
   const fontSize = 10;
+  const bulletChar = '*'; // WinAnsi-safe (avoid U+2022)
 
   for (const item of token.items || []) {
     const itemText = item.tokens ? renderInlineTokens(item.tokens) : '';
     const lines = wrapText(itemText, contentWidth - indent - 15, fontSize, font);
     const itemHeight = lines.length * lineHeight + 4;
+
+    // Check page break before bullet/number
+    if (yPosition - fontSize - itemHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      yPosition = pageHeight - margin;
+    }
 
     // Draw bullet or number
     if (isOrdered) {
@@ -297,7 +351,7 @@ function renderList(
         color: rgb(0, 0, 0),
       });
     } else {
-      page.drawText('•', {
+      page.drawText(bulletChar, {
         x: bulletX,
         y: yPosition - fontSize,
         size: fontSize,
@@ -309,6 +363,10 @@ function renderList(
     // Render list item content
     let currentY = yPosition;
     for (const line of lines) {
+      if (currentY - lineHeight < margin) {
+        page = pdfDoc.addPage([pageWidth, pageHeight]);
+        currentY = pageHeight - margin;
+      }
       page.drawText(line, {
         x: textX,
         y: currentY - fontSize,
@@ -319,7 +377,7 @@ function renderList(
       currentY -= lineHeight;
     }
 
-    yPosition -= itemHeight + 4;
+    yPosition = currentY - 4;
     if (isOrdered) itemNumber++;
   }
 
@@ -331,11 +389,14 @@ function renderList(
 function renderCode(
   token: MarkdownToken,
   page: any,
+  pdfDoc: any,
   font: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
-  lineHeight: number
+  lineHeight: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   const code = sanitizeText(token.text || '');
   const fontSize = 9;
@@ -343,28 +404,32 @@ function renderCode(
   const lines = code.split('\n');
   const textHeight = lines.length * lineHeight + padding * 2;
 
-  // Draw background
-  page.drawRectangle({
-    x: margin,
-    y: yPosition - textHeight,
-    width: contentWidth,
-    height: textHeight,
-    color: rgb(0.96, 0.96, 0.96),
-  });
+  // Draw background and border for first-page portion only
+  const firstPageHeight = Math.min(textHeight, yPosition - margin);
+  if (firstPageHeight > 0) {
+    page.drawRectangle({
+      x: margin,
+      y: yPosition - firstPageHeight,
+      width: contentWidth,
+      height: firstPageHeight,
+      color: rgb(0.96, 0.96, 0.96),
+    });
+    page.drawRectangle({
+      x: margin,
+      y: yPosition - firstPageHeight,
+      width: contentWidth,
+      height: firstPageHeight,
+      borderColor: rgb(0.8, 0.8, 0.8),
+      borderWidth: 1,
+    });
+  }
 
-  // Draw border
-  page.drawRectangle({
-    x: margin,
-    y: yPosition - textHeight,
-    width: contentWidth,
-    height: textHeight,
-    borderColor: rgb(0.8, 0.8, 0.8),
-    borderWidth: 1,
-  });
-
-  // Render code
   let currentY = yPosition - padding;
   for (const line of lines) {
+    if (currentY - lineHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - margin - padding;
+    }
     page.drawText(line || ' ', {
       x: margin + padding,
       y: currentY - fontSize,
@@ -375,7 +440,7 @@ function renderCode(
     currentY -= lineHeight;
   }
 
-  yPosition -= textHeight + 6;
+  yPosition = currentY - 6;
 
   return { yPosition, page };
 }
@@ -383,11 +448,14 @@ function renderCode(
 function renderBlockquote(
   token: MarkdownToken,
   page: any,
+  pdfDoc: any,
   font: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
-  lineHeight: number
+  lineHeight: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   if (!token.tokens || token.tokens.length === 0) {
     return { yPosition, page };
@@ -399,17 +467,20 @@ function renderBlockquote(
   const lines = wrapText(quoteText, contentWidth - indent, fontSize, font);
   const textHeight = lines.length * lineHeight + 10;
 
-  // Draw left border
+  // Draw left border (first page only; continuation on new page has no bar)
   page.drawLine({
     start: { x: margin, y: yPosition },
-    end: { x: margin, y: yPosition - textHeight },
+    end: { x: margin, y: Math.max(margin, yPosition - textHeight) },
     thickness: 4,
     color: rgb(0.29, 0.56, 0.89),
   });
 
-  // Render content
   let currentY = yPosition;
   for (const line of lines) {
+    if (currentY - lineHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - margin;
+    }
     page.drawText(line, {
       x: margin + indent,
       y: currentY - fontSize,
@@ -420,7 +491,7 @@ function renderBlockquote(
     currentY -= lineHeight;
   }
 
-  yPosition -= textHeight + 6;
+  yPosition = currentY - 6;
 
   return { yPosition, page };
 }
@@ -428,12 +499,15 @@ function renderBlockquote(
 function renderTable(
   token: MarkdownToken,
   page: any,
+  pdfDoc: any,
   boldFont: any,
   normalFont: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
-  lineHeight: number
+  lineHeight: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   const header = token.header || [];
   const rows = token.rows || [];
@@ -444,18 +518,34 @@ function renderTable(
   const colWidth = contentWidth / colCount;
   const fontSize = 10;
   const cellPadding = 5;
-  const rowHeight = 20;
+  const cellWidth = colWidth - cellPadding * 2;
 
-  // Render header
+  // Render header: wrap each cell, draw line-by-line
   let x = margin;
-  let maxHeaderHeight = rowHeight;
+  let maxHeaderHeight = 0;
+  const headerCellHeights: number[] = [];
 
   for (let i = 0; i < header.length; i++) {
     const cellTokens = Array.isArray(header[i]) ? header[i] : [];
-    const cell = renderInlineTokens(cellTokens);
-    const cellHeight = Math.ceil(cell.length / 30) * lineHeight + cellPadding * 2;
+    const cellText = renderInlineTokens(cellTokens);
+    const lines = wrapText(cellText, cellWidth, fontSize, boldFont);
+    const cellHeight = lines.length * lineHeight + cellPadding * 2;
+    headerCellHeights.push(cellHeight);
+    maxHeaderHeight = Math.max(maxHeaderHeight, cellHeight);
+  }
 
-    // Draw cell background
+  if (yPosition - maxHeaderHeight < margin) {
+    page = pdfDoc.addPage([pageWidth, pageHeight]);
+    yPosition = pageHeight - margin;
+  }
+
+  x = margin;
+  for (let i = 0; i < header.length; i++) {
+    const cellTokens = Array.isArray(header[i]) ? header[i] : [];
+    const cellText = renderInlineTokens(cellTokens);
+    const lines = wrapText(cellText, cellWidth, fontSize, boldFont);
+    const cellHeight = headerCellHeights[i];
+
     page.drawRectangle({
       x: x,
       y: yPosition - cellHeight,
@@ -463,8 +553,6 @@ function renderTable(
       height: cellHeight,
       color: rgb(0.94, 0.94, 0.94),
     });
-
-    // Draw cell border
     page.drawRectangle({
       x: x,
       y: yPosition - cellHeight,
@@ -474,33 +562,45 @@ function renderTable(
       borderWidth: 0.5,
     });
 
-    // Draw cell text
-    page.drawText(cell, {
-      x: x + cellPadding,
-      y: yPosition - fontSize - cellPadding,
-      size: fontSize,
-      font: boldFont,
-      color: rgb(0, 0, 0),
-      maxWidth: colWidth - cellPadding * 2,
-    });
-
+    let cellY = yPosition - cellPadding;
+    for (const line of lines) {
+      page.drawText(line, {
+        x: x + cellPadding,
+        y: cellY - fontSize,
+        size: fontSize,
+        font: boldFont,
+        color: rgb(0, 0, 0),
+      });
+      cellY -= lineHeight;
+    }
     x += colWidth;
-    maxHeaderHeight = Math.max(maxHeaderHeight, cellHeight);
   }
 
   yPosition -= maxHeaderHeight;
 
-  // Render rows
+  // Render body rows
   for (const row of rows) {
-    x = margin;
-    let currentRowHeight = rowHeight;
-
+    const rowCellHeights: number[] = [];
     for (let i = 0; i < row.length; i++) {
       const cellTokens = Array.isArray(row[i]) ? row[i] : [];
-      const cell = renderInlineTokens(cellTokens);
-      const cellHeight = Math.ceil(cell.length / 30) * lineHeight + cellPadding * 2;
+      const cellText = renderInlineTokens(cellTokens);
+      const lines = wrapText(cellText, cellWidth, fontSize, normalFont);
+      rowCellHeights.push(lines.length * lineHeight + cellPadding * 2);
+    }
+    const currentRowHeight = Math.max(...rowCellHeights, 20);
 
-      // Draw cell border
+    if (yPosition - currentRowHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      yPosition = pageHeight - margin;
+    }
+
+    x = margin;
+    for (let i = 0; i < row.length; i++) {
+      const cellTokens = Array.isArray(row[i]) ? row[i] : [];
+      const cellText = renderInlineTokens(cellTokens);
+      const lines = wrapText(cellText, cellWidth, fontSize, normalFont);
+      const cellHeight = rowCellHeights[i];
+
       page.drawRectangle({
         x: x,
         y: yPosition - cellHeight,
@@ -510,18 +610,18 @@ function renderTable(
         borderWidth: 0.5,
       });
 
-      // Draw cell text
-      page.drawText(cell, {
-        x: x + cellPadding,
-        y: yPosition - fontSize - cellPadding,
-        size: fontSize,
-        font: normalFont,
-        color: rgb(0, 0, 0),
-        maxWidth: colWidth - cellPadding * 2,
-      });
-
+      let cellY = yPosition - cellPadding;
+      for (const line of lines) {
+        page.drawText(line, {
+          x: x + cellPadding,
+          y: cellY - fontSize,
+          size: fontSize,
+          font: normalFont,
+          color: rgb(0, 0, 0),
+        });
+        cellY -= lineHeight;
+      }
       x += colWidth;
-      currentRowHeight = Math.max(currentRowHeight, cellHeight);
     }
 
     yPosition -= currentRowHeight;
@@ -554,19 +654,25 @@ function renderHorizontalRule(
 function renderText(
   text: string,
   page: any,
+  pdfDoc: any,
   font: any,
   margin: number,
   contentWidth: number,
   yPosition: number,
   lineHeight: number,
-  paragraphSpacing: number
+  paragraphSpacing: number,
+  pageWidth: number,
+  pageHeight: number
 ): RenderResult {
   const fontSize = 10;
   const lines = wrapText(text, contentWidth, fontSize, font);
-  const textHeight = lines.length * lineHeight;
 
   let currentY = yPosition;
   for (const line of lines) {
+    if (currentY - lineHeight < margin) {
+      page = pdfDoc.addPage([pageWidth, pageHeight]);
+      currentY = pageHeight - margin;
+    }
     page.drawText(line, {
       x: margin,
       y: currentY - fontSize,
@@ -577,7 +683,7 @@ function renderText(
     currentY -= lineHeight;
   }
 
-  yPosition -= textHeight + paragraphSpacing;
+  yPosition = currentY - paragraphSpacing;
 
   return { yPosition, page };
 }
@@ -692,30 +798,50 @@ function renderInlineTokens(tokens: MarkdownToken[] | undefined | null): string 
 }
 
 /**
- * Simple text wrapping (basic implementation)
+ * Wrap text to maxWidth. Respects existing newlines; uses font metrics when available.
  */
 function wrapText(text: string, maxWidth: number, fontSize: number, font: any): string[] {
-  // Simple word wrapping - split by spaces and combine words until line exceeds maxWidth
-  const words = text.split(' ');
-  const lines: string[] = [];
-  let currentLine = '';
+  const allLines: string[] = [];
+  const segments = text.split('\n');
 
-  for (const word of words) {
-    const testLine = currentLine ? `${currentLine} ${word}` : word;
-    // Approximate width: each character is roughly fontSize * 0.6 points wide
-    const estimatedWidth = testLine.length * fontSize * 0.6;
-
-    if (estimatedWidth > maxWidth && currentLine) {
-      lines.push(currentLine);
-      currentLine = word;
-    } else {
-      currentLine = testLine;
+  function measureWidth(str: string): number {
+    if (font && typeof font.widthOfTextAtSize === 'function') {
+      try {
+        return font.widthOfTextAtSize(str, fontSize);
+      } catch {
+        return str.length * fontSize * 0.6;
+      }
     }
+    return str.length * fontSize * 0.6;
   }
 
-  if (currentLine) {
-    lines.push(currentLine);
+  function wrapSegment(segment: string): string[] {
+    const words = segment.split(' ');
+    const lines: string[] = [];
+    let currentLine = '';
+
+    for (const word of words) {
+      const testLine = currentLine ? `${currentLine} ${word}` : word;
+      const width = measureWidth(testLine);
+
+      if (width > maxWidth && currentLine) {
+        lines.push(currentLine);
+        currentLine = word;
+      } else {
+        currentLine = testLine;
+      }
+    }
+
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+    return lines;
   }
 
-  return lines.length > 0 ? lines : [text];
+  for (const segment of segments) {
+    const segmentLines = wrapSegment(segment.trim() || ' ');
+    allLines.push(...segmentLines);
+  }
+
+  return allLines.length > 0 ? allLines : [text];
 }
