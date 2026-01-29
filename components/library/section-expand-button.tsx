@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Maximize2, ChevronDown } from 'lucide-react';
+import { Maximize2 } from 'lucide-react';
 import { formatFileName, filterMarkdownFiles } from '@/lib/utils/content';
 import type { LevelComponent } from '@/lib/utils/content';
 import { cn } from '@/lib/utils';
@@ -67,7 +67,6 @@ export function SectionExpandButton({
           title="Expanded view"
         >
           <Maximize2 className="h-4 w-4" />
-          <ChevronDown className="h-4 w-4 ml-1" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

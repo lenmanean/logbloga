@@ -245,16 +245,6 @@ export function LevelContent({
                 sectionTitle="Platform Setup Guides"
                 level={level}
               />
-              <SectionExpandButton
-                productId={productId}
-                files={platformGuides}
-                sectionTitle="Platform Setup Guides"
-                sectionId="platform_guides"
-                slug={slug}
-                onExpand={(filename, title) =>
-                  setExpandedDoc({ sectionId: 'platform_guides', filename, title })
-                }
-              />
               {!levelProgress.platform_guides ? (
                 <Button
                   variant="outline"
@@ -288,6 +278,16 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={platformGuides}
+                sectionTitle="Platform Setup Guides"
+                sectionId="platform_guides"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({ sectionId: 'platform_guides', filename, title })
+                }
+              />
             </div>
             {platformGuides.map((guide, idx) => {
               const hosted = isHostedContent(guide.type);
@@ -357,20 +357,6 @@ export function LevelContent({
                 sectionTitle="Creative Decision Frameworks"
                 level={level}
               />
-              <SectionExpandButton
-                productId={productId}
-                files={creativeFrameworks}
-                sectionTitle="Creative Decision Frameworks"
-                sectionId="creative_frameworks"
-                slug={slug}
-                onExpand={(filename, title) =>
-                  setExpandedDoc({
-                    sectionId: 'creative_frameworks',
-                    filename,
-                    title,
-                  })
-                }
-              />
               {!levelProgress.creative_frameworks ? (
                 <Button
                   variant="outline"
@@ -404,6 +390,20 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={creativeFrameworks}
+                sectionTitle="Creative Decision Frameworks"
+                sectionId="creative_frameworks"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'creative_frameworks',
+                    filename,
+                    title,
+                  })
+                }
+              />
             </div>
             {creativeFrameworks.map((fw, idx) => {
               const hosted = isHostedContent(fw.type);
@@ -467,20 +467,6 @@ export function LevelContent({
                 sectionTitle="Launch & Marketing"
                 level={level}
               />
-              <SectionExpandButton
-                productId={productId}
-                files={launchMarketing}
-                sectionTitle="Launch & Marketing"
-                sectionId="launch_marketing"
-                slug={slug}
-                onExpand={(filename, title) =>
-                  setExpandedDoc({
-                    sectionId: 'launch_marketing',
-                    filename,
-                    title,
-                  })
-                }
-              />
               {!levelProgress.launch_marketing ? (
                 <Button
                   variant="outline"
@@ -514,6 +500,20 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={launchMarketing}
+                sectionTitle="Launch & Marketing"
+                sectionId="launch_marketing"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'launch_marketing',
+                    filename,
+                    title,
+                  })
+                }
+              />
             </div>
             {launchMarketing.map((item, idx) => {
               const hosted = isHostedContent(item.type);
@@ -579,20 +579,6 @@ export function LevelContent({
                   level={level}
                 />
               )}
-              <SectionExpandButton
-                productId={productId}
-                files={troubleshooting}
-                sectionTitle="Troubleshooting"
-                sectionId="troubleshooting"
-                slug={slug}
-                onExpand={(filename, title) =>
-                  setExpandedDoc({
-                    sectionId: 'troubleshooting',
-                    filename,
-                    title,
-                  })
-                }
-              />
               {!levelProgress.troubleshooting ? (
                 <Button
                   variant="outline"
@@ -626,6 +612,20 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={troubleshooting}
+                sectionTitle="Troubleshooting"
+                sectionId="troubleshooting"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'troubleshooting',
+                    filename,
+                    title,
+                  })
+                }
+              />
             </div>
             {troubleshooting.map((item, idx) => {
               const hosted = isHostedContent(item.type);
@@ -689,20 +689,6 @@ export function LevelContent({
                 sectionTitle="Time & Budget Planning"
                 level={level}
               />
-              <SectionExpandButton
-                productId={productId}
-                files={planning}
-                sectionTitle="Time & Budget Planning"
-                sectionId="planning"
-                slug={slug}
-                onExpand={(filename, title) =>
-                  setExpandedDoc({
-                    sectionId: 'planning',
-                    filename,
-                    title,
-                  })
-                }
-              />
               {!levelProgress.planning ? (
                 <Button
                   variant="outline"
@@ -736,6 +722,20 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={planning}
+                sectionTitle="Time & Budget Planning"
+                sectionId="planning"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'planning',
+                    filename,
+                    title,
+                  })
+                }
+              />
             </div>
             {planning.map((item, idx) => {
               const hosted = isHostedContent(item.type);
@@ -799,20 +799,6 @@ export function LevelContent({
                 sectionTitle="Templates & Checklists"
                 level={level}
               />
-              <SectionExpandButton
-                productId={productId}
-                files={templates}
-                sectionTitle="Templates & Checklists"
-                sectionId="templates"
-                slug={slug}
-                onExpand={(filename, title) =>
-                  setExpandedDoc({
-                    sectionId: 'templates',
-                    filename,
-                    title,
-                  })
-                }
-              />
               {!levelProgress.templates ? (
                 <Button
                   variant="outline"
@@ -846,6 +832,20 @@ export function LevelContent({
                   )}
                 </Button>
               )}
+              <SectionExpandButton
+                productId={productId}
+                files={templates}
+                sectionTitle="Templates & Checklists"
+                sectionId="templates"
+                slug={slug}
+                onExpand={(filename, title) =>
+                  setExpandedDoc({
+                    sectionId: 'templates',
+                    filename,
+                    title,
+                  })
+                }
+              />
             </div>
             {templates.map((t, idx) => {
               const hosted = isHostedContent(t.type);
