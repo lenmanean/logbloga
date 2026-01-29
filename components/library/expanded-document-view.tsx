@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { MarkdownViewer } from '@/components/library/markdown-viewer';
 import { cn } from '@/lib/utils';
 
-const EXIT_DURATION_MS = 200;
+const EXIT_DURATION_MS = 220;
 
 interface ExpandedDocumentViewProps {
   productId: string;
@@ -18,7 +18,7 @@ interface ExpandedDocumentViewProps {
 
 /**
  * Full-viewport overlay that expands the document over all page elements
- * (tabs, header, nav). Renders via portal with expansion animation.
+ * (tabs, header, nav). Uses opacity + scale transitions so exit animation runs reliably.
  */
 export function ExpandedDocumentView({
   productId,
@@ -27,7 +27,16 @@ export function ExpandedDocumentView({
   onClose,
 }: ExpandedDocumentViewProps) {
   const [isClosing, setIsClosing] = useState(false);
+  const [hasEntered, setHasEntered] = useState(false);
   const exitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Trigger enter animation after first paint (opacity 0 -> 1, scale 0.95 -> 1)
+  useEffect(() => {
+    const t = requestAnimationFrame(() => {
+      setHasEntered(true);
+    });
+    return () => cancelAnimationFrame(t);
+  }, []);
 
   const requestClose = useCallback(() => {
     if (isClosing) return;
@@ -56,17 +65,17 @@ export function ExpandedDocumentView({
     };
   }, [handleEscape]);
 
+  const isVisible = hasEntered && !isClosing;
+
   const overlay = (
     <div
       role="dialog"
       aria-modal="true"
       aria-label={`Expanded view: ${title}`}
-      data-state={isClosing ? 'closed' : 'open'}
       className={cn(
         'fixed inset-0 z-[100] flex flex-col bg-background',
-        'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
-        'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
-        'duration-200 ease-out'
+        'transition-opacity transition-transform duration-200 ease-out',
+        isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-[0.98]'
       )}
     >
       {/* Toolbar: title + close */}
