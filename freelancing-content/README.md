@@ -21,9 +21,23 @@ The two Level 1 planning PDFs are **downloadable** files. Their **content struct
 
 To **regenerate or update the PDFs:** use the content in the `*-content.md` files above as the source for layout and copy. The repo does not include scripted PDF generation by default; a human or custom script can produce the PDFs from these specs.
 
-## ZIP Sources (Level 2)
+## PDF Content Specifications (Level 2)
 
-The three Level 2 template ZIPs are built from source directories in this folder:
+The Level 2 planning PDF is **downloadable**. Its **content structure and wording** are specified in markdown:
+
+- **Full-Time Budget Planner:** Content spec in `freelancing-level-2-full-time-budget-planner-content.md`. Sections: (1) Monthly revenue goal ($1,500–$4,000 band, checkboxes), (2) Platform costs ($20–50 L2 range), (3) Income tracking table, (4) Expense categories, (5) Net and notes. Use terminology from `docs/TERMINOLOGY_STYLE_GUIDE.md`.
+
+## PDF Content Specifications (Level 3)
+
+The Level 3 planning PDF is **downloadable**. Its **content structure and wording** are specified in markdown:
+
+- **Business Financial Planning:** Content spec in `freelancing-level-3-business-financial-planning-content.md`. Sections: (1) Revenue target ($4k–$10k+ band), (2) Platform costs ($50–150 L3 range), (3) P&L-style summary, (4) Cash flow, (5) Tax and retirement. Use terminology from `docs/TERMINOLOGY_STYLE_GUIDE.md`.
+
+To **regenerate or update** Level 2 or Level 3 PDFs, use the corresponding `*-content.md` file as the source for layout and copy.
+
+## ZIP Sources (Level 2 and Level 3)
+
+Level 2 and Level 3 template ZIPs are built from source directories in this folder:
 
 - `proposal-templates/` → `proposal-templates.zip`
 - `contract-templates/` → `contract-templates.zip`
