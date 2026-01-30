@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { BookOpen, Settings, Lightbulb, FileText, Check, Rocket, Wrench, Calendar, X, Maximize2 } from 'lucide-react';
 import type { LevelContent } from '@/lib/data/package-level-content';
+import { getFileToSectionMap } from '@/lib/data/package-level-content';
 import {
   isHostedContent,
   getFileTypeIcon,
@@ -47,6 +48,29 @@ export function LevelContent({
     filename: string;
     title: string;
   } | null>(null);
+  const [pendingScrollTarget, setPendingScrollTarget] = useState<{
+    sectionId: string;
+    fileId?: string;
+  } | null>(null);
+
+  const fileToSectionMap = useMemo(() => getFileToSectionMap(levelData), [levelData]);
+
+  useEffect(() => {
+    if (!pendingScrollTarget || expandedDoc !== null) return;
+    const { sectionId, fileId } = pendingScrollTarget;
+    const sectionEl = document.getElementById(sectionId);
+    if (sectionEl) {
+      sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (fileId) {
+        const fileEl = document.getElementById(fileId);
+        if (fileEl) {
+          setTimeout(() => fileEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+        }
+      }
+    }
+    setPendingScrollTarget(null);
+  }, [pendingScrollTarget, expandedDoc]);
+
   const {
     implementationPlan,
     platformGuides,
@@ -207,24 +231,28 @@ export function LevelContent({
               )}
             </div>
           </div>
-          {isHostedContent(implementationPlan.type) ? (
-            // When expanded overlay is open, don't mount the inline viewer to avoid duplicate IDs and two scrollbars
-            isImplementationPlanExpanded ? (
-              <p className="mt-4 text-sm text-muted-foreground">Viewing in expanded mode.</p>
-            ) : (
+          <div id={`file-${implementationPlan.file.replace(/\./g, '-')}`}>
+            {isHostedContent(implementationPlan.type) ? (
+              // When expanded overlay is open, don't mount the inline viewer to avoid duplicate IDs and two scrollbars
+              isImplementationPlanExpanded ? (
+                <p className="mt-4 text-sm text-muted-foreground">Viewing in expanded mode.</p>
+              ) : (
               <MarkdownViewer
                 productId={productId}
                 filename={implementationPlan.file}
                 className="mt-4"
+                fileToSectionMap={fileToSectionMap}
+                currentFilename={implementationPlan.file}
               />
-            )
-          ) : (
-            <DownloadButton
-              productId={productId}
-              filename={implementationPlan.file}
-              label={`Download ${formatFileName(implementationPlan.file)}`}
-            />
-          )}
+              )
+            ) : (
+              <DownloadButton
+                productId={productId}
+                filename={implementationPlan.file}
+                label={`Download ${formatFileName(implementationPlan.file)}`}
+              />
+            )}
+          </div>
         </div>
       </ContentSection>
 
@@ -294,6 +322,7 @@ export function LevelContent({
               return (
                 <div
                   key={idx}
+                  id={`file-${guide.file.replace(/\./g, '-')}`}
                   className="rounded-lg border bg-muted/30 p-4 space-y-3"
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -325,6 +354,8 @@ export function LevelContent({
                       productId={productId}
                       filename={guide.file}
                       className="mt-2"
+                      fileToSectionMap={fileToSectionMap}
+                      currentFilename={guide.file}
                     />
                   ) : (
                     <DownloadButton
@@ -411,6 +442,7 @@ export function LevelContent({
               return (
                 <div
                   key={idx}
+                  id={`file-${fw.file.replace(/\./g, '-')}`}
                   className="rounded-lg border bg-muted/30 p-4 space-y-3"
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -435,6 +467,8 @@ export function LevelContent({
                       productId={productId}
                       filename={fw.file}
                       className="mt-2"
+                      fileToSectionMap={fileToSectionMap}
+                      currentFilename={fw.file}
                     />
                   ) : (
                     <DownloadButton
@@ -521,6 +555,7 @@ export function LevelContent({
               return (
                 <div
                   key={idx}
+                  id={`file-${item.file.replace(/\./g, '-')}`}
                   className="rounded-lg border bg-muted/30 p-4 space-y-3"
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -545,6 +580,8 @@ export function LevelContent({
                       productId={productId}
                       filename={item.file}
                       className="mt-2"
+                      fileToSectionMap={fileToSectionMap}
+                      currentFilename={item.file}
                     />
                   ) : (
                     <DownloadButton
@@ -633,6 +670,7 @@ export function LevelContent({
               return (
                 <div
                   key={idx}
+                  id={`file-${item.file.replace(/\./g, '-')}`}
                   className="rounded-lg border bg-muted/30 p-4 space-y-3"
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -657,6 +695,8 @@ export function LevelContent({
                       productId={productId}
                       filename={item.file}
                       className="mt-2"
+                      fileToSectionMap={fileToSectionMap}
+                      currentFilename={item.file}
                     />
                   ) : (
                     <DownloadButton
@@ -743,6 +783,7 @@ export function LevelContent({
               return (
                 <div
                   key={idx}
+                  id={`file-${item.file.replace(/\./g, '-')}`}
                   className="rounded-lg border bg-muted/30 p-4 space-y-3"
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -767,6 +808,8 @@ export function LevelContent({
                       productId={productId}
                       filename={item.file}
                       className="mt-2"
+                      fileToSectionMap={fileToSectionMap}
+                      currentFilename={item.file}
                     />
                   ) : (
                     <DownloadButton
@@ -853,6 +896,7 @@ export function LevelContent({
               return (
                 <div
                   key={idx}
+                  id={`file-${t.file.replace(/\./g, '-')}`}
                   className="rounded-lg border bg-muted/30 p-4 space-y-3"
                 >
                   <div className="flex flex-wrap items-center gap-2">
@@ -877,6 +921,8 @@ export function LevelContent({
                       productId={productId}
                       filename={t.file}
                       className="mt-2"
+                      fileToSectionMap={fileToSectionMap}
+                      currentFilename={t.file}
                     />
                   ) : (
                     <DownloadButton
@@ -898,7 +944,11 @@ export function LevelContent({
           productId={productId}
           filename={expandedDoc.filename}
           title={expandedDoc.title}
-          onClose={() => setExpandedDoc(null)}
+          fileToSectionMap={fileToSectionMap}
+          onClose={(scrollTarget) => {
+            setExpandedDoc(null);
+            if (scrollTarget) setPendingScrollTarget(scrollTarget);
+          }}
         />
       )}
     </div>

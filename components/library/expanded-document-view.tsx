@@ -24,7 +24,10 @@ interface ExpandedDocumentViewProps {
   productId: string;
   filename: string;
   title: string;
-  onClose: () => void;
+  /** Call to close; when a cross-file link is clicked, called with scroll target so parent can scroll after close */
+  onClose: (scrollTarget?: { sectionId: string; fileId?: string }) => void;
+  /** Map from filename to section id for resolving cross-file links */
+  fileToSectionMap?: Record<string, string> | null;
 }
 
 /**
@@ -36,6 +39,7 @@ export function ExpandedDocumentView({
   filename,
   title,
   onClose,
+  fileToSectionMap = null,
 }: ExpandedDocumentViewProps) {
   const [hasEntered, setHasEntered] = useState(false);
   const [content, setContent] = useState<string | null>(null);
@@ -93,6 +97,13 @@ export function ExpandedDocumentView({
   const handleEscape = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
+    },
+    [onClose]
+  );
+
+  const handleNavigateToSection = useCallback(
+    (sectionId: string, fileId?: string) => {
+      onClose({ sectionId, fileId });
     },
     [onClose]
   );
@@ -235,7 +246,7 @@ export function ExpandedDocumentView({
         <Button
           variant="ghost"
           size="icon"
-          onClick={onClose}
+          onClick={() => onClose()}
           aria-label="Close expanded view"
           className="shrink-0"
         >
@@ -317,6 +328,9 @@ export function ExpandedDocumentView({
                 scrollContainerRef={documentScrollRef}
                 className="flex-1 min-h-0"
                 height="100%"
+                fileToSectionMap={fileToSectionMap}
+                currentFilename={filename}
+                onNavigateToSection={handleNavigateToSection}
               />
             )}
           </div>

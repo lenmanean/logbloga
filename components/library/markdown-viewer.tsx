@@ -33,9 +33,15 @@ interface MarkdownViewerProps {
   onHeadingsParsed?: (entries: TocEntry[]) => void;
   /** When provided (e.g. expanded view), use a plain overflow div instead of ScrollArea so parent can scroll it reliably */
   scrollContainerRef?: React.RefObject<HTMLDivElement | null>;
+  /** Map from filename to section id for resolving cross-file links (from LevelContent) */
+  fileToSectionMap?: Record<string, string> | null;
+  /** Current file being rendered, for same-doc vs cross-file detection */
+  currentFilename?: string | null;
+  /** When provided (e.g. expanded view), called for cross-file links instead of scrolling; parent closes overlay and scrolls */
+  onNavigateToSection?: (sectionId: string, fileId?: string) => void;
 }
 
-export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp, onHeadingsParsed, scrollContainerRef }: MarkdownViewerProps) {
+export function MarkdownViewer({ productId, filename, className, height = '600px', content: contentProp, onHeadingsParsed, scrollContainerRef, fileToSectionMap = null, currentFilename = null, onNavigateToSection }: MarkdownViewerProps) {
   const [content, setContent] = useState<string | null>(contentProp ?? null);
   const [loading, setLoading] = useState(typeof contentProp !== 'string');
   const [error, setError] = useState<string | null>(null);
@@ -279,29 +285,71 @@ export function MarkdownViewer({ productId, filename, className, height = '600px
       </blockquote>
     ),
     
-    // Links with hover effects and security
+    // Links with hover effects and security; handle external, same-doc #, and cross-file .md/.pdf/.xlsx/.docx
     a: ({ href, children }) => {
       const isExternal = href?.startsWith('http');
-      // Check if this is a relative markdown file link (e.g., web-apps-level-1-ai-prompts.md)
-      const isRelativeMarkdownLink = href && !isExternal && /\.(md|markdown)$/i.test(href);
-      
       const handleClick = (e: MouseEvent) => {
-        if (isRelativeMarkdownLink) {
-          e.preventDefault();
-          // Try to scroll to templates section first (where AI prompts file is),
-          // then planning section as fallback
-          const templatesSection = document.getElementById('section-templates');
-          const planningSection = document.getElementById('section-planning');
-          const targetSection = templatesSection || planningSection;
-          if (targetSection) {
-            targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!href) return;
+        if (isExternal) return; // Let default behavior (target _blank) run
+
+        // Parse path and hash
+        const hashIdx = href.indexOf('#');
+        const pathPart = hashIdx >= 0 ? href.slice(0, hashIdx) : href;
+        const hashPart = hashIdx >= 0 ? href.slice(hashIdx + 1) : '';
+
+        // Same-document anchor only (#...)
+        if (!pathPart || pathPart === '') {
+          if (hashPart) {
+            e.preventDefault();
+            const id = hashPart;
+            const el = scrollContainerRef?.current
+              ? scrollContainerRef.current.querySelector<HTMLElement>(`#${CSS.escape(id)}`)
+              : document.getElementById(id);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+          return;
+        }
+
+        // Relative cross-file link (.md, .pdf, .xlsx, .docx, or path that might resolve)
+        const isPackageFile = /\.(md|markdown|pdf|xlsx|docx)$/i.test(pathPart) || pathPart.trim().length > 0;
+        if (!isPackageFile || !fileToSectionMap) return;
+
+        e.preventDefault();
+
+        // Normalize filename for lookup: strip ./, ../, paths; lowercase; add .md if no extension
+        const trimmedPath = pathPart.replace(/^\.\//, '').replace(/^.*[/\\]/, '').trim();
+        let lookupKey = trimmedPath.toLowerCase();
+        if (!/\.(md|markdown|pdf|xlsx|docx)$/i.test(lookupKey)) {
+          lookupKey = lookupKey ? `${lookupKey}.md` : lookupKey;
+        }
+
+        // Lookup section by filename (exact, trimmed, case-insensitive)
+        const matchedKey =
+          Object.keys(fileToSectionMap).find((k) => k.toLowerCase() === lookupKey) ??
+          (trimmedPath in fileToSectionMap ? trimmedPath : null) ??
+          (lookupKey in fileToSectionMap ? lookupKey : null);
+        const sectionId = matchedKey ? fileToSectionMap[matchedKey]! : 'section-templates';
+        const fileId = `file-${(matchedKey ?? lookupKey).replace(/\./g, '-')}`;
+
+        if (onNavigateToSection) {
+          onNavigateToSection(sectionId, fileId);
+        } else {
+          const sectionEl = document.getElementById(sectionId);
+          if (sectionEl) {
+            sectionEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const fileEl = document.getElementById(fileId);
+            if (fileEl) {
+              setTimeout(() => fileEl.scrollIntoView({ behavior: 'smooth', block: 'start' }), 300);
+            }
           }
         }
       };
-      
+
       return (
-        <a 
-          href={href} 
+        <a
+          href={href}
           onClick={handleClick}
           className="text-primary no-underline hover:underline font-medium cursor-pointer"
           target={isExternal ? '_blank' : undefined}

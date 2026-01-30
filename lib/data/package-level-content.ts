@@ -526,6 +526,40 @@ export function getLevelContent(
 }
 
 /**
+ * Build a map from filename to section id for a given level.
+ * Used by MarkdownViewer to resolve internal links and scroll to the correct section.
+ * Section ids match those in components/library/level-content.tsx.
+ */
+export function getFileToSectionMap(levelData: LevelContent): Record<string, string> {
+  const map: Record<string, string> = {};
+
+  if (levelData.implementationPlan?.file) {
+    map[levelData.implementationPlan.file] = 'section-implementation-plan';
+  }
+
+  for (const g of levelData.platformGuides ?? []) {
+    if (g.file) map[g.file] = 'section-platform-guides';
+  }
+  for (const f of levelData.creativeFrameworks ?? []) {
+    if (f.file) map[f.file] = 'section-creative-frameworks';
+  }
+  for (const t of levelData.templates ?? []) {
+    if (t.file) map[t.file] = 'section-templates';
+  }
+  for (const m of levelData.launchMarketing ?? []) {
+    if (m.file) map[m.file] = 'section-launch-marketing';
+  }
+  for (const t of levelData.troubleshooting ?? []) {
+    if (t.file) map[t.file] = 'section-troubleshooting';
+  }
+  for (const p of levelData.planning ?? []) {
+    if (p.file) map[p.file] = 'section-planning';
+  }
+
+  return map;
+}
+
+/**
  * Returns the set of all allowed filenames for a package (all levels).
  * Used by the download API for allowlist validation.
  * Package content uses flat filenames only; nested paths are not in the allowlist.
