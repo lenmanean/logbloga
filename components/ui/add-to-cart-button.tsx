@@ -26,7 +26,7 @@ export function AddToCartButton({
   className,
   size = 'lg',
   redirectToCart = false,
-  bypassPayment = true, // Default to true for development
+  bypassPayment = false,
 }: AddToCartButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);

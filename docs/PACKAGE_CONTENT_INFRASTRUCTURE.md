@@ -555,6 +555,7 @@ All listed guide **files** are included regardless of path; users choose which p
 ### 7.4 Package-Level vs Product-Level
 
 - **Package products** (e.g. Web Apps, Social Media, Agency, Freelancing) contain **all three levels**. Purchasing the package grants access to every file for every level.
+- **Production access model:** All packages are paid products. Access is granted via Stripe checkout and order completion only. There is no development bypass in production; the `/api/packages/[id]/grant-access` endpoint returns 404.
 - **Product ID:** One per package product. All level files for that package live under the same `productId` folder.
 - **DOER coupon:** 6 months free DOER Pro; separate from file delivery. Shown on product page, order confirmation, and account library.
 

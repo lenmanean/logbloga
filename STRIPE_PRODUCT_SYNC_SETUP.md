@@ -22,6 +22,8 @@
    - Added `npm run stripe:sync` command
    - Installed `tsx` and `dotenv` as dev dependencies
 
+**Note:** Packages require Stripe price IDs (`stripe_price_id`) before paid checkout works. Run `npm run stripe:sync` before launching production.
+
 ## 🚀 Next Steps
 
 ### 1. Ensure Environment Variables Are Set
