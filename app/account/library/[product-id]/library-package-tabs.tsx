@@ -144,22 +144,28 @@ export function LibraryPackageTabs({
       if (isTransitioning) return;
 
       pendingTabRef.current = next;
-      setIsTransitioning(true);
 
-      const params = new URLSearchParams(searchParams.toString());
-      if (next === 'overview') params.delete('tab');
-      else params.set('tab', next);
-      const q = params.toString();
-      router.push(q ? `${pathname}?${q}` : pathname, { scroll: false });
+      // Defer heavy work to next frame so the click handler returns immediately.
+      // This improves INP (Interaction to Next Paint) by letting the browser
+      // paint the interaction response before navigation and re-renders.
+      requestAnimationFrame(() => {
+        setIsTransitioning(true);
 
-      // Fallback: clear transitioning if URL never updates (e.g. navigation error)
-      safetyTimeoutRef.current = setTimeout(() => {
-        safetyTimeoutRef.current = null;
-        if (pendingTabRef.current !== null) {
-          pendingTabRef.current = null;
-          setIsTransitioning(false);
-        }
-      }, 2000);
+        const params = new URLSearchParams(searchParams.toString());
+        if (next === 'overview') params.delete('tab');
+        else params.set('tab', next);
+        const q = params.toString();
+        router.push(q ? `${pathname}?${q}` : pathname, { scroll: false });
+
+        // Fallback: clear transitioning if URL never updates (e.g. navigation error)
+        safetyTimeoutRef.current = setTimeout(() => {
+          safetyTimeoutRef.current = null;
+          if (pendingTabRef.current !== null) {
+            pendingTabRef.current = null;
+            setIsTransitioning(false);
+          }
+        }, 2000);
+      });
     },
     [validTab, isTransitioning, searchParams, router, pathname]
   );
