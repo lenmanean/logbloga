@@ -145,27 +145,27 @@ If you're coding yourself and using AI for assistance:
 **File Path**: `app/`, `lib/`, `components/`, `contexts/`  
 **Purpose**: Create folders for auth, API, components, and shared lib
 
-**Option A (Using AI Tools)**: *"Set up folder structure for a SaaS app: app/(auth)/login and signup routes, app/(dashboard)/ for protected pages, app/api/ for API routes, lib/ for Supabase client and utils, components/ for reusable UI, contexts/ for auth context. Create placeholder files so the structure is clear."*
+**Option A (Using AI Tools)**: *"Set up folder structure for a SaaS app: app/(auth)/login and signup routes, app/(dashboard)/ for protected pages, app/api/ for API routes, lib/ for Supabase client and utils, components/ for reusable UI, contexts/ for auth context. Create stub files so the structure is clear."*
 
 **Option B (Manual)**:
-1. Create `app/(auth)/login/page.tsx` and `app/(auth)/signup/page.tsx` (placeholder)
-2. Create `app/(dashboard)/page.tsx` (placeholder dashboard)
-3. Create `lib/supabase/client.ts` and `lib/supabase/server.ts` (placeholder; will add in 1.2)
-4. Create `contexts/auth-context.tsx` (placeholder)
+1. Create `app/(auth)/login/page.tsx` and `app/(auth)/signup/page.tsx` (stub pages)
+2. Create `app/(dashboard)/page.tsx` (stub dashboard)
+3. Create `lib/supabase/client.ts` and `lib/supabase/server.ts` (stub; will add in 1.2)
+4. Create `contexts/auth-context.tsx` (stub)
 5. Create `components/ui/` if using shadcn later
 6. Document structure in README or leave as-is
 
-**Testing Checklist**: [ ] Folders exist; [ ] Placeholder pages do not error
+**Testing Checklist**: [ ] Folders exist; [ ] Stub pages load without errors
 
 ### Sub-Step 1.1.4: Configure Environment Variables
 **File Path**: `.env.local`, `.env.example`, `.gitignore`  
 **Purpose**: Define required env vars and keep secrets out of git
 
-**Option A (Using AI Tools)**: *"Create .env.local with placeholders for NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Create .env.example with the same keys and example values (e.g. https://xxx.supabase.co, eyJ...). Ensure .env.local and .env*.local are in .gitignore."*
+**Option A (Using AI Tools)**: *"Create .env.local with slots for NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY. Create .env.example with the same keys and example values (e.g. https://xxx.supabase.co, eyJ...). Ensure .env.local and .env*.local are in .gitignore."*
 
 **Option B (Manual)**:
 1. Create `.env.local`: `NEXT_PUBLIC_SUPABASE_URL=`, `NEXT_PUBLIC_SUPABASE_ANON_KEY=`
-2. Create `.env.example`: same keys with placeholder values and comments
+2. Create `.env.example`: same keys with example values and comments
 3. Check `.gitignore` includes `.env*.local` and `.env.local`
 4. Do not commit real keys
 5. Document in README: "Copy .env.example to .env.local and fill in Supabase values"
@@ -555,7 +555,7 @@ Create user profile pages where users can view and edit their information.
 1. Create app/(dashboard)/profile/page.tsx (server component)
 2. const supabase = await createClient(); const { data: { user } } = await supabase.auth.getUser(); if (!user) redirect('/login')
 3. const { data: profile } = await supabase.from('profiles').select('*').eq('user_id', user.id).single()
-4. Render display_name (or user.email), avatar (img or placeholder), email
+4. Render display_name (or user.email), avatar (img or default icon), email
 5. Add link to edit profile or /profile/edit
 6. Ensure layout protects /profile (dashboard layout or middleware)
 7. Test: log in; open /profile; see own data
@@ -1526,11 +1526,11 @@ Conduct a security audit and implement security best practices.
 **File Path**: `.env.local`, `.env.example`  
 **Purpose**: Ensure secrets are secure
 
-**Option A (Using AI Tools)**: *"Review .env files: ensure .env.local in .gitignore. Check .env.example has placeholders (no real keys). Verify production secrets in Vercel (not in code). Document required env vars."*
+**Option A (Using AI Tools)**: *"Review .env files: ensure .env.local in .gitignore. Check .env.example has example values (no real keys). Verify production secrets in Vercel (not in code). Document required env vars."*
 
 **Option B (Manual)**:
 1. Verify .env.local in .gitignore
-2. Check .env.example has placeholders
+2. Check .env.example has example values
 3. Document required vars in README
 4. Verify production secrets in Vercel
 5. Never commit secrets

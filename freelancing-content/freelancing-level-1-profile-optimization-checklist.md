@@ -56,4 +56,4 @@ Checklist to optimize your freelancing profile (Fiverr or similar) for visibilit
 ## See Also
 
 - [First Client Acquisition Guide](freelancing-level-1-first-client-acquisition-guide.md) — Use this checklist first; then apply the acquisition guide for visibility and first orders.  
-- [Gig Listing Template](gig-listing-template.md) — For structure and placeholders when writing or revising gig title, description, pricing, and FAQ.
+- [Gig Listing Template](gig-listing-template.md) — For structure and sample fields when writing or revising gig title, description, pricing, and FAQ.

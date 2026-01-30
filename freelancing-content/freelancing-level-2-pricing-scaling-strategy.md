@@ -75,7 +75,7 @@ _________________________________________________
 3. Offer value in exchange (e.g. "I'm raising my rate to $X/hr. In return, you'll get [priority support / monthly check-in / etc.]").  
 4. Use the [Contract Templates](contract-templates.zip) (ZIP) for updates; send an amendment or new contract via [Hello Bonsai Paid Setup](hello-bonsai-paid-setup.md) if needed.
 
-**Script (placeholder):**  
+**Rate-change script (copy and customize):**  
 "Hi [Client], I'm updating my rates effective [date]. For our work together, my new rate will be [X]. I'm also [adding value, e.g. monthly check-in]. If you have questions, let's chat."
 
 **Notes:** _________________________________________________

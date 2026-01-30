@@ -23,7 +23,13 @@
     "stripe:sync": "tsx scripts/sync-products-to-stripe.ts",
     "content:upload": "tsx scripts/upload-web-apps-files.ts",
     "content:deploy": "tsx scripts/upload-web-apps-files.ts",
-    "content:build-zips": "tsx scripts/build-web-apps-zips.ts"
+    "content:build-zips": "tsx scripts/build-web-apps-zips.ts",
+    "content:build-pdfs": "tsx scripts/build-package-pdfs.ts",
+    "content:build-social-media-xlsx": "tsx scripts/build-social-media-xlsx.ts",
+    "content:build-social-media-docx": "tsx scripts/build-social-media-docx.ts",
+    "content:build-social-media-zips": "tsx scripts/build-social-media-zips.ts",
+    "content:build-agency-zips": "tsx scripts/build-agency-zips.ts",
+    "content:audit": "tsx scripts/audit-package-content.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -83,6 +89,8 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
+    "docx": "^9.5.0",
+    "exceljs": "^4.4.0",
     "@next/bundle-analyzer": "^16.1.4",
     "@playwright/test": "^1.57.0",
     "@tailwindcss/postcss": "^4",

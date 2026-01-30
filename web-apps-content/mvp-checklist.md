@@ -124,7 +124,7 @@ Use this checklist to ensure your Minimum Viable Product is ready for launch. Ch
 
 ### Content
 - [ ] Copy is clear and error-free
-- [ ] No placeholder text remaining
+- [ ] No sample or dummy text remaining
 - [ ] Legal pages created (Terms, Privacy)
 - [ ] Contact information added
 - [ ] About page created (if needed)

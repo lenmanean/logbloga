@@ -1,4 +1,8 @@
 /**
+ * DEPRECATED: Do not use. Freelancing package uses real PDFs in repo (or generate
+ * from *-content.md if a build step is added). This script created minimal empty
+ * PDFs; we no longer use placeholder files. Kept for reference only.
+ *
  * Create minimal valid PDF placeholders for Freelancing package planning worksheets.
  * Run from repo root. Outputs to freelancing-content/*.pdf
  *

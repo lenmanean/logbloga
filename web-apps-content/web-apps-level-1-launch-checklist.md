@@ -130,7 +130,7 @@ Use this comprehensive checklist to ensure a smooth launch for your simple web a
 - [ ] Analytics tracking correctly
 
 ### Content
-- [ ] No placeholder text
+- [ ] No sample or dummy text
 - [ ] All links work
 - [ ] Images load correctly
 - [ ] Copy is error-free

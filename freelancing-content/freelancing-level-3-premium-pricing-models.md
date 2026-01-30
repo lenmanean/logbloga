@@ -99,7 +99,7 @@ _________________________________________________
 
 **How to communicate:** Give 30 days notice; state new rate and effective date; offer value in exchange (e.g. priority support, monthly check-in). Use Contract Templates (Level 2) or Business Systems Templates (ZIP) for amendments.
 
-**Script (placeholder):**  
+**Rate-change script (copy and customize):**  
 "Hi [Client], I'm updating my rates effective [date]. For our work together, my new rate will be [X]. I'm also [adding value]. If you have questions, let's chat."
 
 **Testing checklist:** [ ] When to raise defined; [ ] New rate set; [ ] Communication script ready; [ ] First new client or renewal at new rate

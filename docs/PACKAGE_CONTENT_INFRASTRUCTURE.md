@@ -334,6 +334,8 @@ This is separate from the implementation plan **file**; the file is the canonica
 
 **Social Media package total: 39 files** (14 + 14 + 11).
 
+**Content location and upload:** Package content lives in `social-media-content/` at the repo root. To upload all 39 files to Supabase Storage (`digital-products/{productId}/{filename}`), run `npx tsx scripts/upload-social-media-files.ts`. The script uses `getAllowedFilenamesForPackage('social-media')` and supports MD, PDF, ZIP, XLSX, and DOCX. Ensure XLSX, DOCX, PDF, and ZIP binaries exist in `social-media-content/` (generate via build scripts or add real files; see `social-media-content/README.md`) for every allowlist entry.
+
 ---
 
 ## 5. Agency Package
@@ -431,6 +433,8 @@ All listed guide **files** are included regardless of path; users choose which p
 ---
 
 **Agency package total: 40 files** (14 + 14 + 12).
+
+**Content location and upload:** Package content lives in `agency-content/` at repo root. To upload all 40 files to Supabase Storage, run `npx tsx scripts/upload-agency-files.ts`. The script uses `getAllowedFilenamesForPackage('agency')` and supports MD, PDF, and ZIP. Ensure PDF and ZIP binaries exist in `agency-content/` (generate via build scripts or add real files; see `agency-content/README.md`) for every allowlist entry.
 
 ---
 

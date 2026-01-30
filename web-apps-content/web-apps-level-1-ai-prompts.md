@@ -192,7 +192,7 @@ Create a hero section for the landing page at app/page.tsx. The hero section sho
 3. A prominent call-to-action button that links to the payment page
 4. Professional, modern styling using Tailwind CSS
 5. Responsive design that looks great on all screen sizes
-6. Optional: Placeholder for professional imagery or graphics
+6. Optional: Slot for professional imagery or graphics
 
 Make it visually appealing and conversion-focused. Use a clean, modern design with good spacing and typography. The CTA button should stand out and encourage clicks.
 ```

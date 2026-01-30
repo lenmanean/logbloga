@@ -1,6 +1,6 @@
 # Portfolio Showcase Template
 
-Ready-to-use structure for your freelancing portfolio. Copy each section and replace placeholders with your name, services, and projects. Use this for your Fiverr profile portfolio, a simple one-page site, or proposals.
+Ready-to-use structure for your freelancing portfolio. Copy each section and replace the sample text with your name, services, and projects. Use this for your Fiverr profile portfolio, a simple one-page site, or proposals.
 
 ## Purpose
 
@@ -9,7 +9,7 @@ This template gives you a one-page portfolio structure so buyers can see who you
 ## How to Use
 
 1. Complete the [Portfolio Creation Framework](portfolio-creation-framework.md) so you have 3–5 projects and outcomes.  
-2. Copy the sections below and replace every `[PLACEHOLDER]` with your content.  
+2. Copy the sections below and replace every bracketed slot (e.g. `[Your name]`) with your content.  
 3. Keep tone and style consistent with your gigs so you look cohesive.  
 4. Use this structure on Fiverr (profile + gig images) or on a simple page (e.g. Linktree, Notion, or a one-page site).
 
@@ -17,7 +17,7 @@ This template gives you a one-page portfolio structure so buyers can see who you
 
 ## Header
 
-**Placeholder:**  
+**Template (customize):**  
 [Your name] | [Tagline]
 
 **Links:**  
@@ -35,7 +35,7 @@ Fiverr: fiverr.com/janedoe | Contact: Message me on Fiverr
 
 List 2–4 core services with a one-line description and link to a sample or gig.
 
-**Placeholder:**  
+**Template (customize):**  
 - **Service 1:** [Name] — [One line]. Link: [gig or sample URL]  
 - **Service 2:** [Name] — [One line]. Link: [gig or sample URL]  
 - **Service 3:** [Name] — [One line]. Link: [gig or sample URL]
@@ -83,7 +83,7 @@ Use 2–3 blocks. For each project: title, client/context, problem, solution, re
 
 ## About
 
-**Placeholder:**  
+**Template (customize):**  
 [2–3 sentences: who you are, who you help, and why they work with you. Match the tone of your Fiverr bio.]
 
 **Example:**  
@@ -93,7 +93,7 @@ I’m a logo and brand designer for small businesses and startups. I help founde
 
 ## Contact
 
-**Placeholder:**  
+**Template (customize):**  
 [Email] or [Fiverr contact / message link]
 
 **Example:**  

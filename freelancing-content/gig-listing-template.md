@@ -1,6 +1,6 @@
 # Gig Listing Template
 
-Ready-to-use template for Fiverr (or similar) gig listings. Copy each section and replace the placeholders with your service and niche.
+Ready-to-use template for Fiverr (or similar) gig listings. Copy each section and replace the sample text with your service and niche.
 
 ## Purpose
 
@@ -10,7 +10,7 @@ Use this template when creating or revising a gig so your title, description, pr
 
 1. Complete the [Service Definition Framework](service-definition-framework.md) and [Pricing Strategy Worksheet](pricing-strategy-worksheet.md) in this level.  
 2. Copy the sections below into a doc or Fiverr gig editor.  
-3. Replace every `[PLACEHOLDER]` with your own text.  
+3. Replace every `[YOUR_TEXT]` (or bracketed slot) with your own text.  
 4. Paste into Fiverr (or your platform) and stay within character limits (e.g. Fiverr gig title ~80 characters).  
 5. Run through the [Profile Optimization Checklist](freelancing-level-1-profile-optimization-checklist.md) when you’re done.
 
@@ -20,7 +20,7 @@ Use this template when creating or revising a gig so your title, description, pr
 
 **Formula:** I will [deliverable] for [niche].
 
-**Placeholder:**  
+**Template (customize):**  
 I will [deliverable] for [niche].
 
 **Example:**  
@@ -37,7 +37,7 @@ I will design a professional logo for small businesses.
 
 **Structure:** [HOOK] → [BENEFITS] → [BULLET 1–3] → [PROCESS] → [CTA]
 
-### Copy-paste template (replace placeholders)
+### Copy-paste template (customize)
 
 **[HOOK]**  
 [1–2 sentences: what you deliver and who it’s for. Use your value proposition from the Service Definition Framework.]
@@ -53,7 +53,7 @@ I will design a professional logo for small businesses.
 **[CTA]**  
 [One sentence: invite them to order or message you—e.g. "Order now or message me with your project details."]
 
-### Example (placeholder text—replace with your service)
+### Example (replace with your service)
 
 **Hook:**  
 I design professional logos for small businesses and startups. You get a memorable logo that works on your website, social media, and print—ready to use.
@@ -82,7 +82,7 @@ Align with your [Pricing Strategy Worksheet](pricing-strategy-worksheet.md). Use
 | Premium  | [deliverable 1, 2, 3, 4 + extras] | X days | $XX     |
 | Add-ons  | [e.g. extra revision, rush]     | —        | $XX     |
 
-**Placeholder row:**  
+**Sample row (customize):**  
 - **Basic:** [Deliverables]. Delivery: [X] days. $[XX]  
 - **Standard:** [Deliverables]. Delivery: [X] days. $[XX]  
 - **Premium:** [Deliverables]. Delivery: [X] days. $[XX]  
@@ -94,7 +94,7 @@ Align with your [Pricing Strategy Worksheet](pricing-strategy-worksheet.md). Use
 
 Add 5–7 common questions with short answers. Reduces back-and-forth and builds trust.
 
-**Placeholder questions (customize answers):**
+**Sample questions (customize answers):**
 
 1. **What do I need to provide?**  
    [e.g. Your brief, brand name, references, or files.]

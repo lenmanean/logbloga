@@ -1,6 +1,6 @@
 # Client Communication Templates
 
-Ready-to-use templates for client communication (emails, updates, handoffs). Copy each section and replace placeholders with your project and style.
+Ready-to-use templates for client communication (emails, updates, handoffs). Copy each section and replace the bracketed or sample text with your project and style.
 
 ## Purpose
 
@@ -9,7 +9,7 @@ Use these templates so every client gets consistent, professional communication:
 ## How to Use
 
 1. Copy the template you need (kickoff, progress, delivery, feedback).  
-2. Replace every `[PLACEHOLDER]` with your project details and tone.  
+2. Replace every bracketed slot (e.g. `[Client name]`, `[Project name]`) with your project details and tone.  
 3. Send from your professional email (e.g. Google Workspace).  
 4. Use with the [Proposal Templates](proposal-templates.zip) and [Contract Templates](contract-templates.zip) (ZIP) in this level so scope and terms are in writing.  
 5. Reference the [Client Acquisition Strategies](freelancing-level-2-client-acquisition-strategies.md) for when to send (e.g. kickoff after contract signed, progress weekly, delivery on completion, feedback after delivery).
@@ -20,11 +20,11 @@ Use these templates so every client gets consistent, professional communication:
 
 **When to use:** After the contract is signed and before you start work. Sets expectations for communication and deliverables.
 
-### Subject line (placeholder)
+### Subject line (customize)
 
 **Subject:** [Project name] – Kickoff and next steps
 
-### Body (copy-paste and replace placeholders)
+### Body (copy-paste and customize)
 
 Hi [Client name],
 
@@ -56,11 +56,11 @@ Best,
 
 **When to use:** Mid-project or weekly. Builds trust and avoids surprises.
 
-### Subject line (placeholder)
+### Subject line (customize)
 
 **Subject:** [Project name] – Progress update [date or week]
 
-### Body (copy-paste and replace placeholders)
+### Body (copy-paste and customize)
 
 Hi [Client name],
 
@@ -87,11 +87,11 @@ Best,
 
 **When to use:** When you deliver the final work. Summarizes deliverables and support.
 
-### Subject line (placeholder)
+### Subject line (customize)
 
 **Subject:** [Project name] – Final delivery
 
-### Body (copy-paste and replace placeholders)
+### Body (copy-paste and customize)
 
 Hi [Client name],
 
@@ -120,11 +120,11 @@ Best,
 
 **When to use:** After delivery (and, if applicable, after any revision round). Keeps it short so clients are more likely to respond.
 
-### Subject line (placeholder)
+### Subject line (customize)
 
 **Subject:** Quick feedback on [project name]?
 
-### Body (copy-paste and replace placeholders)
+### Body (copy-paste and customize)
 
 Hi [Client name],
 

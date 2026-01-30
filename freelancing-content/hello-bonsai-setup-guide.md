@@ -45,7 +45,7 @@ Hello Bonsai helps freelancers send contracts, create invoices, and manage clien
 
 ### Sub-step 2.2: Customize the contract
 
-1. **Parties:** Your name (or business name) as the freelancer; leave a placeholder for "Client name" or "Client company" so you can fill it when you send.
+1. **Parties:** Your name (or business name) as the freelancer; leave a slot for "Client name" or "Client company" so you can fill it when you send.
 2. **Scope and deliverables:** Describe what you’re delivering (e.g. "One logo design with 2 revision rounds" or "One 500-word blog post, 1 revision"). Use your gig description or [Service Definition](service-definition-framework.md) so it matches what you sell on Fiverr.
 3. **Revisions:** Specify how many revision rounds are included. This prevents scope creep.
 4. **Payment schedule:** e.g. "50% upfront, 50% on delivery" or "100% on delivery." For Fiverr orders, the platform handles payment; use Bonsai contracts for direct clients or custom orders.
