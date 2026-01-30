@@ -85,10 +85,14 @@ async function uploadFile(
     const fileContent = readFileSync(filePath);
     const stats = statSync(filePath);
     const storagePath = `${productId}/${filename}`;
-    const finalContentType =
-      filename.endsWith('.md') || filename.endsWith('.markdown')
-        ? 'application/octet-stream'
-        : getContentType(filename);
+    // Use octet-stream for types that Supabase Storage may not allow (xlsx, docx)
+    const ext = filename.split('.').pop()?.toLowerCase() || '';
+    const useOctetStream =
+      filename.endsWith('.md') ||
+      filename.endsWith('.markdown') ||
+      ext === 'xlsx' ||
+      ext === 'docx';
+    const finalContentType = useOctetStream ? 'application/octet-stream' : getContentType(filename);
 
     const { error } = await supabase.storage
       .from('digital-products')
