@@ -50,11 +50,11 @@ For each issue we give **Causes**, **Step-by-step resolution**, **Prevention**, 
 
 **Step-by-step resolution:**
 1. Schedule a call. Ask: "What would make our reporting (or results) more useful for you?" Listen first; don't defend.
-2. Revisit goals and KPIs from onboarding. Align reports with those KPIs. Use the [Client Reporting Template](client-reporting-template-spec.md) structure (summary, metrics, top posts, recommendations).
+2. Revisit goals and KPIs from onboarding. Align reports with those KPIs. Use the [Client Reporting Template](client-reporting-template.docx) structure (summary, metrics, top posts, recommendations).
 3. If results are low: share what you've tried, what's working, and a clear plan for the next 30–60 days (e.g. new content format, different posting times). Set one or two measurable goals and a review date.
 4. Document the conversation and any new agreements (email or short summary). Follow up on the next report with the agreed format and goals.
 
-**Prevention:** Set expectations at onboarding: what you'll report, how often, and what "success" looks like in 90 days. Use the [Client Onboarding Framework](client-onboarding-framework.md) and [Client Onboarding Checklist](client-onboarding-checklist-content.md).
+**Prevention:** Set expectations at onboarding: what you'll report, how often, and what "success" looks like in 90 days. Use the [Client Onboarding Framework](client-onboarding-framework.md) and [Client Onboarding Checklist](client-onboarding-checklist.pdf).
 
 **When to escalate:** If the client is abusive or refuses to pay despite delivered work, consider pausing delivery and seeking legal advice. If they're simply not a fit, plan an offboarding and end the contract at renewal.
 

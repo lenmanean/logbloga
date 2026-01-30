@@ -12,7 +12,7 @@ Fill in for your agency. Adjust titles to match your structure (solo, contractor
 | **Content creator** | | Create posts (copy, visuals); use Content Direction Framework and brand kit. |
 | **Scheduler** | | Queue posts in Hootsuite/Later/Buffer; assign to correct profiles; respect approval flow. |
 | **Approver** | | Review posts or reports before client; ensure brand and quality. |
-| **Reporting** | | Pull metrics, draft client report using [Client Reporting Template](../client-reporting-template-spec.md); send on cadence. |
+| **Reporting** | | Pull metrics, draft client report using [Client Reporting Template](../client-reporting-template.docx); send on cadence. |
 
 ## Approval flow
 

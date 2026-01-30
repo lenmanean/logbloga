@@ -46,12 +46,12 @@ _________________________________________________
 - Kickoff: _________________________________________________
 - Access and brand: _________________________________________________
 - First content and report date: _________________________________________________
-- Tools (e.g. [Client Onboarding Checklist](client-onboarding-checklist-content.md), [Content Calendar](content-calendar-template-spec.md)): _________________________________________________
+- Tools (e.g. [Client Onboarding Checklist](client-onboarding-checklist.pdf), [Content Calendar Template](content-calendar-template.xlsx) (XLSX)): _________________________________________________
 
 **Deliver (ongoing):**
 - Content cadence: _________________________________________________
 - Scheduling tool (e.g. [Hootsuite](hootsuite-setup-guide.md)): _________________________________________________
-- Reporting cadence and template (e.g. [Client Reporting Template](client-reporting-template-spec.md)): _________________________________________________
+- Reporting cadence and template (e.g. [Client Reporting Template](client-reporting-template.docx) (DOCX)): _________________________________________________
 
 **Renew (retention):**
 - How you check in (e.g. quarterly review, monthly report call): _________________________________________________

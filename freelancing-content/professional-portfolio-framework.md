@@ -96,4 +96,4 @@ _________________________________________________
 
 - Use the [Portfolio Promotion Guide](freelancing-level-2-portfolio-promotion-guide.md) to decide where to host and how to share your portfolio (proposals, LinkedIn, email).  
 - Use the [Client Acquisition Strategies](freelancing-level-2-client-acquisition-strategies.md) for platform and direct outreach.  
-- Reference the Proposal Templates and Contract Templates (ZIP) in this level when sending proposals and contracts.
+- Reference the [Proposal Templates](proposal-templates.zip) and [Contract Templates](contract-templates.zip) (ZIP) in this level when sending proposals and contracts.

@@ -29,9 +29,9 @@ Before starting, ensure you have:
 - [ ] Service offer and packages defined (channels, posts, reporting)
 
 ### Milestone 2: Client Onboarding and Pricing (Days 8–14)
-- [ ] Client Onboarding Checklist (PDF) and Content Calendar Template (XLSX) in use
-- [ ] Client Reporting Template (DOCX) customized
-- [ ] Service Pricing Strategy and SMM Budget Planner (PDF) in use
+- [ ] [Client Onboarding Checklist](client-onboarding-checklist.pdf) (PDF) and [Content Calendar Template](content-calendar-template.xlsx) (XLSX) in use
+- [ ] [Client Reporting Template](client-reporting-template.docx) (DOCX) customized
+- [ ] Service Pricing Strategy and [SMM Budget Planner](social-media-level-2-smm-budget-planner.pdf) (PDF) in use
 
 ### Milestone 3: First SMM Clients (Days 15–28)
 - [ ] First SMM Clients Guide applied (who to target, offer, outreach)
@@ -118,9 +118,9 @@ AI can speed up batch captions, content ideas per client, and report summaries s
 **Prerequisites:** At least one client in pipeline or signed  
 **Expected outcome:** Content Calendar Template (XLSX), Client Reporting Template (DOCX), and Client Onboarding Checklist (PDF) in use so delivery is consistent.
 
-- Use the **Content Calendar Template** (XLSX) from the Templates section: plan by client, date, platform, content type, copy, status. Or use a simple spreadsheet with the same columns.
-- Customize the **Client Reporting Template** (DOCX): summary, metrics, top posts, recommendations. Use with Metricool data.
-- Use the **Client Onboarding Checklist** (PDF) for every new client: access, brand, calendar, first report date.
+- Use the [Content Calendar Template](content-calendar-template.xlsx) (XLSX) from the Templates section: plan by client, date, platform, content type, copy, status. Or use a simple spreadsheet with the same columns.
+- Customize the [Client Reporting Template](client-reporting-template.docx) (DOCX): summary, metrics, top posts, recommendations. Use with Metricool data.
+- Use the [Client Onboarding Checklist](client-onboarding-checklist.pdf) (PDF) for every new client: access, brand, calendar, first report date.
 
 **Testing checklist:** [ ] Content Calendar in use for at least one client; [ ] Client Reporting Template customized; [ ] Client Onboarding Checklist used for first client
 
@@ -143,7 +143,7 @@ Use the [Client & Service Issues](social-media-level-2-client-service-issues.md)
 **Expected outcome:** Pricing and budget under control so you can scale to $1,000–$3,000/month.
 
 - Use the [Service Pricing Strategy](social-media-level-2-service-pricing-strategy.md): when to raise, how to communicate, package evolution. Use with the [Service Pricing Framework](service-pricing-framework.md).
-- Use the **SMM Budget Planner** (PDF) from the Planning section: revenue goal ($1k–$3k), platform costs ($30–100), income and expense tracking, net. Update monthly.
+- Use the [SMM Budget Planner](social-media-level-2-smm-budget-planner.pdf) (PDF) from the Planning section: revenue goal ($1k–$3k), platform costs ($30–100), income and expense tracking, net. Update monthly.
 
 **Testing checklist:** [ ] Service Pricing Strategy in use; [ ] SMM Budget Planner in use; [ ] Revenue and costs tracked monthly
 
@@ -174,9 +174,9 @@ You've completed Level 2 when:
 [Service Pricing Framework](service-pricing-framework.md) — Price SMM services  
 
 **Templates:**  
-Content Calendar Template (XLSX) — Plan by client, date, platform (Templates section)  
-Client Reporting Template (DOCX) — Summary, metrics, recommendations (Templates section)  
-Client Onboarding Checklist (PDF) — Checklist for new clients (Templates section)  
+[Content Calendar Template](content-calendar-template.xlsx) (XLSX) — Plan by client, date, platform (Templates section)  
+[Client Reporting Template](client-reporting-template.docx) (DOCX) — Summary, metrics, recommendations (Templates section)  
+[Client Onboarding Checklist](client-onboarding-checklist.pdf) (PDF) — Checklist for new clients (Templates section)  
 
 **Launch & Marketing:**  
 [First SMM Clients Guide](social-media-level-2-first-smm-clients-guide.md) — Land first SMM clients  
@@ -187,7 +187,7 @@ Client Onboarding Checklist (PDF) — Checklist for new clients (Templates secti
 
 **Planning:**  
 [Service Pricing Strategy](social-media-level-2-service-pricing-strategy.md) — When and how to scale pricing  
-SMM Budget Planner (PDF) — Revenue, costs, net (Planning section)  
+[SMM Budget Planner](social-media-level-2-smm-budget-planner.pdf) (PDF) — Revenue, costs, net (Planning section)  
 
 ## Troubleshooting
 

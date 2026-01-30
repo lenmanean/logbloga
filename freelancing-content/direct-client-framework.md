@@ -12,7 +12,7 @@ This framework helps you define your ideal direct client and offer, plan outreac
 - **When:** Early in Level 3 (Phase 2 of the [Implementation Plan](freelancing-level-3-plan.md)); after or alongside [Consultant Positioning](consultant-positioning-framework.md).  
 - **AI tip:** Use ChatGPT or Claude to draft outreach email sequences or proposal outlines from your fill-ins; then personalize for each prospect.
 
-Complete each part in order. Use the results with the [Direct Client Acquisition Guide](direct-client-acquisition-guide.md) (outreach, discovery, closing) and the [CRM Setup Guide](crm-setup-guide.md) (pipeline stages and follow-up). Use Contract and Business Systems templates (ZIP) from this level for contracts and operations.
+Complete each part in order. Use the results with the [Direct Client Acquisition Guide](direct-client-acquisition-guide.md) (outreach, discovery, closing) and the [CRM Setup Guide](crm-setup-guide.md) (pipeline stages and follow-up). Use [Contract Templates](contract-templates.zip) and [Business Systems Templates](business-systems-templates.zip) (ZIP) from this level for contracts and operations.
 
 ---
 
@@ -93,7 +93,7 @@ _________________________________________________
 **Retention (e.g. end-of-project review, offer retainer or next project):**  
 _________________________________________________
 
-Use the [Direct Client Acquisition Guide](direct-client-acquisition-guide.md) for outreach sequence and closing. Use the [CRM Setup Guide](crm-setup-guide.md) to track deals and follow-up. Use Business Systems Templates (ZIP) and Contract Templates (Level 2) for contracts and invoicing.
+Use the [Direct Client Acquisition Guide](direct-client-acquisition-guide.md) for outreach sequence and closing. Use the [CRM Setup Guide](crm-setup-guide.md) to track deals and follow-up. Use [Business Systems Templates](business-systems-templates.zip) (ZIP) and [Contract Templates](contract-templates.zip) (Level 2) for contracts and invoicing.
 
 ---
 
@@ -102,4 +102,4 @@ Use the [Direct Client Acquisition Guide](direct-client-acquisition-guide.md) fo
 - [Direct Client Acquisition Guide](direct-client-acquisition-guide.md) — Where to find direct clients, outreach sequence, discovery and closing, CRM usage  
 - [CRM Setup Guide](crm-setup-guide.md) — Pipeline stages, contact and deal fields, automation  
 - [Consultant Positioning Framework](consultant-positioning-framework.md) — Position as consultant so direct clients see premium value  
-- Contract Templates (ZIP) and Business Systems Templates (ZIP) — Contracts and operations
+- [Contract Templates](contract-templates.zip) (ZIP) and [Business Systems Templates](business-systems-templates.zip) (ZIP) — Contracts and operations

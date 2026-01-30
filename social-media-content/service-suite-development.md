@@ -102,7 +102,7 @@ _________________________________________________
 
 **Onboarding (e.g. kickoff, access, first content, first report date):**
 _________________________________________________
-(See [Agency Operations Framework](agency-operations-framework.md) Part 2 and [Client Onboarding Checklist](client-onboarding-checklist-content.md).)
+(See [Agency Operations Framework](agency-operations-framework.md) Part 2 and [Client Onboarding Checklist](client-onboarding-checklist.pdf).)
 
 **Example:** "Contact: website form + referrals. Discovery: 30-min call + short questionnaire. Proposal: 1-pager with scope, deliverables, investment, 3-month minimum. Close: e-sign + first month upfront. Onboarding: kickoff within 5 days; access and brand in 7 days; first report in 30 days."
 

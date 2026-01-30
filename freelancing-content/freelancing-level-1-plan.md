@@ -49,7 +49,7 @@ Before starting, ensure you have:
 ### Milestone 5: Consistency (Days 12–14)
 - [ ] First order delivered on time
 - [ ] Review requested and received (or in progress)
-- [ ] Side Hustle Budget Planner and Pricing Calculator Worksheet in use
+- [ ] [Side Hustle Budget Planner](freelancing-level-1-side-hustle-budget-planner.pdf) (PDF) and [Pricing Calculator Worksheet](freelancing-level-1-pricing-calculator-worksheet.pdf) (PDF) in use
 - [ ] Common issues handled using the Troubleshooting guide
 
 ## Working with AI Tools
@@ -287,8 +287,8 @@ You've completed Level 1 when:
 [Common Freelancing Issues](freelancing-level-1-common-freelancing-issues.md) — Profile, payments, clients, time/burnout  
 
 **Time & Budget Planning (downloadable):**  
-Side Hustle Budget Planner (PDF) — Track revenue goal, platform costs, income, expenses  
-Pricing Calculator Worksheet (PDF) — Minimum price, market check, package builder  
+[Side Hustle Budget Planner](freelancing-level-1-side-hustle-budget-planner.pdf) (PDF) — Track revenue goal, platform costs, income, expenses  
+[Pricing Calculator Worksheet](freelancing-level-1-pricing-calculator-worksheet.pdf) (PDF) — Minimum price, market check, package builder  
 
 Download these from the Planning section in this level.
 

@@ -64,7 +64,7 @@ Partnerships and referrals bring clients you don't have to cold-outreach. This g
 ### Sub-steps
 
 1. **Verbal first:** Many partnerships start with a handshake: "When I refer someone, I'll send you their name and context; when you refer someone, same. No fee to start—we'll see how it goes." Document in a short email after the call.
-2. **Referral fee (optional):** If one side sends more leads, you can agree on a referral fee (e.g. 10–15% of first project or first month retainer). Use a simple one-page agreement if needed; see Contract Templates (Level 2) or Business Systems Templates (ZIP) for a starting point.
+2. **Referral fee (optional):** If one side sends more leads, you can agree on a referral fee (e.g. 10–15% of first project or first month retainer). Use a simple one-page agreement if needed; see [Contract Templates](contract-templates.zip) (Level 2) or [Business Systems Templates](business-systems-templates.zip) (ZIP) for a starting point.
 3. **Scope and handoff:** When you refer, give the partner enough context (what the client needs, budget/timeline if you know) so they can follow up effectively. When they refer to you, ask for the same.
 4. **Confidentiality:** Don't share client details without permission. Keep referral conversations professional.
 

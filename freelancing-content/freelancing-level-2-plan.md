@@ -186,8 +186,8 @@ You've completed Level 2 when:
 [Pricing Strategy Advanced](pricing-strategy-advanced.md) — Price for full-time revenue  
 
 **Templates:**  
-Proposal Templates (ZIP) — Download from Templates section  
-Contract Templates (ZIP) — Download from Templates section  
+[Proposal Templates](proposal-templates.zip) (ZIP) — Download from Templates section  
+[Contract Templates](contract-templates.zip) (ZIP) — Download from Templates section  
 [Client Communication Templates](client-communication-templates.md) — Kickoff, progress, delivery, feedback  
 
 **Launch & Marketing:**  
@@ -198,7 +198,7 @@ Contract Templates (ZIP) — Download from Templates section
 [Client Management Issues](freelancing-level-2-client-management-issues.md) — Scope, communication, multiple clients, difficult clients  
 
 **Time & Budget Planning:**  
-Full-Time Budget Planner (PDF) — Track revenue, platform costs, income, expenses (download from Planning section)  
+[Full-Time Budget Planner](freelancing-level-2-full-time-budget-planner.pdf) (PDF) — Track revenue, platform costs, income, expenses (download from Planning section)  
 [Pricing Scaling Strategy](freelancing-level-2-pricing-scaling-strategy.md) — When and how to scale pricing  
 
 ## Troubleshooting

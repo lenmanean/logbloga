@@ -19,7 +19,7 @@ One-page agenda for the kickoff call with a new social media client. Use after c
 
 - **Scope:** What's included (e.g. 5 posts/week, 2 platforms, monthly report). Reference the package or SOW they signed.
 - **First deliverables:** First content batch date; first report date.
-- **Tools:** Access (social accounts, brand assets, scheduling/analytics). Confirm [Client Onboarding Checklist](../client-onboarding-checklist-content.md) items.
+- **Tools:** Access (social accounts, brand assets, scheduling/analytics). Confirm [Client Onboarding Checklist](../client-onboarding-checklist.pdf) items.
 
 ## 4. Process and timeline (5 min)
 

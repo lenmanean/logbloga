@@ -100,7 +100,7 @@ _________________________________________________
 **When you'll raise rates (e.g. after 3 strong case studies, when pipeline is full):**
 _________________________________________________
 
-Use the [Premium Pricing Models](freelancing-level-3-premium-pricing-models.md) for project vs retainer, value-based pricing, and when to raise. Use the Business Financial Planning (PDF) from the Planning section for revenue target, costs, and cash flow.
+Use the [Premium Pricing Models](freelancing-level-3-premium-pricing-models.md) for project vs retainer, value-based pricing, and when to raise. Use the [Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) from the Planning section for revenue target, costs, and cash flow.
 
 ---
 

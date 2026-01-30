@@ -128,7 +128,7 @@ Complete the [Client Retention Strategies](client-retention-strategies.md): Part
 **Prerequisites:** Step 1.1–1.3 completed  
 **Expected outcome:** Project kickoff, status report, client review agenda, and handoff checklist in use so delivery is consistent across team and clients.
 
-Download the **Agency Operations Templates** (ZIP) from the Templates section. Use or customize: project kickoff template, status report template, client review agenda, handoff checklist. Align with [Team Management Framework](team-management-framework.md) and [Service Suite Development](service-suite-development.md). Content spec: [agency-operations-templates-spec.md](agency-operations-templates-spec.md).
+Download the [Agency Operations Templates](agency-operations-templates.zip) (ZIP) from the Templates section. Use or customize: project kickoff template, status report template, client review agenda, handoff checklist. Align with [Team Management Framework](team-management-framework.md) and [Service Suite Development](service-suite-development.md). Content spec: [agency-operations-templates-spec.md](agency-operations-templates-spec.md).
 
 **Testing checklist:** [ ] Agency Operations Templates (ZIP) in use; [ ] Kickoff, status report, review, handoff in place for at least one client
 
@@ -170,7 +170,7 @@ Read the overview of [Team & Client Issues](agency-level-2-team-client-issues.md
 **Prerequisites:** At least 2–3 clients and some revenue  
 **Expected outcome:** Revenue mix, when to scale team, pricing by tier, and team cost tracked so you can reach $5,000–$15,000/month deliberately.
 
-Use the [Team Pricing & Revenue Strategy](agency-level-2-team-pricing-revenue-strategy.md): revenue mix, when to scale team, pricing by service tier, when to raise rates. Include team cost and revenue-per-head considerations. Use the **Team Budget Planner** (PDF) from the Planning section: revenue goal ($5k–$15k band), platform costs ($300–800), income/expense tracking, team and contractor costs, net. Update monthly. Content spec: [Team Budget Planner content spec](agency-level-2-team-budget-planner-content.md).
+Use the [Team Pricing & Revenue Strategy](agency-level-2-team-pricing-revenue-strategy.md): revenue mix, when to scale team, pricing by service tier, when to raise rates. Include team cost and revenue-per-head considerations. Use the [Team Budget Planner](agency-level-2-team-budget-planner.pdf) (PDF) from the Planning section: revenue goal ($5k–$15k band), platform costs ($300–800), income/expense tracking, team and contractor costs, net. Update monthly. Content spec: [Team Budget Planner content spec](agency-level-2-team-budget-planner-content.md).
 
 **Testing checklist:** [ ] Team Pricing & Revenue Strategy in use; [ ] Team Budget Planner (PDF) in use; [ ] Revenue and team costs tracked monthly
 
@@ -206,7 +206,7 @@ You've completed Level 2 when:
 [Client Retention Strategies](client-retention-strategies.md) — Health signals, touchpoints, upsell, offboarding  
 
 **Templates:**  
-Agency Operations Templates (ZIP) — Kickoff, status report, client review, handoff (Templates section)  
+[Agency Operations Templates](agency-operations-templates.zip) (ZIP) — Kickoff, status report, client review, handoff (Templates section)  
 
 **Launch & Marketing:**  
 [Client Acquisition Scaling Guide](agency-level-2-client-acquisition-scaling-guide.md) — Who to target at scale, offer, outreach systems  
@@ -217,7 +217,7 @@ Agency Operations Templates (ZIP) — Kickoff, status report, client review, han
 
 **Planning:**  
 [Team Pricing & Revenue Strategy](agency-level-2-team-pricing-revenue-strategy.md) — Revenue mix, when to scale team, pricing by tier  
-Team Budget Planner (PDF) — Revenue, costs, team (Planning section)  
+[Team Budget Planner](agency-level-2-team-budget-planner.pdf) (PDF) — Revenue, costs, team (Planning section)  
 
 ## Troubleshooting
 

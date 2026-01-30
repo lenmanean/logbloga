@@ -59,7 +59,7 @@ This guide helps agency leads (Level 3, $3,000–$10,000+/month) set up Hootsuit
 
 **Time estimate:** 15–20 minutes
 
-1. **Reports:** Configure reports (e.g. overview, engagement, top posts) per profile or client. Align with your [Advanced Analytics Setup](advanced-analytics-setup.md) and [Client Reporting Template](client-reporting-template-spec.md) structure.
+1. **Reports:** Configure reports (e.g. overview, engagement, top posts) per profile or client. Align with your [Advanced Analytics Setup](advanced-analytics-setup.md) and [Client Reporting Template](client-reporting-template.docx) structure.
 2. **Team members:** Invite team members or contractors. Assign roles (e.g. content creator, approver, viewer) and limit access to only the clients or profiles they need. Use [Team Management Templates](team-management-templates.zip) (ZIP) for role definitions.
 3. **White-label (optional):** If your plan supports it, enable white-label reports so client-facing reports show your agency branding.
 

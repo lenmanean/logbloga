@@ -85,7 +85,7 @@ Common client and project management issues for full-time freelancers. For each 
 
 - Before saying yes to a new project, check your calendar and task list. If you're full, say no or propose a later start date.  
 - Add "availability" to your Upwork profile or proposals (e.g. "Available for projects starting [date]").  
-- Review capacity weekly; use the Full-Time Budget Planner to see if you're overcommitted.
+- Review capacity weekly; use the [Full-Time Budget Planner](freelancing-level-2-full-time-budget-planner.pdf) (PDF) to see if you're overcommitted.
 
 ### When to escalate
 

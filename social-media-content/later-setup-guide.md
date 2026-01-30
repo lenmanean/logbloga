@@ -62,7 +62,7 @@ Later is a scheduling and calendar tool for social media. For Level 2 SMM, you n
 ### Sub-steps
 
 1. **One profile set per client (or per channel):** If you manage multiple accounts, assign each client their own profile set in Later. Name them clearly (e.g. "Client A – Instagram").
-2. **Content Calendar Template:** Use the Content Calendar Template (XLSX) or a spreadsheet to plan by client, date, platform, content type, copy, status. Then add posts to Later in batch (e.g. every Sunday for the week).
+2. **Content Calendar Template:** Use the [Content Calendar Template](content-calendar-template.xlsx) (XLSX) or a spreadsheet to plan by client, date, platform, content type, copy, status. Then add posts to Later in batch (e.g. every Sunday for the week).
 3. **Approval (optional):** If clients require approval before posting, use Later's approval workflow (if available) or send a weekly preview (e.g. PDF or link) for sign-off before scheduling.
 
 **What you'll have when done:** A Later account with calendar view, at least one profile connected, and a workflow to add content by client. Use the [Content Calendar Template](content-calendar-template.xlsx) (XLSX) and [Client Onboarding Framework](client-onboarding-framework.md) for consistency. See the [Metricool Setup Guide](metricool-setup-guide.md) for reporting and the [Buffer Paid Setup Guide](buffer-paid-setup-guide.md) for multi-client scheduling if you use both.

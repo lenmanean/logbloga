@@ -77,14 +77,14 @@ Advanced business challenges for premium freelance consultants. For each issue: 
 
 ### Step-by-step resolution
 
-1. **Deploy Business Systems Templates.** Use the **Business Systems Templates** (ZIP) from the Templates section in this level: CRM and pipeline templates, invoicing and follow-up checklists, or other assets. Customize for your niche and use with your [CRM Setup Guide](crm-setup-guide.md) and contracts (Hello Bonsai or similar).  
+1. **Deploy Business Systems Templates.** Use the [Business Systems Templates](business-systems-templates.zip) (ZIP) from the Templates section in this level: CRM and pipeline templates, invoicing and follow-up checklists, or other assets. Customize for your niche and use with your [CRM Setup Guide](crm-setup-guide.md) and contracts (Hello Bonsai or similar).  
 2. **Standardize contracts and invoicing.** Use one contract template and one invoicing flow for all direct clients. Set payment terms (e.g. 50% upfront, 50% on delivery) and stick to them. Automate reminders if your tool supports it.  
 3. **Block capacity.** Use a calendar and capacity plan: how many hours per week for delivery, how many for sales and admin. Use the Business Financial Planning (PDF) from the Planning section for revenue target and costs. When you're at 80%+ capacity, raise rates or say no to new work until you deliver.  
 4. **Automate where it helps.** Use your CRM for follow-up reminders and pipeline views. Use your contract/invoicing tool for payment reminders. Don't over-automate—start with 1–2 workflows and add as needed.
 
 ### Prevention
 
-- Use the [Business Systems Templates](README.md) (ZIP) and [CRM Setup Guide](crm-setup-guide.md) so processes are consistent.  
+- Use the [Business Systems Templates](business-systems-templates.zip) (ZIP) and [CRM Setup Guide](crm-setup-guide.md) so processes are consistent.  
 - Review capacity and revenue monthly with the Business Financial Planning (PDF).  
 - Document your processes (proposal → contract → kickoff → delivery → invoice) so you can delegate or streamline later.
 
@@ -133,5 +133,5 @@ Advanced business challenges for premium freelance consultants. For each issue: 
 - [CRM Setup Guide](crm-setup-guide.md) — Pipeline and follow-up systems  
 - [Premium Pricing Models](freelancing-level-3-premium-pricing-models.md) — Consultant-level pricing  
 - [Partnership Strategies](freelancing-level-3-partnership-strategies.md) — Referrals and partners  
-- Business Systems Templates (ZIP) — Download from Templates section  
-- Business Financial Planning (PDF) — Revenue target, P&L, cash flow (Planning section)
+- [Business Systems Templates](business-systems-templates.zip) (ZIP) — Download from Templates section  
+- [Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) — Revenue target, P&L, cash flow (Planning section)

@@ -176,7 +176,7 @@ Use the [Solo Launch Checklist](agency-level-1-solo-launch-checklist.md): positi
 **Prerequisites:** At least one client in pipeline or signed  
 **Expected outcome:** First client onboarded using the template so delivery is consistent.
 
-Download the **Client Onboarding Template** (ZIP) from the Templates section. Use the welcome email, discovery questionnaire, kickoff agenda, and checklist for your first client. Align with your [Target Client Framework](target-client-framework.md) and [First Agency Clients Guide](agency-level-1-first-clients-guide.md). Customize as needed; keep the structure for repeatability.
+Download the [Client Onboarding Template](client-onboarding-template.zip) (ZIP) from the Templates section. Use the welcome email, discovery questionnaire, kickoff agenda, and checklist for your first client. Align with your [Target Client Framework](target-client-framework.md) and [First Agency Clients Guide](agency-level-1-first-clients-guide.md). Customize as needed; keep the structure for repeatability.
 
 **Testing checklist:** [ ] Client Onboarding Template (ZIP) used for first client; [ ] Welcome and kickoff sent; [ ] Discovery and delivery plan documented
 
@@ -198,7 +198,7 @@ Read the overview of [Solo Operations Issues](agency-level-1-solo-operations-iss
 **Prerequisites:** At least one client or pipeline activity  
 **Expected outcome:** Revenue goals, package mix, and budget tracked so you can reach $2,000–$5,000/month deliberately.
 
-Use the [Solo Revenue Strategy](agency-level-1-solo-revenue-strategy.md): revenue goals, package mix, pricing floor, when to raise rates, expense categories. Include a simple revenue model (e.g. X clients × $Y = target). Use the **Solo Budget Worksheet** (PDF) from the Planning section: revenue goal ($2k–$5k band), platform costs ($100–300), income tracking, expense categories (tools, marketing, contract help), net and notes. Update monthly. Content spec for the PDF: [Solo Budget Worksheet content spec](agency-level-1-solo-budget-worksheet-content.md).
+Use the [Solo Revenue Strategy](agency-level-1-solo-revenue-strategy.md): revenue goals, package mix, pricing floor, when to raise rates, expense categories. Include a simple revenue model (e.g. X clients × $Y = target). Use the [Solo Budget Worksheet](agency-level-1-solo-budget-worksheet.pdf) (PDF) from the Planning section: revenue goal ($2k–$5k band), platform costs ($100–300), income tracking, expense categories (tools, marketing, contract help), net and notes. Update monthly. Content spec for the PDF: [Solo Budget Worksheet content spec](agency-level-1-solo-budget-worksheet-content.md).
 
 **Testing checklist:** [ ] Solo Revenue Strategy in use; [ ] Solo Budget Worksheet (PDF) in use; [ ] Revenue and costs tracked monthly
 
@@ -234,7 +234,7 @@ You've completed Level 1 when:
 [Target Client Framework](target-client-framework.md) — Define ideal client  
 
 **Templates:**  
-Client Onboarding Template (ZIP) — Welcome email, discovery, kickoff, checklist (Templates section)  
+[Client Onboarding Template](client-onboarding-template.zip) (ZIP) — Welcome email, discovery, kickoff, checklist (Templates section)  
 
 **Launch & Marketing:**  
 [First Agency Clients Guide](agency-level-1-first-clients-guide.md) — Who to target, offer, outreach, proposal  
@@ -245,7 +245,7 @@ Client Onboarding Template (ZIP) — Welcome email, discovery, kickoff, checklis
 
 **Planning:**  
 [Solo Revenue Strategy](agency-level-1-solo-revenue-strategy.md) — Goals, package mix, pricing, expenses  
-Solo Budget Worksheet (PDF) — Revenue, costs, net (Planning section)  
+[Solo Budget Worksheet](agency-level-1-solo-budget-worksheet.pdf) (PDF) — Revenue, costs, net (Planning section)  
 
 ## Troubleshooting
 

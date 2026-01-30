@@ -34,7 +34,7 @@ Before starting, ensure you have:
 - [ ] First direct outreach or partnership conversation in motion
 
 ### Milestone 3: Business Systems (Days 21–35)
-- [ ] Business Systems Templates (ZIP) reviewed and deployed
+- [ ] [Business Systems Templates](business-systems-templates.zip) (ZIP) reviewed and deployed
 - [ ] Premium Positioning Guide and Partnership Strategies applied
 - [ ] Premium messaging and proof points in place (website, proposals, LinkedIn)
 
@@ -44,7 +44,7 @@ Before starting, ensure you have:
 - [ ] Referral or partnership pipeline tracked in CRM
 
 ### Milestone 5: Financial Planning and Launch (Days 46–56)
-- [ ] Premium Pricing Models and Business Financial Planning (PDF) in use
+- [ ] Premium Pricing Models and [Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) in use
 - [ ] Premium pricing in place for new and (where appropriate) existing clients
 - [ ] Advanced Business Challenges guide used for any positioning, pipeline, or systems issues
 
@@ -131,7 +131,7 @@ Complete the [Direct Client Framework](direct-client-framework.md): Part 1 (idea
 **Prerequisites:** None  
 **Expected outcome:** Business systems templates (ZIP) reviewed and deployed so invoicing, contracts, and follow-up are consistent.
 
-Download and review the **Business Systems Templates** (ZIP) from the Templates section in this level. Deploy what fits: CRM and pipeline templates, invoicing and follow-up checklists, or other assets. Customize for your niche and scale. Use with your CRM and [Hello Bonsai](hello-bonsai-paid-setup.md) or similar for contracts and invoicing.
+Download and review the [Business Systems Templates](business-systems-templates.zip) (ZIP) from the Templates section in this level. Deploy what fits: CRM and pipeline templates, invoicing and follow-up checklists, or other assets. Customize for your niche and scale. Use with your CRM and [Hello Bonsai](hello-bonsai-paid-setup.md) or similar for contracts and invoicing.
 
 **Testing checklist:** [ ] Business Systems Templates (ZIP) reviewed; [ ] Relevant templates deployed; [ ] Invoicing and follow-up in use
 
@@ -197,7 +197,7 @@ You've completed Level 3 when:
 [Direct Client Framework](direct-client-framework.md) — Win and retain direct clients  
 
 **Templates:**  
-Business Systems Templates (ZIP) — Download from Templates section  
+[Business Systems Templates](business-systems-templates.zip) (ZIP) — Download from Templates section  
 
 **Launch & Marketing:**  
 [Premium Positioning Guide](freelancing-level-3-premium-positioning-guide.md) — Messaging and visibility  
@@ -208,7 +208,7 @@ Business Systems Templates (ZIP) — Download from Templates section
 
 **Time & Budget Planning:**  
 [Premium Pricing Models](freelancing-level-3-premium-pricing-models.md) — Consultant-level pricing  
-Business Financial Planning (PDF) — Revenue target, P&L, cash flow (download from Planning section)  
+[Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) — Revenue target, P&L, cash flow (download from Planning section)  
 
 ## Troubleshooting
 

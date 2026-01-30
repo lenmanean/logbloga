@@ -30,7 +30,7 @@ This file is the **content specification** for the PDF **Client Onboarding Check
 
 **Instructions:** Establish the content calendar and first batch.
 
-- [ ] **Calendar:** [Content Calendar Template](content-calendar-template-spec.md) (or your XLSX) set up for this client; first 2 weeks (or first month) drafted.
+- [ ] **Calendar:** [Content Calendar Template](content-calendar-template.xlsx) (XLSX) (or your own spreadsheet) set up for this client; first 2 weeks (or first month) drafted.
 - [ ] **Cadence:** Posting frequency per platform agreed and documented.
 - [ ] **First batch:** First week of content scheduled or ready to schedule in [Later](later-setup-guide.md) / [Buffer](buffer-paid-setup-guide.md).
 
@@ -41,7 +41,7 @@ This file is the **content specification** for the PDF **Client Onboarding Check
 **Instructions:** Lock in reporting cadence and first deliverable.
 
 - [ ] **Cadence:** Reporting frequency agreed (e.g. monthly) and first report date set.
-- [ ] **Template:** [Client Reporting Template](client-reporting-template-spec.md) (DOCX) shared or confirmed; client knows what to expect.
+- [ ] **Template:** [Client Reporting Template](client-reporting-template.docx) (DOCX) shared or confirmed; client knows what to expect.
 - [ ] **KPIs:** Key metrics and goals for the first report confirmed (from [Client Onboarding Framework](client-onboarding-framework.md) Part 4).
 
 ---

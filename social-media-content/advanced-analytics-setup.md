@@ -42,8 +42,8 @@ This guide helps agency leads (Level 3, $3,000–$10,000+/month) set up an analy
 
 **Time estimate:** 30–45 minutes
 
-1. **KPIs:** Define 5–8 KPIs you’ll report for most clients (e.g. reach, engagement rate, clicks, conversions, follower growth). Align with your [Service Suite Development](service-suite-development.md) and [Client Reporting Template](client-reporting-template-spec.md): summary, metrics, top posts, recommendations.
-2. **Templates:** Create a report template (in DOCX, dashboard, or export) that matches your deliverable. Sections: summary, metrics table, top posts, recommendations. Use the same structure for every client; only the numbers and copy change. See [Client Reporting Template spec](client-reporting-template-spec.md).
+1. **KPIs:** Define 5–8 KPIs you’ll report for most clients (e.g. reach, engagement rate, clicks, conversions, follower growth). Align with your [Service Suite Development](service-suite-development.md) and [Client Reporting Template](client-reporting-template.docx): summary, metrics, top posts, recommendations.
+2. **Templates:** Create a report template (in DOCX, dashboard, or export) that matches your deliverable. Sections: summary, metrics table, top posts, recommendations. Use the same structure for every client; only the numbers and copy change. See [Client Reporting Template](client-reporting-template.docx).
 3. **Cadence:** Set a reminder or calendar event for each client’s report (e.g. first Monday of month). Use your [Agency Operations Framework](agency-operations-framework.md) and onboarding notes.
 
 **What you'll have:** Standard KPIs and a repeatable report template so you can produce client reports quickly and consistently.
@@ -79,5 +79,5 @@ This guide helps agency leads (Level 3, $3,000–$10,000+/month) set up an analy
 
 - [Service Suite Development](service-suite-development.md) — Service tiers and deliverables
 - [Agency Revenue Strategy](social-media-level-3-agency-revenue-strategy.md) — Revenue mix and scaling
-- [Client Reporting Template spec](client-reporting-template-spec.md) — Report structure
+- [Client Reporting Template](client-reporting-template.docx) — Report structure
 - [Level 3 Implementation Plan](social-media-level-3-plan.md) — Full roadmap

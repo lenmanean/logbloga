@@ -133,7 +133,7 @@ Complete the [Enterprise Service Development](enterprise-service-development.md)
 **Prerequisites:** Phase 1 completed  
 **Expected outcome:** Enterprise proposal, multi-service SOW, partnership outline, board-style report (and any other templates in ZIP) in use so enterprise sales and delivery are consistent.
 
-Download the **Enterprise Templates** (ZIP) from the Templates section. Use or customize: enterprise proposal, multi-service SOW, partnership outline, board-style report. Align with [Enterprise Operations Framework](enterprise-operations-framework.md), [Enterprise Service Development](enterprise-service-development.md), [Partnership Strategies](agency-level-3-partnership-strategies.md). Content spec: [enterprise-templates-spec.md](enterprise-templates-spec.md). **Testing checklist:** [ ] Enterprise Templates (ZIP) in use; [ ] At least one enterprise proposal and one SOW used; [ ] Partnership outline and board report (if applicable) in use
+Download the [Enterprise Templates](enterprise-templates.zip) (ZIP) from the Templates section. Use or customize: enterprise proposal, multi-service SOW, partnership outline, board-style report. Align with [Enterprise Operations Framework](enterprise-operations-framework.md), [Enterprise Service Development](enterprise-service-development.md), [Partnership Strategies](agency-level-3-partnership-strategies.md). Content spec: [enterprise-templates-spec.md](enterprise-templates-spec.md). **Testing checklist:** [ ] Enterprise Templates (ZIP) in use; [ ] At least one enterprise proposal and one SOW used; [ ] Partnership outline and board report (if applicable) in use
 
 #### Step 2.2: Implement Multi-Service Delivery Playbooks
 
@@ -193,7 +193,7 @@ Read the overview of [Enterprise Operations Issues](agency-level-3-enterprise-op
 **Prerequisites:** At least 5+ clients and 5+ person team (or plan in place)  
 **Expected outcome:** Revenue by service line, when to scale team, pricing and margin by tier, M&A/new lines (if applicable); P&L-style logic, revenue-per-head; Enterprise Budget Planning (PDF) in use for $15k–$50k+, platform $800–2,000, P&L, cash flow, team costs, reserve and growth.
 
-Use the [Scaling & Revenue Strategy](agency-level-3-scaling-revenue-strategy.md): revenue by service line, when to scale team, pricing and margin by tier, M&A or new service lines; P&L-style logic, revenue-per-head. Use the **Enterprise Budget Planning** (PDF) from the Planning section: revenue goal ($15k–$50k+ band), platform costs ($800–2,000), P&L, cash flow, team costs, reserve and growth. Update monthly. Content spec: [agency-level-3-enterprise-budget-planning-content.md](agency-level-3-enterprise-budget-planning-content.md). **Testing checklist:** [ ] Scaling & Revenue Strategy in use; [ ] Enterprise Budget Planning (PDF) in use; [ ] Revenue, P&L, and cash flow tracked monthly
+Use the [Scaling & Revenue Strategy](agency-level-3-scaling-revenue-strategy.md): revenue by service line, when to scale team, pricing and margin by tier, M&A or new service lines; P&L-style logic, revenue-per-head. Use the [Enterprise Budget Planning](agency-level-3-enterprise-budget-planning.pdf) (PDF) from the Planning section: revenue goal ($15k–$50k+ band), platform costs ($800–2,000), P&L, cash flow, team costs, reserve and growth. Update monthly. Content spec: [agency-level-3-enterprise-budget-planning-content.md](agency-level-3-enterprise-budget-planning-content.md). **Testing checklist:** [ ] Scaling & Revenue Strategy in use; [ ] Enterprise Budget Planning (PDF) in use; [ ] Revenue, P&L, and cash flow tracked monthly
 
 #### Step 4.2: Monthly Review (Pipeline, Pricing, Retention, Partnerships)
 
@@ -243,7 +243,7 @@ Enterprise Templates (ZIP) — Enterprise proposal, multi-service SOW, partnersh
 
 **Planning:**  
 [Scaling & Revenue Strategy](agency-level-3-scaling-revenue-strategy.md) — Revenue by service line, when to scale, pricing, M&A  
-Enterprise Budget Planning (PDF) — P&L, cash flow, team costs, reserve (Planning section)  
+[Enterprise Budget Planning](agency-level-3-enterprise-budget-planning.pdf) (PDF) — P&L, cash flow, team costs, reserve (Planning section)  
 
 ## Troubleshooting
 

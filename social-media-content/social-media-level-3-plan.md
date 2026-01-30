@@ -190,7 +190,7 @@ You've completed Level 3 when:
 [Service Suite Development](service-suite-development.md) — Define and sell service suite  
 
 **Templates:**  
-Team Management Templates (ZIP) — Roles, workflows, handoffs (Templates section)  
+[Team Management Templates](team-management-templates.zip) (ZIP) — Roles, workflows, handoffs (Templates section)  
 
 **Launch & Marketing:**  
 [Agency Positioning Guide](social-media-level-3-agency-positioning-guide.md) — Messaging, proof points, placement  
@@ -201,7 +201,7 @@ Team Management Templates (ZIP) — Roles, workflows, handoffs (Templates sectio
 
 **Planning:**  
 [Agency Revenue Strategy](social-media-level-3-agency-revenue-strategy.md) — Revenue mix, scaling, pricing, team cost  
-Agency Budget Planning (PDF) — Revenue, costs, P&L, cash flow (Planning section)  
+[Agency Budget Planning](social-media-level-3-agency-budget-planning.pdf) (PDF) — Revenue, costs, P&L, cash flow (Planning section)  
 
 ## Troubleshooting
 

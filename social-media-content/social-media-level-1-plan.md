@@ -31,8 +31,8 @@ Before starting, ensure you have:
 
 ### Milestone 2: Content Direction and First Posts (Days 4–7)
 - [ ] Content Direction Framework completed (pillars, formats, cadence, metrics)
-- [ ] Content Strategy Template (XLSX) in use; first week of content planned
-- [ ] Daily Posting Checklist (PDF) reviewed; first posts scheduled or published
+- [ ] [Content Strategy Template](content-strategy-template.xlsx) (XLSX) in use; first week of content planned
+- [ ] [Daily Posting Checklist](daily-posting-checklist.pdf) (PDF) reviewed; first posts scheduled or published
 
 ### Milestone 3: Scheduling and Analytics (Days 8–14)
 - [ ] Buffer queue or calendar filled for at least one week
@@ -47,7 +47,7 @@ Before starting, ensure you have:
 ### Milestone 5: Consistency (Days 22+)
 - [ ] Content Growth Checklist in use (posting, engagement, analytics review)
 - [ ] Common Creator Issues guide bookmarked for troubleshooting
-- [ ] Revenue and costs tracked in Monetization Budget Worksheet
+- [ ] Revenue and costs tracked in [Monetization Budget Worksheet](social-media-level-1-monetization-budget-worksheet.pdf) (PDF)
 
 ## Working with AI Tools
 
@@ -230,8 +230,8 @@ You've completed Level 1 when:
 [Content Direction Framework](content-direction-framework.md) — Pillars, formats, cadence  
 
 **Templates:**  
-Content Strategy Template (XLSX) — Plan content by date and platform (Templates section)  
-Daily Posting Checklist (PDF) — Daily workflow (Templates section)  
+[Content Strategy Template](content-strategy-template.xlsx) (XLSX) — Plan content by date and platform (Templates section)  
+[Daily Posting Checklist](daily-posting-checklist.pdf) (PDF) — Daily workflow (Templates section)  
 
 **Launch & Marketing:**  
 [First Monetization Guide](social-media-level-1-first-monetization-guide.md) — Affiliate, sponsored, product  
@@ -242,7 +242,7 @@ Daily Posting Checklist (PDF) — Daily workflow (Templates section)
 
 **Planning:**  
 [Creator Income Planning](social-media-level-1-creator-income-planning.md) — Goals, streams, timeline  
-Monetization Budget Worksheet (PDF) — Revenue, costs, net (Planning section)  
+[Monetization Budget Worksheet](social-media-level-1-monetization-budget-worksheet.pdf) (PDF) — Revenue, costs, net (Planning section)  
 
 ## Troubleshooting
 

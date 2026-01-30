@@ -4,13 +4,13 @@ Premium pricing models for freelance consultants so you price at consultant leve
 
 ## Purpose
 
-This guide helps you choose and apply pricing that fits consultant positioning: project vs retainer, value-based pricing, packaging for consultants, and when to raise. Use it with the [Consultant Positioning Framework](consultant-positioning-framework.md) Part 4 and the Business Financial Planning (PDF) from the Planning section so revenue and costs align with your positioning.
+This guide helps you choose and apply pricing that fits consultant positioning: project vs retainer, value-based pricing, packaging for consultants, and when to raise. Use it with the [Consultant Positioning Framework](consultant-positioning-framework.md) Part 4 and the [Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) from the Planning section so revenue and costs align with your positioning.
 
 ## How to Use
 
 - **Time:** 30–45 minutes to plan; then review quarterly or when pipeline is full.  
-- **When:** Use after completing the [Consultant Positioning Framework](consultant-positioning-framework.md) (positioning statement and Part 4 pricing). Use with the Business Financial Planning (PDF) for revenue target and costs.  
-- **Cross-ref:** Use Contract Templates (Level 2) and Business Systems Templates (ZIP) in this level for terms and delivery.
+- **When:** Use after completing the [Consultant Positioning Framework](consultant-positioning-framework.md) (positioning statement and Part 4 pricing). Use with the [Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) for revenue target and costs.  
+- **Cross-ref:** Use [Contract Templates](contract-templates.zip) (Level 2) and [Business Systems Templates](business-systems-templates.zip) (ZIP) in this level for terms and delivery.
 
 Complete each part below. Use the results when you set new client rates and when you communicate changes to existing clients.
 
@@ -97,7 +97,7 @@ _________________________________________________
 [ ] After 6–12 months of consistent work  
 [ ] When I'm adding value (e.g. retainer, priority support)  
 
-**How to communicate:** Give 30 days notice; state new rate and effective date; offer value in exchange (e.g. priority support, monthly check-in). Use Contract Templates (Level 2) or Business Systems Templates (ZIP) for amendments.
+**How to communicate:** Give 30 days notice; state new rate and effective date; offer value in exchange (e.g. priority support, monthly check-in). Use [Contract Templates](contract-templates.zip) (Level 2) or [Business Systems Templates](business-systems-templates.zip) (ZIP) for amendments.
 
 **Rate-change script (copy and customize):**  
 "Hi [Client], I'm updating my rates effective [date]. For our work together, my new rate will be [X]. I'm also [adding value]. If you have questions, let's chat."
@@ -109,7 +109,7 @@ _________________________________________________
 ## See Also
 
 - [Consultant Positioning Framework](consultant-positioning-framework.md) — Part 4 (pricing and packaging); align pricing with positioning  
-- Business Financial Planning (PDF) — Revenue target ($4k–$10k+), platform costs ($50–150), P&L, cash flow (Planning section)  
+- [Business Financial Planning](freelancing-level-3-business-financial-planning.pdf) (PDF) — Revenue target ($4k–$10k+), platform costs ($50–150), P&L, cash flow (Planning section)  
 - [Premium Positioning Guide](freelancing-level-3-premium-positioning-guide.md) — Where to show your positioning and pricing (proposals, website)  
 - [Partnership Strategies](freelancing-level-3-partnership-strategies.md) — Referrals and partners; don't underprice to fill pipeline  
 - If you run into pricing or positioning issues: [Advanced Business Challenges](freelancing-level-3-advanced-business-challenges.md)

@@ -4,7 +4,7 @@ How to scale SMM pricing so you can reach $1,000–$3,000/month and beyond.
 
 ## Purpose
 
-This guide helps you decide when to raise rates, how to communicate changes to clients, and how to evolve packages (Basic/Standard/Premium or custom) so you grow revenue without losing good clients. Use it with the [Service Pricing Framework](service-pricing-framework.md) and the **SMM Budget Planner** (PDF) from the Planning section so your pricing and budget stay aligned.
+This guide helps you decide when to raise rates, how to communicate changes to clients, and how to evolve packages (Basic/Standard/Premium or custom) so you grow revenue without losing good clients. Use it with the [Service Pricing Framework](service-pricing-framework.md) and the [SMM Budget Planner](social-media-level-2-smm-budget-planner.pdf) (PDF) from the Planning section so your pricing and budget stay aligned.
 
 ## How to Use
 
@@ -91,7 +91,7 @@ _________________________________________________
 ## See Also
 
 - [Service Pricing Framework](service-pricing-framework.md) — Packages and pricing  
-- SMM Budget Planner (PDF) — Revenue goal ($1k–$3k), platform costs ($30–100), net (Planning section)  
+- [SMM Budget Planner](social-media-level-2-smm-budget-planner.pdf) (PDF) — Revenue goal ($1k–$3k), platform costs ($30–100), net (Planning section)  
 - [Client Onboarding Framework](client-onboarding-framework.md) — Scope and reporting  
 - [Client & Service Issues](social-media-level-2-client-service-issues.md) — Billing and contracts  
 - [Implementation Plan](social-media-level-2-plan.md) Phase 3 — Operations and pricing

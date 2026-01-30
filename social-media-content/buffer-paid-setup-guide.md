@@ -79,5 +79,5 @@ A Buffer paid account with multiple client channels, a queue (or calendar) per c
 - [Service Portfolio Checklist](social-media-level-2-service-portfolio-checklist.md) — Portfolio and case studies for winning clients  
 - [Later Setup Guide](later-setup-guide.md) — Alternative or complement for calendar view  
 - [Metricool Setup Guide](metricool-setup-guide.md) — Reporting for clients  
-- Content Calendar Template (XLSX) — Plan by client, date, platform (Templates section)  
+- [Content Calendar Template](content-calendar-template.xlsx) (XLSX) — Plan by client, date, platform (Templates section)  
 - If you run into client or service issues: [Client & Service Issues](social-media-level-2-client-service-issues.md)
