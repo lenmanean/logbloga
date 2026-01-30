@@ -19,7 +19,7 @@ The two Level 1 planning PDFs are **downloadable** files. Their **content struct
 - **Side Hustle Budget Planner:** Content spec in `freelancing-level-1-side-hustle-budget-planner-content.md`. Sections: (1) Monthly revenue goal ($500–$1,500 band, checkboxes), (2) Platform costs ($0–20 L1 range), (3) Income tracking table, (4) Expense categories, (5) Net and notes. Use terminology from `docs/TERMINOLOGY_STYLE_GUIDE.md` (e.g. "platform costs," "expected revenue").
 - **Pricing Calculator Worksheet:** Content spec in `freelancing-level-1-pricing-calculator-worksheet-content.md`. Sections: (1) Cost inputs, (2) Minimum price calculation, (3) Market check, (4) Package builder (Basic/Standard/Premium), (5) Add-ons and notes. Align with the markdown [pricing-strategy-worksheet.md](pricing-strategy-worksheet.md).
 
-To **regenerate or update the PDFs:** use the content in the `*-content.md` files above as the source for layout and copy. The repo does not include scripted PDF generation by default; a human or custom script can produce the PDFs from these specs.
+To **regenerate or update the PDFs:** run `npx tsx scripts/build-package-pdfs.ts`. The script reads *-content.md, strips spec preamble, and writes user-facing PDFs into this folder. The *-content.md files are authoring sources and are not uploaded.
 
 ## PDF Content Specifications (Level 2)
 
@@ -33,7 +33,7 @@ The Level 3 planning PDF is **downloadable**. Its **content structure and wordin
 
 - **Business Financial Planning:** Content spec in `freelancing-level-3-business-financial-planning-content.md`. Sections: (1) Revenue target ($4k–$10k+ band), (2) Platform costs ($50–150 L3 range), (3) P&L-style summary, (4) Cash flow, (5) Tax and retirement. Use terminology from `docs/TERMINOLOGY_STYLE_GUIDE.md`.
 
-To **regenerate or update** Level 2 or Level 3 PDFs, use the corresponding `*-content.md` file as the source for layout and copy.
+To **regenerate or update** Level 2 or Level 3 PDFs, run `npx tsx scripts/build-package-pdfs.ts` (includes all four Freelancing PDFs).
 
 ## ZIP Sources (Level 2 and Level 3)
 

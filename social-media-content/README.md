@@ -53,7 +53,7 @@ To **regenerate or update** the PDFs, use the corresponding `*-content.md` file 
 
 ## Build PDFs and Upload
 
-Run `npx tsx scripts/build-package-pdfs.ts` to regenerate PDFs from *-content.md before upload. Run `npx tsx scripts/upload-social-media-files.ts` to upload all 39 files to storage. Ensure XLSX, DOCX, PDF, and ZIP binaries exist in this folder (generate via build scripts or add real files) before upload.
+Run `npx tsx scripts/build-package-pdfs.ts` to regenerate PDFs from *-content.md before upload. The build strips spec preamble (Content Specification title, authoring paragraphs, Level context, authoring-only Notes) so output PDFs contain user-facing content only. The *-content.md and *-spec.md files are authoring sources and are not uploaded. Run `npx tsx scripts/upload-social-media-files.ts` to upload all 39 files to storage. Ensure XLSX, DOCX, PDF, and ZIP binaries exist in this folder (generate via build scripts or add real files) before upload.
 
 ## Terminology and Cross-References
 

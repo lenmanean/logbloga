@@ -50,7 +50,7 @@ The three planning PDFs are **downloadable**. Their **content structure and word
 - **Level 2 — Team Budget Planner:** Content spec in `agency-level-2-team-budget-planner-content.md`. Sections: (1) Revenue goal ($5k–$15k band), (2) Platform costs ($300–800 L2 range), (3) Income/expense tracking, (4) Team and contractor costs, (5) Net. Use terminology from `docs/TERMINOLOGY_STYLE_GUIDE.md`.
 - **Level 3 — Enterprise Budget Planning:** Content spec in `agency-level-3-enterprise-budget-planning-content.md`. Sections: (1) Revenue target ($15k–$50k+ band), (2) Platform costs ($800–2,000 L3 range), (3) P&L-style summary, (4) Cash flow, (5) Team and contractor costs, (6) Reserve and growth. Use terminology from `docs/TERMINOLOGY_STYLE_GUIDE.md`.
 
-To **regenerate or update** the PDFs, run `npx tsx scripts/build-package-pdfs.ts` (reads *-content.md and writes the corresponding PDF into this folder). Use the corresponding `*-content.md` file as the source for layout and copy.
+To **regenerate or update** the PDFs, run `npx tsx scripts/build-package-pdfs.ts` (reads *-content.md, strips spec preamble, writes user-facing PDF into this folder). The *-content.md and *-spec.md files are authoring sources and are not uploaded.
 
 ## Template / ZIP Content Specifications
 

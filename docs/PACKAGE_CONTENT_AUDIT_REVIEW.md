@@ -220,6 +220,8 @@ All Issues (1–5) and Recommendations (1–5) have been addressed. Binaries are
 
 **Build order before upload:** Run `content:build-pdfs` → `content:build-social-media-xlsx` → `content:build-social-media-docx` → `content:build-social-media-zips` → `content:build-agency-zips` → `content:build-zips` (Web Apps) and `build-freelancing-zips`; then `content:audit` (must exit 0); then upload scripts.
 
+**Update (January 30, 2026):** Freelancing PDFs now built via `build-package-pdfs.ts` (same as Social Media and Agency). The PDF build preprocesses *-content.md to strip spec preamble (Content Specification title, authoring paragraphs, Level context, authoring-only Notes) so delivered PDFs contain user-facing content only. See `lib/utils/strip-content-spec-preamble.ts` and [scripts/README.md](../scripts/README.md).
+
 ---
 
 **Document generated as the single audit/review deliverable per the Comprehensive Package Content Audit and Review Plan.**

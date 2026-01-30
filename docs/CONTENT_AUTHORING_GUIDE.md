@@ -46,6 +46,15 @@ copy-paste ready prompts for each implementation step.
 - Package-specific: `{package}-level-{n}-{content-type}.md`
 - AI prompts: `{package}-level-{n}-ai-prompts.md`
 
+## Content Specification Files
+
+Two types of spec files serve as authoring sources (not uploaded; not in allowlist):
+
+- **\*-content.md** (PDF specs): Describe the structure and copy of planning PDFs (budget worksheets, checklists). Run `npx tsx scripts/build-package-pdfs.ts` to generate user-facing PDFs. The build strips the spec preamble (Content Specification title, authoring paragraphs, Level context, authoring-only Notes) so delivered PDFs contain only real content.
+- **\*-spec.md** (template specs): Describe XLSX, DOCX, or ZIP structure. Build scripts (e.g. `build-social-media-xlsx.ts`, `build-agency-zips.ts`) produce the binaries from structure defined in code; specs document the intended layout.
+
+Always maintain package, level, and section context in spec files. See package READMEs (social-media-content, agency-content, freelancing-content) for per-package spec lists.
+
 ## Templates (ZIP)
 
 For Web Apps, ZIPs are built from source dirs under `web-apps-content/<name>/`. Run `npm run content:build-zips` before upload. Each template dir should include README and `.env.example`; see [WEB_APPS_ZIP_AUDIT.md](WEB_APPS_ZIP_AUDIT.md) and [TERMINOLOGY_STYLE_GUIDE.md](TERMINOLOGY_STYLE_GUIDE.md) for structure and terminology.

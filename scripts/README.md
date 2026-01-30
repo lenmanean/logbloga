@@ -229,3 +229,41 @@ Lists contents of each Web Apps ZIP source directory and key-file checks. Use to
 npx tsx scripts/audit-web-apps-zips.ts
 npx tsx scripts/audit-web-apps-zips.ts --json
 ```
+
+---
+
+## Package Content Build (Social Media, Agency, Freelancing)
+
+### `build-package-pdfs.ts`
+
+Builds all PDFs from *-content.md for Social Media, Agency, and Freelancing packages. Strips spec preamble (Content Specification title, authoring paragraphs, Level context, authoring-only Notes) so output PDFs contain **user-facing content only**. No placeholders.
+
+**Usage:**
+```bash
+npm run content:build-pdfs
+# or
+npx tsx scripts/build-package-pdfs.ts
+```
+
+**What it does:**
+- Reads each *-content.md, preprocesses to remove spec-only content, runs markdownToPDF()
+- Writes allowlist PDF filenames into social-media-content/, agency-content/, freelancing-content/
+- Social Media: 5 PDFs (monetization worksheet, daily posting checklist, SMM planner, agency budget, client onboarding)
+- Agency: 3 PDFs (solo, team, enterprise budget worksheets)
+- Freelancing: 4 PDFs (side hustle, pricing calculator, full-time planner, business financial planning)
+
+**When to use:** Before upload for Social Media, Agency, and Freelancing packages. Run first in the content build order.
+
+### Build order before upload
+
+Run scripts in this order, then `content:audit`, then upload:
+
+1. `npm run content:build-pdfs`
+2. `npx tsx scripts/build-social-media-xlsx.ts`
+3. `npx tsx scripts/build-social-media-docx.ts`
+4. `npx tsx scripts/build-social-media-zips.ts`
+5. `npx tsx scripts/build-agency-zips.ts`
+6. `npm run content:build-zips` (Web Apps)
+7. `npx tsx scripts/build-freelancing-zips.ts`
+8. `npm run content:audit` (must exit 0)
+9. Upload: `upload-social-media-files.ts`, `upload-agency-files.ts`, `upload-freelancing-files.ts`, `upload-web-apps-files.ts`
