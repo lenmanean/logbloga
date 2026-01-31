@@ -39,7 +39,9 @@ export async function getAllProducts(options?: ProductQueryOptions): Promise<Pro
     query = query.eq('featured', options.featured);
   }
 
-  if (options?.productType) {
+  if (options?.productTypes?.length) {
+    query = query.in('product_type', options.productTypes);
+  } else if (options?.productType) {
     query = query.eq('product_type', options.productType);
   }
 
@@ -217,10 +219,10 @@ export async function getPackageProducts(): Promise<ExtendedProduct[]> {
 }
 
 /**
- * Search products
+ * Search products (packages and bundle only; excludes legacy individual products)
  */
 export async function searchProducts(searchTerm: string, limit = 10): Promise<Product[]> {
-  return getAllProducts({ search: searchTerm, limit });
+  return getAllProducts({ search: searchTerm, limit, productTypes: ['package', 'bundle'] });
 }
 
 /**

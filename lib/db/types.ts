@@ -21,5 +21,7 @@ export interface ProductQueryOptions extends QueryOptions {
   active?: boolean;
   search?: string;
   productType?: 'package' | 'individual';
+  /** When set, only return products with these types (e.g. package, bundle for storefront) */
+  productTypes?: ('package' | 'bundle')[];
 }
 

@@ -60,12 +60,14 @@ export async function getRecommendationsByProduct(
   }
 
   // Fetch the actual product details for each recommended product
+  // Only include packages and bundle (exclude legacy individual products)
   const productIds = recommendations.map((rec) => rec.recommended_product_id);
   const { data: products, error: productsError } = await supabase
     .from('products')
     .select('*')
     .in('id', productIds)
-    .eq('active', true);
+    .eq('active', true)
+    .in('product_type', ['package', 'bundle']);
 
   if (productsError) {
     console.error('Error fetching recommended products:', productsError);
@@ -96,6 +98,7 @@ export async function getRecommendationsByCategory(
     .select('*')
     .eq('category', category)
     .eq('active', true)
+    .in('product_type', ['package', 'bundle'])
     .order('featured', { ascending: false })
     .order('created_at', { ascending: false });
 
@@ -173,12 +176,13 @@ export async function getFrequentlyBoughtTogether(
     .slice(0, limit)
     .map(([productId]) => productId);
 
-  // Fetch product details
+  // Fetch product details (only packages and bundle, exclude legacy individual products)
   const { data: products, error: productsError } = await supabase
     .from('products')
     .select('*')
     .in('id', sortedProducts)
-    .eq('active', true);
+    .eq('active', true)
+    .in('product_type', ['package', 'bundle']);
 
   if (productsError) {
     console.error('Error fetching frequently bought together products:', productsError);
@@ -205,6 +209,7 @@ export async function getPopularProducts(
     .from('products')
     .select('*')
     .eq('active', true)
+    .in('product_type', ['package', 'bundle'])
     .order('featured', { ascending: false })
     .order('created_at', { ascending: false });
 

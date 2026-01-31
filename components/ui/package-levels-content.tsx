@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { PackageProduct, PackageLevels, PackageLevel } from '@/lib/products';
-import { ChevronDown, ChevronUp, Check, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Sparkles } from 'lucide-react';
+import { ChevronDown, ChevronUp, FileText, FileSpreadsheet, File, Download, BookOpen, Lightbulb, Settings, Clock, DollarSign, Sparkles, Rocket, Wrench, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import { getLevelContent } from '@/lib/data/package-level-content';
@@ -82,14 +82,14 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
         // Get enriched content (merges database data with static content)
         const enrichedContent = getLevelContent(pkg.slug, level.level, level);
         
-        // Use enriched content if available, otherwise database level (both have required aiLeverage)
+        // Use enriched content (merges DB + static); includes all 7 categories
         const displayLevel = enrichedContent ? {
           ...level,
           aiLeverage: enrichedContent.aiLeverage ?? level.aiLeverage,
           implementationPlan: enrichedContent.implementationPlan,
-          platformGuides: enrichedContent.platformGuides,
-          creativeFrameworks: enrichedContent.creativeFrameworks,
-          templates: enrichedContent.templates,
+          platformGuides: enrichedContent.platformGuides ?? [],
+          creativeFrameworks: enrichedContent.creativeFrameworks ?? [],
+          templates: enrichedContent.templates ?? [],
         } : level;
         
         const FileIcon = getFileTypeIcon(displayLevel.implementationPlan.type);
@@ -240,6 +240,111 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
                                   {framework.description && (
                                     <p className="text-xs text-muted-foreground mt-1">{framework.description}</p>
                                   )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Launch & Marketing */}
+                {enrichedContent?.launchMarketing && enrichedContent.launchMarketing.length > 0 && (
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-start gap-3 mb-3">
+                      <Rocket className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-1">Launch & Marketing</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Launch checklists, marketing guides, and customer acquisition resources
+                        </p>
+                        <div className="space-y-2">
+                          {enrichedContent.launchMarketing.map((item, index) => {
+                            const ItemIcon = getFileTypeIcon(item.type);
+                            return (
+                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-muted/30">
+                                <ItemIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-sm font-medium truncate">
+                                      {item.name || formatFileNameToDisplayName(item.file)}
+                                    </span>
+                                    <Badge variant={getFileTypeBadgeVariant(item.type)} className="text-xs">
+                                      {item.type.toUpperCase()}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Troubleshooting */}
+                {enrichedContent?.troubleshooting && enrichedContent.troubleshooting.length > 0 && (
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-start gap-3 mb-3">
+                      <Wrench className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-1">Troubleshooting</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Common issues and solutions
+                        </p>
+                        <div className="space-y-2">
+                          {enrichedContent.troubleshooting.map((item, index) => {
+                            const ItemIcon = getFileTypeIcon(item.type);
+                            return (
+                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-muted/30">
+                                <ItemIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-sm font-medium truncate">
+                                      {item.name || formatFileNameToDisplayName(item.file)}
+                                    </span>
+                                    <Badge variant={getFileTypeBadgeVariant(item.type)} className="text-xs">
+                                      {item.type.toUpperCase()}
+                                    </Badge>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Time & Budget Planning */}
+                {enrichedContent?.planning && enrichedContent.planning.length > 0 && (
+                  <div className="border rounded-lg p-4">
+                    <div className="flex items-start gap-3 mb-3">
+                      <Calendar className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-lg mb-1">Time & Budget Planning</h3>
+                        <p className="text-sm text-muted-foreground mb-3">
+                          Time investment planners, budget worksheets, and success metrics
+                        </p>
+                        <div className="space-y-2">
+                          {enrichedContent.planning.map((item, index) => {
+                            const ItemIcon = getFileTypeIcon(item.type);
+                            return (
+                              <div key={index} className="flex items-center gap-2 p-2 rounded bg-muted/30">
+                                <ItemIcon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <span className="text-sm font-medium truncate">
+                                      {item.name || formatFileNameToDisplayName(item.file)}
+                                    </span>
+                                    <Badge variant={getFileTypeBadgeVariant(item.type)} className="text-xs">
+                                      {item.type.toUpperCase()}
+                                    </Badge>
+                                  </div>
                                 </div>
                               </div>
                             );

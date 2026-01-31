@@ -47,7 +47,11 @@
 | Agency | `scripts/upload-agency-files.ts` | `agency` | `getAllowedFilenamesForPackage('agency')` | `agency-content/` | md, pdf, zip. **Missing:** 3 PDFs, 3 ZIPs (see §4). |
 | Freelancing | `scripts/upload-freelancing-files.ts` | `freelancing` | `getAllowedFilenamesForPackage('freelancing')` | `freelancing-content/` | md, pdf, zip. All 41 files present; `scripts/build-freelancing-zips.ts` builds ZIPs from source dirs. |
 
-### 2.4 UI: Hosted vs Download, Expanded View, TOC, Search
+### 2.4 Product Page What's Included
+
+- **package-levels-content.tsx:** The product page (pre-purchase) What's Included section now displays the **complete 7-category itemized list** per level, aligned with the library (post-purchase) experience. Categories shown in order: Implementation Plan, Platform Setup Guides, Creative Decision Frameworks, Launch & Marketing, Troubleshooting, Time & Budget Planning, Templates & Checklists. Data comes from `getLevelContent()` which merges database levels with static content from `package-level-content.ts`. This ensures pre- and post-purchase views show the same structure and file counts per package.
+
+### 2.5 UI: Hosted vs Download, Expanded View, TOC, Search
 
 - **level-content.tsx:** For each section, hosted content uses `isHostedContent(type)` (true only for `md`/`markdown`). MD files get `MarkdownViewer` and Expand button; PDF/ZIP/XLSX/DOCX get `DownloadButton` only. Implementation Plan, Platform Guides, Creative Frameworks, Templates, Launch & Marketing, Troubleshooting, Planning all follow this.
 - **markdown-viewer.tsx:** Renders headings (h1–h6) with stable IDs via `slugify`/`TocEntry`; passes heading entries to parent for TOC. Supports `content` prop and `onHeadingsParsed`.
