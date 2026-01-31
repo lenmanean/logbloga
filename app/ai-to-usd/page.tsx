@@ -5,7 +5,7 @@ import { caseStudies } from '@/lib/resources/case-studies';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Layers, FileText, Lightbulb, TrendingUp, Users, BookOpen, CheckCircle, Clock } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, FileText, Lightbulb, TrendingUp, Users, BookOpen, CheckCircle, Clock, Package } from 'lucide-react';
 
 export default function AiToUsdPage() {
   // Get DOER case study (only real case study)
@@ -27,6 +27,34 @@ export default function AiToUsdPage() {
             </div>
           </div>
         </section>
+
+        {/* Master Bundle Featured Section */}
+        <Link href="/ai-to-usd/packages/master-bundle" className="block mb-12">
+          <Card className="overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 hover:shadow-xl hover:border-primary/50 transition-all duration-300">
+            <CardContent className="p-6 md:p-8">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div className="flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-primary/20">
+                    <Package className="h-10 w-10 text-primary" />
+                  </div>
+                  <div>
+                    <Badge className="mb-2">Best Value</Badge>
+                    <h2 className="text-2xl md:text-3xl font-bold mb-2">
+                      Complete AI Monetization – Master Bundle
+                    </h2>
+                    <p className="text-muted-foreground max-w-2xl">
+                      Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides. One purchase, every path to AI revenue.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-lg font-semibold">View Master Bundle</span>
+                  <ArrowRight className="h-5 w-5" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
 
         {/* Package Navigation Cards */}
         <div id="explore-packages" className="mb-16">

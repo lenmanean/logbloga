@@ -21,6 +21,8 @@
     "db:reset": "supabase db reset",
     "db:seed": "supabase db seed",
     "stripe:sync": "tsx scripts/sync-products-to-stripe.ts",
+    "stripe:cleanup": "tsx scripts/cleanup-stripe-products.ts",
+    "stripe:sync-content": "tsx scripts/sync-stripe-product-content.ts",
     "content:upload": "tsx scripts/upload-web-apps-files.ts",
     "content:deploy": "tsx scripts/upload-web-apps-files.ts",
     "content:build-zips": "tsx scripts/build-web-apps-zips.ts",

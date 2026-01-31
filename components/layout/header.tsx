@@ -150,6 +150,10 @@ export function Header() {
               onNavigate={() => router.push('/ai-to-usd')}
             >
               <DropdownMenuItem asChild>
+                <Link href="/ai-to-usd/packages/master-bundle">Master Bundle</Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
                 <Link href="/ai-to-usd/packages/web-apps">Web Apps</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
@@ -338,6 +342,14 @@ export function Header() {
                     AI to USD
                   </Link>
                   <div className="flex flex-col pl-4 space-y-2">
+                    <Link
+                      href="/ai-to-usd/packages/master-bundle"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Master Bundle
+                    </Link>
+                    <div className="border-t border-border my-1" />
                     <Link
                       href="/ai-to-usd/packages/web-apps"
                       onClick={() => setOpen(false)}

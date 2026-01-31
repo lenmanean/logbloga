@@ -24,14 +24,15 @@ function toProduct(row: SupabaseProduct): Product {
 
 /**
  * Check if user has access to a specific product
- * Returns true if user has a completed order for the product directly
+ * Returns true if user has a completed order for the product directly,
+ * or if user has a bundle that includes the product.
  */
 export async function hasProductAccess(
   userId: string,
   productId: string
 ): Promise<boolean> {
   const supabase = await createClient();
-  
+
   // Get all completed orders for the user
   const { data: orders, error: ordersError } = await supabase
     .from('orders')
@@ -43,7 +44,7 @@ export async function hasProductAccess(
     return false;
   }
 
-  const orderIds = orders.map(o => o.id);
+  const orderIds = orders.map((o) => o.id);
 
   // Check direct purchase
   const { data: directPurchase, error: directError } = await supabase
@@ -58,7 +59,38 @@ export async function hasProductAccess(
     console.error('Error checking direct purchase:', directError);
   }
 
-  return !!directPurchase;
+  if (directPurchase) return true;
+
+  // Check bundle expansion: user may have purchased a bundle that includes this product
+  const { data: bundleItems, error: bundleError } = await supabase
+    .from('order_items')
+    .select('product:products!product_id(id, product_type, included_products)')
+    .in('order_id', orderIds);
+
+  if (bundleError || !bundleItems) return false;
+
+  const PACKAGE_SLUG_ALLOWLIST = new Set(['web-apps', 'social-media', 'agency', 'freelancing']);
+  const slugsToResolve = new Set<string>();
+  for (const item of bundleItems) {
+    const product = item.product as { product_type?: string; included_products?: string[] } | null;
+    if (!product || product.product_type !== 'bundle') continue;
+    const slugs = product.included_products;
+    if (Array.isArray(slugs)) {
+      slugs.forEach((s) => {
+        if (typeof s === 'string' && PACKAGE_SLUG_ALLOWLIST.has(s)) slugsToResolve.add(s);
+      });
+    }
+  }
+
+  if (slugsToResolve.size === 0) return false;
+
+  const { data: resolvedProducts } = await supabase
+    .from('products')
+    .select('id')
+    .in('slug', Array.from(slugsToResolve));
+
+  const includedIds = new Set((resolvedProducts || []).map((p) => p.id));
+  return includedIds.has(productId);
 }
 
 /**
@@ -86,51 +118,59 @@ export async function hasProductAccessBySlug(
 
 /**
  * Get all products user has access to
+ * Expands bundles into their included packages (library shows individual packages, not the bundle)
  */
 export async function getUserProductAccess(userId: string): Promise<Product[]> {
   const supabase = await createClient();
-  
-  // Get all completed orders for user
+
   const { data: orders, error: ordersError } = await supabase
     .from('orders')
     .select('id')
     .eq('user_id', userId)
     .eq('status', 'completed');
 
-  if (ordersError || !orders || orders.length === 0) {
-    return [];
-  }
+  if (ordersError || !orders || orders.length === 0) return [];
+  const orderIds = orders.map((o) => o.id);
 
-  const orderIds = orders.map(o => o.id);
-
-  // Get all products from order items
   const { data: orderItems, error: itemsError } = await supabase
     .from('order_items')
-    .select(`
-      product_id,
-      product:products!product_id(*)
-    `)
+    .select('product_id, product:products!product_id(*)')
     .in('order_id', orderIds);
 
-  if (itemsError || !orderItems) {
-    return [];
-  }
+  if (itemsError || !orderItems) return [];
 
   const products: Product[] = [];
   const productIds = new Set<string>();
 
   for (const item of orderItems) {
     if (!item.product_id) continue;
-
     const rawProduct = item.product as SupabaseProduct;
     if (!rawProduct) continue;
-    
-    const product = toProduct(rawProduct);
-    
-    // Add direct product (packages only)
-    if (!productIds.has(product.id)) {
-      products.push(product);
-      productIds.add(product.id);
+
+    if ((rawProduct.product_type as string) === 'bundle') {
+      const slugs = rawProduct.included_products as string[] | null;
+      if (!Array.isArray(slugs) || slugs.length === 0) continue;
+      const PACKAGE_SLUG_ALLOWLIST = ['web-apps', 'social-media', 'agency', 'freelancing'];
+      const validSlugs = slugs.filter((s) => typeof s === 'string' && PACKAGE_SLUG_ALLOWLIST.includes(s));
+      if (validSlugs.length === 0) continue;
+      const { data: included } = await supabase
+        .from('products')
+        .select('*')
+        .in('slug', validSlugs)
+        .eq('product_type', 'package');
+      for (const p of included || []) {
+        const prod = toProduct(p as SupabaseProduct);
+        if (!productIds.has(prod.id)) {
+          products.push(prod);
+          productIds.add(prod.id);
+        }
+      }
+    } else {
+      const product = toProduct(rawProduct);
+      if (!productIds.has(product.id)) {
+        products.push(product);
+        productIds.add(product.id);
+      }
     }
   }
 
@@ -192,26 +232,56 @@ export async function getUserProductAccessWithDates(userId: string): Promise<Pro
 
   for (const item of orderItems) {
     if (!item.product_id || !item.order_id) continue;
-
-    const product = item.product as Product;
     const orderInfo = orderMap.get(item.order_id);
     if (!orderInfo) continue;
 
-    // Use the earliest purchase date if product appears in multiple orders
-    const existing = productMap.get(product.id);
-    if (!existing) {
-      productMap.set(product.id, {
-        ...product,
-        purchasedDate: orderInfo.date,
-        orderId: orderInfo.orderId,
-      });
+    const rawProduct = item.product as SupabaseProduct & { product_type?: string; included_products?: string[] };
+
+    if (rawProduct?.product_type === 'bundle') {
+      const slugs = rawProduct.included_products as string[] | null;
+      if (!Array.isArray(slugs) || slugs.length === 0) continue;
+      const PACKAGE_SLUG_ALLOWLIST = ['web-apps', 'social-media', 'agency', 'freelancing'];
+      const validSlugs = slugs.filter((s) => typeof s === 'string' && PACKAGE_SLUG_ALLOWLIST.includes(s));
+      if (validSlugs.length === 0) continue;
+      const { data: included } = await supabase
+        .from('products')
+        .select('*')
+        .in('slug', validSlugs)
+        .eq('product_type', 'package');
+      for (const p of included || []) {
+        const product = toProduct(p as SupabaseProduct);
+        const existing = productMap.get(product.id);
+        if (!existing) {
+          productMap.set(product.id, {
+            ...product,
+            purchasedDate: orderInfo.date,
+            orderId: orderInfo.orderId,
+          });
+        } else {
+          const existingDate = new Date(existing.purchasedDate);
+          const newDate = new Date(orderInfo.date);
+          if (newDate < existingDate) {
+            existing.purchasedDate = orderInfo.date;
+            existing.orderId = orderInfo.orderId;
+          }
+        }
+      }
     } else {
-      // Keep the earliest purchase date
-      const existingDate = new Date(existing.purchasedDate);
-      const newDate = new Date(orderInfo.date);
-      if (newDate < existingDate) {
-        existing.purchasedDate = orderInfo.date;
-        existing.orderId = orderInfo.orderId;
+      const product = item.product as Product;
+      const existing = productMap.get(product.id);
+      if (!existing) {
+        productMap.set(product.id, {
+          ...product,
+          purchasedDate: orderInfo.date,
+          orderId: orderInfo.orderId,
+        });
+      } else {
+        const existingDate = new Date(existing.purchasedDate);
+        const newDate = new Date(orderInfo.date);
+        if (newDate < existingDate) {
+          existing.purchasedDate = orderInfo.date;
+          existing.orderId = orderInfo.orderId;
+        }
       }
     }
   }
@@ -259,30 +329,25 @@ export async function checkPackageAccess(
 }
 
 /**
- * Check if an order contains a package product
+ * Check if an order contains a package or bundle product
  */
 export async function orderContainsPackage(orderId: string): Promise<boolean> {
   const supabase = await createClient();
-  
-  const { data, error } = await supabase
-    .from('order_items')
-    .select(`
-      product_id,
-      product:products!product_id(product_type)
-    `)
-    .eq('order_id', orderId)
-    .eq('product.product_type', 'package')
-    .limit(1)
-    .single();
 
-  if (error) {
-    if (error.code === 'PGRST116') {
-      return false; // No package in order
-    }
+  const { data: items, error } = await supabase
+    .from('order_items')
+    .select('product:products!product_id(product_type)')
+    .eq('order_id', orderId);
+
+  if (error || !items) {
+    if (error?.code === 'PGRST116') return false;
     console.error('Error checking order for package:', error);
     return false;
   }
 
-  return !!data;
+  return items.some((item) => {
+    const p = item.product as { product_type?: string } | null;
+    return p?.product_type === 'package' || p?.product_type === 'bundle';
+  });
 }
 

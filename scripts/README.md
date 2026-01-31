@@ -46,6 +46,54 @@ Once products are synced, your checkout will automatically:
 
 ---
 
+## Stripe Product Catalogue Cleanup
+
+### `cleanup-stripe-products.ts`
+
+Archives all Stripe products that are NOT one of our 5 products (Web Apps, Social Media, Agency, Freelancing, Master Bundle). Use when extra products exist in Stripe from testing or old seeds.
+
+**Usage:**
+```bash
+# Preview what would be archived
+npx tsx scripts/cleanup-stripe-products.ts --dry-run
+
+# Archive extra products
+npm run stripe:cleanup
+# or
+npx tsx scripts/cleanup-stripe-products.ts
+```
+
+**What it does:**
+- Fetches the 4 packages + Master Bundle from database (by slug)
+- Lists all active Stripe products
+- Archives (sets `active: false`) any product not in the keep list
+- Keeps: Web Apps, Social Media, Agency, Freelancing, Master Bundle
+
+---
+
+## Sync Stripe Product Content
+
+### `sync-stripe-product-content.ts`
+
+Updates Stripe product name, description, images, and prices to match the database. Use after database changes to keep Stripe in sync with your implementation.
+
+**Usage:**
+```bash
+# Preview changes
+npx tsx scripts/sync-stripe-product-content.ts --dry-run
+
+# Apply updates
+npm run stripe:sync-content
+```
+
+**What it does:**
+- Fetches packages and Master Bundle from database (title, description, tagline, package_image, price)
+- For each: updates Stripe product name, description, images to match DB
+- If price differs: creates new Stripe price, archives old, updates DB
+- Ensures Stripe product catalogue matches actual implementation
+
+---
+
 ## Stripe Price Updates
 
 ### `update-stripe-prices.ts`

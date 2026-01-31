@@ -28,7 +28,7 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../lib/types/supabase';
 import { deleteByTag } from '../lib/cache/redis-cache';
 
-const PACKAGE_SLUGS = ['web-apps', 'social-media', 'agency', 'freelancing'];
+const PACKAGE_SLUGS = ['web-apps', 'social-media', 'agency', 'freelancing', 'master-bundle'];
 
 /**
  * Create Supabase client for script usage

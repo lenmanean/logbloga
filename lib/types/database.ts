@@ -10,7 +10,7 @@ import type { Database } from './supabase';
 // Helper types for common table rows
 export type Product = Database['public']['Tables']['products']['Row'] & {
   // Fields added in migration 000020
-  product_type?: 'package' | 'individual' | 'tool' | 'template' | 'strategy' | 'course' | null;
+  product_type?: 'package' | 'bundle' | 'individual' | 'tool' | 'template' | 'strategy' | 'course' | null;
   version_year?: number | null;
   is_current_version?: boolean | null;
   included_products?: any; // JSONB
