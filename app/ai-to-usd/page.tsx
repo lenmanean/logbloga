@@ -1,11 +1,12 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { CategoryCard } from '@/components/ui/category-card';
 import { categories } from '@/lib/products';
 import { caseStudies } from '@/lib/resources/case-studies';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Layers, FileText, Lightbulb, TrendingUp, Users, BookOpen, CheckCircle, Clock, Package } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, FileText, Lightbulb, TrendingUp, Users, BookOpen, CheckCircle, Clock } from 'lucide-react';
 
 export default function AiToUsdPage() {
   // Get DOER case study (only real case study)
@@ -33,11 +34,18 @@ export default function AiToUsdPage() {
           <Card className="overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 hover:shadow-xl hover:border-primary/50 transition-all duration-300">
             <CardContent className="p-6 md:p-8">
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-primary/20">
-                    <Package className="h-10 w-10 text-primary" />
+                <div className="flex items-center gap-4 md:gap-6 flex-1">
+                  <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
+                    <Image
+                      src="/package-master.png"
+                      alt="Master Bundle - All four AI to USD packages"
+                      fill
+                      className="object-contain p-2"
+                      sizes="(max-width: 768px) 96px, 128px"
+                      priority
+                    />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <Badge className="mb-2">Best Value</Badge>
                     <h2 className="text-2xl md:text-3xl font-bold mb-2">
                       Complete AI Monetization – Master Bundle
