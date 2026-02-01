@@ -126,7 +126,9 @@ export default async function PackagePage({ params }: PackagePageProps) {
     image: packageData.package_image || (packageData.images as any)?.[0] || packageData.image_url || undefined,
     duration: packageData.duration || undefined,
     packageImage: packageData.package_image || '',
-    images: (packageData.images as string[]) || [packageData.package_image || ''],
+    images: ((packageData.images as string[])?.filter(Boolean)?.length ?? 0) > 0
+      ? (packageData.images as string[]).filter(Boolean)
+      : (packageData.package_image ? [packageData.package_image] : []),
     tagline: packageData.tagline || '',
     levels: levels ?? undefined,
     pricingJustification: packageData.pricing_justification || '',
@@ -171,7 +173,12 @@ export default async function PackagePage({ params }: PackagePageProps) {
     }));
   }
 
-  const productImages = packageProduct.images || [packageProduct.packageImage];
+  const productImages =
+    (packageProduct.images?.length ?? 0) > 0
+      ? packageProduct.images!.filter((src) => src?.trim())
+      : packageProduct.packageImage
+        ? [packageProduct.packageImage]
+        : [];
 
   return (
     <main className="min-h-screen bg-background">

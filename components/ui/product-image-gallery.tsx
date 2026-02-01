@@ -14,29 +14,36 @@ interface ProductImageGalleryProps {
 
 export function ProductImageGallery({ images, alt, className }: ProductImageGalleryProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const currentImage = images[currentIndex] || images[0];
+  const validImages = images?.filter((src) => src?.trim()) ?? [];
+  const currentImage = validImages[currentIndex] || validImages[0];
 
   const handlePrevious = () => {
-    setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+    setCurrentIndex((prev) => (prev === 0 ? validImages.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+    setCurrentIndex((prev) => (prev === validImages.length - 1 ? 0 : prev + 1));
   };
 
   // If only one image, don't show navigation
-  const showNavigation = images.length > 1;
+  const showNavigation = validImages.length > 1;
 
   return (
     <div className={cn('relative w-full', className)}>
       <div className="relative aspect-square w-full max-w-2xl mx-auto bg-background rounded-lg overflow-hidden border border-border">
-        <Image
-          src={currentImage}
-          alt={`${alt} - Image ${currentIndex + 1}`}
-          fill
-          className="object-contain p-4"
-          priority={currentIndex === 0}
-        />
+        {currentImage ? (
+          <Image
+            src={currentImage}
+            alt={`${alt} - Image ${currentIndex + 1}`}
+            fill
+            className="object-contain p-4"
+            priority={currentIndex === 0}
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+            <span className="text-sm">No image available</span>
+          </div>
+        )}
         
         {showNavigation && (
           <>
@@ -63,9 +70,9 @@ export function ProductImageGallery({ images, alt, className }: ProductImageGall
             </Button>
 
             {/* Image Indicator */}
-            {images.length > 1 && (
+            {validImages.length > 1 && (
               <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
-                {images.map((_, index) => (
+                {validImages.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
