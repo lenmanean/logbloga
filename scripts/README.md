@@ -26,39 +26,31 @@ npx tsx scripts/sync-products-to-stripe.ts
 
 **What it does:**
 - Fetches all active products from your database that don't have Stripe IDs
-- Creates a Stripe product for each database product
-- Creates a Stripe price for each product (with automatic tax enabled)
-- Updates the database with the Stripe product and price IDs
-- Provides a summary of successful syncs and any errors
+- Creates a Stripe product and price for each database product (with automatic tax enabled)
+- Updates the database with the Stripe **product** ID only (checkout uses `STRIPE_PRICE_*` env vars, not DB)
+- Prints the new price ID for each product — set the corresponding env var (e.g. `STRIPE_PRICE_MASTER_BUNDLE=price_xxx`)
 
 **Features:**
 - ✅ Creates Stripe products with metadata linking to database products
-- ✅ Enables automatic tax calculation (tax_code: `txcd_10301001` for digital products)
+- ✅ Enables automatic tax calculation (tax_code for digital products)
 - ✅ Sets tax behavior to `exclusive` (tax calculated automatically)
-- ✅ Skips products that already have Stripe IDs
+- ✅ Skips products that already have Stripe product IDs
 - ✅ Provides detailed logging and error handling
 
-**After running:**
-Once products are synced, your checkout will automatically:
-- Use pre-created Stripe prices (faster checkout)
-- Enable automatic tax calculation
-- Provide better product management in Stripe Dashboard
+**After running:** Set each `STRIPE_PRICE_*` env var to the printed price ID, then run `sync-display-prices-from-stripe.ts` so UI prices match Stripe.
 
-### `update-product-stripe-price.ts`
+### `sync-display-prices-from-stripe.ts`
 
-Updates a single product's `stripe_price_id` in the database by slug. Use when you create a new Stripe Price (e.g. after the original failed) and need to point the product to the new price.
+Syncs display prices **from Stripe to DB** (`products.price`). Reads `STRIPE_PRICE_*` env vars per slug, fetches `unit_amount` from Stripe, updates `products.price` for each sellable product so the UI (cart, checkout, product pages) reflects Stripe pricing.
 
-**When to use:**
-- After creating a new default price in the Stripe Dashboard (e.g. $0.51) so checkout uses that price instead of an archived one (e.g. $0.01). Stripe requires Checkout Session total ≥ $0.50; if the DB still points at an old low price, you'll get `amount_too_small` until you update `stripe_price_id` to the new price ID.
+**When to run:** After changing a price in Stripe or after setting a new `STRIPE_PRICE_*` env var.
 
 **Usage:**
 ```bash
-npx tsx scripts/update-product-stripe-price.ts <slug> <stripe_price_id>
-# Example: Master Bundle new price (get price_xxx from Stripe Dashboard → Product → Pricing)
-npx tsx scripts/update-product-stripe-price.ts master-bundle price_1SvRghRPD0Bbk4QBldhV3krO
+npx tsx scripts/sync-display-prices-from-stripe.ts
 ```
 
-**Environment:** `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (e.g. in `.env.local`).
+**Environment:** `STRIPE_SECRET_KEY`, `STRIPE_PRICE_AGENCY`, `STRIPE_PRICE_SOCIAL_MEDIA`, `STRIPE_PRICE_WEB_APPS`, `STRIPE_PRICE_FREELANCING`, `STRIPE_PRICE_MASTER_BUNDLE`; `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (e.g. in `.env.local`).
 
 ---
 
@@ -105,78 +97,7 @@ npm run stripe:sync-content
 **What it does:**
 - Fetches packages and Master Bundle from database (title, description, tagline, package_image, price)
 - For each: updates Stripe product name, description, images to match DB
-- If price differs: creates new Stripe price, archives old, updates DB
-- Ensures Stripe product catalogue matches actual implementation
-
----
-
-## Stripe Price Updates
-
-### `update-stripe-prices.ts`
-
-Updates Stripe prices for products that have changed in the database. Since Stripe doesn't allow editing prices, this script creates new prices and archives old ones.
-
-**Prerequisites:**
-1. Products must already have Stripe IDs (run `sync-products-to-stripe.ts` first if needed)
-2. Same environment variables as sync script
-
-**Usage:**
-```bash
-# Preview changes without making updates
-npx tsx scripts/update-stripe-prices.ts --dry-run
-
-# Apply updates
-npx tsx scripts/update-stripe-prices.ts
-```
-
-**What it does:**
-- Fetches all active products with existing Stripe IDs
-- Compares database prices with current Stripe prices
-- Creates new Stripe prices for products with price changes
-- Archives old Stripe prices (sets `active: false`)
-- Updates database with new `stripe_price_id`
-- Handles both packages and individual products
-
-**Features:**
-- ✅ Dry-run mode to preview changes
-- ✅ Batch processing with error handling
-- ✅ Detailed logging of all price updates
-- ✅ Validation that new prices match database
-- ✅ Automatically archives old prices
-- ✅ Skips products with no price changes
-
-**When to use:**
-- After running database migrations that update product prices
-- When manually updating prices in the database
-- To sync price changes from database to Stripe
-
-**Example output:**
-```
-🚀 Starting Stripe price update...
-
-✓ Stripe client initialized
-✓ Supabase client initialized
-
-Checking 4 product(s) for price updates...
-
-Found 4 product(s) with price changes:
-
-  Web Apps Package (web-apps)
-    Old: $1997.00 → New: $697.00 (-$1300.00)
-  Social Media Package (social-media)
-    Old: $997.00 → New: $397.00 (-$600.00)
-  Agency Package (agency)
-    Old: $2997.00 → New: $797.00 (-$2200.00)
-  Freelancing Package (freelancing)
-    Old: $497.00 → New: $397.00 (-$100.00)
-
-Updating: Web Apps Package (web-apps)
-  Creating new Stripe price for: Web Apps Package
-  ✓ Created new Stripe price: price_xxx ($697.00)
-  ✓ Archived old Stripe price: price_yyy
-  ✓ Updated database with new Stripe price ID
-✅ Successfully updated: Web Apps Package
-```
+- If price differs: creates new Stripe price, archives old, and **prints** the new price ID with instructions to set the corresponding `STRIPE_PRICE_*` env var (checkout uses env, not DB). Then run `sync-display-prices-from-stripe.ts` to update `products.price`.
 
 ---
 
@@ -224,7 +145,7 @@ stripe products list
 stripe products retrieve prod_xxxxx
 ```
 
-**Note:** The `update-stripe-prices.ts` script handles price updates automatically. Use CLI commands primarily for verification and troubleshooting.
+**Note:** Checkout uses `STRIPE_PRICE_*` env vars (see `sync-display-prices-from-stripe.ts`). Use CLI commands for verification and troubleshooting.
 
 ---
 

@@ -26,6 +26,7 @@ config({ path: resolve(process.cwd(), '.env') });
 
 import { getStripeClient } from '../lib/stripe/client';
 import { formatAmountForStripe } from '../lib/stripe/utils';
+import { SLUG_TO_STRIPE_PRICE_ENV } from '../lib/stripe/prices';
 import { createClient } from '@supabase/supabase-js';
 import type Stripe from 'stripe';
 import type { Database } from '../lib/types/supabase';
@@ -88,27 +89,25 @@ async function createStripeProduct(
 }
 
 /**
- * Update product in database with Stripe IDs
+ * Update product in database with Stripe product ID only.
+ * Checkout uses STRIPE_PRICE_* env vars, not stripe_price_id in DB.
  */
 async function updateProductStripeIds(
   supabase: ReturnType<typeof createSupabaseClient>,
   productId: string,
   stripeProductId: string,
-  stripePriceId: string
+  _stripePriceId: string
 ): Promise<void> {
   const { error } = await supabase
     .from('products')
-    .update({
-      stripe_product_id: stripeProductId,
-      stripe_price_id: stripePriceId,
-    })
+    .update({ stripe_product_id: stripeProductId })
     .eq('id', productId);
 
   if (error) {
     throw new Error(`Failed to update product ${productId}: ${error.message}`);
   }
 
-  console.log(`  ✓ Updated database with Stripe IDs`);
+  console.log(`  ✓ Updated database with Stripe product ID`);
 }
 
 /**
@@ -187,6 +186,9 @@ async function syncProductsToStripe() {
         );
 
         await updateProductStripeIds(supabase, product.id, productId, priceId);
+
+        const envKey = SLUG_TO_STRIPE_PRICE_ENV[product.slug] ?? `STRIPE_PRICE_${product.slug.replace(/-/g, '_').toUpperCase()}`;
+        console.log(`  → Set ${envKey}=${priceId} in your environment for checkout.\n`);
 
         successCount++;
         console.log(`✅ Successfully synced: ${product.title}\n`);

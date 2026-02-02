@@ -18,6 +18,12 @@ const envSchema = z.object({
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: z.string().min(1, 'Stripe publishable key is required').optional(),
   STRIPE_SECRET_KEY: z.string().min(1, 'Stripe secret key is required').optional(),
   STRIPE_WEBHOOK_SECRET: z.string().min(1, 'Stripe webhook secret is required').optional(),
+  // Stripe price IDs per product slug (checkout uses these; optional so build succeeds without them)
+  STRIPE_PRICE_AGENCY: z.string().optional(),
+  STRIPE_PRICE_SOCIAL_MEDIA: z.string().optional(),
+  STRIPE_PRICE_WEB_APPS: z.string().optional(),
+  STRIPE_PRICE_FREELANCING: z.string().optional(),
+  STRIPE_PRICE_MASTER_BUNDLE: z.string().optional(),
   
   // Email (Resend)
   RESEND_API_KEY: z.string().min(1, 'Resend API key is required').optional(),

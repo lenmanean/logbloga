@@ -1,7 +1,7 @@
 /**
  * Update a single product's display price (and optional original_price) by slug.
- * Checkout and cart show prices from the products table; Stripe charges use stripe_price_id.
- * Keep products.price in sync with your Stripe price so order totals and Place Order work.
+ * Checkout uses STRIPE_PRICE_* env vars; cart and UI use products.price from the DB.
+ * This script updates products.price (display only). For canonical sync from Stripe, run sync-display-prices-from-stripe.ts.
  *
  * Usage:
  *   npx tsx scripts/update-product-price.ts <slug> <price>

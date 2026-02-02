@@ -34,9 +34,14 @@ If the user clicks "Place Order" again with the same cart (e.g. double-click or 
 - **Events used**: `checkout.session.completed`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`
 - **Production**: Register the webhook URL in the Stripe Dashboard and set `STRIPE_WEBHOOK_SECRET` for that endpoint.
 
+## Stripe price IDs (checkout)
+
+- **Checkout** uses **environment variables** for Stripe price IDs: `STRIPE_PRICE_AGENCY`, `STRIPE_PRICE_SOCIAL_MEDIA`, `STRIPE_PRICE_WEB_APPS`, `STRIPE_PRICE_FREELANCING`, `STRIPE_PRICE_MASTER_BUNDLE`. Each must be set to a Stripe Price ID (`price_xxx`). Line items are built from order item `product_sku` (slug) and the corresponding env var; no DB `stripe_price_id` is used for checkout.
+- **Display** (cart, checkout UI, product pages) uses `products.price` from the DB. Run `npx tsx scripts/sync-display-prices-from-stripe.ts` after changing a price in Stripe or setting a new env var so UI reflects Stripe pricing.
+
 ## Related files
 
-- `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session (line items, discount, tax)
+- `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session (line items from env price IDs, discount, tax)
 - `app/api/orders/create/route.ts` — Creates order (or returns existing pending order); does **not** clear cart
 - `lib/stripe/webhooks.ts` — Handles Stripe events; clears cart in `handleCheckoutSessionCompleted`
 - `app/api/cron/daily/route.ts` — Single daily cron (Hobby): piracy monitor + abandoned-cart; `vercel.json` has one cron entry for `/api/cron/daily` at 2 AM UTC
@@ -54,6 +59,7 @@ Ensure these are set in production:
 |--------|---------|
 | `STRIPE_SECRET_KEY` | Server-side Stripe API (e.g. `sk_live_...`) |
 | `STRIPE_WEBHOOK_SECRET` | Webhook signature verification (from Stripe Dashboard webhook endpoint) |
+| `STRIPE_PRICE_AGENCY`, `STRIPE_PRICE_SOCIAL_MEDIA`, `STRIPE_PRICE_WEB_APPS`, `STRIPE_PRICE_FREELANCING`, `STRIPE_PRICE_MASTER_BUNDLE` | Stripe Price ID (`price_xxx`) per sellable product; checkout uses these. Use test IDs for test, live for production. |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-side key (e.g. `pk_live_...`) if using Stripe.js |
 | `NEXT_PUBLIC_APP_URL` | App root URL for Stripe redirect URLs (success/cancel) |
 | `CRON_SECRET` | Optional: secures cron routes; set in Vercel. **No leading or trailing whitespace** (Vercel rejects it for HTTP headers). Windows-safe: `node -e "require('fs').writeFileSync('.cron-secret-tmp', require('crypto').randomBytes(32).toString('hex'), 'utf8')"` then `cmd /c "vercel env add CRON_SECRET production < .cron-secret-tmp"`; delete `.cron-secret-tmp` after. |

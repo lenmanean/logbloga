@@ -8,16 +8,13 @@ Migration **`000044_set_test_pricing_packages.sql`** sets `products.price` and `
 
 To revert after testing, run a follow-up migration that restores the previous package prices.
 
-## 1. Stripe Price IDs vs Supabase
+## 1. Stripe Price IDs (environment variables)
 
-**Checkout uses `products.stripe_price_id`** from Supabase to build line items. The amount charged is whatever that Stripe Price object is.
+**Checkout uses environment variables** (`STRIPE_PRICE_*` per product slug), not `products.stripe_price_id` from Supabase. The amount charged is whatever that Stripe Price object is.
 
-- **If you edited the existing Stripe Price** (same `price_xxx` ID) to a non-zero amount:  
-  No change needed. Supabase already points to that ID; checkout will charge the new amount.
-
-- **If you created new Stripe Price objects** (new IDs):  
-  Update Supabase so each package product points to the new price:
-  - In Supabase Dashboard → Table Editor → `products`, set `stripe_price_id` for each package (e.g. `agency`, `social-media`, `web-apps`, `freelancing`, `master-bundle`) to the new Stripe Price ID.
+- Set these in your environment (e.g. Vercel, `.env.local`):  
+  `STRIPE_PRICE_AGENCY`, `STRIPE_PRICE_SOCIAL_MEDIA`, `STRIPE_PRICE_WEB_APPS`, `STRIPE_PRICE_FREELANCING`, `STRIPE_PRICE_MASTER_BUNDLE` — each to a Stripe Price ID (`price_xxx`). Use test price IDs for test, live for production.
+- After changing a price in Stripe or setting a new env var, run **`npx tsx scripts/sync-display-prices-from-stripe.ts`** so `products.price` in the DB matches Stripe and the UI shows the correct amount.
 
 ## 2. Use a New Order for Testing
 

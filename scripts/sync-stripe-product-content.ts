@@ -16,7 +16,8 @@ config({ path: resolve(process.cwd(), '.env.local') });
 config({ path: resolve(process.cwd(), '.env') });
 
 import { getStripeClient } from '../lib/stripe/client';
-import { formatAmountForStripe, formatAmountFromStripe } from '../lib/stripe/utils';
+import { formatAmountForStripe } from '../lib/stripe/utils';
+import { getStripePriceIdBySlug, SLUG_TO_STRIPE_PRICE_ENV } from '../lib/stripe/prices';
 import { createClient } from '@supabase/supabase-js';
 import type Stripe from 'stripe';
 import type { Database } from '../lib/types/supabase';
@@ -123,8 +124,10 @@ async function main() {
       }
     }
 
-    if (pkg.stripe_price_id) {
-      const stripePrice = await stripe.prices.retrieve(pkg.stripe_price_id);
+    // Prefer env price ID (what checkout uses); fall back to DB stripe_price_id for comparison
+    const priceIdToCompare = getStripePriceIdBySlug(pkg.slug) ?? pkg.stripe_price_id;
+    if (priceIdToCompare) {
+      const stripePrice = await stripe.prices.retrieve(priceIdToCompare);
       const dbCents = formatAmountForStripe(pkg.price);
       const stripeCents = stripePrice.unit_amount || 0;
 
@@ -140,11 +143,9 @@ async function main() {
             metadata: { product_slug: pkg.slug, product_id: pkg.id },
             tax_behavior: 'exclusive',
           });
-          await stripe.prices.update(pkg.stripe_price_id, { active: false });
-          await supabase
-            .from('products')
-            .update({ stripe_price_id: newPrice.id })
-            .eq('id', pkg.id);
+          await stripe.prices.update(priceIdToCompare, { active: false });
+          const envKey = SLUG_TO_STRIPE_PRICE_ENV[pkg.slug] ?? `STRIPE_PRICE_${pkg.slug.replace(/-/g, '_').toUpperCase()}`;
+          console.log(`  → Set ${envKey}=${newPrice.id} in your environment for checkout. Then run sync-display-prices-from-stripe.ts to update products.price.`);
           priceUpdates++;
         }
       }
