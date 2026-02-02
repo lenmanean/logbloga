@@ -24,7 +24,7 @@ const envSchema = z.object({
   RESEND_FROM_EMAIL: z.string().email('Invalid Resend from email').optional(),
 
   // Doer Partner API (for 6-month Pro coupon on AI-to-USD package purchases)
-  LOGBLOGGA_PARTNER_SECRET: z.string().min(1, 'Doer partner secret is required for coupon generation').optional(),
+  LOGBLOGA_PARTNER_SECRET: z.string().min(1, 'Doer partner secret is required for coupon generation').optional(),
   
   // App
   NEXT_PUBLIC_APP_URL: z.string().url('Invalid app URL').optional(),

@@ -68,9 +68,9 @@ export function generateDoerSignature(
   orderId: string,
   packageId: string
 ): string {
-  const secret = process.env.LOGBLOGGA_PARTNER_SECRET;
+  const secret = process.env.LOGBLOGA_PARTNER_SECRET;
   if (!secret) {
-    throw new Error('LOGBLOGGA_PARTNER_SECRET is not configured');
+    throw new Error('LOGBLOGA_PARTNER_SECRET is not configured');
   }
 
   const payload = `${email}|${orderId}|${packageId}`;
@@ -201,7 +201,7 @@ export async function getDoerCouponForOrder(orderId: string): Promise<string | n
   return (data as any).doer_coupon_code || null;
 }
 
-const DOER_API_URL = 'https://usedoer.com/api/partners/logblogga/generate-coupon';
+const DOER_API_URL = 'https://usedoer.com/api/partners/logbloga/generate-coupon';
 const DOER_FETCH_TIMEOUT_MS = 15_000;
 const DOER_MAX_ATTEMPTS = 3;
 const DOER_BACKOFF_MS = [1000, 2000]; // 1s, 2s
@@ -219,9 +219,9 @@ async function requestDoerCouponFromApi(
   orderId: string,
   packageId: DoerPackageId
 ): Promise<{ couponCode: string; expiresAt?: string } | null> {
-  const secret = process.env.LOGBLOGGA_PARTNER_SECRET;
+  const secret = process.env.LOGBLOGA_PARTNER_SECRET;
   if (!secret) {
-    console.error('Doer API: LOGBLOGGA_PARTNER_SECRET is not configured');
+    console.error('Doer API: LOGBLOGA_PARTNER_SECRET is not configured');
     return null;
   }
 

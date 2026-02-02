@@ -71,7 +71,7 @@ describe('Doer Coupon', () => {
 
   describe('generateDoerSignature', () => {
     beforeEach(() => {
-      vi.stubEnv('LOGBLOGGA_PARTNER_SECRET', 'test-partner-secret');
+      vi.stubEnv('LOGBLOGA_PARTNER_SECRET', 'test-partner-secret');
     });
 
     it('returns 64-character hex string (Doer expected format)', () => {
@@ -98,11 +98,11 @@ describe('Doer Coupon', () => {
       expect(s1).not.toBe(s3);
     });
 
-    it('throws when LOGBLOGGA_PARTNER_SECRET is not set', () => {
-      vi.stubEnv('LOGBLOGGA_PARTNER_SECRET', '');
+    it('throws when LOGBLOGA_PARTNER_SECRET is not set', () => {
+      vi.stubEnv('LOGBLOGA_PARTNER_SECRET', '');
       expect(() =>
         generateDoerSignature('a@b.com', 'ord-1', 'agency')
-      ).toThrow('LOGBLOGGA_PARTNER_SECRET is not configured');
+      ).toThrow('LOGBLOGA_PARTNER_SECRET is not configured');
     });
   });
 });
