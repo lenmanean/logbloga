@@ -57,10 +57,10 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <div className={cn(
-      'flex flex-col sm:flex-row gap-4 p-4 border rounded-lg relative',
+      'flex gap-4 p-4 pr-24 border rounded-lg relative',
       isRemoving && 'opacity-50 pointer-events-none'
     )}>
-      {/* Remove: fixed top-right of card so it's always visible (e.g. in narrow cart sheet) */}
+      {/* Remove: fixed top-right so it's always visible and doesn't affect layout */}
       <Button
         variant="ghost"
         size="sm"
@@ -79,10 +79,10 @@ export function CartItem({ item }: CartItemProps) {
         <span className="sr-only">Remove item from cart</span>
       </Button>
 
-      {/* Product Image */}
+      {/* Product Image: fixed size so layout is predictable */}
       <Link 
         href={productSlug ? `/ai-to-usd/packages/${productSlug}` : '#'}
-        className="relative w-full sm:w-24 h-24 sm:h-24 bg-muted rounded-md overflow-hidden flex-shrink-0"
+        className="relative w-20 h-20 flex-shrink-0 bg-muted rounded-md overflow-hidden"
       >
         <Image
           src={productImage}
@@ -92,22 +92,22 @@ export function CartItem({ item }: CartItemProps) {
         />
       </Link>
 
-      {/* Product Info */}
-      <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
-        <div className="flex-1 min-w-0">
-          <Link 
-            href={productSlug ? `/ai-to-usd/packages/${productSlug}` : '#'}
-            className="hover:underline"
-          >
-            <h3 className="font-semibold text-lg mb-1">{productTitle}</h3>
-          </Link>
-          <p className="text-sm text-muted-foreground">
-            ${unitPrice.toLocaleString()} each
-          </p>
-        </div>
-
-        {/* Quantity and Line Total */}
-        <div className="flex items-center gap-4 flex-wrap">
+      {/* Content: single column so title, price, quantity never overlap */}
+      <div className="flex-1 min-w-0 flex flex-col gap-2">
+        {/* Title and unit price only - no inline quantity/price */}
+        <Link 
+          href={productSlug ? `/ai-to-usd/packages/${productSlug}` : '#'}
+          className="hover:underline min-w-0"
+        >
+          <h3 className="font-semibold text-sm leading-tight break-words">
+            {productTitle}
+          </h3>
+        </Link>
+        <p className="text-xs text-muted-foreground">
+          ${unitPrice.toLocaleString()} each
+        </p>
+        {/* Quantity and line total on their own row, below title */}
+        <div className="flex items-center justify-between gap-2 mt-1">
           <div className="flex items-center gap-2">
             {isUpdating ? (
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
@@ -120,11 +120,9 @@ export function CartItem({ item }: CartItemProps) {
               />
             )}
           </div>
-          <div className="text-right min-w-[80px]">
-            <p className="font-semibold text-lg">
-              ${lineTotal.toLocaleString()}
-            </p>
-          </div>
+          <p className="font-semibold text-sm shrink-0">
+            ${lineTotal.toLocaleString()}
+          </p>
         </div>
       </div>
     </div>
