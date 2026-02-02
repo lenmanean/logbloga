@@ -9,21 +9,33 @@ import { CheckoutCartReview } from './components/checkout-cart-review';
 import { CheckoutCustomerInfo } from './components/checkout-customer-info';
 import { CheckoutOrderReview } from './components/checkout-order-review';
 import { CheckoutSummary } from './components/checkout-summary';
+import { Loader2 } from 'lucide-react';
 
 export function CheckoutContent() {
   const { currentStep } = useCheckout();
-  const { items } = useCart();
+  const { items, isLoading } = useCart();
   const router = useRouter();
 
-  // Redirect if cart is empty
+  // Redirect only after cart has finished loading and is truly empty (avoid redirect race on initial load)
   useEffect(() => {
-    if (items.length === 0) {
-      router.push('/');
+    if (!isLoading && items.length === 0) {
+      router.replace('/');
     }
-  }, [items.length, router]);
+  }, [isLoading, items.length, router]);
+
+  if (isLoading) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3 text-muted-foreground">
+          <Loader2 className="h-8 w-8 animate-spin" aria-hidden />
+          <p className="text-sm">Loading your cart…</p>
+        </div>
+      </main>
+    );
+  }
 
   if (items.length === 0) {
-    return null; // Will redirect
+    return null; // Redirect in progress
   }
 
   return (

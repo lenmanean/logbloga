@@ -15,6 +15,7 @@ export function CartSummary() {
   const router = useRouter();
 
   const handleCheckout = () => {
+    if (items.length === 0) return;
     if (!isAuthenticated) {
       router.push('/auth/signin?redirect=/checkout');
       return;

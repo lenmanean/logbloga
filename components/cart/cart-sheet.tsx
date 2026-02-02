@@ -27,6 +27,7 @@ export function CartSheet({ open, onOpenChange, trigger }: CartSheetProps) {
   const router = useRouter();
 
   const handleProceedToCheckout = () => {
+    if (items.length === 0) return;
     if (!isAuthenticated) {
       router.push('/auth/signin?redirect=/checkout');
       onOpenChange?.(false);
