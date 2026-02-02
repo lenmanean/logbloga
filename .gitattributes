@@ -1,0 +1,17 @@
+# Normalize line endings for cross-platform consistency (LF in repo and checkout).
+# Ensures all contributors and CI get the same behavior regardless of OS.
+* text=auto eol=lf
+
+# Explicit binary — no line-ending or merge handling.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.pdf binary
+*.zip binary
