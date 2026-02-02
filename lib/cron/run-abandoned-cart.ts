@@ -62,7 +62,7 @@ export async function runAbandonedCart(): Promise<AbandonedCartResult> {
         .map(
           (row: {
             quantity: number;
-            product: { title?: string; slug?: string; price?: number } | null;
+            product: { title: string | null; slug: string; price: number } | null;
           }) => {
             const p = row.product;
             const title = p?.title ?? 'Product';
