@@ -79,8 +79,9 @@ export async function POST(request: Request) {
       );
     }
 
-    // Only allow packages to be added to cart
-    if (product.product_type !== 'package') {
+    // Only allow packages and bundles (e.g. Master Bundle) to be added to cart
+    const cartEligibleTypes = ['package', 'bundle'];
+    if (!product.product_type || !cartEligibleTypes.includes(product.product_type)) {
       return NextResponse.json(
         { error: 'Only packages can be added to cart.' },
         { status: 400 }
