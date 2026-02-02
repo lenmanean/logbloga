@@ -14,7 +14,6 @@ interface AddToCartButtonProps {
   variantId?: string;
   className?: string;
   size?: 'default' | 'sm' | 'lg';
-  redirectToCart?: boolean; // Default: false
   bypassPayment?: boolean; // Development mode: grant immediate access
 }
 
@@ -25,7 +24,6 @@ export function AddToCartButton({
   variantId,
   className,
   size = 'lg',
-  redirectToCart = false,
   bypassPayment = false,
 }: AddToCartButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -77,14 +75,9 @@ export function AddToCartButton({
     try {
       await addItem(productId, quantity, variantId);
       setIsSuccess(true);
-      
+
       // Reset success state after 2 seconds
       setTimeout(() => setIsSuccess(false), 2000);
-
-      // Redirect home if requested (user can open cart panel from header)
-      if (redirectToCart) {
-        router.push('/');
-      }
     } catch (error) {
       console.error('Error adding to cart:', error);
       const errorMessage = error instanceof Error ? error.message : 'Failed to add item to cart';

@@ -139,7 +139,6 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
           quantity={quantity}
           variantId={selectedVariant || undefined}
           size="lg"
-          redirectToCart
           className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
         />
       </div>
