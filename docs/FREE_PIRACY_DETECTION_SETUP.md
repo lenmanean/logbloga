@@ -49,10 +49,13 @@ Add to Vercel environment variables:
 CRON_SECRET=your_random_secret_string_here
 ```
 
-Generate a random string:
+**Important:** Do not include leading or trailing whitespace (e.g. no newline when pasting). Vercel rejects values with whitespace for cron HTTP headers.
+
+Generate a random string (no newline when using CLI):
 ```bash
-openssl rand -base64 32
+openssl rand -hex 32
 ```
+Or with Node and pipe to Vercel: `node -e "process.stdout.write(require('crypto').randomBytes(32).toString('hex'))" | vercel env add CRON_SECRET production`
 
 ### Step 3: Configure Admin Email (Optional)
 
