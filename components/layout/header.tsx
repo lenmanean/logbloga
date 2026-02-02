@@ -19,6 +19,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
 import { useCart } from '@/contexts/cart-context';
 import { WishlistBadge } from '@/components/wishlist/wishlist-badge';
+import { CartSheet } from '@/components/cart/cart-sheet';
 
 interface NavDropdownProps {
   label: string;
@@ -95,6 +96,7 @@ export function Header() {
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
   const { itemCount } = useCart();
   const [open, setOpen] = useState(false);
+  const [cartSheetOpen, setCartSheetOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
   const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
@@ -213,18 +215,22 @@ export function Header() {
 
           {/* Cart & Profile - Desktop */}
           <div className={`hidden md:flex items-center space-x-3 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-            {/* Cart Button */}
-            <Link href="/cart">
-              <Button variant="ghost" size="icon" className="rounded-full relative">
-                <ShoppingCart className="h-5 w-5" />
-                {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
-                    {itemCount > 9 ? '9+' : itemCount}
-                  </span>
-                )}
-                <span className="sr-only">Shopping cart</span>
-              </Button>
-            </Link>
+            {/* Cart Sheet (panel opened from cart icon) */}
+            <CartSheet
+              open={cartSheetOpen}
+              onOpenChange={setCartSheetOpen}
+              trigger={
+                <Button variant="ghost" size="icon" className="rounded-full relative">
+                  <ShoppingCart className="h-5 w-5" />
+                  {itemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                      {itemCount > 9 ? '9+' : itemCount}
+                    </span>
+                  )}
+                  <span className="sr-only">Shopping cart</span>
+                </Button>
+              }
+            />
             {isAuthenticated && <WishlistBadge />}
 
             {/* Profile Dropdown */}
@@ -454,12 +460,17 @@ export function Header() {
                   </div>
                 </div>
                 <div className="flex flex-col space-y-3 pt-4 border-t">
-                  <Link href="/checkout" onClick={() => setOpen(false)}>
-                    <Button variant="outline" className="w-full rounded-full flex items-center justify-center gap-2">
-                      <ShoppingCart className="h-4 w-4" />
-                      Cart
-                    </Button>
-                  </Link>
+                  <Button
+                    variant="outline"
+                    className="w-full rounded-full flex items-center justify-center gap-2"
+                    onClick={() => {
+                      setOpen(false);
+                      setCartSheetOpen(true);
+                    }}
+                  >
+                    <ShoppingCart className="h-4 w-4" />
+                    Cart
+                  </Button>
                   {isAuthenticated && user ? (
                     <div className="flex flex-col space-y-2">
                       <div className="px-2 py-1 border-b mb-2">

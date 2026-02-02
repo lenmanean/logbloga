@@ -81,9 +81,9 @@ export function AddToCartButton({
       // Reset success state after 2 seconds
       setTimeout(() => setIsSuccess(false), 2000);
 
-      // Redirect to cart if requested
+      // Redirect home if requested (user can open cart panel from header)
       if (redirectToCart) {
-        router.push('/cart');
+        router.push('/');
       }
     } catch (error) {
       console.error('Error adding to cart:', error);

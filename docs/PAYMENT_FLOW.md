@@ -20,6 +20,13 @@ The cart is **not** cleared when the order is created. It is cleared only **afte
 
 If the user clicks "Place Order" again with the same cart (e.g. double-click or refresh), the API returns the existing **pending** order instead of creating a duplicate. The client then creates a Stripe Checkout session for that order and redirects as usual.
 
+## Abandoned cart email
+
+- **Trigger**: Cron route `GET /api/cron/abandoned-cart` (e.g. hourly via Vercel Cron). Secured with `CRON_SECRET` (Authorization: Bearer) or Vercel cron header.
+- **Logic**: Finds users who have at least one cart item older than 1 hour; for each, builds `AbandonedCartEmailData` (user email/name, cart items with product name/slug/price/quantity) and enqueues an `abandoned-cart` email. The email queue processes it and calls `sendAbandonedCartReminder`.
+- **Email CTA**: Link in the email points to `/checkout`. Cart is cleared only after successful payment, so the user’s cart is still there when they return.
+- **Preferences**: Abandoned-cart is gated by `email_promotional` in notification preferences (see `lib/email/utils.ts`).
+
 ## Webhook
 
 - **Endpoint**: `POST /api/stripe/webhook`
@@ -32,6 +39,8 @@ If the user clicks "Place Order" again with the same cart (e.g. double-click or 
 - `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session (line items, discount, tax)
 - `app/api/orders/create/route.ts` — Creates order (or returns existing pending order); does **not** clear cart
 - `lib/stripe/webhooks.ts` — Handles Stripe events; clears cart in `handleCheckoutSessionCompleted`
+- `app/api/cron/abandoned-cart/route.ts` — Enqueues abandoned-cart emails (cron); configure in `vercel.json`
+- `lib/email/senders.ts` — `sendAbandonedCartReminder`; `lib/email/queue.ts` — processes `abandoned-cart`
 - `docs/TAX_IMPLEMENTATION_GUIDE.md` — Tax configuration and Stripe Tax
 
 ---

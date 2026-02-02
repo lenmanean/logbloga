@@ -47,6 +47,11 @@ const nextConfig: NextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
+  // Redirect /cart to / (cart is now a panel opened from header)
+  async redirects() {
+    return [{ source: '/cart', destination: '/', permanent: false }];
+  },
+
   // Security headers (additional ones not set in middleware)
   async headers() {
     return [

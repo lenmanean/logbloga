@@ -36,7 +36,7 @@ export function CheckoutCartReview() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Review Your Cart</CardTitle>
-          <Link href="/cart">
+          <Link href="/">
             <Button variant="outline" size="sm">
               Edit Cart
             </Button>

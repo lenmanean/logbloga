@@ -22,7 +22,7 @@ export default async function CheckoutPage() {
   const cartItems = await getUserCartItems(user.id);
   
   if (cartItems.length === 0) {
-    redirect('/cart');
+    redirect('/');
   }
 
   return (

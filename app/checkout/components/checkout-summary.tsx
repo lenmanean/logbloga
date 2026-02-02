@@ -2,7 +2,6 @@
 
 import { useCheckout } from '@/contexts/checkout-context';
 import { DiscountCodeForm } from '@/components/checkout/discount-code-form';
-import { CheckoutUpsell } from '@/components/recommendations/checkout-upsell';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ShoppingBag } from 'lucide-react';
@@ -59,11 +58,6 @@ export function CheckoutSummary() {
             Tax (if any) is calculated at payment.
           </p>
         </div>
-
-        <Separator />
-
-        {/* Checkout Upsell */}
-        <CheckoutUpsell />
       </CardContent>
     </Card>
   );
