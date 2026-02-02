@@ -6,7 +6,6 @@
 import type Stripe from 'stripe';
 import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
-import { stripeStatusToOrderStatus } from './utils';
 import type { Order } from '@/lib/types/database';
 import { sendOrderConfirmation, sendPaymentReceipt } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
@@ -127,9 +126,9 @@ export async function handlePaymentIntentSucceeded(
   // Generate DOER coupon for package purchases
   try {
     const { generateDoerCouponForOrder } = await import('@/lib/doer/coupon');
-    const couponCode = await generateDoerCouponForOrder(order.id);
-    if (couponCode) {
-      console.log(`Generated DOER coupon ${couponCode} for order ${order.id}`);
+    const couponGenerated = await generateDoerCouponForOrder(order.id);
+    if (couponGenerated) {
+      console.log(`Doer coupon generated for order ${order.id}`);
     }
   } catch (error) {
     // Log error but don't fail the webhook (coupon generation is optional)
@@ -141,18 +140,8 @@ export async function handlePaymentIntentSucceeded(
     try {
       const orderWithItems = await getOrderWithItems(order.id);
       if (orderWithItems && orderWithItems.customer_email) {
-        // Get DOER coupon code if available
         const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
-        const { createServiceRoleClient } = await import('@/lib/supabase/server');
         const doerCouponCode = await getDoerCouponForOrder(order.id);
-        
-        // Get coupon expiration if available
-        const supabaseForCoupon = await createServiceRoleClient();
-        const { data: orderData } = await supabaseForCoupon
-          .from('orders')
-          .select('doer_coupon_expires_at')
-          .eq('id', order.id)
-          .single() as any;
 
         const emailData = {
           order: {
@@ -175,10 +164,9 @@ export async function handlePaymentIntentSucceeded(
             total: parseFloat(String(item.total_price)),
           })),
           doerCouponCode: doerCouponCode || null,
-          doerCouponExpiresAt: (orderData as any)?.doer_coupon_expires_at || null,
+          doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? null,
         };
 
-        // Send payment receipt - products are now available in library via order-based access
         await sendPaymentReceipt(order.user_id, emailData);
       }
     } catch (error) {

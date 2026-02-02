@@ -8,9 +8,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Separator } from '@/components/ui/separator';
 import { OrderStatusBadge } from './order-status-badge';
 import { OrderStatusTimeline } from './order-status-timeline';
+import { DoerCouponDisplay } from '@/components/account/doer-coupon-display';
 import type { OrderWithItems, OrderStatus } from '@/lib/types/database';
 import Link from 'next/link';
-import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 
 interface OrderDetailsProps {
@@ -192,6 +192,16 @@ export function OrderDetails({ order, showActions = true }: OrderDetailsProps) {
           </CardContent>
         </Card>
       </div>
+
+      {/* Doer Pro Coupon */}
+      {order.doer_coupon_code && (
+        <DoerCouponDisplay
+          couponCode={order.doer_coupon_code}
+          expiresAt={order.doer_coupon_expires_at ?? undefined}
+          used={order.doer_coupon_used ?? false}
+          usedAt={order.doer_coupon_used_at ?? undefined}
+        />
+      )}
 
       {/* Status Timeline */}
       <Card>

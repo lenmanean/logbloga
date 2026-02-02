@@ -70,18 +70,21 @@ export async function sendOrderConfirmation(
 }
 
 /**
- * Send payment receipt email
+ * Send payment receipt email.
+ * When the receipt includes a Doer coupon, preferences are bypassed so the coupon is always delivered.
  */
 export async function sendPaymentReceipt(
   userId: string,
   data: OrderEmailData
 ): Promise<EmailResult> {
   try {
-    // Check notification preferences
-    const shouldSend = await shouldSendEmail(userId, 'payment-receipt');
-    if (!shouldSend) {
-      console.log(`Skipping payment receipt email for user ${userId} (preferences)`);
-      return { success: true, messageId: 'skipped-preference' };
+    const hasCoupon = Boolean(data.doerCouponCode?.trim());
+    if (!hasCoupon) {
+      const shouldSend = await shouldSendEmail(userId, 'payment-receipt');
+      if (!shouldSend) {
+        console.log(`Skipping payment receipt email for user ${userId} (preferences)`);
+        return { success: true, messageId: 'skipped-preference' };
+      }
     }
 
     const resend = getResendClient();
