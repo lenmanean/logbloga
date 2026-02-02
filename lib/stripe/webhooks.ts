@@ -6,6 +6,7 @@
 import type Stripe from 'stripe';
 import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
+import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
 import { sendOrderConfirmation, sendPaymentReceipt } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
@@ -143,26 +144,52 @@ export async function handlePaymentIntentSucceeded(
         const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
         const doerCouponCode = await getDoerCouponForOrder(order.id);
 
+        let totalAmount = parseFloat(String(orderWithItems.total_amount));
+        let subtotal = parseFloat(String(orderWithItems.subtotal));
+        let taxAmount: number | null = orderWithItems.tax_amount ? parseFloat(String(orderWithItems.tax_amount)) : null;
+        let discountAmount: number | null = orderWithItems.discount_amount ? parseFloat(String(orderWithItems.discount_amount)) : null;
+        let currency = orderWithItems.currency || 'USD';
+        let items: Array<{ productName: string; quantity: number; unitPrice: number; total: number }> = (orderWithItems.items || []).map(item => ({
+          productName: item.product_name,
+          quantity: item.quantity,
+          unitPrice: parseFloat(String(item.unit_price)),
+          total: parseFloat(String(item.total_price)),
+        }));
+
+        const sessionId = order.stripe_checkout_session_id;
+        if (sessionId) {
+          try {
+            const stripeAmounts = await getReceiptAmountsFromStripe(sessionId);
+            if (stripeAmounts) {
+              totalAmount = stripeAmounts.totalAmount;
+              subtotal = stripeAmounts.subtotal;
+              taxAmount = stripeAmounts.taxAmount;
+              discountAmount = stripeAmounts.discountAmount;
+              currency = stripeAmounts.currency;
+              if (stripeAmounts.items.length > 0) {
+                items = stripeAmounts.items;
+              }
+            }
+          } catch {
+            // Fall back to DB totals; already set above
+          }
+        }
+
         const emailData = {
           order: {
             id: orderWithItems.id,
             orderNumber: orderWithItems.order_number || '',
             status: orderWithItems.status || 'completed',
-            totalAmount: parseFloat(String(orderWithItems.total_amount)),
-            subtotal: parseFloat(String(orderWithItems.subtotal)),
-            taxAmount: orderWithItems.tax_amount ? parseFloat(String(orderWithItems.tax_amount)) : null,
-            discountAmount: orderWithItems.discount_amount ? parseFloat(String(orderWithItems.discount_amount)) : null,
-            currency: orderWithItems.currency || 'USD',
+            totalAmount,
+            subtotal,
+            taxAmount,
+            discountAmount,
+            currency,
             createdAt: orderWithItems.created_at || new Date().toISOString(),
             customerEmail: orderWithItems.customer_email,
             customerName: orderWithItems.customer_name,
           },
-          items: (orderWithItems.items || []).map(item => ({
-            productName: item.product_name,
-            quantity: item.quantity,
-            unitPrice: parseFloat(String(item.unit_price)),
-            total: parseFloat(String(item.total_price)),
-          })),
+          items,
           doerCouponCode: doerCouponCode || null,
           doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? null,
         };
