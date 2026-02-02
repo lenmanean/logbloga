@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
-import { getUserCartItems } from '@/lib/db/cart';
 import { CheckoutProvider } from '@/contexts/checkout-context';
 import { CheckoutContent } from './checkout-content';
 
@@ -18,13 +17,9 @@ export default async function CheckoutPage() {
     redirect('/auth/signin?redirect=/checkout');
   }
 
-  // Check if cart has items
-  const cartItems = await getUserCartItems(user.id);
-  
-  if (cartItems.length === 0) {
-    redirect('/');
-  }
-
+  // Do not redirect for empty cart on the server: it can use stale/cached data
+  // and send users home after they just clicked "Proceed to Checkout". The client
+  // (CheckoutContent) redirects when cart is empty after loading.
   return (
     <CheckoutProvider>
       <CheckoutContent />
