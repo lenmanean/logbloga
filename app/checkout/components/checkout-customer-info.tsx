@@ -160,15 +160,12 @@ export function CheckoutCustomerInfo() {
             </div>
           </div>
 
-          {/* Billing Address (Optional for digital products) */}
+          {/* Billing Address */}
           <Separator />
-          
+
           <div className="space-y-4">
             <div>
-              <h3 className="font-semibold text-base">Billing Address (Optional)</h3>
-              <p className="text-sm text-muted-foreground mt-1">
-                Required for some payment methods and invoices
-              </p>
+              <h3 className="font-semibold text-base">Billing Address</h3>
             </div>
 
             {/* Saved Address Selector (if authenticated) */}

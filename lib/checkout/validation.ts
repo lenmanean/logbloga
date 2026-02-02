@@ -25,7 +25,7 @@ export const customerInfoSchema = z.object({
   name: z.string().min(1, 'Full name is required').max(200),
   email: z.string().email('Please enter a valid email address'),
   phone: z.string().optional(),
-  billingAddress: addressSchema.optional(),
+  billingAddress: addressSchema,
 });
 
 export type CustomerInfo = z.infer<typeof customerInfoSchema>;

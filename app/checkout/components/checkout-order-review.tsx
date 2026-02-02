@@ -231,9 +231,6 @@ export function CheckoutOrderReview() {
                     </Link>
                     .
                   </span>
-                  <span className="mt-1 block text-muted-foreground">
-                    I understand that no earnings, revenue, or profit figures are guaranteed, and that results will vary based on my effort and circumstances.
-                  </span>
                 </Label>
               </div>
             </div>
@@ -242,9 +239,11 @@ export function CheckoutOrderReview() {
                 You must accept the Terms of Service to complete your purchase.
               </p>
             )}
-            <p className="text-xs text-muted-foreground ml-8">
-              You will be redirected to our secure payment provider to complete your purchase.
-            </p>
+            {orderTotals.total < 0.5 && (
+              <p className="text-sm text-muted-foreground ml-8">
+                Minimum order total is $0.50 to proceed to payment.
+              </p>
+            )}
           </div>
 
           {/* Action Buttons */}
@@ -260,7 +259,7 @@ export function CheckoutOrderReview() {
             </Button>
             <Button
               onClick={handlePlaceOrder}
-              disabled={isPlacingOrder || !termsAccepted}
+              disabled={isPlacingOrder || !termsAccepted || orderTotals.total < 0.5}
               size="lg"
               className="flex-1 max-w-xs"
             >

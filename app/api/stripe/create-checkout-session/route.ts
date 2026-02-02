@@ -12,6 +12,9 @@ import { formatStripeError, StripeOrderNotFoundError, StripeCheckoutSessionError
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import type Stripe from 'stripe';
 
+/** Stripe requires Checkout Session total to be at least $0.50 USD */
+const MIN_CHECKOUT_AMOUNT_USD = 0.5;
+
 export async function POST(request: Request) {
   try {
     const user = await requireAuth();
@@ -128,6 +131,17 @@ export async function POST(request: Request) {
       });
     }
 
+    // Stripe minimum: total must be at least $0.50 USD
+    const orderTotalUsd = typeof order.total_amount === 'number'
+      ? order.total_amount
+      : parseFloat(String(order.total_amount || 0));
+    if (orderTotalUsd < MIN_CHECKOUT_AMOUNT_USD) {
+      return NextResponse.json(
+        { error: 'Order total must be at least $0.50 to complete payment.' },
+        { status: 400 }
+      );
+    }
+
     // Get app URL for redirects
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
@@ -182,6 +196,15 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: error.message },
         { status: error.statusCode || 500 }
+      );
+    }
+
+    // Stripe amount_too_small: return 400 with clear message
+    const stripeError = error as { code?: string };
+    if (stripeError?.code === 'amount_too_small') {
+      return NextResponse.json(
+        { error: 'Order total must be at least $0.50 to complete payment.' },
+        { status: 400 }
       );
     }
 
