@@ -22,7 +22,7 @@ If the user clicks "Place Order" again with the same cart (e.g. double-click or 
 
 ## Abandoned cart email
 
-- **Trigger**: Cron route `GET /api/cron/abandoned-cart` (e.g. hourly via Vercel Cron). Secured with `CRON_SECRET` (Authorization: Bearer) or Vercel cron header.
+- **Trigger**: On Vercel **Hobby**, cron runs once per day via `GET /api/cron/daily` (schedule `0 2 * * *` in `vercel.json`). That single daily cron runs both piracy monitoring and abandoned-cart. The abandoned-cart logic also lives in `GET /api/cron/abandoned-cart` for manual runs from the Vercel dashboard. Secured with `CRON_SECRET` (Authorization: Bearer) or Vercel cron header.
 - **Logic**: Finds users who have at least one cart item older than 1 hour; for each, builds `AbandonedCartEmailData` (user email/name, cart items with product name/slug/price/quantity) and enqueues an `abandoned-cart` email. The email queue processes it and calls `sendAbandonedCartReminder`.
 - **Email CTA**: Link in the email points to `/checkout`. Cart is cleared only after successful payment, so the user’s cart is still there when they return.
 - **Preferences**: Abandoned-cart is gated by `email_promotional` in notification preferences (see `lib/email/utils.ts`).
@@ -39,7 +39,8 @@ If the user clicks "Place Order" again with the same cart (e.g. double-click or 
 - `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session (line items, discount, tax)
 - `app/api/orders/create/route.ts` — Creates order (or returns existing pending order); does **not** clear cart
 - `lib/stripe/webhooks.ts` — Handles Stripe events; clears cart in `handleCheckoutSessionCompleted`
-- `app/api/cron/abandoned-cart/route.ts` — Enqueues abandoned-cart emails (cron); configure in `vercel.json`
+- `app/api/cron/daily/route.ts` — Single daily cron (Hobby): piracy monitor + abandoned-cart; `vercel.json` has one cron entry for `/api/cron/daily` at 2 AM UTC
+- `app/api/cron/abandoned-cart/route.ts` — Abandoned-cart only (for manual runs); shared logic in `lib/cron/run-abandoned-cart.ts`
 - `lib/email/senders.ts` — `sendAbandonedCartReminder`; `lib/email/queue.ts` — processes `abandoned-cart`
 - `docs/TAX_IMPLEMENTATION_GUIDE.md` — Tax configuration and Stripe Tax
 
@@ -55,5 +56,6 @@ Ensure these are set in production:
 | `STRIPE_WEBHOOK_SECRET` | Webhook signature verification (from Stripe Dashboard webhook endpoint) |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-side key (e.g. `pk_live_...`) if using Stripe.js |
 | `NEXT_PUBLIC_APP_URL` | App root URL for Stripe redirect URLs (success/cancel) |
+| `CRON_SECRET` | Optional: secures cron routes; set in Vercel (Project → Settings → Environment Variables or `vercel env add CRON_SECRET production`) |
 
 Use **live** keys and the **live** webhook secret in production. Test with **test** keys and Stripe CLI (`stripe listen --forward-to .../api/stripe/webhook`) locally.

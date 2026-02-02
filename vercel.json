@@ -1,12 +1,8 @@
 {
   "crons": [
     {
-      "path": "/api/cron/piracy-monitor",
+      "path": "/api/cron/daily",
       "schedule": "0 2 * * *"
-    },
-    {
-      "path": "/api/cron/abandoned-cart",
-      "schedule": "0 * * * *"
     }
   ]
 }

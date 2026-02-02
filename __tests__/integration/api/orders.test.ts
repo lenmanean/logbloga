@@ -28,6 +28,7 @@ vi.mock('@/lib/db/cart', () => ({
 // Mock orders db functions
 vi.mock('@/lib/db/orders', () => ({
   createOrderWithItems: vi.fn(),
+  getMostRecentPendingOrderForUser: vi.fn(() => Promise.resolve(null)),
 }));
 
 // Mock coupons db functions
