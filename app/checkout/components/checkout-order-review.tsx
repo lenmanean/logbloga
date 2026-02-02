@@ -195,7 +195,7 @@ export function CheckoutOrderReview() {
 
           {/* Terms and Conditions - Required Checkbox */}
           <div className="space-y-2">
-            <div className="flex items-start space-x-2">
+            <div className="flex items-start gap-3">
               <Checkbox
                 id="checkout-terms"
                 checked={termsAccepted}
@@ -203,43 +203,46 @@ export function CheckoutOrderReview() {
                   setTermsAccepted(checked === true);
                   setError(null);
                 }}
-                className="mt-1"
+                className="mt-1 shrink-0"
                 aria-invalid={error && !termsAccepted ? 'true' : 'false'}
               />
-              <Label 
-                htmlFor="checkout-terms" 
-                className="text-sm font-normal cursor-pointer leading-relaxed"
-              >
-                I agree to the{' '}
-                <Link 
-                  href="/legal/terms" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary underline hover:text-primary/80"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Terms of Service
-                </Link>
-                {' '}and{' '}
-                <Link 
-                  href="/legal/refund" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-primary underline hover:text-primary/80"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  Refund Policy
-                </Link>
-                . I understand that no earnings, revenue, or profit figures are guaranteed, and 
-                that results will vary based on my effort and circumstances.
-              </Label>
+              <div className="min-w-0 text-sm leading-relaxed">
+                <Label htmlFor="checkout-terms" className="cursor-pointer">
+                  <span className="block">
+                    I agree to the{' '}
+                    <Link
+                      href="/legal/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline whitespace-nowrap text-primary underline hover:text-primary/80"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Terms of Service
+                    </Link>
+                    {' '}and{' '}
+                    <Link
+                      href="/legal/refund"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline whitespace-nowrap text-primary underline hover:text-primary/80"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Refund Policy
+                    </Link>
+                    .
+                  </span>
+                  <span className="mt-1 block text-muted-foreground">
+                    I understand that no earnings, revenue, or profit figures are guaranteed, and that results will vary based on my effort and circumstances.
+                  </span>
+                </Label>
+              </div>
             </div>
             {error && !termsAccepted && (
-              <p className="text-sm text-destructive ml-6">
+              <p className="text-sm text-destructive ml-8">
                 You must accept the Terms of Service to complete your purchase.
               </p>
             )}
-            <p className="text-xs text-muted-foreground ml-6">
+            <p className="text-xs text-muted-foreground ml-8">
               You will be redirected to our secure payment provider to complete your purchase.
             </p>
           </div>
