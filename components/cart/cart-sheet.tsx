@@ -67,7 +67,7 @@ export function CartSheet({ open, onOpenChange, trigger }: CartSheetProps) {
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
           </div>
         ) : items.length === 0 ? (
-          <div className="flex flex-1 flex-col justify-center py-8 text-center">
+          <div className="flex flex-1 flex-col justify-center px-5 py-8 text-center">
             <p className="text-muted-foreground mb-4">Your cart is empty.</p>
             <Link href="/ai-to-usd" onClick={() => onOpenChange?.(false)}>
               <Button>Continue Shopping</Button>
@@ -75,15 +75,15 @@ export function CartSheet({ open, onOpenChange, trigger }: CartSheetProps) {
           </div>
         ) : (
           <>
-            <ScrollArea className="flex-1 pr-2 -mr-2">
-              <div className="space-y-4 py-4">
+            <ScrollArea className="flex-1">
+              <div className="space-y-4 px-5 py-4">
                 {items.map((item) => (
                   <CartItem key={item.id} item={item} />
                 ))}
               </div>
             </ScrollArea>
             <Separator />
-            <div className="space-y-4 py-4">
+            <div className="space-y-4 px-5 py-4">
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Subtotal</span>
