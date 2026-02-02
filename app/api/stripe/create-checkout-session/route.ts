@@ -83,20 +83,42 @@ export async function POST(request: Request) {
       }
     }
 
-    // Build line items - use pre-created Stripe prices when available, otherwise use price_data
+    // Stripe requires session total >= $0.50. If products.stripe_price_id points to an
+    // archived/low price (e.g. $0.01), use price_data from the order item instead.
+    const stripe = getStripeClient();
+    const MIN_UNIT_AMOUNT_CENTS = 50;
+    const validPriceIds = new Set<string>();
+    const uniquePriceIds = [...new Set(
+      order.items
+        .map((item) => item.product_id ? productsMap.get(item.product_id)?.stripe_price_id : null)
+        .filter((id): id is string => !!id)
+    )];
+    for (const priceId of uniquePriceIds) {
+      try {
+        const price = await stripe.prices.retrieve(priceId);
+        const unitAmount = price.unit_amount ?? 0;
+        if (unitAmount >= MIN_UNIT_AMOUNT_CENTS) {
+          validPriceIds.add(priceId);
+        }
+      } catch {
+        // If we can't fetch the price, don't use it; we'll use price_data below
+      }
+    }
+
+    // Build line items - use pre-created Stripe prices when available and >= $0.50, otherwise use price_data
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = order.items.map((item) => {
       const product = item.product_id ? productsMap.get(item.product_id) : null;
       const stripePriceId = product?.stripe_price_id;
 
-      // If we have a Stripe price ID, use it (enables automatic tax)
-      if (stripePriceId) {
+      // Use Stripe price ID only if it's valid (amount >= $0.50) so session total meets Stripe minimum
+      if (stripePriceId && validPriceIds.has(stripePriceId)) {
         return {
           price: stripePriceId,
           quantity: item.quantity,
         };
       }
 
-      // Fallback to price_data for products without Stripe IDs
+      // Fallback to price_data for products without Stripe IDs or with sub-$0.50 Stripe prices
       return {
         price_data: {
           currency: order.currency?.toLowerCase() || 'usd',
@@ -146,7 +168,6 @@ export async function POST(request: Request) {
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
     // Create Stripe Checkout Session
-    const stripe = getStripeClient();
 
     // Prepare metadata with proper type handling (Stripe metadata only accepts strings)
     const metadata: Record<string, string> = {

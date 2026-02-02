@@ -48,10 +48,13 @@ Once products are synced, your checkout will automatically:
 
 Updates a single product's `stripe_price_id` in the database by slug. Use when you create a new Stripe Price (e.g. after the original failed) and need to point the product to the new price.
 
+**When to use:**
+- After creating a new default price in the Stripe Dashboard (e.g. $0.51) so checkout uses that price instead of an archived one (e.g. $0.01). Stripe requires Checkout Session total ≥ $0.50; if the DB still points at an old low price, you'll get `amount_too_small` until you update `stripe_price_id` to the new price ID.
+
 **Usage:**
 ```bash
 npx tsx scripts/update-product-stripe-price.ts <slug> <stripe_price_id>
-# Example: Master Bundle new price
+# Example: Master Bundle new price (get price_xxx from Stripe Dashboard → Product → Pricing)
 npx tsx scripts/update-product-stripe-price.ts master-bundle price_1SvRghRPD0Bbk4QBldhV3krO
 ```
 
