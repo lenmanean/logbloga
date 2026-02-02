@@ -114,13 +114,6 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
   }, [currentStep, customerInfo, appliedCoupon, orderTotals, termsAccepted]);
 
   /**
-   * Calculate order totals whenever items or coupon changes
-   */
-  useEffect(() => {
-    calculateTotals();
-  }, [items, appliedCoupon]);
-
-  /**
    * Set current step
    */
   const setCurrentStep = useCallback((step: CheckoutStep) => {
@@ -219,6 +212,13 @@ export function CheckoutProvider({ children }: { children: React.ReactNode }) {
     const totals = calculateOrderTotals(items, appliedCoupon);
     setOrderTotals(totals);
   }, [items, appliedCoupon]);
+
+  /**
+   * Recalculate order totals whenever items or coupon changes
+   */
+  useEffect(() => {
+    calculateTotals();
+  }, [items, appliedCoupon, calculateTotals]);
 
   /**
    * Validate step before allowing progression

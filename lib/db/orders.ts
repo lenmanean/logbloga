@@ -109,6 +109,33 @@ export async function getOrderWithItems(orderId: string): Promise<OrderWithItems
 }
 
 /**
+ * Get the most recent pending order for a user (for resume payment / idempotency)
+ * Returns null if none
+ */
+export async function getMostRecentPendingOrderForUser(userId: string): Promise<OrderWithItems | null> {
+  const supabase = await createServiceRoleClient();
+  const { data: order, error: orderError } = await supabase
+    .from('orders')
+    .select('*')
+    .eq('user_id', userId)
+    .eq('status', 'pending')
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .single();
+
+  if (orderError || !order) {
+    if (orderError?.code === 'PGRST116') return null;
+    if (orderError) {
+      console.error('Error fetching pending order:', orderError);
+      return null;
+    }
+    return null;
+  }
+
+  return await getOrderWithItems(order.id);
+}
+
+/**
  * Get order by order number
  * Order numbers are unique identifiers in format ORD-YYYYMMDD-XXXXXX
  * Returns null if order not found

@@ -12,7 +12,18 @@ const steps = [
 ] as const;
 
 export function CheckoutProgress() {
-  const { currentStep } = useCheckout();
+  const { currentStep, setCurrentStep, validateStep } = useCheckout();
+
+  const handleStepClick = (stepNumber: (typeof steps)[number]['number']) => {
+    const canGoBack = stepNumber <= currentStep;
+    const isNextStep = stepNumber === currentStep + 1;
+    const canGoForwardToStep2 = isNextStep && stepNumber === 2 && validateStep(1);
+    const canGoForwardToStep3 = isNextStep && stepNumber === 3 && validateStep(3);
+    const canGoForward = canGoForwardToStep2 || canGoForwardToStep3;
+    if (canGoBack || canGoForward) {
+      setCurrentStep(stepNumber);
+    }
+  };
 
   return (
     <div className="w-full">
@@ -21,25 +32,38 @@ export function CheckoutProgress() {
           const isActive = currentStep === step.number;
           const isCompleted = currentStep > step.number;
           const isLast = index === steps.length - 1;
+          const canGoBack = step.number <= currentStep;
+          const isNextStep = step.number === currentStep + 1;
+          const canGoForward =
+            isNextStep &&
+            (step.number === 2 ? validateStep(1) : validateStep(step.number));
+          const canNavigate = canGoBack || canGoForward;
 
           return (
             <React.Fragment key={step.number}>
               {/* Step Circle */}
               <div className="flex flex-col items-center flex-1">
-                <div
+                <button
+                  type="button"
+                  onClick={() => handleStepClick(step.number)}
+                  disabled={!canNavigate}
                   className={cn(
                     'flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors',
+                    canNavigate && 'cursor-pointer hover:opacity-90',
+                    !canNavigate && 'cursor-default',
                     isCompleted && 'bg-primary border-primary text-primary-foreground',
                     isActive && !isCompleted && 'border-primary bg-primary/10 text-primary',
                     !isActive && !isCompleted && 'border-muted-foreground/30 bg-background text-muted-foreground'
                   )}
+                  aria-label={`Go to step ${step.number}: ${step.label}`}
+                  aria-current={isActive ? 'step' : undefined}
                 >
                   {isCompleted ? (
                     <Check className="h-5 w-5" />
                   ) : (
                     <span className="font-semibold">{step.number}</span>
                   )}
-                </div>
+                </button>
                 <span
                   className={cn(
                     'mt-2 text-sm font-medium',

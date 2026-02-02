@@ -16,7 +16,7 @@ export function CartSummary() {
 
   const handleCheckout = () => {
     if (!isAuthenticated) {
-      router.push('/auth/signin?redirect=/cart');
+      router.push('/auth/signin?redirect=/checkout');
       return;
     }
     router.push('/checkout');
@@ -55,6 +55,9 @@ export function CartSummary() {
             <span>Total</span>
             <span>${finalTotal.toLocaleString()}</span>
           </div>
+          <p className="text-xs text-muted-foreground pt-1">
+            Tax (if any) is calculated at payment.
+          </p>
         </div>
       </CardContent>
       <CardFooter className="flex flex-col gap-2">

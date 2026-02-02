@@ -55,6 +55,9 @@ export function CheckoutSummary() {
             <span>Total</span>
             <span>${orderTotals.total.toLocaleString()}</span>
           </div>
+          <p className="text-xs text-muted-foreground pt-1">
+            Tax (if any) is calculated at payment.
+          </p>
         </div>
 
         <Separator />

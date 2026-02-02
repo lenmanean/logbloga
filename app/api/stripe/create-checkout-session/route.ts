@@ -81,7 +81,7 @@ export async function POST(request: Request) {
     }
 
     // Build line items - use pre-created Stripe prices when available, otherwise use price_data
-    const lineItems = order.items.map((item) => {
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = order.items.map((item) => {
       const product = item.product_id ? productsMap.get(item.product_id) : null;
       const stripePriceId = product?.stripe_price_id;
 
@@ -100,6 +100,7 @@ export async function POST(request: Request) {
           product_data: {
             name: item.product_name,
             description: `Quantity: ${item.quantity}`,
+            tax_code: 'txcd_10000000', // General - Electronically Supplied Services
           },
           unit_amount: formatAmountForStripe(item.unit_price),
           // Enable automatic tax even for dynamically created prices
@@ -108,6 +109,24 @@ export async function POST(request: Request) {
         quantity: item.quantity,
       };
     });
+
+    // Apply app coupon as a negative line item so Stripe total matches order.total_amount
+    const discountAmount = typeof order.discount_amount === 'number'
+      ? order.discount_amount
+      : parseFloat(String(order.discount_amount || 0));
+    if (discountAmount > 0) {
+      lineItems.push({
+        price_data: {
+          currency: order.currency?.toLowerCase() || 'usd',
+          product_data: {
+            name: 'Discount',
+            description: 'Coupon discount applied at checkout',
+          },
+          unit_amount: -formatAmountForStripe(discountAmount),
+        },
+        quantity: 1,
+      });
+    }
 
     // Get app URL for redirects
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -134,8 +153,8 @@ export async function POST(request: Request) {
       metadata,
       success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${appUrl}/checkout?error=payment_cancelled`,
-      // Allow promotion codes
-      allow_promotion_codes: true,
+      // Only allow Stripe promotion codes when no app coupon was applied (avoid double discount)
+      allow_promotion_codes: discountAmount <= 0,
       // Enable automatic tax calculation
       automatic_tax: {
         enabled: true,

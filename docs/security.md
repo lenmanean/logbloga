@@ -52,6 +52,10 @@ export async function GET(request: Request) {
 
 **Exemptions**: Stripe webhooks (use signature verification instead)
 
+### Payment flow
+
+Payment uses Stripe Checkout (redirect); card data is never handled by the app. Cart is cleared only after successful payment (Stripe webhook). See [PAYMENT_FLOW.md](PAYMENT_FLOW.md) for flow, webhook, and production env checklist.
+
 ### Input Validation
 
 **Location**: `lib/security/validation.ts`

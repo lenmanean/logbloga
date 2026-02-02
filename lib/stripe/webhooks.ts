@@ -5,6 +5,7 @@
 
 import type Stripe from 'stripe';
 import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
+import { clearUserCart } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
@@ -35,6 +36,17 @@ export async function handleCheckoutSessionCompleted(
   });
 
   console.log(`Order ${metadata.orderId} updated: checkout session completed, payment intent: ${paymentIntentId}`);
+
+  // Clear cart only after successful payment (so abandoned checkouts keep cart)
+  const userId = metadata.userId;
+  if (userId) {
+    try {
+      await clearUserCart(userId);
+    } catch (error) {
+      console.error('Error clearing cart after payment:', error);
+      // Don't fail webhook; cart clear is non-critical
+    }
+  }
 
   // Create notification (non-blocking)
   try {

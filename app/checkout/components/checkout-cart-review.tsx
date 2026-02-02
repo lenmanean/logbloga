@@ -3,12 +3,15 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/contexts/cart-context';
+import { useCheckout } from '@/contexts/checkout-context';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import { ChevronRight } from 'lucide-react';
 
 export function CheckoutCartReview() {
   const { items } = useCart();
+  const { setCurrentStep } = useCheckout();
 
   if (items.length === 0) {
     return (
@@ -97,6 +100,13 @@ export function CheckoutCartReview() {
               return sum + (price * (item.quantity || 0));
             }, 0).toLocaleString()}
           </span>
+        </div>
+
+        <div className="flex justify-end pt-4">
+          <Button onClick={() => setCurrentStep(2)} size="lg">
+            Continue to Customer Info
+            <ChevronRight className="h-4 w-4 ml-2" />
+          </Button>
         </div>
       </CardContent>
     </Card>

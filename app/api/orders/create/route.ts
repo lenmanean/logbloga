@@ -1,15 +1,34 @@
 import { requireAuth } from '@/lib/auth/utils';
-import { getUserCartItems, clearUserCart } from '@/lib/db/cart';
-import { createOrderWithItems } from '@/lib/db/orders';
+import { getUserCartItems } from '@/lib/db/cart';
+import { createOrderWithItems, getMostRecentPendingOrderForUser } from '@/lib/db/orders';
 import { validateCoupon } from '@/lib/db/coupons';
 import { calculateOrderTotals } from '@/lib/checkout/calculations';
 import { NextResponse } from 'next/server';
 import type { CustomerInfo } from '@/lib/checkout/validation';
 import { createNotification } from '@/lib/db/notifications-db';
+import type { CartItemWithProduct } from '@/lib/db/cart';
+import type { OrderWithItems } from '@/lib/types/database';
+
+function cartFingerprint(items: { product_id: string; quantity: number }[]): string {
+  const normalized = [...items]
+    .map((i) => ({ product_id: i.product_id, quantity: i.quantity || 0 }))
+    .sort((a, b) => (a.product_id || '').localeCompare(b.product_id || ''));
+  return JSON.stringify(normalized);
+}
+
+function cartMatchesOrder(cartItems: CartItemWithProduct[], order: OrderWithItems): boolean {
+  const cartFp = cartFingerprint(
+    cartItems.map((i) => ({ product_id: i.product_id ?? '', quantity: i.quantity || 0 }))
+  );
+  const orderFp = cartFingerprint(
+    (order.items || []).map((i) => ({ product_id: i.product_id ?? '', quantity: i.quantity || 0 }))
+  );
+  return cartFp === orderFp;
+}
 
 /**
  * POST /api/orders/create
- * Create a new order from cart items
+ * Create a new order from cart items, or return existing pending order if cart matches (resume payment)
  */
 export async function POST(request: Request) {
   try {
@@ -33,6 +52,12 @@ export async function POST(request: Request) {
         { error: 'Cart is empty. Add items to your cart before placing an order.' },
         { status: 400 }
       );
+    }
+
+    // Resume payment: if user has a pending order with same cart, return it instead of creating duplicate
+    const pendingOrder = await getMostRecentPendingOrderForUser(user.id);
+    if (pendingOrder && cartMatchesOrder(cartItems, pendingOrder)) {
+      return NextResponse.json(pendingOrder, { status: 201 });
     }
 
     // Validate coupon if provided
@@ -75,13 +100,7 @@ export async function POST(request: Request) {
       cartItems
     );
 
-    // Clear cart after successful order creation
-    try {
-      await clearUserCart(user.id);
-    } catch (error) {
-      console.error('Error clearing cart after order creation:', error);
-      // Don't fail the order creation if cart clearing fails
-    }
+    // Cart is cleared only after successful payment (see Stripe webhook handleCheckoutSessionCompleted)
 
     // Create order confirmation notification (non-blocking)
     try {
