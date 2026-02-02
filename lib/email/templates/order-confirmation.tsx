@@ -119,10 +119,10 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
                   <strong>How to redeem:</strong>
                 </Text>
                 <Text style={couponInstructions}>
-                  1. Visit <Link href="https://usedoer.com/checkout" style={link}>usedoer.com/checkout</Link>
+                  1. Visit <Link href="https://usedoer.com/checkout?plan=pro&cycle=monthly" style={link}>usedoer.com/checkout</Link> (Pro Monthly or choose Pro Annual)
                 </Text>
                 <Text style={couponInstructions}>
-                  2. Apply the coupon code at checkout
+                  2. Enter your code in the Promo Code field at checkout
                 </Text>
                 <Text style={couponInstructions}>
                   3. Enter your payment method (required for post-trial billing)

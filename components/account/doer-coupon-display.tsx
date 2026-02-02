@@ -153,7 +153,7 @@ export function DoerCouponDisplay({
               variant="default"
             >
               <a
-                href="https://usedoer.com/checkout"
+                href="https://usedoer.com/checkout?plan=pro&cycle=monthly"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -169,8 +169,8 @@ export function DoerCouponDisplay({
           <div className="rounded-lg bg-muted p-3 text-sm">
             <p className="font-medium mb-1">How to redeem:</p>
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-              <li>Visit usedoer.com/checkout</li>
-              <li>Apply the coupon code at checkout</li>
+              <li>Visit usedoer.com/checkout?plan=pro&cycle=monthly (or cycle=annual)</li>
+              <li>Enter your code in the Promo Code field at checkout</li>
               <li>Enter your payment method (required for post-trial billing)</li>
               <li>Enjoy 6 months free Pro subscription</li>
             </ol>

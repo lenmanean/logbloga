@@ -231,7 +231,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
                         <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground ml-4">
                           <li>Purchase your Logbloga AI to USD package</li>
                           <li>Receive your unique DOER Pro coupon code after purchase</li>
-                          <li>Visit usedoer.com/checkout and apply your coupon code</li>
+                          <li>Visit usedoer.com/checkout?plan=pro&cycle=monthly and enter your code in the Promo Code field</li>
                           <li>Set up your DOER workspace and import your package implementation plan</li>
                           <li>Start tracking your progress through each level</li>
                         </ol>
