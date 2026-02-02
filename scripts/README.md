@@ -44,6 +44,19 @@ Once products are synced, your checkout will automatically:
 - Enable automatic tax calculation
 - Provide better product management in Stripe Dashboard
 
+### `update-product-stripe-price.ts`
+
+Updates a single product's `stripe_price_id` in the database by slug. Use when you create a new Stripe Price (e.g. after the original failed) and need to point the product to the new price.
+
+**Usage:**
+```bash
+npx tsx scripts/update-product-stripe-price.ts <slug> <stripe_price_id>
+# Example: Master Bundle new price
+npx tsx scripts/update-product-stripe-price.ts master-bundle price_1SvRghRPD0Bbk4QBldhV3krO
+```
+
+**Environment:** `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (e.g. in `.env.local`).
+
 ---
 
 ## Stripe Product Catalogue Cleanup
