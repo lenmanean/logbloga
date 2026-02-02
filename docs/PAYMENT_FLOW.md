@@ -56,6 +56,6 @@ Ensure these are set in production:
 | `STRIPE_WEBHOOK_SECRET` | Webhook signature verification (from Stripe Dashboard webhook endpoint) |
 | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Client-side key (e.g. `pk_live_...`) if using Stripe.js |
 | `NEXT_PUBLIC_APP_URL` | App root URL for Stripe redirect URLs (success/cancel) |
-| `CRON_SECRET` | Optional: secures cron routes; set in Vercel. **No leading or trailing whitespace** (Vercel rejects it for HTTP headers). CLI: `node -e "process.stdout.write(require('crypto').randomBytes(32).toString('hex'))" \| vercel env add CRON_SECRET production` |
+| `CRON_SECRET` | Optional: secures cron routes; set in Vercel. **No leading or trailing whitespace** (Vercel rejects it for HTTP headers). Windows-safe: `node -e "require('fs').writeFileSync('.cron-secret-tmp', require('crypto').randomBytes(32).toString('hex'), 'utf8')"` then `cmd /c "vercel env add CRON_SECRET production < .cron-secret-tmp"`; delete `.cron-secret-tmp` after. |
 
 Use **live** keys and the **live** webhook secret in production. Test with **test** keys and Stripe CLI (`stripe listen --forward-to .../api/stripe/webhook`) locally.

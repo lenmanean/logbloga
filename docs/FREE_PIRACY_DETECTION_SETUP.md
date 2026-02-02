@@ -49,13 +49,15 @@ Add to Vercel environment variables:
 CRON_SECRET=your_random_secret_string_here
 ```
 
-**Important:** Do not include leading or trailing whitespace (e.g. no newline when pasting). Vercel rejects values with whitespace for cron HTTP headers.
+**Important:** Do not include leading or trailing whitespace (e.g. no newline when pasting). Vercel rejects values with whitespace for cron HTTP headers. On Windows, piping can add whitespace; use the file method below.
 
-Generate a random string (no newline when using CLI):
+Generate and add via file (no whitespace):
 ```bash
-openssl rand -hex 32
+node -e "require('fs').writeFileSync('.cron-secret-tmp', require('crypto').randomBytes(32).toString('hex'), 'utf8')"
+cmd /c "vercel env add CRON_SECRET production < .cron-secret-tmp"
+# Delete .cron-secret-tmp after. Add .cron-secret-tmp to .gitignore.
 ```
-Or with Node and pipe to Vercel: `node -e "process.stdout.write(require('crypto').randomBytes(32).toString('hex'))" | vercel env add CRON_SECRET production`
+On Unix: `openssl rand -hex 32 | tr -d '\n' > .cron-secret-tmp` then `vercel env add CRON_SECRET production < .cron-secret-tmp`
 
 ### Step 3: Configure Admin Email (Optional)
 
