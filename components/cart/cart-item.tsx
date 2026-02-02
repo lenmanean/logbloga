@@ -57,9 +57,28 @@ export function CartItem({ item }: CartItemProps) {
 
   return (
     <div className={cn(
-      'flex flex-col sm:flex-row gap-4 p-4 border rounded-lg',
+      'flex flex-col sm:flex-row gap-4 p-4 border rounded-lg relative',
       isRemoving && 'opacity-50 pointer-events-none'
     )}>
+      {/* Remove: fixed top-right of card so it's always visible (e.g. in narrow cart sheet) */}
+      <Button
+        variant="ghost"
+        size="sm"
+        onClick={handleRemove}
+        disabled={isRemoving}
+        className="absolute top-3 right-3 z-10 text-destructive hover:text-destructive hover:bg-destructive/10 shrink-0"
+      >
+        {isRemoving ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <>
+            <Trash2 className="h-4 w-4 mr-1" />
+            <span>Remove</span>
+          </>
+        )}
+        <span className="sr-only">Remove item from cart</span>
+      </Button>
+
       {/* Product Image */}
       <Link 
         href={productSlug ? `/ai-to-usd/packages/${productSlug}` : '#'}
@@ -74,8 +93,8 @@ export function CartItem({ item }: CartItemProps) {
       </Link>
 
       {/* Product Info */}
-      <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4">
-        <div className="flex-1">
+      <div className="flex-1 flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
+        <div className="flex-1 min-w-0">
           <Link 
             href={productSlug ? `/ai-to-usd/packages/${productSlug}` : '#'}
             className="hover:underline"
@@ -87,9 +106,8 @@ export function CartItem({ item }: CartItemProps) {
           </p>
         </div>
 
-        {/* Quantity and Actions */}
-        <div className="flex items-center gap-4">
-          {/* Quantity Selector */}
+        {/* Quantity and Line Total */}
+        <div className="flex items-center gap-4 flex-wrap">
           <div className="flex items-center gap-2">
             {isUpdating ? (
               <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
@@ -102,29 +120,11 @@ export function CartItem({ item }: CartItemProps) {
               />
             )}
           </div>
-
-          {/* Line Total */}
           <div className="text-right min-w-[80px]">
             <p className="font-semibold text-lg">
               ${lineTotal.toLocaleString()}
             </p>
           </div>
-
-          {/* Remove Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleRemove}
-            disabled={isRemoving}
-            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-          >
-            {isRemoving ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Trash2 className="h-4 w-4" />
-            )}
-            <span className="sr-only">Remove item</span>
-          </Button>
         </div>
       </div>
     </div>
