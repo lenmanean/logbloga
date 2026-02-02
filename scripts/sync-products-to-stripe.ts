@@ -59,8 +59,9 @@ async function createStripeProduct(
       product_slug: product.slug,
       product_id: product.id,
     },
-    // Note: tax_code is optional - automatic tax will handle tax calculation
-    // You can set a tax code later in Stripe Dashboard if needed
+    // Tax code for digital products: General - Electronically Supplied Services
+    // Enables correct tax calculation per jurisdiction (US sales tax, EU VAT, etc.)
+    tax_code: 'txcd_10000000',
   });
 
   console.log(`  ✓ Created Stripe product: ${stripeProduct.id}`);
