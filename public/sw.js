@@ -83,6 +83,11 @@ self.addEventListener('fetch', (event) => {
     return; // Don't cache or handle vercel.live requests
   }
 
+  // Don't intercept Stripe – let the browser load it (avoids CSP and stale script issues)
+  if (url.hostname === 'js.stripe.com' || url.hostname.endsWith('.stripe.com')) {
+    return;
+  }
+
   // Skip API routes (these should use network-first)
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(networkFirst(request));
