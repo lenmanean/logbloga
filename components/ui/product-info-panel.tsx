@@ -152,6 +152,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
                 productId={pkg.id}
                 productTitle={pkg.title}
                 amountFormatted={`$${finalPrice.toLocaleString()}`}
+                amountTotalUsd={finalPrice}
                 quantity={quantity}
               />
             ) : (

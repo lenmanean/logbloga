@@ -1,10 +1,13 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import type { PaymentRequest } from '@stripe/stripe-js';
 import {
+  Elements,
   PaymentElement,
+  PaymentRequestButtonElement,
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
@@ -29,6 +32,67 @@ interface ExpressCheckoutFormProps {
   amountFormatted: string;
   onSuccess: () => void;
   onError: (message: string) => void;
+}
+
+/** Apple Pay / Google Pay native button; must be used inside Elements. Uses existing order clientSecret so one order is shared with the form below. */
+function ExpressWalletButtonInline({
+  clientSecret,
+  orderId,
+  amountInCents,
+  productTitle,
+  onError,
+}: {
+  clientSecret: string;
+  orderId: string;
+  amountInCents: number;
+  productTitle: string;
+  onError: (msg: string) => void;
+}) {
+  const stripe = useStripe();
+  const router = useRouter();
+  const [paymentRequest, setPaymentRequest] = useState<PaymentRequest | null>(null);
+  const [canPay, setCanPay] = useState(false);
+
+  useEffect(() => {
+    if (!stripe || amountInCents < 50) return;
+    const label = productTitle.length > 100 ? productTitle.slice(0, 97) + '…' : productTitle;
+    const pr = stripe.paymentRequest({
+      country: 'US',
+      currency: 'usd',
+      total: { label, amount: amountInCents },
+      requestPayerName: true,
+      requestPayerEmail: true,
+    });
+    pr.on('paymentmethod', async (ev) => {
+      onError('');
+      try {
+        const { error } = await stripe!.confirmCardPayment(clientSecret, {
+          payment_method: ev.paymentMethod.id,
+        });
+        if (error) {
+          onError(error.message ?? 'Payment failed');
+          ev.complete('fail');
+          return;
+        }
+        ev.complete('success');
+        router.push(`/checkout/success?order_id=${orderId}`);
+      } catch (err) {
+        onError(err instanceof Error ? err.message : 'Payment failed');
+        ev.complete('fail');
+      }
+    });
+    pr.canMakePayment().then((result) => {
+      setCanPay(Boolean(result && (result.applePay || result.googlePay)));
+    });
+    setPaymentRequest(pr);
+  }, [stripe, clientSecret, orderId, amountInCents, productTitle, router, onError]);
+
+  if (!canPay || !paymentRequest) return null;
+  return (
+    <div className="w-full [&>div]:!block">
+      <PaymentRequestButtonElement options={{ paymentRequest }} />
+    </div>
+  );
 }
 
 /** Exported for use on full-page express checkout (mobile). Uses Payment Element so all Stripe payment methods can show. */
@@ -80,7 +144,11 @@ export function ExpressCheckoutForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="min-h-[320px] sm:min-h-[280px] w-full min-w-0" aria-label="Payment method">
-        <PaymentElement options={{ layout: 'tabs' }} />
+        <PaymentElement
+          options={{
+            layout: { type: 'accordion', spacedAccordionItems: true, defaultCollapsed: false },
+          }}
+        />
       </div>
       <div className="flex items-start gap-3">
         <Checkbox
@@ -124,16 +192,19 @@ interface ExpressCheckoutInlineProps {
   productId: string;
   productTitle: string;
   amountFormatted: string;
+  /** Total in dollars (used to derive amountInCents for wallet button). */
+  amountTotalUsd: number;
   quantity: number;
 }
 
 /**
- * Inline Payment Element on the product page (no modal). Shows all native payment methods; creates order on mount.
+ * Inline on product page: individual native Stripe buttons (Apple/Google Pay, then Card/Link/etc. in accordion). Creates order on mount.
  */
 export function ExpressCheckoutInline({
   productId,
   productTitle,
   amountFormatted,
+  amountTotalUsd,
   quantity,
 }: ExpressCheckoutInlineProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
@@ -201,6 +272,8 @@ export function ExpressCheckoutInline({
     );
   }
 
+  const amountInCents = Math.round(amountTotalUsd * 100);
+
   return (
     <div className="rounded-lg border border-input bg-muted/30 p-4 sm:p-6 space-y-4">
       <p className="text-sm font-medium text-foreground">
@@ -222,12 +295,21 @@ export function ExpressCheckoutInline({
           },
         }}
       >
-        <ExpressCheckoutForm
-          orderId={orderId}
-          amountFormatted={amountFromApi}
-          onSuccess={handleSuccess}
-          onError={setError}
-        />
+        <div className="space-y-4">
+          <ExpressWalletButtonInline
+            clientSecret={clientSecret}
+            orderId={orderId}
+            amountInCents={amountInCents}
+            productTitle={productTitle}
+            onError={setError}
+          />
+          <ExpressCheckoutForm
+            orderId={orderId}
+            amountFormatted={amountFromApi}
+            onSuccess={handleSuccess}
+            onError={setError}
+          />
+        </div>
       </Elements>
       <p className="text-xs text-muted-foreground text-center">
         No options showing?{' '}
