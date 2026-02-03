@@ -183,47 +183,16 @@ export async function POST(request: Request) {
     }
 
     if (!clientSecret) {
-      const allMethodTypes = [
-        'card',
-        'link',
-        'klarna',
-        'afterpay_clearpay',
-        'affirm',
-        'amazon_pay',
-        'cashapp',
-      ] as const;
-      const fallbackMethodTypes = ['card', 'link'] as const;
-      let paymentIntent: Awaited<ReturnType<typeof stripe.paymentIntents.create>>;
-      try {
-        paymentIntent = await stripe.paymentIntents.create({
-          amount: amountCents,
-          currency: 'usd',
-          payment_method_types: [...allMethodTypes],
-          metadata: {
-            orderId: order.id,
-            userId: order.user_id ?? '',
-          },
-          receipt_email: order.customer_email ?? undefined,
-        });
-      } catch (firstErr: unknown) {
-        const isInvalidType =
-          firstErr && typeof firstErr === 'object' && 'code' in firstErr &&
-          (String((firstErr as { code?: string }).code).includes('payment_method') || String((firstErr as { message?: string }).message ?? '').includes('payment method'));
-        if (isInvalidType) {
-          paymentIntent = await stripe.paymentIntents.create({
-            amount: amountCents,
-            currency: 'usd',
-            payment_method_types: [...fallbackMethodTypes],
-            metadata: {
-              orderId: order.id,
-              userId: order.user_id ?? '',
-            },
-            receipt_email: order.customer_email ?? undefined,
-          });
-        } else {
-          throw firstErr;
-        }
-      }
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amountCents,
+        currency: 'usd',
+        automatic_payment_methods: { enabled: true },
+        metadata: {
+          orderId: order.id,
+          userId: order.user_id ?? '',
+        },
+        receipt_email: order.customer_email ?? undefined,
+      });
       await updateOrderWithPaymentInfo(order.id, {
         stripePaymentIntentId: paymentIntent.id,
       });

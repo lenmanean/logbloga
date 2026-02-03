@@ -81,13 +81,7 @@ function ExpressCheckoutForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <PaymentElement
         options={{
-          layout: {
-            type: 'accordion',
-            defaultCollapsed: false,
-            radios: true,
-            spacedAccordionItems: true,
-            visibleAccordionItemsCount: 0,
-          },
+          layout: 'tabs',
           paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
         }}
       />
