@@ -20,6 +20,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
+import { PAYMENT_METHOD_ORDER } from '@/lib/stripe/payment-element-options';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
@@ -78,12 +79,14 @@ function ExpressCheckoutForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <PaymentElement
-        options={{
-          layout: 'tabs',
-          // Let Stripe show all methods enabled for your account (card, link, etc.)
-        }}
-      />
+      <div className="min-h-[280px] w-full" aria-label="Payment method">
+        <PaymentElement
+          options={{
+            layout: 'tabs',
+            paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
+          }}
+        />
+      </div>
       <div className="flex items-start gap-3">
         <Checkbox
           id="express-terms"
@@ -147,12 +150,18 @@ export function ExpressCheckoutPaymentElementModal({
   const [orderId, setOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Defer mounting Payment Element until dialog is open and painted (fixes blank iframe in modal)
+  const [mountPaymentElement, setMountPaymentElement] = useState(false);
 
   useEffect(() => {
-    if (!open || !productId) return;
+    if (!open || !productId) {
+      setMountPaymentElement(false);
+      return;
+    }
     setClientSecret(null);
     setOrderId(null);
     setError(null);
+    setMountPaymentElement(false);
     setLoading(true);
     fetch('/api/orders/create-express', {
       method: 'POST',
@@ -171,6 +180,16 @@ export function ExpressCheckoutPaymentElementModal({
       .catch(() => setError('Failed to start payment'))
       .finally(() => setLoading(false));
   }, [open, productId, quantity]);
+
+  // Mount Payment Element only after dialog content is visible so Stripe iframe has dimensions
+  useEffect(() => {
+    if (!open || !clientSecret) {
+      setMountPaymentElement(false);
+      return;
+    }
+    const t = setTimeout(() => setMountPaymentElement(true), 200);
+    return () => clearTimeout(t);
+  }, [open, clientSecret]);
 
   const handleSuccess = () => {
     onOpenChange(false);
@@ -196,8 +215,9 @@ export function ExpressCheckoutPaymentElementModal({
             <p className="text-sm">Preparing payment…</p>
           </div>
         )}
-        {!loading && clientSecret && orderId && stripePromise && (
+        {!loading && clientSecret && orderId && stripePromise && mountPaymentElement && (
           <Elements
+            key={clientSecret}
             stripe={stripePromise}
             options={{
               clientSecret,
