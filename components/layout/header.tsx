@@ -627,6 +627,7 @@ export function Header() {
             </SheetContent>
           </Sheet>
         </div>
+        </div>
       </header>
     </div>
   );
