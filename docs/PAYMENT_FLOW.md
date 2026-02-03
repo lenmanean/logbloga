@@ -65,6 +65,12 @@ The app uses Stripe’s **Payment Element** for quick checkout (product-page mod
 
 After changing payment method settings, no app redeploy is needed; the next Payment Element load will reflect them.
 
+**Only Link or Card showing (no Klarna, Affirm, Afterpay, Apple Pay):**
+
+- Stripe shows methods based on **payment method rules** (amount, country, currency). In **Settings → Payment methods**, open each method (e.g. Klarna, Affirm) and click **Customize availability** to see or change rules (e.g. minimum amount, allowed countries). If the customer’s location or order amount doesn’t match, that method won’t appear.
+- **Apple Pay (web)** requires **Configure domains** for your site (e.g. `logbloga.com`); otherwise it won’t show in the browser.
+- **Mobile:** The Payment Element needs a moment to render inside the modal; if it stays blank, try again or ensure the latest build is deployed.
+
 ## Stripe price IDs (checkout)
 
 - **Checkout** uses **environment variables** for Stripe price IDs: `STRIPE_PRICE_AGENCY`, `STRIPE_PRICE_SOCIAL_MEDIA`, `STRIPE_PRICE_WEB_APPS`, `STRIPE_PRICE_FREELANCING`, `STRIPE_PRICE_MASTER_BUNDLE`. Each must be set to a Stripe Price ID (`price_xxx`). Line items are built from order item `product_sku` (slug) and the corresponding env var; no DB `stripe_price_id` is used for checkout.

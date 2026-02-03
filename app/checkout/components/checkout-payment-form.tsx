@@ -12,7 +12,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { PAYMENT_METHOD_ORDER } from '@/lib/stripe/payment-element-options';
 
 interface CheckoutPaymentFormProps {
   orderId: string;
@@ -84,7 +83,6 @@ export function CheckoutPaymentForm({
           <PaymentElement
             options={{
               layout: 'tabs',
-              paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
             }}
           />
 

@@ -20,7 +20,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
-import { PAYMENT_METHOD_ORDER } from '@/lib/stripe/payment-element-options';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 const stripePromise = stripePublishableKey ? loadStripe(stripePublishableKey) : null;
@@ -79,11 +78,11 @@ function ExpressCheckoutForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="min-h-[280px] w-full" aria-label="Payment method">
+      <div className="min-h-[320px] sm:min-h-[280px] w-full min-w-0" aria-label="Payment method">
         <PaymentElement
           options={{
             layout: 'tabs',
-            paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
+            // No paymentMethodOrder: let Stripe show all eligible methods in its default order
           }}
         />
       </div>
@@ -181,13 +180,14 @@ export function ExpressCheckoutPaymentElementModal({
       .finally(() => setLoading(false));
   }, [open, productId, quantity]);
 
-  // Mount Payment Element only after dialog content is visible so Stripe iframe has dimensions
+  // Mount Payment Element only after dialog content is visible so Stripe iframe has dimensions (longer on mobile)
   useEffect(() => {
     if (!open || !clientSecret) {
       setMountPaymentElement(false);
       return;
     }
-    const t = setTimeout(() => setMountPaymentElement(true), 200);
+    const delay = typeof window !== 'undefined' && window.innerWidth < 640 ? 450 : 250;
+    const t = setTimeout(() => setMountPaymentElement(true), delay);
     return () => clearTimeout(t);
   }, [open, clientSecret]);
 
@@ -197,11 +197,11 @@ export function ExpressCheckoutPaymentElementModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[min(100vw-2rem,28rem)] sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Quick checkout — {productTitle}</DialogTitle>
           <DialogDescription>
-            Choose your payment method below.
+            Choose your payment method below. Options depend on your location and order amount.
           </DialogDescription>
         </DialogHeader>
         {error && (
