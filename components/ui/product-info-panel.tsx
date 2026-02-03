@@ -330,22 +330,6 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
         </div>
       </div>
 
-      {/* Membership Offer Banner (if not authenticated) */}
-      {!isAuthenticated && (
-        <div className="bg-teal-50 dark:bg-teal-950/20 border border-teal-200 dark:border-teal-900 rounded-md p-4 mb-6">
-          <p className="text-sm text-teal-900 dark:text-teal-100">
-            <span className="font-medium">Members save 20%!</span>{' '}
-            <Link href="/login" className="text-teal-600 dark:text-teal-400 hover:underline font-medium">
-              Login
-            </Link>
-            {' or '}
-            <Link href="/signup" className="text-teal-600 dark:text-teal-400 hover:underline font-medium">
-              Join Today
-            </Link>
-          </p>
-        </div>
-      )}
-
       {/* Trust Indicators */}
       <div className="grid grid-cols-2 gap-6 pt-6 border-t border-border">
         <div>

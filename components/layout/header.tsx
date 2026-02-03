@@ -329,12 +329,12 @@ export function Header() {
             </DropdownMenu>
           </div>
 
-          {/* Mobile: Cart icon (direct access without opening menu) */}
-          <div className={`md:hidden flex items-center transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          {/* Mobile: Cart + Account + Menu (evenly spaced to the left of edge) */}
+          <div className={`md:hidden flex items-center gap-3 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <Button
               variant="ghost"
               size="icon"
-              className="rounded-full relative"
+              className="rounded-full relative shrink-0"
               onClick={() => setCartSheetOpen(true)}
               aria-label="Shopping cart"
             >
@@ -345,18 +345,108 @@ export function Header() {
                 </span>
               )}
             </Button>
-          </div>
-
-          {/* Mobile Menu */}
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild className={`md:hidden transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <Menu className="h-5 w-5" />
-                <span className="sr-only">Toggle menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col space-y-4 mt-8">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full shrink-0">
+                  <Avatar className="h-8 w-8">
+                    {isAuthenticated && user?.image && (
+                      <AvatarImage src={user.image} alt={user.name || user.email || 'User'} />
+                    )}
+                    <AvatarFallback className="bg-red-500 text-white">
+                      {isAuthenticated && user ? (
+                        getUserInitials(user.name, user.email)
+                      ) : (
+                        <User className="h-4 w-4" />
+                      )}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="sr-only">Account menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {isAuthenticated && user ? (
+                  <>
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium leading-none">
+                          {user.name || 'Account'}
+                        </p>
+                        {user.email && (
+                          <p className="text-xs leading-none text-muted-foreground">
+                            {user.email}
+                          </p>
+                        )}
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/library" className="flex items-center">
+                        <BookOpen className="mr-2 h-4 w-4" />
+                        Library
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/orders" className="flex items-center">
+                        <ShoppingBag className="mr-2 h-4 w-4" />
+                        Orders
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/billing" className="flex items-center">
+                        <CreditCard className="mr-2 h-4 w-4" />
+                        Billing
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/settings" className="flex items-center">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/account/profile" className="flex items-center">
+                        <User className="mr-2 h-4 w-4" />
+                        Account Info
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem 
+                      className="text-destructive focus:text-destructive cursor-pointer"
+                      onClick={handleSignOut}
+                    >
+                      <LogOut className="mr-2 h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
+                  </>
+                ) : (
+                  <>
+                    <DropdownMenuLabel>Account</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/auth/signin" className="flex items-center">
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Sign In
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                      <Link href="/auth/signup" className="flex items-center">
+                        <LogIn className="mr-2 h-4 w-4" />
+                        Sign Up
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full shrink-0">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] px-6 pb-8 pt-14">
+              <nav className="flex flex-col space-y-4">
                 <div className="flex flex-col">
                   <Link
                     href="/ai-to-usd"
