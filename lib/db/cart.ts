@@ -183,6 +183,30 @@ export async function clearUserCart(userId: string): Promise<void> {
 }
 
 /**
+ * Remove from cart only the items whose product_id is in the given list.
+ * Used after payment so only paid order items are removed; other cart items remain.
+ */
+export async function removeCartItemsByProductIds(
+  userId: string,
+  productIds: string[]
+): Promise<void> {
+  if (productIds.length === 0) return;
+
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('cart_items')
+    .delete()
+    .eq('user_id', userId)
+    .in('product_id', productIds);
+
+  if (error) {
+    console.error('Error removing cart items by product ids:', error);
+    throw new Error(`Failed to remove cart items: ${error.message}`);
+  }
+}
+
+/**
  * Get total item count (sum of quantities) for a user's cart
  */
 export async function getCartItemCount(userId: string): Promise<number> {

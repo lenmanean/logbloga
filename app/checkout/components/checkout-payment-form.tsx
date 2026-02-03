@@ -6,6 +6,7 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
+import { PAYMENT_METHOD_ORDER } from '@/lib/stripe/payment-element-options';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -83,6 +84,7 @@ export function CheckoutPaymentForm({
           <PaymentElement
             options={{
               layout: 'tabs',
+              paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
             }}
           />
 

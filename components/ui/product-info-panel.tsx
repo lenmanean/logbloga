@@ -8,6 +8,8 @@ import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
+import { ExpressPaymentRequestButton } from '@/components/checkout/express-payment-request-button';
+import { ExpressCheckoutModal } from '@/components/checkout/express-checkout-modal';
 import {
   Select,
   SelectContent,
@@ -37,6 +39,7 @@ interface ProductInfoPanelProps {
 
 export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: ProductInfoPanelProps) {
   const [quantity, setQuantity] = useState(1);
+  const [expressModalOpen, setExpressModalOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(
     pkg.variants && pkg.variants.length > 0 ? pkg.variants[0].id : null
   );
@@ -130,6 +133,36 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
           onChange={handleQuantityChange}
         />
       </div>
+
+      {/* Quick checkout (Apple Pay / Google Pay + more ways to pay) */}
+      {isAuthenticated && (
+        <div className="mb-6 space-y-4">
+          <p className="text-sm font-medium text-muted-foreground">Quick checkout</p>
+          <ExpressPaymentRequestButton
+            productId={pkg.id}
+            productTitle={pkg.title}
+            amountInCents={Math.round(finalPrice * 100)}
+            quantity={quantity}
+          />
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="w-full"
+            onClick={() => setExpressModalOpen(true)}
+          >
+            More ways to pay (Amazon Pay, Klarna, Afterpay, and more)
+          </Button>
+          <ExpressCheckoutModal
+            open={expressModalOpen}
+            onOpenChange={setExpressModalOpen}
+            productId={pkg.id}
+            productTitle={pkg.title}
+            amountFormatted={`$${finalPrice.toLocaleString()}`}
+            quantity={quantity}
+          />
+        </div>
+      )}
 
       {/* Add to Cart Button */}
       <div className="mb-6">

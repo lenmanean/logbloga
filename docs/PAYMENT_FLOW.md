@@ -32,7 +32,22 @@ If the user clicks "Place Order" again with the same cart (e.g. double-click or 
 - **Endpoint**: `POST /api/stripe/webhook`
 - **Verification**: Request body is verified with `STRIPE_WEBHOOK_SECRET` (Stripe signature). Do not skip verification in production.
 - **Events used**: `checkout.session.completed`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`
-- **Production**: Register the webhook URL in the Stripe Dashboard and set `STRIPE_WEBHOOK_SECRET` for that endpoint.
+
+### Webhook secret (STRIPE_WEBHOOK_SECRET)
+
+The webhook secret is **not** a global Stripe setting. It is the **signing secret** of a specific **webhook endpoint** you create in Stripe.
+
+**How to get it:**
+
+1. Stripe Dashboard → **Developers** → **Webhooks**
+2. Click **Add endpoint**
+3. **Endpoint URL**: `https://<your-domain>/api/stripe/webhook` (e.g. `https://logbloga.com/api/stripe/webhook`)
+4. **Events to send**: Choose “Select events” and enable at least: `checkout.session.completed`, `payment_intent.succeeded`, `payment_intent.payment_failed`, `charge.refunded`
+5. Save the endpoint
+6. Open the new endpoint → **Signing secret** → **Reveal** → copy the value (starts with `whsec_...`)
+7. Set that value as `STRIPE_WEBHOOK_SECRET` in your app environment (e.g. `.env.local`, Vercel env vars)
+
+Use the **test** endpoint and its signing secret in test mode; use a separate **live** endpoint and secret in production. For local testing, run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and use the temporary secret the CLI prints as `STRIPE_WEBHOOK_SECRET`.
 
 ## Stripe price IDs (checkout)
 

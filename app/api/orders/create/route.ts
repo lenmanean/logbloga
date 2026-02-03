@@ -57,8 +57,8 @@ export async function POST(request: Request) {
     // Resume payment: if user has a pending order with same cart, return it (with current pricing)
     const pendingOrder = await getMostRecentPendingOrderForUser(user.id);
     if (pendingOrder && cartMatchesOrder(cartItems, pendingOrder)) {
-      // Recalculate totals from current cart (current product prices) so create-checkout-session
-      // sees correct total and passes Stripe minimum ($0.50). Stale pending orders may have old totals.
+      // Recalculate totals from current cart (current product prices) so create-payment-intent
+      // (and create-checkout-session if used) see correct total and pass Stripe minimum ($0.50). Stale pending orders may have old totals.
       let coupon = null;
       if (couponCode) {
         const subtotal = cartItems.reduce((sum, item) => {

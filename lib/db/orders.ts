@@ -375,7 +375,7 @@ export async function updateOrderStatus(
 
 /**
  * Update order totals (e.g. when resuming payment with current product prices).
- * Ensures create-checkout-session sees current pricing and passes minimum-amount checks.
+ * Ensures create-payment-intent (and create-checkout-session if used) see current pricing and pass minimum-amount checks.
  */
 export async function updateOrderTotals(
   orderId: string,

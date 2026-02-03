@@ -5,7 +5,7 @@
 
 import type Stripe from 'stripe';
 import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
-import { clearUserCart } from '@/lib/db/cart';
+import { removeCartItemsByProductIds } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
@@ -37,11 +37,15 @@ export async function handleCheckoutSessionCompleted(
 
   console.log(`Order ${metadata.orderId} updated: checkout session completed, payment intent: ${paymentIntentId}`);
 
-  // Clear cart only after successful payment (so abandoned checkouts keep cart)
+  // Remove from cart only the products in this order (so express checkout doesn't wipe other items)
   const userId = metadata.userId;
   if (userId) {
     try {
-      await clearUserCart(userId);
+      const orderWithItems = await getOrderWithItems(metadata.orderId);
+      const productIds = (orderWithItems?.items ?? []).map((i) => i.product_id).filter(Boolean) as string[];
+      if (productIds.length > 0) {
+        await removeCartItemsByProductIds(userId, productIds);
+      }
     } catch (error) {
       console.error('Error clearing cart after payment:', error);
       // Don't fail webhook; cart clear is non-critical
@@ -120,10 +124,14 @@ export async function handlePaymentIntentSucceeded(
 
   console.log(`Order ${order.id} updated: payment succeeded, status changed to completed`);
 
-  // Clear cart after successful payment (PaymentIntent-only flow has no Checkout Session)
+  // Remove from cart only the products in this order (so express checkout doesn't wipe other items)
   if (order.user_id) {
     try {
-      await clearUserCart(order.user_id);
+      const orderWithItems = await getOrderWithItems(order.id);
+      const productIds = (orderWithItems?.items ?? []).map((i) => i.product_id).filter(Boolean) as string[];
+      if (productIds.length > 0) {
+        await removeCartItemsByProductIds(order.user_id, productIds);
+      }
     } catch (error) {
       console.error('Error clearing cart after payment:', error);
     }
