@@ -69,7 +69,8 @@ After changing payment method settings, no app redeploy is needed; the next Paym
 
 - Stripe shows methods based on **payment method rules** (amount, country, currency). In **Settings → Payment methods**, open each method (e.g. Klarna, Affirm) and click **Customize availability** to see or change rules (e.g. minimum amount, allowed countries). If the customer’s location or order amount doesn’t match, that method won’t appear.
 - **Apple Pay (web)** requires **Configure domains** for your site (e.g. `logbloga.com`); otherwise it won’t show in the browser.
-- **Mobile:** The Payment Element needs a moment to render inside the modal; if it stays blank, try again or ensure the latest build is deployed.
+- **Mobile:** The Payment Element needs a moment to render inside the modal; if it stays blank, try again or use **full checkout from cart** (link shown in the modal). Ensure the latest build is deployed.
+- **Blank or no methods:** In Stripe Dashboard go to **Settings → Payment methods → Review** (or the payment method troubleshooting tool) to see which methods are available for your currency, amount, and test/live mode. If none qualify, the element can appear empty; enable more methods or adjust rules.
 
 ## Stripe price IDs (checkout)
 

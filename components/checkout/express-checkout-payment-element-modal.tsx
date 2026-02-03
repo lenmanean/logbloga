@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import {
@@ -180,15 +180,32 @@ export function ExpressCheckoutPaymentElementModal({
       .finally(() => setLoading(false));
   }, [open, productId, quantity]);
 
-  // Mount Payment Element only after dialog content is visible so Stripe iframe has dimensions (longer on mobile)
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Mount Payment Element only after the container has non-zero dimensions (fixes blank iframe on mobile)
   useEffect(() => {
     if (!open || !clientSecret) {
       setMountPaymentElement(false);
       return;
     }
-    const delay = typeof window !== 'undefined' && window.innerWidth < 640 ? 450 : 250;
-    const t = setTimeout(() => setMountPaymentElement(true), delay);
-    return () => clearTimeout(t);
+    const baseDelay = typeof window !== 'undefined' && window.innerWidth < 640 ? 400 : 200;
+    let mounted = true;
+
+    const tryMount = () => {
+      const el = containerRef.current;
+      if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
+        setMountPaymentElement(true);
+        return;
+      }
+      if (!mounted) return;
+      requestAnimationFrame(() => setTimeout(tryMount, 50));
+    };
+
+    const t = setTimeout(tryMount, baseDelay);
+    return () => {
+      mounted = false;
+      clearTimeout(t);
+    };
   }, [open, clientSecret]);
 
   const handleSuccess = () => {
@@ -215,25 +232,51 @@ export function ExpressCheckoutPaymentElementModal({
             <p className="text-sm">Preparing payment…</p>
           </div>
         )}
-        {!loading && clientSecret && orderId && stripePromise && mountPaymentElement && (
-          <Elements
-            key={clientSecret}
-            stripe={stripePromise}
-            options={{
-              clientSecret,
-              appearance: {
-                theme: 'stripe',
-                variables: { borderRadius: '6px' },
-              },
-            }}
+        {!loading && clientSecret && orderId && !stripePromise && (
+          <p className="text-sm text-destructive rounded-md bg-destructive/15 p-3" role="alert">
+            Payment is not configured. Please set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.
+          </p>
+        )}
+        {!loading && clientSecret && orderId && stripePromise && (
+          <div
+            ref={containerRef}
+            className="min-h-[320px] sm:min-h-[280px] w-full min-w-0 flex flex-col"
+            aria-busy={!mountPaymentElement}
           >
-            <ExpressCheckoutForm
-              orderId={orderId}
-              amountFormatted={amountFormatted}
-              onSuccess={handleSuccess}
-              onError={setError}
-            />
-          </Elements>
+            {mountPaymentElement ? (
+              <>
+                <Elements
+                  key={clientSecret}
+                  stripe={stripePromise}
+                  options={{
+                    clientSecret,
+                    appearance: {
+                      theme: 'stripe',
+                      variables: { borderRadius: '6px' },
+                    },
+                  }}
+                >
+                  <ExpressCheckoutForm
+                    orderId={orderId}
+                    amountFormatted={amountFormatted}
+                    onSuccess={handleSuccess}
+                    onError={setError}
+                  />
+                </Elements>
+                <p className="text-xs text-muted-foreground mt-3 text-center">
+                  No options showing?{' '}
+                  <Link href="/checkout" className="underline">
+                    Use full checkout from cart
+                  </Link>
+                </p>
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-8 gap-2 text-muted-foreground min-h-[280px]">
+                <Loader2 className="h-6 w-6 animate-spin" aria-hidden />
+                <p className="text-sm">Loading payment options…</p>
+              </div>
+            )}
+          </div>
         )}
       </DialogContent>
     </Dialog>

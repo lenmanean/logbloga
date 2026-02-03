@@ -22,10 +22,9 @@ export function CookieConsent() {
   const [localPreferences, setLocalPreferences] = useState(preferences);
 
   useEffect(() => {
-    if (requiresConsent) {
-      setShowBanner(true);
-    }
     setLocalPreferences(preferences);
+    // Only show banner after we've read storage; prevents flash and reappearing when cookie was set but loaded wasn't
+    setShowBanner(preferences.loaded && requiresConsent);
   }, [requiresConsent, preferences]);
 
   const handleAcceptAll = () => {

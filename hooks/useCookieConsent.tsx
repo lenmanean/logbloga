@@ -50,7 +50,7 @@ export function useCookieConsent() {
           essential: parsed.essential ?? true,
           analytics: parsed.analytics ?? false,
           marketing: parsed.marketing ?? false,
-          loaded: true,
+          loaded: true, // Required so requiresConsent becomes false after load
         });
       } else {
         setPreferences((prev) => ({ ...prev, loaded: true }));

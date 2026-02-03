@@ -28,8 +28,8 @@ const BundleOffer = dynamic(() => import('@/components/recommendations/bundle-of
   loading: () => <div className="h-48 animate-pulse bg-muted rounded-lg" />,
 });
 
-// Enable ISR - revalidate every hour
-export const revalidate = 3600;
+// Revalidate every 60s so price/caption updates propagate quickly (avoids stale $0.51 or old placeholder text)
+export const revalidate = 60;
 
 interface PackagePageProps {
   params: Promise<{
