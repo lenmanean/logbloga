@@ -231,8 +231,9 @@ export async function POST(request: Request) {
       );
     }
 
+    const amountFormatted = `$${orderTotalUsd.toLocaleString()}`;
     return NextResponse.json(
-      { orderId: order.id, clientSecret },
+      { orderId: order.id, clientSecret, amountFormatted },
       { status: 201 }
     );
   } catch (error) {

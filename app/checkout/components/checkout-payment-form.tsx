@@ -102,7 +102,7 @@ export function CheckoutPaymentForm({
                     href="/legal/terms"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline"
+                    className="underline whitespace-nowrap"
                   >
                     Terms of Service
                   </Link>{' '}
@@ -111,7 +111,7 @@ export function CheckoutPaymentForm({
                     href="/legal/refund"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline"
+                    className="underline whitespace-nowrap"
                   >
                     Refund Policy
                   </Link>

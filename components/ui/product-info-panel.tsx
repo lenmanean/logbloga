@@ -157,14 +157,25 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
                   amountInCents={Math.round(finalPrice * 100)}
                   quantity={quantity}
                 />
+                {/* On mobile: full-page express so Payment Element renders in-document (avoids blank iframe in modal). On desktop: modal. */}
                 <Button
                   type="button"
                   variant="outline"
                   size="lg"
-                  className="w-full touch-manipulation"
+                  className="w-full touch-manipulation hidden sm:flex"
                   onClick={() => setExpressModalOpen(true)}
                 >
                   Buy Now
+                </Button>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full touch-manipulation sm:hidden"
+                  asChild
+                >
+                  <Link href={`/checkout/express?productId=${encodeURIComponent(pkg.id)}&title=${encodeURIComponent(pkg.title)}`}>
+                    Buy Now
+                  </Link>
                 </Button>
                 <ExpressCheckoutPaymentElementModal
                   open={expressModalOpen}

@@ -31,7 +31,8 @@ interface ExpressCheckoutFormProps {
   onError: (message: string) => void;
 }
 
-function ExpressCheckoutForm({
+/** Exported for use on full-page express checkout (mobile) where the Payment Element renders in-document instead of in a modal. */
+export function ExpressCheckoutForm({
   orderId,
   amountFormatted,
   onSuccess,
@@ -95,11 +96,11 @@ function ExpressCheckoutForm({
         />
         <Label htmlFor="express-terms" className="text-sm cursor-pointer">
           I agree to the{' '}
-          <Link href="/legal/terms" target="_blank" rel="noopener noreferrer" className="underline">
+          <Link href="/legal/terms" target="_blank" rel="noopener noreferrer" className="underline whitespace-nowrap">
             Terms of Service
           </Link>{' '}
           and{' '}
-          <Link href="/legal/refund" target="_blank" rel="noopener noreferrer" className="underline">
+          <Link href="/legal/refund" target="_blank" rel="noopener noreferrer" className="underline whitespace-nowrap">
             Refund Policy
           </Link>
           .
