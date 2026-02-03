@@ -445,7 +445,8 @@ export function Header() {
                   <span className="sr-only">Toggle menu</span>
                 </Button>
               </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px] px-6 pb-8 pt-14">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col px-6 pb-8 pt-14">
+              <div className="flex-1 min-h-0 overflow-y-auto -mx-1 px-1">
               <nav className="flex flex-col space-y-4">
                 <div className="flex flex-col">
                   <Link
@@ -624,6 +625,7 @@ export function Header() {
                   )}
                 </div>
               </nav>
+              </div>
             </SheetContent>
           </Sheet>
         </div>
