@@ -8,7 +8,6 @@ import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
-import { ExpressPaymentRequestButton } from '@/components/checkout/express-payment-request-button';
 import { ExpressCheckoutPaymentElementModal } from '@/components/checkout/express-checkout-payment-element-modal';
 import {
   Select,
@@ -147,35 +146,18 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
             />
           </div>
 
-          {/* Buy Now and express payment options */}
+          {/* Buy Now opens quick-checkout modal; Add to Cart below. Payment methods only in modal and full checkout. */}
           <div className="mb-6 space-y-4">
             {isAuthenticated ? (
               <>
-                <ExpressPaymentRequestButton
-                  productId={pkg.id}
-                  productTitle={pkg.title}
-                  amountInCents={Math.round(finalPrice * 100)}
-                  quantity={quantity}
-                />
-                {/* On mobile: full-page express so Payment Element renders in-document (avoids blank iframe in modal). On desktop: modal. */}
                 <Button
                   type="button"
                   variant="outline"
                   size="lg"
-                  className="w-full touch-manipulation hidden sm:flex"
+                  className="w-full touch-manipulation"
                   onClick={() => setExpressModalOpen(true)}
                 >
                   Buy Now
-                </Button>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full touch-manipulation sm:hidden"
-                  asChild
-                >
-                  <Link href={`/checkout/express?productId=${encodeURIComponent(pkg.id)}&title=${encodeURIComponent(pkg.title)}`}>
-                    Buy Now
-                  </Link>
                 </Button>
                 <ExpressCheckoutPaymentElementModal
                   open={expressModalOpen}

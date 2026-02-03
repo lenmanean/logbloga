@@ -51,7 +51,7 @@ Use the **test** endpoint and its signing secret in test mode; use a separate **
 
 ## Stripe Dashboard: Payment methods (Payment Element)
 
-Both **main checkout** and **quick checkout** (product-page modal and full-page `/checkout/express` on mobile) use the **Payment Element**. PaymentIntents are created with **`automatic_payment_methods: { enabled: true }`**, so all payment methods you enable in the Stripe Dashboard can appear (card, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.). Which methods actually show depends on Stripe Dashboard settings and eligibility (amount, currency, country). **Apple Pay** on the web requires domain verification in the Dashboard.
+Both **main checkout** and **quick checkout** use the **Payment Element**. Quick checkout is the product-page modal (Buy Now); the full-page `/checkout/express` route is also available for direct links. PaymentIntents are created with **`automatic_payment_methods: { enabled: true }`**, so all payment methods you enable in the Stripe Dashboard can appear (card, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.). Which methods actually show depends on Stripe Dashboard settings and eligibility (amount, currency, country). **Apple Pay** on the web requires domain verification in the Dashboard.
 
 **Step-by-step (so card, Link, and other methods show):**
 
