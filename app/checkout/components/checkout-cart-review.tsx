@@ -41,7 +41,7 @@ export function CheckoutCartReview({ singlePage }: CheckoutCartReviewProps = {})
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Review Your Cart</CardTitle>
-          <Link href="/">
+          <Link href="/ai-to-usd">
             <Button variant="outline" size="sm">
               Edit Cart
             </Button>
