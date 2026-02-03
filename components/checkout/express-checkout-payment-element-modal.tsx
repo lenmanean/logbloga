@@ -31,7 +31,7 @@ interface ExpressCheckoutFormProps {
   onError: (message: string) => void;
 }
 
-/** Exported for use on full-page express checkout (mobile) where the Payment Element renders in-document instead of in a modal. */
+/** Exported for use on full-page express checkout (mobile). Uses Payment Element so all Stripe payment methods can show. */
 export function ExpressCheckoutForm({
   orderId,
   amountFormatted,
@@ -80,12 +80,7 @@ export function ExpressCheckoutForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="min-h-[320px] sm:min-h-[280px] w-full min-w-0" aria-label="Payment method">
-        <PaymentElement
-          options={{
-            layout: 'tabs',
-            // No paymentMethodOrder: let Stripe show all eligible methods in its default order
-          }}
-        />
+        <PaymentElement options={{ layout: 'tabs' }} />
       </div>
       <div className="flex items-start gap-3">
         <Checkbox
@@ -150,8 +145,8 @@ export function ExpressCheckoutPaymentElementModal({
   const [orderId, setOrderId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // Defer mounting Payment Element until dialog is open and painted (fixes blank iframe in modal)
   const [mountPaymentElement, setMountPaymentElement] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!open || !productId) {
@@ -181,9 +176,6 @@ export function ExpressCheckoutPaymentElementModal({
       .finally(() => setLoading(false));
   }, [open, productId, quantity]);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Mount Payment Element only after the container has non-zero dimensions (fixes blank iframe on mobile)
   useEffect(() => {
     if (!open || !clientSecret) {
       setMountPaymentElement(false);
@@ -191,7 +183,6 @@ export function ExpressCheckoutPaymentElementModal({
     }
     const baseDelay = typeof window !== 'undefined' && window.innerWidth < 640 ? 400 : 200;
     let mounted = true;
-
     const tryMount = () => {
       const el = containerRef.current;
       if (el && el.offsetWidth > 0 && el.offsetHeight > 0) {
@@ -201,7 +192,6 @@ export function ExpressCheckoutPaymentElementModal({
       if (!mounted) return;
       requestAnimationFrame(() => setTimeout(tryMount, 50));
     };
-
     const t = setTimeout(tryMount, baseDelay);
     return () => {
       mounted = false;

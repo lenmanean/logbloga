@@ -51,17 +51,15 @@ Use the **test** endpoint and its signing secret in test mode; use a separate **
 
 ## Stripe Dashboard: Payment methods (Payment Element)
 
-The app uses Stripe’s **Payment Element** for quick checkout (product-page modal, and full-page on mobile) and for the main checkout page. PaymentIntents are created with **explicit** `payment_method_types: ['card', 'link']` so the element always shows at least card and Link when they are enabled in the Dashboard (avoids a blank element).
+Both **main checkout** and **quick checkout** (product-page modal and full-page `/checkout/express` on mobile) use the **Payment Element**. PaymentIntents are created with **`automatic_payment_methods: { enabled: true }`**, so all payment methods you enable in the Stripe Dashboard can appear (card, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.). Which methods actually show depends on Stripe Dashboard settings and eligibility (amount, currency, country). **Apple Pay** on the web requires domain verification in the Dashboard.
 
 **Step-by-step (so card, Link, and other methods show):**
 
 1. **Stripe Dashboard** → **Settings** (gear) → **Payment methods**
-2. Under **Payment methods**, ensure **Cards** and **Link** are **Turned on** for your account (they usually are by default).
-3. To show **Klarna**, **Afterpay**, **Affirm**, **Cash App Pay**, **Amazon Pay**, etc.:
-   - In **Payment methods**, find each method and turn it **On**
-   - Some methods have **eligibility** (e.g. country, amount). Satisfy those or they won’t appear in the Payment Element.
+2. Under **Payment methods**, turn **On** every method you want (Cards, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.).
+3. Some methods have **eligibility** (e.g. country, amount). Satisfy those or they won’t appear in the Payment Element.
 4. **Test mode**: Use **Settings** → **Payment methods** in **Test mode** (toggle in Dashboard) to enable methods for test payments. Repeat for **Live mode** when going live.
-5. **Code**: The app requests `payment_method_types: ['card', 'link']` so card and Link always appear when enabled in the Dashboard. To offer Apple Pay, Klarna, etc., you would need to add those types in the PaymentIntent creation (or switch to `automatic_payment_methods` and ensure eligibility rules are met).
+5. **Apple Pay (web)**: Add and verify your domain (e.g. `logbloga.com`) in the Dashboard so Apple Pay appears in the browser.
 
 After changing payment method settings, no app redeploy is needed; the next Payment Element load will reflect them.
 
