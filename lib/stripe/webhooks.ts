@@ -120,6 +120,15 @@ export async function handlePaymentIntentSucceeded(
 
   console.log(`Order ${order.id} updated: payment succeeded, status changed to completed`);
 
+  // Clear cart after successful payment (PaymentIntent-only flow has no Checkout Session)
+  if (order.user_id) {
+    try {
+      await clearUserCart(order.user_id);
+    } catch (error) {
+      console.error('Error clearing cart after payment:', error);
+    }
+  }
+
   // Create payment received notification (non-blocking)
   try {
     if (order.user_id) {
@@ -168,6 +177,7 @@ export async function handlePaymentIntentSucceeded(
           total: parseFloat(String(item.total_price)),
         }));
 
+        // When there is a Checkout Session, use Stripe amounts for receipt; otherwise use DB only (PaymentIntent-only flow)
         const sessionId = order.stripe_checkout_session_id;
         if (sessionId) {
           try {
@@ -186,6 +196,7 @@ export async function handlePaymentIntentSucceeded(
             // Fall back to DB totals; already set above
           }
         }
+        // When no session: totalAmount, subtotal, taxAmount, discountAmount, items already from DB above
 
         const emailData = {
           order: {

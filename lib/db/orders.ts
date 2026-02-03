@@ -374,6 +374,41 @@ export async function updateOrderStatus(
 }
 
 /**
+ * Update order totals (e.g. when resuming payment with current product prices).
+ * Ensures create-checkout-session sees current pricing and passes minimum-amount checks.
+ */
+export async function updateOrderTotals(
+  orderId: string,
+  totals: {
+    subtotal: number;
+    totalAmount: number;
+    taxAmount?: number;
+    discountAmount?: number;
+  }
+): Promise<Order> {
+  const supabase = await createServiceRoleClient();
+
+  const { data, error } = await supabase
+    .from('orders')
+    .update({
+      subtotal: totals.subtotal,
+      total_amount: totals.totalAmount,
+      tax_amount: totals.taxAmount ?? 0,
+      discount_amount: totals.discountAmount ?? 0,
+    })
+    .eq('id', orderId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error updating order totals:', error);
+    throw new Error(`Failed to update order totals: ${error.message}`);
+  }
+
+  return data;
+}
+
+/**
  * Update order with Stripe payment information
  * Used after successful payment processing
  */

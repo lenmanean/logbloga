@@ -14,7 +14,12 @@ import { Separator } from '@/components/ui/separator';
 import { AddressSelector } from '@/components/addresses/address-selector';
 import type { SavedAddress } from '@/lib/db/addresses';
 
-export function CheckoutCustomerInfo() {
+interface CheckoutCustomerInfoProps {
+  /** When true, form syncs to context on change and does not show step navigation (single-page checkout). */
+  singlePage?: boolean;
+}
+
+export function CheckoutCustomerInfo({ singlePage }: CheckoutCustomerInfoProps = {}) {
   const { customerInfo, setCustomerInfo, setCurrentStep } = useCheckout();
   const { user, isAuthenticated } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
@@ -24,6 +29,7 @@ export function CheckoutCustomerInfo() {
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
     setValue,
   } = useForm<CustomerInfo>({
@@ -34,6 +40,18 @@ export function CheckoutCustomerInfo() {
       phone: '',
     },
   });
+
+  // In single-page mode, sync form values to context so "Continue to payment" can validate
+  useEffect(() => {
+    if (!singlePage) return;
+    const subscription = watch((data) => {
+      const parsed = customerInfoSchema.safeParse(data);
+      if (parsed.success) {
+        setCustomerInfo(parsed.data);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [singlePage, watch, setCustomerInfo]);
 
   // Pre-fill email from auth
   useEffect(() => {
@@ -89,8 +107,9 @@ export function CheckoutCustomerInfo() {
     setIsLoading(true);
     try {
       setCustomerInfo(data);
-      // Move to next step (Order Review)
-      setCurrentStep(3);
+      if (!singlePage) {
+        setCurrentStep(3);
+      }
     } catch (error) {
       console.error('Error saving customer info:', error);
     } finally {
@@ -264,18 +283,20 @@ export function CheckoutCustomerInfo() {
             </div>
           </div>
 
-          <div className="flex justify-end gap-4 pt-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setCurrentStep(1)}
-            >
-              Back
-            </Button>
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? 'Saving...' : 'Continue to Review'}
-            </Button>
-          </div>
+          {!singlePage && (
+            <div className="flex justify-end gap-4 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setCurrentStep(1)}
+              >
+                Back
+              </Button>
+              <Button type="submit" disabled={isLoading}>
+                {isLoading ? 'Saving...' : 'Continue to Review'}
+              </Button>
+            </div>
+          )}
         </CardContent>
       </form>
     </Card>

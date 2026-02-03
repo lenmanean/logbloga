@@ -23,6 +23,7 @@ interface OrderData {
 export function CheckoutSuccessContent() {
   const searchParams = useSearchParams();
   const sessionId = searchParams.get('session_id');
+  const orderIdParam = searchParams.get('order_id');
   const orderNumberParam = searchParams.get('orderNumber');
   const [orderData, setOrderData] = useState<OrderData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -34,8 +35,29 @@ export function CheckoutSuccessContent() {
         setIsLoading(true);
         setError(null);
 
-        // If we have a session_id, fetch order from Stripe session
-        if (sessionId) {
+        if (orderIdParam) {
+          const response = await fetch(`/api/orders/${orderIdParam}`);
+          if (!response.ok) {
+            if (response.status === 403) {
+              setError('You do not have access to this order.');
+            } else if (response.status === 404) {
+              setError('Order not found.');
+            } else {
+              throw new Error('Failed to fetch order information');
+            }
+            return;
+          }
+          const data = await response.json();
+          setOrderData({
+            orderNumber: data.orderNumber || 'N/A',
+            status: data.status || 'processing',
+            orderId: data.orderId ?? orderIdParam,
+            doerCouponCode: data.doerCouponCode ?? null,
+            doerCouponExpiresAt: data.doerCouponExpiresAt ?? null,
+            doerCouponUsed: data.doerCouponUsed ?? false,
+            doerCouponUsedAt: data.doerCouponUsedAt ?? null,
+          });
+        } else if (sessionId) {
           const response = await fetch(`/api/stripe/get-order-by-session?session_id=${sessionId}`);
           if (!response.ok) {
             throw new Error('Failed to fetch order information');
@@ -51,7 +73,6 @@ export function CheckoutSuccessContent() {
             doerCouponUsedAt: data.doerCouponUsedAt || null,
           });
         } else if (orderNumberParam) {
-          // Fallback to order number if provided
           setOrderData({
             orderNumber: orderNumberParam,
             status: 'pending',
@@ -68,7 +89,7 @@ export function CheckoutSuccessContent() {
     }
 
     fetchOrderData();
-  }, [sessionId, orderNumberParam]);
+  }, [sessionId, orderIdParam, orderNumberParam]);
 
   const orderNumber = orderData?.orderNumber || orderNumberParam || 'N/A';
 

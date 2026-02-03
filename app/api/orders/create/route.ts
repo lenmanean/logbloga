@@ -1,6 +1,6 @@
 import { requireAuth } from '@/lib/auth/utils';
 import { getUserCartItems } from '@/lib/db/cart';
-import { createOrderWithItems, getMostRecentPendingOrderForUser } from '@/lib/db/orders';
+import { createOrderWithItems, getMostRecentPendingOrderForUser, updateOrderTotals } from '@/lib/db/orders';
 import { validateCoupon } from '@/lib/db/coupons';
 import { calculateOrderTotals } from '@/lib/checkout/calculations';
 import { NextResponse } from 'next/server';
@@ -54,9 +54,41 @@ export async function POST(request: Request) {
       );
     }
 
-    // Resume payment: if user has a pending order with same cart, return it instead of creating duplicate
+    // Resume payment: if user has a pending order with same cart, return it (with current pricing)
     const pendingOrder = await getMostRecentPendingOrderForUser(user.id);
     if (pendingOrder && cartMatchesOrder(cartItems, pendingOrder)) {
+      // Recalculate totals from current cart (current product prices) so create-checkout-session
+      // sees correct total and passes Stripe minimum ($0.50). Stale pending orders may have old totals.
+      let coupon = null;
+      if (couponCode) {
+        const subtotal = cartItems.reduce((sum, item) => {
+          const price = typeof item.product?.price === 'number'
+            ? item.product.price
+            : parseFloat(String(item.product?.price || 0));
+          return sum + (price * (item.quantity || 0));
+        }, 0);
+        const productIds = cartItems
+          .map(item => item.product_id)
+          .filter((id): id is string => !!id);
+        const validationResult = await validateCoupon(couponCode, subtotal, productIds);
+        if (validationResult.valid && validationResult.coupon) {
+          coupon = validationResult.coupon;
+        }
+      }
+      const orderTotals = calculateOrderTotals(cartItems, coupon || undefined);
+      const currentTotal = typeof pendingOrder.total_amount === 'number'
+        ? pendingOrder.total_amount
+        : parseFloat(String(pendingOrder.total_amount ?? 0));
+      if (Math.abs(orderTotals.total - currentTotal) > 0.001) {
+        await updateOrderTotals(pendingOrder.id, {
+          subtotal: orderTotals.subtotal,
+          totalAmount: orderTotals.total,
+          taxAmount: orderTotals.taxAmount,
+          discountAmount: orderTotals.discountAmount,
+        });
+        const updated = await getMostRecentPendingOrderForUser(user.id);
+        return NextResponse.json(updated ?? pendingOrder, { status: 201 });
+      }
       return NextResponse.json(pendingOrder, { status: 201 });
     }
 

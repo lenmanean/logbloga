@@ -87,7 +87,7 @@ export function CheckoutOrderReview() {
         <CardHeader>
           <CardTitle>Review Your Order</CardTitle>
           <CardDescription>
-            Please review your order details before proceeding
+            Please review your order details before proceeding. You will enter your payment details on the next page (secure Stripe checkout).
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">

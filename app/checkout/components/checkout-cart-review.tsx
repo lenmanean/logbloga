@@ -9,7 +9,12 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ChevronRight } from 'lucide-react';
 
-export function CheckoutCartReview() {
+interface CheckoutCartReviewProps {
+  /** When true, do not show step navigation (single-page checkout). */
+  singlePage?: boolean;
+}
+
+export function CheckoutCartReview({ singlePage }: CheckoutCartReviewProps = {}) {
   const { items } = useCart();
   const { setCurrentStep } = useCheckout();
 
@@ -102,12 +107,14 @@ export function CheckoutCartReview() {
           </span>
         </div>
 
-        <div className="flex justify-end pt-4">
-          <Button onClick={() => setCurrentStep(2)} size="lg">
-            Continue to Customer Info
-            <ChevronRight className="h-4 w-4 ml-2" />
-          </Button>
-        </div>
+        {!singlePage && (
+          <div className="flex justify-end pt-4">
+            <Button onClick={() => setCurrentStep(2)} size="lg">
+              Continue to Customer Info
+              <ChevronRight className="h-4 w-4 ml-2" />
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
   );
