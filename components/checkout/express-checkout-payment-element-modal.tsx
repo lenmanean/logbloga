@@ -120,6 +120,125 @@ export function ExpressCheckoutForm({
   );
 }
 
+interface ExpressCheckoutInlineProps {
+  productId: string;
+  productTitle: string;
+  amountFormatted: string;
+  quantity: number;
+}
+
+/**
+ * Inline Payment Element on the product page (no modal). Shows all native payment methods; creates order on mount.
+ */
+export function ExpressCheckoutInline({
+  productId,
+  productTitle,
+  amountFormatted,
+  quantity,
+}: ExpressCheckoutInlineProps) {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [amountFromApi, setAmountFromApi] = useState<string>(amountFormatted);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!productId) return;
+    setLoading(true);
+    setError(null);
+    fetch('/api/orders/create-express', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ productId, quantity }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (!data.orderId || !data.clientSecret) {
+          setError(data.error ?? 'Failed to start payment');
+          return;
+        }
+        setOrderId(data.orderId);
+        setClientSecret(data.clientSecret);
+        if (data.amountFormatted) setAmountFromApi(data.amountFormatted);
+      })
+      .catch(() => setError('Failed to start payment'))
+      .finally(() => setLoading(false));
+  }, [productId, quantity, amountFormatted]);
+
+  const handleSuccess = () => {
+    if (typeof window !== 'undefined' && orderId) {
+      window.location.href = `${window.location.origin}/checkout/success?order_id=${orderId}`;
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="rounded-lg border border-input bg-muted/30 p-6 flex flex-col items-center justify-center min-h-[280px] gap-3">
+        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" aria-hidden />
+        <p className="text-sm text-muted-foreground">Loading payment options…</p>
+      </div>
+    );
+  }
+
+  if (error || !clientSecret || !orderId) {
+    return (
+      <div className="rounded-lg border border-input bg-destructive/5 p-4 space-y-2">
+        <p className="text-sm text-destructive" role="alert">
+          {error ?? 'Something went wrong.'}
+        </p>
+        <Link href="/checkout" className="text-sm underline">
+          Use full checkout from cart
+        </Link>
+      </div>
+    );
+  }
+
+  if (!stripePromise) {
+    return (
+      <p className="text-sm text-destructive rounded-md bg-destructive/15 p-3">
+        Payment is not configured. Please set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY.
+      </p>
+    );
+  }
+
+  return (
+    <div className="rounded-lg border border-input bg-muted/30 p-4 sm:p-6 space-y-4">
+      <p className="text-sm font-medium text-foreground">
+        Pay for {productTitle} — {amountFromApi}
+      </p>
+      {error && (
+        <p className="text-sm text-destructive rounded-md bg-destructive/15 p-3" role="alert">
+          {error}
+        </p>
+      )}
+      <Elements
+        key={clientSecret}
+        stripe={stripePromise}
+        options={{
+          clientSecret,
+          appearance: {
+            theme: 'stripe',
+            variables: { borderRadius: '6px' },
+          },
+        }}
+      >
+        <ExpressCheckoutForm
+          orderId={orderId}
+          amountFormatted={amountFromApi}
+          onSuccess={handleSuccess}
+          onError={setError}
+        />
+      </Elements>
+      <p className="text-xs text-muted-foreground text-center">
+        No options showing?{' '}
+        <Link href="/checkout" className="underline">
+          Use full checkout from cart
+        </Link>
+      </p>
+    </div>
+  );
+}
+
 interface ExpressCheckoutPaymentElementModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;

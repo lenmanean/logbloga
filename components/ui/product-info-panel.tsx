@@ -8,7 +8,7 @@ import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
-import { ExpressCheckoutPaymentElementModal } from '@/components/checkout/express-checkout-payment-element-modal';
+import { ExpressCheckoutInline } from '@/components/checkout/express-checkout-payment-element-modal';
 import {
   Select,
   SelectContent,
@@ -40,7 +40,6 @@ interface ProductInfoPanelProps {
 
 export function ProductInfoPanel({ package: pkg, className, onQuantityChange, hasAccess = false }: ProductInfoPanelProps) {
   const [quantity, setQuantity] = useState(1);
-  const [expressModalOpen, setExpressModalOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(
     pkg.variants && pkg.variants.length > 0 ? pkg.variants[0].id : null
   );
@@ -146,28 +145,15 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
             />
           </div>
 
-          {/* Buy Now opens quick-checkout modal; Add to Cart below. Payment methods only in modal and full checkout. */}
+          {/* Inline payment methods (card, Apple Pay, Link, etc.) on product page; no Buy Now button. */}
           <div className="mb-6 space-y-4">
             {isAuthenticated ? (
-              <>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="lg"
-                  className="w-full touch-manipulation"
-                  onClick={() => setExpressModalOpen(true)}
-                >
-                  Buy Now
-                </Button>
-                <ExpressCheckoutPaymentElementModal
-                  open={expressModalOpen}
-                  onOpenChange={setExpressModalOpen}
-                  productId={pkg.id}
-                  productTitle={pkg.title}
-                  amountFormatted={`$${finalPrice.toLocaleString()}`}
-                  quantity={quantity}
-                />
-              </>
+              <ExpressCheckoutInline
+                productId={pkg.id}
+                productTitle={pkg.title}
+                amountFormatted={`$${finalPrice.toLocaleString()}`}
+                quantity={quantity}
+              />
             ) : (
               <Button
                 type="button"
@@ -177,7 +163,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
                 asChild
               >
                 <Link href={`/auth/signin?redirect=${encodeURIComponent(`/ai-to-usd/packages/${pkg.slug}`)}`}>
-                  Buy Now — Sign in to continue
+                  Sign in to pay
                 </Link>
               </Button>
             )}
