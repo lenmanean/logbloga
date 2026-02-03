@@ -81,7 +81,13 @@ function ExpressCheckoutForm({
     <form onSubmit={handleSubmit} className="space-y-6">
       <PaymentElement
         options={{
-          layout: 'tabs',
+          layout: {
+            type: 'accordion',
+            defaultCollapsed: false,
+            radios: true,
+            spacedAccordionItems: true,
+            visibleAccordionItemsCount: 0,
+          },
           paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
         }}
       />
@@ -183,7 +189,7 @@ export function ExpressCheckoutPaymentElementModal({
         <DialogHeader>
           <DialogTitle>Quick checkout — {productTitle}</DialogTitle>
           <DialogDescription>
-            Pay with card, Klarna, Afterpay, Affirm, or other methods below.
+            Choose your payment method below. Enable Klarna, Afterpay, Affirm, and others in Stripe Dashboard if you want them to appear here.
           </DialogDescription>
         </DialogHeader>
         {error && (

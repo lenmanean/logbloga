@@ -151,7 +151,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
             className="w-full"
             onClick={() => setExpressModalOpen(true)}
           >
-            Pay with card, Klarna, Afterpay & more
+            Buy Now
           </Button>
           <ExpressCheckoutPaymentElementModal
             open={expressModalOpen}
