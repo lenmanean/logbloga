@@ -1,7 +1,11 @@
 import { requireAuth } from '@/lib/auth/utils';
 import { getUserCartItems, addCartItem } from '@/lib/db/cart';
+import { hasProductAccess, hasProductAccessBySlug } from '@/lib/db/access';
+import { getProductBySlug } from '@/lib/db/products';
 import { NextResponse } from 'next/server';
 import type { Product } from '@/lib/types/database';
+
+const PACKAGE_SLUGS = ['web-apps', 'social-media', 'agency', 'freelancing'] as const;
 
 /**
  * GET /api/cart
@@ -51,7 +55,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Validate that product is a package
+    // Validate that product is a package or bundle
     const { createClient } = await import('@/lib/supabase/server');
     const supabase = await createClient();
     
@@ -88,10 +92,37 @@ export async function POST(request: Request) {
       );
     }
 
+    // If adding a package: do not allow if user already owns the Master Bundle
+    if (product.product_type === 'package') {
+      const bundle = await getProductBySlug('master-bundle');
+      if (bundle?.id && (await hasProductAccess(user.id, bundle.id))) {
+        return NextResponse.json(
+          { error: 'You already have the Master Bundle. Individual packages are not sold separately to bundle owners.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // If adding the bundle: do not allow if user already owns all four packages
+    if (product.product_type === 'bundle') {
+      const allPackagesOwned = await Promise.all(
+        PACKAGE_SLUGS.map((slug) => hasProductAccessBySlug(user.id, slug))
+      );
+      if (allPackagesOwned.every(Boolean)) {
+        return NextResponse.json(
+          { error: 'You already own all four packages. The Master Bundle is not available.' },
+          { status: 400 }
+        );
+      }
+    }
+
+    // One per product: packages and bundle are limited to quantity 1
+    const effectiveQuantity = Math.min(quantity, 1);
+
     const cartItem = await addCartItem(
       user.id,
       productId,
-      quantity,
+      effectiveQuantity,
       variantId
     );
 

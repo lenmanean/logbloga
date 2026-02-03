@@ -124,45 +124,59 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
         </div>
       )}
 
-      {/* Quantity Selector */}
+      {/* Quantity Selector — one per package/bundle */}
       <div className="mb-6">
         <QuantitySelector
           min={1}
-          max={10}
+          max={1}
           defaultValue={1}
           onChange={handleQuantityChange}
         />
       </div>
 
-      {/* Quick checkout: Apple Pay / Google Pay (native) + Payment Element (card, Klarna, etc.) */}
-      {isAuthenticated && (
-        <div className="mb-6 space-y-4">
-          <p className="text-sm font-medium text-muted-foreground">Quick checkout</p>
-          <ExpressPaymentRequestButton
-            productId={pkg.id}
-            productTitle={pkg.title}
-            amountInCents={Math.round(finalPrice * 100)}
-            quantity={quantity}
-          />
+      {/* Quick checkout: Apple Pay / Google Pay (native) + Payment Element — visible on mobile and desktop */}
+      <div className="mb-6 space-y-4">
+        <p className="text-sm font-medium text-muted-foreground">Quick checkout</p>
+        {isAuthenticated ? (
+          <>
+            <ExpressPaymentRequestButton
+              productId={pkg.id}
+              productTitle={pkg.title}
+              amountInCents={Math.round(finalPrice * 100)}
+              quantity={quantity}
+            />
+            <Button
+              type="button"
+              variant="outline"
+              size="lg"
+              className="w-full touch-manipulation"
+              onClick={() => setExpressModalOpen(true)}
+            >
+              Buy Now
+            </Button>
+            <ExpressCheckoutPaymentElementModal
+              open={expressModalOpen}
+              onOpenChange={setExpressModalOpen}
+              productId={pkg.id}
+              productTitle={pkg.title}
+              amountFormatted={`$${finalPrice.toLocaleString()}`}
+              quantity={quantity}
+            />
+          </>
+        ) : (
           <Button
             type="button"
             variant="outline"
             size="lg"
-            className="w-full"
-            onClick={() => setExpressModalOpen(true)}
+            className="w-full touch-manipulation"
+            asChild
           >
-            Buy Now
+            <Link href={`/auth/signin?redirect=${encodeURIComponent(`/ai-to-usd/packages/${pkg.slug}`)}`}>
+              Buy Now — Sign in to continue
+            </Link>
           </Button>
-          <ExpressCheckoutPaymentElementModal
-            open={expressModalOpen}
-            onOpenChange={setExpressModalOpen}
-            productId={pkg.id}
-            productTitle={pkg.title}
-            amountFormatted={`$${finalPrice.toLocaleString()}`}
-            quantity={quantity}
-          />
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Add to Cart Button */}
       <div className="mb-6">

@@ -6,7 +6,8 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
-import { getProductById } from '@/lib/db/products';
+import { getProductById, getProductBySlug } from '@/lib/db/products';
+import { hasProductAccess, hasProductAccessBySlug } from '@/lib/db/access';
 import { getUserProfile } from '@/lib/db/profiles';
 import {
   createOrderWithItems,
@@ -48,7 +49,8 @@ export async function POST(request: Request) {
       );
     }
 
-    quantity = Math.max(1, Math.min(10, Math.floor(quantity)));
+    // One per package/bundle
+    quantity = 1;
 
     const product = await getProductById(productId);
     if (!product) {
@@ -56,6 +58,29 @@ export async function POST(request: Request) {
         { error: 'Product not found or unavailable' },
         { status: 400 }
       );
+    }
+
+    const productType = (product as { product_type?: string }).product_type;
+    if (productType === 'package') {
+      const bundle = await getProductBySlug('master-bundle');
+      if (bundle?.id && (await hasProductAccess(user.id, bundle.id))) {
+        return NextResponse.json(
+          { error: 'You already have the Master Bundle. Individual packages are not sold separately to bundle owners.' },
+          { status: 400 }
+        );
+      }
+    }
+    if (productType === 'bundle') {
+      const PACKAGE_SLUGS = ['web-apps', 'social-media', 'agency', 'freelancing'] as const;
+      const allPackagesOwned = await Promise.all(
+        PACKAGE_SLUGS.map((slug) => hasProductAccessBySlug(user.id, slug))
+      );
+      if (allPackagesOwned.every(Boolean)) {
+        return NextResponse.json(
+          { error: 'You already own all four packages. The Master Bundle is not available.' },
+          { status: 400 }
+        );
+      }
     }
 
     const profile = await getUserProfile(user.id);

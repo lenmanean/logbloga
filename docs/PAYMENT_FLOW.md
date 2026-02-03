@@ -49,6 +49,22 @@ The webhook secret is **not** a global Stripe setting. It is the **signing secre
 
 Use the **test** endpoint and its signing secret in test mode; use a separate **live** endpoint and secret in production. For local testing, run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and use the temporary secret the CLI prints as `STRIPE_WEBHOOK_SECRET`.
 
+## Stripe Dashboard: Payment methods (Payment Element)
+
+The app uses Stripe’s **Payment Element** for quick checkout (product-page modal) and for the main checkout page. Which methods appear (card, Link, Klarna, Afterpay, Affirm, etc.) is controlled in Stripe, not in code.
+
+**Step-by-step (so card, Link, and other methods show):**
+
+1. **Stripe Dashboard** → **Settings** (gear) → **Payment methods**
+2. Under **Payment methods**, ensure **Cards** and **Link** are **Turned on** for your account (they usually are by default).
+3. To show **Klarna**, **Afterpay**, **Affirm**, **Cash App Pay**, **Amazon Pay**, etc.:
+   - In **Payment methods**, find each method and turn it **On**
+   - Some methods have **eligibility** (e.g. country, amount). Satisfy those or they won’t appear in the Payment Element.
+4. **Test mode**: Use **Settings** → **Payment methods** in **Test mode** (toggle in Dashboard) to enable methods for test payments. Repeat for **Live mode** when going live.
+5. **No custom list in code**: The app does not restrict payment methods in code; Stripe decides what to show based on your Dashboard settings and the payment (currency, amount, customer location). If only “Link” or only “Card” appears, enable more methods and eligibility in Stripe.
+
+After changing payment method settings, no app redeploy is needed; the next Payment Element load will reflect them.
+
 ## Stripe price IDs (checkout)
 
 - **Checkout** uses **environment variables** for Stripe price IDs: `STRIPE_PRICE_AGENCY`, `STRIPE_PRICE_SOCIAL_MEDIA`, `STRIPE_PRICE_WEB_APPS`, `STRIPE_PRICE_FREELANCING`, `STRIPE_PRICE_MASTER_BUNDLE`. Each must be set to a Stripe Price ID (`price_xxx`). Line items are built from order item `product_sku` (slug) and the corresponding env var; no DB `stripe_price_id` is used for checkout.

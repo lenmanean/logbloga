@@ -8,7 +8,6 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
-import { PAYMENT_METHOD_ORDER } from '@/lib/stripe/payment-element-options';
 import {
   Dialog,
   DialogContent,
@@ -82,7 +81,7 @@ function ExpressCheckoutForm({
       <PaymentElement
         options={{
           layout: 'tabs',
-          paymentMethodOrder: [...PAYMENT_METHOD_ORDER],
+          // Let Stripe show all methods enabled for your account (card, link, etc.)
         }}
       />
       <div className="flex items-start gap-3">

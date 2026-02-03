@@ -114,7 +114,7 @@ export function CartItem({ item }: CartItemProps) {
             ) : (
               <QuantitySelector
                 min={1}
-                max={10}
+                max={1}
                 defaultValue={item.quantity || 1}
                 onChange={handleQuantityChange}
               />

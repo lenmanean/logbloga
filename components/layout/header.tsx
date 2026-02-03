@@ -329,6 +329,24 @@ export function Header() {
             </DropdownMenu>
           </div>
 
+          {/* Mobile: Cart icon (direct access without opening menu) */}
+          <div className={`md:hidden flex items-center transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full relative"
+              onClick={() => setCartSheetOpen(true)}
+              aria-label="Shopping cart"
+            >
+              <ShoppingCart className="h-5 w-5" />
+              {itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+                  {itemCount > 9 ? '9+' : itemCount}
+                </span>
+              )}
+            </Button>
+          </div>
+
           {/* Mobile Menu */}
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild className={`md:hidden transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>

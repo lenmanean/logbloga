@@ -31,11 +31,11 @@ export async function PATCH(
       );
     }
 
-    // Verify user owns this cart item
+    // Verify user owns this cart item and get product type
     const supabase = await createClient();
     const { data: cartItem, error: fetchError } = await supabase
       .from('cart_items')
-      .select('user_id')
+      .select('user_id, product_id')
       .eq('id', id)
       .single();
 
@@ -53,7 +53,18 @@ export async function PATCH(
       );
     }
 
-    const updatedItem = await updateCartItem(id, quantity);
+    // Packages and bundle are limited to quantity 1
+    let effectiveQuantity = quantity;
+    const { data: product } = await supabase
+      .from('products')
+      .select('product_type')
+      .eq('id', cartItem.product_id)
+      .single();
+    if (product?.product_type === 'package' || product?.product_type === 'bundle') {
+      effectiveQuantity = 1;
+    }
+
+    const updatedItem = await updateCartItem(id, effectiveQuantity);
     return NextResponse.json(updatedItem, { status: 200 });
   } catch (error) {
     if (error instanceof Error && error.message.includes('redirect')) {
