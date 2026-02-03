@@ -9,7 +9,7 @@ import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
 import { ExpressPaymentRequestButton } from '@/components/checkout/express-payment-request-button';
-import { ExpressPaymentMethodButtons } from '@/components/checkout/express-payment-method-buttons';
+import { ExpressCheckoutPaymentElementModal } from '@/components/checkout/express-checkout-payment-element-modal';
 import {
   Select,
   SelectContent,
@@ -39,6 +39,7 @@ interface ProductInfoPanelProps {
 
 export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: ProductInfoPanelProps) {
   const [quantity, setQuantity] = useState(1);
+  const [expressModalOpen, setExpressModalOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(
     pkg.variants && pkg.variants.length > 0 ? pkg.variants[0].id : null
   );
@@ -133,7 +134,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
         />
       </div>
 
-      {/* Quick checkout: Apple Pay / Google Pay (native sheet) + express buttons (redirect per platform) */}
+      {/* Quick checkout: Apple Pay / Google Pay (native) + Payment Element (card, Klarna, etc.) */}
       {isAuthenticated && (
         <div className="mb-6 space-y-4">
           <p className="text-sm font-medium text-muted-foreground">Quick checkout</p>
@@ -143,7 +144,23 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
             amountInCents={Math.round(finalPrice * 100)}
             quantity={quantity}
           />
-          <ExpressPaymentMethodButtons productId={pkg.id} quantity={quantity} />
+          <Button
+            type="button"
+            variant="outline"
+            size="lg"
+            className="w-full"
+            onClick={() => setExpressModalOpen(true)}
+          >
+            Pay with card, Klarna, Afterpay & more
+          </Button>
+          <ExpressCheckoutPaymentElementModal
+            open={expressModalOpen}
+            onOpenChange={setExpressModalOpen}
+            productId={pkg.id}
+            productTitle={pkg.title}
+            amountFormatted={`$${finalPrice.toLocaleString()}`}
+            quantity={quantity}
+          />
         </div>
       )}
 
