@@ -23,7 +23,7 @@ import { formatAmountForStripe } from '@/lib/stripe/utils';
 import { formatStripeError } from '@/lib/stripe/errors';
 
 const MIN_CHECKOUT_AMOUNT_USD = 0.5;
-const EXPRESS_IDEMPOTENCY_WINDOW_MS = 5 * 60 * 1000; // 5 minutes
+const EXPRESS_IDEMPOTENCY_WINDOW_MS = 5 * 60 * 1000; // 5 minutes (express checkout)
 
 function parseProductPrice(price: unknown): number {
   if (typeof price === 'number' && !Number.isNaN(price)) return price;
