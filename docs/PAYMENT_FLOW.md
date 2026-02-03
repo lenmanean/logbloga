@@ -51,7 +51,7 @@ Use the **test** endpoint and its signing secret in test mode; use a separate **
 
 ## Stripe Dashboard: Payment methods (Payment Element)
 
-The app uses Stripe’s **Payment Element** for quick checkout (product-page modal) and for the main checkout page. Which methods appear (card, Link, Klarna, Afterpay, Affirm, etc.) is controlled in Stripe, not in code.
+The app uses Stripe’s **Payment Element** for quick checkout (product-page modal, and full-page on mobile) and for the main checkout page. PaymentIntents are created with **explicit** `payment_method_types: ['card', 'link']` so the element always shows at least card and Link when they are enabled in the Dashboard (avoids a blank element).
 
 **Step-by-step (so card, Link, and other methods show):**
 
@@ -61,7 +61,7 @@ The app uses Stripe’s **Payment Element** for quick checkout (product-page mod
    - In **Payment methods**, find each method and turn it **On**
    - Some methods have **eligibility** (e.g. country, amount). Satisfy those or they won’t appear in the Payment Element.
 4. **Test mode**: Use **Settings** → **Payment methods** in **Test mode** (toggle in Dashboard) to enable methods for test payments. Repeat for **Live mode** when going live.
-5. **No custom list in code**: The app does not restrict payment methods in code; Stripe decides what to show based on your Dashboard settings and the payment (currency, amount, customer location). If only “Link” or only “Card” appears, enable more methods and eligibility in Stripe.
+5. **Code**: The app requests `payment_method_types: ['card', 'link']` so card and Link always appear when enabled in the Dashboard. To offer Apple Pay, Klarna, etc., you would need to add those types in the PaymentIntent creation (or switch to `automatic_payment_methods` and ensure eligibility rules are met).
 
 After changing payment method settings, no app redeploy is needed; the next Payment Element load will reflect them.
 

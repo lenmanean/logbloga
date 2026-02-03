@@ -211,7 +211,8 @@ export async function POST(request: Request) {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: amountCents,
         currency: 'usd',
-        automatic_payment_methods: { enabled: true },
+        // Explicit types so Payment Element always shows at least card + Link (avoids blank when automatic_payment_methods surfaces none)
+        payment_method_types: ['card', 'link'],
         metadata: {
           orderId: order.id,
           userId: order.user_id ?? '',
