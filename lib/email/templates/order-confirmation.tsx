@@ -102,47 +102,6 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
             </Row>
           </Section>
 
-          {/* DOER Coupon Section */}
-          {data.doerCouponCode && (
-            <>
-              <Hr style={hr} />
-              <Section style={doerCouponSection}>
-                <Heading style={h2}>🎉 Bonus: 6 Months Free DOER Pro</Heading>
-                <Text style={text}>
-                  As a thank you for purchasing a package, you've received a bonus coupon for 6 months of free Pro subscription on usedoer.com!
-                </Text>
-                <Section style={couponCodeSection}>
-                  <Text style={couponCodeLabel}>Your Coupon Code:</Text>
-                  <Text style={couponCode}>{data.doerCouponCode}</Text>
-                </Section>
-                <Text style={couponInstructions}>
-                  <strong>How to redeem:</strong>
-                </Text>
-                <Text style={couponInstructions}>
-                  1. Visit <Link href="https://usedoer.com/checkout?plan=pro&cycle=monthly" style={link}>usedoer.com/checkout</Link> (Pro Monthly or choose Pro Annual)
-                </Text>
-                <Text style={couponInstructions}>
-                  2. Enter your code in the Promo Code field at checkout
-                </Text>
-                <Text style={couponInstructions}>
-                  3. Enter your payment method (required for post-trial billing)
-                </Text>
-                <Text style={couponInstructions}>
-                  4. Enjoy 6 months free Pro subscription!
-                </Text>
-                {data.doerCouponExpiresAt && (
-                  <Text style={couponExpiry}>
-                    Valid until: {new Date(data.doerCouponExpiresAt).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </Text>
-                )}
-              </Section>
-            </>
-          )}
-
           <Hr style={hr} />
 
           <Section style={actionsSection}>

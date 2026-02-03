@@ -9,7 +9,7 @@ import { removeCartItemsByProductIds } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
-import { sendOrderConfirmation, sendPaymentReceipt } from '@/lib/email/senders';
+import { sendOrderConfirmation, sendPaymentReceipt, sendDoerCouponEmail } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
 
 /**
@@ -206,6 +206,20 @@ export async function handlePaymentIntentSucceeded(
         }
         // When no session: totalAmount, subtotal, taxAmount, discountAmount, items already from DB above
 
+        // DOER coupon in a separate email (not in receipt)
+        if (doerCouponCode?.trim()) {
+          try {
+            await sendDoerCouponEmail(orderWithItems.customer_email, {
+              to: orderWithItems.customer_email,
+              doerCouponCode,
+              doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? undefined,
+              orderNumber: orderWithItems.order_number || undefined,
+            });
+          } catch (doerError) {
+            console.error('Error sending DOER coupon email:', doerError);
+          }
+        }
+
         const emailData = {
           order: {
             id: orderWithItems.id,
@@ -221,8 +235,6 @@ export async function handlePaymentIntentSucceeded(
             customerName: orderWithItems.customer_name,
           },
           items,
-          doerCouponCode: doerCouponCode || null,
-          doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? null,
         };
 
         await sendPaymentReceipt(order.user_id, emailData);

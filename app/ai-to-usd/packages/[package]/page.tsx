@@ -9,7 +9,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
 import { getProductBySlug } from '@/lib/db/products';
+import { hasProductAccess } from '@/lib/db/access';
 import { parsePackageLevels } from '@/lib/db/package-levels';
+import { createClient } from '@/lib/supabase/server';
 import { PackageProduct } from '@/lib/products';
 import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb } from 'lucide-react';
 
@@ -180,6 +182,13 @@ export default async function PackagePage({ params }: PackagePageProps) {
         ? [packageProduct.packageImage]
         : [];
 
+  let hasAccess = false;
+  const supabaseAuth = await createClient();
+  const { data: { user } } = await supabaseAuth.auth.getUser();
+  if (user?.id) {
+    hasAccess = await hasProductAccess(user.id, packageData.id);
+  }
+
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
@@ -207,6 +216,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
           <div className="w-full order-2 lg:order-2">
             <ProductInfoPanel 
               package={packageProduct}
+              hasAccess={hasAccess}
             />
           </div>
         </div>

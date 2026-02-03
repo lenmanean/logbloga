@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select';
 import { useAuth } from '@/hooks/useAuth';
 import { cn } from '@/lib/utils';
-import { Gift, Info } from 'lucide-react';
+import { Gift, Info, ArrowRight } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -35,9 +35,11 @@ interface ProductInfoPanelProps {
   package: PackageProduct;
   className?: string;
   onQuantityChange?: (quantity: number) => void;
+  /** When true, user already owns this product; show Access Package only */
+  hasAccess?: boolean;
 }
 
-export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: ProductInfoPanelProps) {
+export function ProductInfoPanel({ package: pkg, className, onQuantityChange, hasAccess = false }: ProductInfoPanelProps) {
   const [quantity, setQuantity] = useState(1);
   const [expressModalOpen, setExpressModalOpen] = useState(false);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(
@@ -124,82 +126,94 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange }: 
         </div>
       )}
 
-      {/* Quantity Selector — one per package/bundle */}
-      <div className="mb-6">
-        <QuantitySelector
-          min={1}
-          max={1}
-          defaultValue={1}
-          onChange={handleQuantityChange}
-        />
-      </div>
-
-      {/* Quick checkout: Apple Pay / Google Pay (native) + Payment Element — visible on mobile and desktop */}
-      <div className="mb-6 space-y-4">
-        <p className="text-sm font-medium text-muted-foreground">Quick checkout</p>
-        {isAuthenticated ? (
-          <>
-            <ExpressPaymentRequestButton
-              productId={pkg.id}
-              productTitle={pkg.title}
-              amountInCents={Math.round(finalPrice * 100)}
-              quantity={quantity}
-            />
-            <Button
-              type="button"
-              variant="outline"
-              size="lg"
-              className="w-full touch-manipulation"
-              onClick={() => setExpressModalOpen(true)}
-            >
-              Buy Now
-            </Button>
-            <ExpressCheckoutPaymentElementModal
-              open={expressModalOpen}
-              onOpenChange={setExpressModalOpen}
-              productId={pkg.id}
-              productTitle={pkg.title}
-              amountFormatted={`$${finalPrice.toLocaleString()}`}
-              quantity={quantity}
-            />
-          </>
-        ) : (
-          <Button
-            type="button"
-            variant="outline"
-            size="lg"
-            className="w-full touch-manipulation"
-            asChild
-          >
-            <Link href={`/auth/signin?redirect=${encodeURIComponent(`/ai-to-usd/packages/${pkg.slug}`)}`}>
-              Buy Now — Sign in to continue
+      {hasAccess ? (
+        <div className="mb-6">
+          <Button asChild size="lg" className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md gap-2">
+            <Link href={`/account/library/${pkg.id}`} className="flex items-center justify-center gap-2">
+              Access Package
+              <ArrowRight className="h-4 w-4" />
             </Link>
           </Button>
-        )}
-      </div>
-
-      {/* Add to Cart Button */}
-      <div className="mb-6">
-        <AddToCartButton
-          productId={pkg.id}
-          price={finalPrice}
-          quantity={quantity}
-          variantId={selectedVariant || undefined}
-          size="lg"
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
-        />
-      </div>
-
-      {/* Add to Wishlist Button */}
-      {isAuthenticated && (
-        <div className="mb-6">
-          <AddToWishlistButton
-            productId={pkg.id}
-            variant="outline"
-            size="lg"
-            className="w-full"
-          />
         </div>
+      ) : (
+        <>
+          {/* Quantity Selector — one per package/bundle */}
+          <div className="mb-6">
+            <QuantitySelector
+              min={1}
+              max={1}
+              defaultValue={1}
+              onChange={handleQuantityChange}
+            />
+          </div>
+
+          {/* Buy Now and express payment options */}
+          <div className="mb-6 space-y-4">
+            {isAuthenticated ? (
+              <>
+                <ExpressPaymentRequestButton
+                  productId={pkg.id}
+                  productTitle={pkg.title}
+                  amountInCents={Math.round(finalPrice * 100)}
+                  quantity={quantity}
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  className="w-full touch-manipulation"
+                  onClick={() => setExpressModalOpen(true)}
+                >
+                  Buy Now
+                </Button>
+                <ExpressCheckoutPaymentElementModal
+                  open={expressModalOpen}
+                  onOpenChange={setExpressModalOpen}
+                  productId={pkg.id}
+                  productTitle={pkg.title}
+                  amountFormatted={`$${finalPrice.toLocaleString()}`}
+                  quantity={quantity}
+                />
+              </>
+            ) : (
+              <Button
+                type="button"
+                variant="outline"
+                size="lg"
+                className="w-full touch-manipulation"
+                asChild
+              >
+                <Link href={`/auth/signin?redirect=${encodeURIComponent(`/ai-to-usd/packages/${pkg.slug}`)}`}>
+                  Buy Now — Sign in to continue
+                </Link>
+              </Button>
+            )}
+          </div>
+
+          {/* Add to Cart Button */}
+          <div className="mb-6">
+            <AddToCartButton
+              productId={pkg.id}
+              price={finalPrice}
+              quantity={quantity}
+              variantId={selectedVariant || undefined}
+              size="lg"
+              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
+            />
+          </div>
+
+          {/* Add to Wishlist Button */}
+          {isAuthenticated && (
+            <div className="mb-6">
+              <AddToWishlistButton
+                productId={pkg.id}
+                variant="outline"
+                size="lg"
+                className="w-full"
+              />
+            </div>
+          )}
+        </>
       )}
 
       {/* DOER Coupon Bonus */}

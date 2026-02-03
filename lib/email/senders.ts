@@ -9,6 +9,7 @@ import { shouldSendEmail } from './utils';
 import type {
   EmailResult,
   OrderEmailData,
+  DoerCouponEmailData,
   WelcomeEmailData,
   AbandonedCartEmailData,
   OrderStatusUpdateEmailData,
@@ -18,6 +19,7 @@ import type {
 } from './types';
 import { OrderConfirmationEmail } from './templates/order-confirmation';
 import { PaymentReceiptEmail } from './templates/payment-receipt';
+import { DoerCouponEmail } from './templates/doer-coupon';
 import { WelcomeEmail } from './templates/welcome';
 import { AbandonedCartEmail } from './templates/abandoned-cart';
 import { OrderStatusUpdateEmail } from './templates/order-status-update';
@@ -70,21 +72,18 @@ export async function sendOrderConfirmation(
 }
 
 /**
- * Send payment receipt email.
- * When the receipt includes a Doer coupon, preferences are bypassed so the coupon is always delivered.
+ * Send payment receipt email (order and payment details only).
+ * DOER coupon is sent separately via sendDoerCouponEmail.
  */
 export async function sendPaymentReceipt(
   userId: string,
   data: OrderEmailData
 ): Promise<EmailResult> {
   try {
-    const hasCoupon = Boolean(data.doerCouponCode?.trim());
-    if (!hasCoupon) {
-      const shouldSend = await shouldSendEmail(userId, 'payment-receipt');
-      if (!shouldSend) {
-        console.log(`Skipping payment receipt email for user ${userId} (preferences)`);
-        return { success: true, messageId: 'skipped-preference' };
-      }
+    const shouldSend = await shouldSendEmail(userId, 'payment-receipt');
+    if (!shouldSend) {
+      console.log(`Skipping payment receipt email for user ${userId} (preferences)`);
+      return { success: true, messageId: 'skipped-preference' };
     }
 
     const resend = getResendClient();
@@ -116,6 +115,47 @@ export async function sendPaymentReceipt(
   }
 }
 
+/**
+ * Send DOER Pro 6-month coupon email (separate from payment receipt).
+ * Always delivered; not gated by notification preferences.
+ */
+export async function sendDoerCouponEmail(
+  to: string,
+  data: DoerCouponEmailData
+): Promise<EmailResult> {
+  try {
+    const resend = getResendClient();
+    const html = await render(DoerCouponEmail({ data }));
+
+    const subject = data.orderNumber
+      ? `Your DOER Pro 6-Month Coupon – Order ${data.orderNumber}`
+      : 'Your DOER Pro 6-Month Coupon';
+
+    const result = await resend.emails.send({
+      from: getDefaultSender(),
+      to,
+      subject,
+      html,
+      tags: [
+        { name: 'email_type', value: 'doer_coupon' },
+        ...(data.orderNumber ? [{ name: 'order_number', value: data.orderNumber }] : []),
+      ],
+    });
+
+    if (result.error) {
+      console.error('Error sending DOER coupon email:', result.error);
+      return { success: false, error: result.error.message };
+    }
+
+    return { success: true, messageId: result.data?.id };
+  } catch (error) {
+    console.error('Error sending DOER coupon email:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+  }
+}
 
 /**
  * Send welcome email
