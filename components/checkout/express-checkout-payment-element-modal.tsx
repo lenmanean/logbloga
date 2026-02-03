@@ -201,7 +201,7 @@ export function ExpressCheckoutPaymentElementModal({
         <DialogHeader>
           <DialogTitle>Quick checkout — {productTitle}</DialogTitle>
           <DialogDescription>
-            Choose your payment method below. Enable Klarna, Afterpay, Affirm, and others in Stripe Dashboard if you want them to appear here.
+            Choose your payment method below.
           </DialogDescription>
         </DialogHeader>
         {error && (
