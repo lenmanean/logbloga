@@ -152,7 +152,7 @@ export function Header() {
               onNavigate={() => router.push('/ai-to-usd')}
             >
               <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/packages/master-bundle" className="text-amber-600 dark:text-amber-400 font-medium">Master Bundle</Link>
+                <Link href="/ai-to-usd/packages/master-bundle">Master Bundle</Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem asChild>
@@ -460,7 +460,7 @@ export function Header() {
                     <Link
                       href="/ai-to-usd/packages/master-bundle"
                       onClick={() => setOpen(false)}
-                      className="text-base font-medium text-amber-600 dark:text-amber-400 transition-colors hover:text-amber-700 dark:hover:text-amber-300 py-1"
+                      className="text-base transition-colors hover:text-primary py-1"
                     >
                       Master Bundle
                     </Link>
