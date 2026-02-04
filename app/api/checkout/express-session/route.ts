@@ -1,7 +1,7 @@
 /**
- * POST /api/orders/create-express
- * Create a single-item order and PaymentIntent for express checkout (Apple Pay, modal, etc.).
- * Returns orderId and clientSecret. Auth required; customer info from session.
+ * POST /api/checkout/express-session
+ * Create a single-item order and Stripe Checkout Session for express checkout (redirect).
+ * Returns { url } for redirecting to Stripe. Auth required.
  */
 
 import { NextResponse } from 'next/server';
@@ -9,21 +9,17 @@ import { requireAuth } from '@/lib/auth/utils';
 import { getProductById, getProductBySlug } from '@/lib/db/products';
 import { hasProductAccess, hasProductAccessBySlug } from '@/lib/db/access';
 import { getUserProfile } from '@/lib/db/profiles';
-import {
-  createOrderWithItems,
-  getMostRecentPendingOrderForUser,
-  getOrderWithItems,
-  updateOrderWithPaymentInfo,
-} from '@/lib/db/orders';
+import { createOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import type { CartItemWithProduct } from '@/lib/db/cart';
 import { validateCoupon } from '@/lib/db/coupons';
 import { calculateOrderTotals } from '@/lib/checkout/calculations';
 import { getStripeClient } from '@/lib/stripe/client';
+import { getStripePriceIdBySlug, SLUG_TO_STRIPE_PRICE_ENV } from '@/lib/stripe/prices';
 import { formatAmountForStripe } from '@/lib/stripe/utils';
 import { formatStripeError } from '@/lib/stripe/errors';
+import type Stripe from 'stripe';
 
 const MIN_CHECKOUT_AMOUNT_USD = 0.5;
-const EXPRESS_IDEMPOTENCY_WINDOW_MS = 5 * 60 * 1000; // 5 minutes (express checkout)
 
 function parseProductPrice(price: unknown): number {
   if (typeof price === 'number' && !Number.isNaN(price)) return price;
@@ -36,11 +32,8 @@ export async function POST(request: Request) {
     const user = await requireAuth();
     const body = await request.json().catch(() => ({}));
     const productId = typeof body?.productId === 'string' ? body.productId.trim() : undefined;
-    let quantity = typeof body?.quantity === 'number' ? body.quantity : 1;
     const couponCode = typeof body?.couponCode === 'string' ? body.couponCode.trim() : undefined;
-    const idempotencyKey = typeof request.headers.get('Idempotency-Key') === 'string'
-      ? request.headers.get('Idempotency-Key')!.trim()
-      : undefined;
+    const productSlug = typeof body?.productSlug === 'string' ? body.productSlug.trim() : undefined;
 
     if (!productId) {
       return NextResponse.json(
@@ -49,8 +42,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // One per package/bundle
-    quantity = 1;
+    const quantity = 1;
 
     const product = await getProductById(productId);
     if (!product) {
@@ -135,112 +127,109 @@ export async function POST(request: Request) {
       );
     }
 
-    let order: Awaited<ReturnType<typeof createOrderWithItems>>;
+    const order = await createOrderWithItems(
+      {
+        userId: user.id,
+        customerEmail,
+        customerName,
+        subtotal: orderTotals.subtotal,
+        totalAmount: orderTotals.total,
+        taxAmount: orderTotals.taxAmount,
+        discountAmount: orderTotals.discountAmount,
+        couponId: coupon?.id,
+        currency: 'USD',
+      },
+      [singleItem]
+    );
 
-    if (idempotencyKey) {
-      const pendingOrder = await getMostRecentPendingOrderForUser(user.id);
-      const createdMs = pendingOrder?.created_at
-        ? new Date(pendingOrder.created_at).getTime()
-        : 0;
-      const withinWindow = Date.now() - createdMs <= EXPRESS_IDEMPOTENCY_WINDOW_MS;
-      const singleItemMatch =
-        pendingOrder?.items?.length === 1 &&
-        pendingOrder.items[0].product_id === productId &&
-        (pendingOrder.items[0].quantity ?? 0) === quantity;
-
-      if (pendingOrder && withinWindow && singleItemMatch) {
-        order = pendingOrder as Awaited<ReturnType<typeof createOrderWithItems>>;
-      } else {
-        order = await createOrderWithItems(
-          {
-            userId: user.id,
-            customerEmail,
-            customerName,
-            subtotal: orderTotals.subtotal,
-            totalAmount: orderTotals.total,
-            taxAmount: orderTotals.taxAmount,
-            discountAmount: orderTotals.discountAmount,
-            couponId: coupon?.id,
-            currency: 'USD',
-          },
-          [singleItem]
-        );
-      }
-    } else {
-      order = await createOrderWithItems(
-        {
-          userId: user.id,
-          customerEmail,
-          customerName,
-          subtotal: orderTotals.subtotal,
-          totalAmount: orderTotals.total,
-          taxAmount: orderTotals.taxAmount,
-          discountAmount: orderTotals.discountAmount,
-          couponId: coupon?.id,
-          currency: 'USD',
-        },
-        [singleItem]
-      );
-    }
-
-    const stripe = getStripeClient();
-    const orderTotalUsd =
-      typeof order.total_amount === 'number'
-        ? order.total_amount
-        : parseFloat(String(order.total_amount ?? 0));
-    const amountCents = formatAmountForStripe(orderTotalUsd);
-
-    let clientSecret: string | null = null;
-    const existingPiId = order.stripe_payment_intent_id;
-    if (existingPiId) {
-      try {
-        const existing = await stripe.paymentIntents.retrieve(existingPiId);
-        if (
-          existing.client_secret &&
-          (existing.status === 'requires_payment_method' ||
-            existing.status === 'requires_confirmation')
-        ) {
-          clientSecret = existing.client_secret;
-        }
-      } catch {
-        // Intent invalid or gone; create new one
-      }
-    }
-
-    if (!clientSecret) {
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: amountCents,
-        currency: 'usd',
-        automatic_payment_methods: { enabled: true },
-        metadata: {
-          orderId: order.id,
-          userId: order.user_id ?? '',
-        },
-        receipt_email: order.customer_email ?? undefined,
-      });
-      await updateOrderWithPaymentInfo(order.id, {
-        stripePaymentIntentId: paymentIntent.id,
-      });
-      clientSecret = paymentIntent.client_secret ?? null;
-    }
-
-    if (!clientSecret) {
+    if (!order.items || order.items.length === 0) {
       return NextResponse.json(
-        { error: 'Failed to create payment session.' },
+        { error: 'Order has no items' },
         { status: 500 }
       );
     }
 
-    const amountFormatted = `$${orderTotalUsd.toLocaleString()}`;
-    return NextResponse.json(
-      { orderId: order.id, clientSecret, amountFormatted },
-      { status: 201 }
-    );
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
+
+    for (const item of order.items) {
+      const slug = item.product_sku?.trim() || null;
+      if (!slug) {
+        return NextResponse.json(
+          { error: 'Order item missing product identifier; cannot create payment session.' },
+          { status: 500 }
+        );
+      }
+
+      const stripePriceId = getStripePriceIdBySlug(slug);
+      if (!stripePriceId) {
+        const envKey = SLUG_TO_STRIPE_PRICE_ENV[slug.toLowerCase()] ?? `STRIPE_PRICE_${slug.replace(/-/g, '_').toUpperCase()}`;
+        return NextResponse.json(
+          { error: `Stripe price is not configured for product. Set ${envKey} in environment.` },
+          { status: 400 }
+        );
+      }
+
+      lineItems.push({
+        price: stripePriceId,
+        quantity: item.quantity,
+      });
+    }
+
+    const discountAmount = typeof order.discount_amount === 'number'
+      ? order.discount_amount
+      : parseFloat(String(order.discount_amount || 0));
+    if (discountAmount > 0) {
+      lineItems.push({
+        price_data: {
+          currency: order.currency?.toLowerCase() || 'usd',
+          product_data: {
+            name: 'Discount',
+            description: 'Coupon discount applied at checkout',
+          },
+          unit_amount: -formatAmountForStripe(discountAmount),
+        },
+        quantity: 1,
+      });
+    }
+
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const cancelPath = productSlug ? `/ai-to-usd/packages/${productSlug}` : '/checkout';
+    const cancelUrl = `${appUrl}${cancelPath}?error=payment_cancelled`;
+
+    const metadata: Record<string, string> = {
+      orderId: order.id,
+      orderNumber: order.order_number || '',
+    };
+    if (order.user_id) {
+      metadata.userId = order.user_id;
+    }
+
+    const stripe = getStripeClient();
+    const session = await stripe.checkout.sessions.create({
+      automatic_payment_methods: { enabled: true },
+      mode: 'payment',
+      line_items: lineItems,
+      customer_email: order.customer_email || undefined,
+      metadata,
+      success_url: `${appUrl}/checkout/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl,
+      allow_promotion_codes: discountAmount <= 0,
+      automatic_tax: { enabled: true },
+    });
+
+    await updateOrderWithPaymentInfo(order.id, {
+      stripeCheckoutSessionId: session.id,
+    });
+
+    return NextResponse.json({
+      url: session.url,
+      sessionId: session.id,
+    });
   } catch (error) {
     if (error instanceof Error && error.message.includes('redirect')) {
       throw error;
     }
-    console.error('Error creating express order:', error);
+    console.error('Error creating express checkout session:', error);
     const message = formatStripeError(error);
     return NextResponse.json(
       { error: message },

@@ -8,7 +8,7 @@ import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
-import { ExpressCheckoutInline } from '@/components/checkout/express-checkout-payment-element-modal';
+import { ProductPagePaymentButtons } from '@/components/checkout/product-page-payment-buttons';
 import {
   Select,
   SelectContent,
@@ -145,30 +145,12 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
             />
           </div>
 
-          {/* Inline payment methods (card, Apple Pay, Link, etc.) on product page; no Buy Now button. */}
-          <div className="mb-6 space-y-4">
-            {isAuthenticated ? (
-              <ExpressCheckoutInline
-                productId={pkg.id}
-                productTitle={pkg.title}
-                amountFormatted={`$${finalPrice.toLocaleString()}`}
-                amountTotalUsd={finalPrice}
-                quantity={quantity}
-              />
-            ) : (
-              <Button
-                type="button"
-                variant="outline"
-                size="lg"
-                className="w-full touch-manipulation"
-                asChild
-              >
-                <Link href={`/auth/signin?redirect=${encodeURIComponent(`/ai-to-usd/packages/${pkg.slug}`)}`}>
-                  Sign in to pay
-                </Link>
-              </Button>
-            )}
-          </div>
+          {/* Payment method buttons (redirect to Stripe Checkout); visible to all users. */}
+          <ProductPagePaymentButtons
+            productId={pkg.id}
+            productTitle={pkg.title}
+            productSlug={pkg.slug}
+          />
 
           {/* Add to Cart Button */}
           <div className="mb-6">

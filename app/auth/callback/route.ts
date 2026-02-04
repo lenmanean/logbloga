@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
     });
 
     if (!error) {
-      // Email verified successfully - redirect to account or sign in
-      const redirectUrl = new URL('/account/profile', request.url);
+      // Email verified successfully - redirect to next (e.g. express checkout) or account
+      const redirectUrl = new URL(next, request.url);
       redirectUrl.searchParams.set('verified', 'true');
       return NextResponse.redirect(redirectUrl);
     } else {

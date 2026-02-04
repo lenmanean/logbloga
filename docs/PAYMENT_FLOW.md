@@ -49,26 +49,29 @@ The webhook secret is **not** a global Stripe setting. It is the **signing secre
 
 Use the **test** endpoint and its signing secret in test mode; use a separate **live** endpoint and secret in production. For local testing, run `stripe listen --forward-to localhost:3000/api/stripe/webhook` and use the temporary secret the CLI prints as `STRIPE_WEBHOOK_SECRET`.
 
-## Stripe Dashboard: Payment methods (Payment Element)
+## Stripe Dashboard: Payment methods
 
-Both **main checkout** and **quick checkout** use the **Payment Element**. Quick checkout is the product-page modal (Buy Now); the full-page `/checkout/express` route is also available for direct links. PaymentIntents are created with **`automatic_payment_methods: { enabled: true }`**, so all payment methods you enable in the Stripe Dashboard can appear (card, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.). Which methods actually show depends on Stripe Dashboard settings and eligibility (amount, currency, country). **Apple Pay** on the web requires domain verification in the Dashboard.
+**Main checkout** (cart) and **express checkout** (product-page buttons) both use **Stripe Checkout** (redirect to Stripe’s hosted page). There is no Payment Element or inline payment form on the product page.
 
-**Step-by-step (so card, Link, and other methods show):**
+- **Product page:** Individual buttons (“Pay with card”, “Pay with Apple Pay / Google Pay”) link to `/checkout/express?productId=...&title=...`. Visible to all users; unauthenticated users are sent to sign-in, then resume to express checkout.
+- **Express flow:** `/checkout/express` (auth required) calls `POST /api/checkout/express-session` to create a single-item order and a Stripe Checkout Session, then redirects to `session.url`. Payment happens on Stripe’s page.
+- **Checkout Session** for express is created with **`automatic_payment_methods: { enabled: true }`**, so all payment methods you enable in the Stripe Dashboard can appear (card, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.). Which methods actually show depends on Stripe Dashboard settings and eligibility (amount, currency, country). **Apple Pay** on the web requires domain verification in the Dashboard.
+
+**Step-by-step (so card, Link, and other methods show on Stripe Checkout):**
 
 1. **Stripe Dashboard** → **Settings** (gear) → **Payment methods**
 2. Under **Payment methods**, turn **On** every method you want (Cards, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.).
-3. Some methods have **eligibility** (e.g. country, amount). Satisfy those or they won’t appear in the Payment Element.
+3. Some methods have **eligibility** (e.g. country, amount). Satisfy those or they won’t appear on the Checkout page.
 4. **Test mode**: Use **Settings** → **Payment methods** in **Test mode** (toggle in Dashboard) to enable methods for test payments. Repeat for **Live mode** when going live.
 5. **Apple Pay (web)**: Add and verify your domain (e.g. `logbloga.com`) in the Dashboard so Apple Pay appears in the browser.
 
-After changing payment method settings, no app redeploy is needed; the next Payment Element load will reflect them.
+After changing payment method settings, no app redeploy is needed; the next redirect to Stripe Checkout will reflect them.
 
 **Only Link or Card showing (no Klarna, Affirm, Afterpay, Apple Pay):**
 
 - Stripe shows methods based on **payment method rules** (amount, country, currency). In **Settings → Payment methods**, open each method (e.g. Klarna, Affirm) and click **Customize availability** to see or change rules (e.g. minimum amount, allowed countries). If the customer’s location or order amount doesn’t match, that method won’t appear.
 - **Apple Pay (web)** requires **Configure domains** for your site (e.g. `logbloga.com`); otherwise it won’t show in the browser.
-- **Mobile:** The Payment Element needs a moment to render inside the modal; if it stays blank, try again or use **full checkout from cart** (link shown in the modal). Ensure the latest build is deployed.
-- **Blank or no methods:** In Stripe Dashboard go to **Settings → Payment methods → Review** (or the payment method troubleshooting tool) to see which methods are available for your currency, amount, and test/live mode. If none qualify, the element can appear empty; enable more methods or adjust rules.
+- **Blank or no methods:** In Stripe Dashboard go to **Settings → Payment methods → Review** (or the payment method troubleshooting tool) to see which methods are available for your currency, amount, and test/live mode. Enable more methods or adjust rules as needed.
 
 ## Stripe price IDs (checkout)
 
@@ -77,7 +80,8 @@ After changing payment method settings, no app redeploy is needed; the next Paym
 
 ## Related files
 
-- `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session (line items from env price IDs, discount, tax)
+- `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session for cart orders (line items from env price IDs, discount, tax)
+- `app/api/checkout/express-session/route.ts` — Creates single-item order and Stripe Checkout session for express (product-page buttons); redirect URL returned to client
 - `app/api/orders/create/route.ts` — Creates order (or returns existing pending order); does **not** clear cart
 - `lib/stripe/webhooks.ts` — Handles Stripe events; clears cart in `handleCheckoutSessionCompleted`
 - `app/api/cron/daily/route.ts` — Single daily cron (Hobby): piracy monitor + abandoned-cart; `vercel.json` has one cron entry for `/api/cron/daily` at 2 AM UTC
