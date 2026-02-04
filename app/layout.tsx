@@ -10,6 +10,7 @@ import { CartProvider } from "@/contexts/cart-context";
 import { CookieConsent } from "@/components/legal/cookie-consent";
 import ServiceWorkerRegistration from "@/components/pwa/service-worker-registration";
 import AnalyticsProvider from "@/components/analytics/analytics-provider";
+import { ChatWidget } from "@/components/chat/chat-widget";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,6 +63,7 @@ export default function RootLayout({
             <CookieConsent />
             <ServiceWorkerRegistration />
             <AnalyticsProvider />
+            <ChatWidget />
             <Analytics />
             <SpeedInsights />
           </CartProvider>

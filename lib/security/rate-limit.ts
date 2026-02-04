@@ -15,7 +15,7 @@ const redis = new Redis({
 /**
  * Rate limit configuration types
  */
-export type RateLimitType = 'public' | 'authenticated' | 'auth' | 'payment' | 'admin';
+export type RateLimitType = 'public' | 'authenticated' | 'auth' | 'payment' | 'admin' | 'chat';
 
 /**
  * Rate limit configurations
@@ -26,6 +26,7 @@ const rateLimitConfigs: Record<RateLimitType, { requests: number; window: Durati
   auth: { requests: 5, window: '1 m' }, // 5 requests per minute (signin/signup)
   payment: { requests: 10, window: '1 m' }, // 10 requests per minute (payment endpoints)
   admin: { requests: 500, window: '1 m' }, // 500 requests per minute (admin endpoints)
+  chat: { requests: 30, window: '1 m' }, // 30 requests per minute (AI chat)
 };
 
 /**
@@ -48,6 +49,7 @@ const rateLimiters = {
   auth: createRateLimiter('auth'),
   payment: createRateLimiter('payment'),
   admin: createRateLimiter('admin'),
+  chat: createRateLimiter('chat'),
 };
 
 /**

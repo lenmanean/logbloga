@@ -43,6 +43,9 @@ const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   SECURITY_AUDIT_RETENTION_DAYS: z.coerce.number().int().positive().default(365).optional(),
   
+  // OpenAI (required for AI chat assistant)
+  OPENAI_API_KEY: z.string().min(1, 'OpenAI API key is required for chat').optional(),
+
   // Optional environment variables
   NEXT_PUBLIC_SENTRY_DSN: z.string().url('Invalid Sentry DSN').optional(),
   SENTRY_ORG: z.string().optional(),
