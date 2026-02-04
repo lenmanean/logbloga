@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { CategoryCard } from '@/components/ui/category-card';
+import { MasterBundleCard } from '@/components/ui/master-bundle-card';
 import { categories } from '@/lib/products';
 import { caseStudies } from '@/lib/resources/case-studies';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -30,39 +31,35 @@ export default function AiToUsdPage() {
         </section>
 
         {/* Master Bundle Featured Section */}
-        <Link href="/ai-to-usd/packages/master-bundle" className="block mb-12">
-          <Card className="overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 hover:shadow-xl hover:border-primary/50 transition-all duration-300">
-            <CardContent className="p-6 md:p-8">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                <div className="flex items-center gap-4 md:gap-6 flex-1">
-                  <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
-                    <Image
-                      src="/package-master.png"
-                      alt="Master Bundle - All four AI to USD packages"
-                      fill
-                      className="object-contain p-2"
-                      sizes="(max-width: 768px) 96px, 128px"
-                      priority
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <Badge className="mb-2">Best Value</Badge>
-                    <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                      Complete AI Monetization – Master Bundle
-                    </h2>
-                    <p className="text-muted-foreground max-w-2xl">
-                      Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides. One purchase, every path to AI revenue.
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2 shrink-0">
-                  <span className="text-lg font-semibold">View Master Bundle</span>
-                  <ArrowRight className="h-5 w-5" />
-                </div>
+        <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex items-center gap-4 md:gap-6 flex-1">
+              <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
+                <Image
+                  src="/package-master.png"
+                  alt="Master Bundle - All four AI to USD packages"
+                  fill
+                  className="object-contain p-2"
+                  sizes="(max-width: 768px) 96px, 128px"
+                  priority
+                />
               </div>
-            </CardContent>
-          </Card>
-        </Link>
+              <div className="min-w-0">
+                <Badge className="mb-2 bg-amber-500/20 text-amber-800 dark:bg-amber-400/20 dark:text-amber-200 border-amber-500/30">Best Value</Badge>
+                <h2 className="text-2xl md:text-3xl font-bold mb-2 text-amber-900 dark:text-amber-100">
+                  Complete AI Monetization – Master Bundle
+                </h2>
+                <p className="text-muted-foreground max-w-2xl">
+                  Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides. One purchase, every path to AI revenue.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
+              <ArrowRight className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+            </div>
+          </div>
+        </MasterBundleCard>
 
         {/* Package Navigation Cards */}
         <div id="explore-packages" className="mb-16">

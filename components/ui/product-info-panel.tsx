@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PackageProduct } from '@/lib/products';
-import { ReviewsSection } from '@/components/ui/reviews-section';
 import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
@@ -88,13 +87,6 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
           </p>
         )}
       </div>
-
-      {/* Reviews */}
-      {pkg.rating && pkg.reviewCount !== undefined && (
-        <div className="mb-6">
-          <ReviewsSection rating={pkg.rating} reviewCount={pkg.reviewCount} />
-        </div>
-      )}
 
       {/* Description */}
       <div className="mb-6">

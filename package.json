@@ -31,8 +31,7 @@
     "content:build-social-media-docx": "tsx scripts/build-social-media-docx.ts",
     "content:build-social-media-zips": "tsx scripts/build-social-media-zips.ts",
     "content:build-agency-zips": "tsx scripts/build-agency-zips.ts",
-    "content:audit": "tsx scripts/audit-package-content.ts",
-    "seed:reviews": "tsx scripts/seed-package-reviews.ts"
+    "content:audit": "tsx scripts/audit-package-content.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

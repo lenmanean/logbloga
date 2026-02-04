@@ -4,9 +4,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ProductImageGallery } from '@/components/ui/product-image-gallery';
 import { ProductInfoPanel } from '@/components/ui/product-info-panel';
-import { ProductReviewsSection } from '@/components/ui/product-reviews-section';
 import { PackagePreviewSection } from '@/components/ui/package-preview-section';
 import { WhatsIncluded } from '@/components/ui/whats-included';
+import { MasterBundleCard } from '@/components/ui/master-bundle-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Button } from '@/components/ui/button';
@@ -15,6 +15,7 @@ import { hasProductAccess } from '@/lib/db/access';
 import { parsePackageLevels } from '@/lib/db/package-levels';
 import { createClient } from '@/lib/supabase/server';
 import { PackageProduct } from '@/lib/products';
+import { cn } from '@/lib/utils';
 import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb, ArrowRight } from 'lucide-react';
 
 // Revalidate every 60s so price/caption updates propagate quickly (avoids stale $0.51 or old placeholder text)
@@ -125,8 +126,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
     pricingJustification: packageData.pricing_justification || '',
     contentHours: packageData.content_hours || '',
     slug: packageData.slug,
-    rating: packageData.rating ? (typeof packageData.rating === 'number' ? packageData.rating : parseFloat(String(packageData.rating))) : undefined,
-    reviewCount: packageData.review_count || 0,
   };
 
   const categoryLabels: Record<string, string> = {
@@ -183,26 +182,8 @@ export default async function PackagePage({ params }: PackagePageProps) {
   const masterBundlePrice = masterBundle && (typeof masterBundle.price === 'number' ? masterBundle.price : parseFloat(String(masterBundle.price || 0)));
   const masterBundleImage = masterBundle?.package_image || (masterBundle?.images as string[])?.[0] || masterBundle?.image_url || '/package-master.png';
 
-  // Initial reviews for SSR (approved only, first page)
-  const supabaseReviews = await createClient();
-  const { data: initialReviewsRows } = await supabaseReviews
-    .from('reviews')
-    .select('id, rating, content, title, reviewer_display_name, created_at')
-    .eq('product_id', packageData.id)
-    .eq('status', 'approved')
-    .order('created_at', { ascending: false })
-    .limit(10);
-  const initialReviews = (initialReviewsRows || []).map((r) => ({
-    id: r.id,
-    rating: r.rating,
-    content: r.content,
-    title: r.title,
-    reviewer_display_name: r.reviewer_display_name,
-    created_at: r.created_at,
-  }));
-
   return (
-    <main className="min-h-screen bg-background">
+    <main className={cn('min-h-screen bg-background', isBundle && 'master-bundle-page')}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Back Button */}
         <div className="mb-6">
@@ -339,16 +320,39 @@ export default async function PackagePage({ params }: PackagePageProps) {
           </Card>
         </div>
 
+        {!isBundle && masterBundle && (
+          <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex items-center gap-4 md:gap-6 flex-1">
+                <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
+                  <Image
+                    src={masterBundleImage}
+                    alt={masterBundle.title || 'Master Bundle'}
+                    fill
+                    className="object-contain p-2"
+                    sizes="(max-width: 768px) 96px, 128px"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <CardTitle className="text-xl md:text-2xl mb-2 text-amber-800 dark:text-amber-200">Get the Master Bundle</CardTitle>
+                  <p className="text-muted-foreground max-w-xl">
+                    Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides.
+                  </p>
+                  {masterBundlePrice != null && !Number.isNaN(masterBundlePrice) && (
+                    <p className="mt-2 text-lg font-semibold text-amber-700 dark:text-amber-300">${masterBundlePrice.toLocaleString()}</p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
+                <ArrowRight className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+            </div>
+          </MasterBundleCard>
+        )}
+
         {/* Package content preview (interactive markdown) */}
         <PackagePreviewSection productId={packageData.id} />
-
-        {/* Reviews Section */}
-        <div className="mb-12">
-          <ProductReviewsSection
-            productId={packageData.id}
-            initialReviews={initialReviews}
-          />
-        </div>
 
         {/* What's Included Section */}
         {isBundle ? (
@@ -383,43 +387,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
         ) : (
           <div className="mb-12">
             <WhatsIncluded package={packageProduct} />
-          </div>
-        )}
-
-        {!isBundle && masterBundle && (
-          <div className="mb-12">
-            <Link href="/ai-to-usd/packages/master-bundle" className="block">
-              <Card className="overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 hover:shadow-xl hover:border-primary/50 transition-all duration-300">
-                <CardContent className="p-6 md:p-8">
-                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-                    <div className="flex items-center gap-4 md:gap-6 flex-1">
-                      <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
-                        <Image
-                          src={masterBundleImage}
-                          alt={masterBundle.title || 'Master Bundle'}
-                          fill
-                          className="object-contain p-2"
-                          sizes="(max-width: 768px) 96px, 128px"
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <CardTitle className="text-xl md:text-2xl mb-2">Get the Master Bundle</CardTitle>
-                        <p className="text-muted-foreground max-w-xl">
-                          Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides.
-                        </p>
-                        {masterBundlePrice != null && !Number.isNaN(masterBundlePrice) && (
-                          <p className="mt-2 text-lg font-semibold">${masterBundlePrice.toLocaleString()}</p>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className="text-lg font-semibold">View Master Bundle</span>
-                      <ArrowRight className="h-5 w-5" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
           </div>
         )}
 

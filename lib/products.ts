@@ -66,8 +66,6 @@ export interface PackageProduct extends Product {
   contentHours: string;
   slug: string;
   variants?: PackageVariant[];
-  rating?: number;
-  reviewCount?: number;
 }
 
 export interface Category {
@@ -128,8 +126,6 @@ export const packageProducts: PackageProduct[] = [
     featured: true,
     packageImage: '/package-2.png',
     images: ['/package-2.png'],
-    rating: 4.8,
-    reviewCount: 127,
     duration: 'Self-paced',
     contentHours: '45 files',
     pricingJustification: 'Comprehensive level-based content with 45 files: implementation plans, platform setup guides, creative frameworks, launch checklists, troubleshooting guides, budget worksheets, and code templates (Next.js, Supabase, Stripe). Comparable to bootcamps priced at $2,000-$6,000+. Lifetime access with immediate ROI through templates and tools.'
@@ -146,8 +142,6 @@ export const packageProducts: PackageProduct[] = [
     featured: true,
     packageImage: '/package-1.png',
     images: ['/package-1.png'],
-    rating: 4.9,
-    reviewCount: 203,
     duration: 'Self-paced',
     contentHours: '39 files',
     pricingJustification: 'Complete social media package with 39 files: implementation plans, platform setup guides (Buffer, Canva, Later, Hootsuite), creative frameworks, content strategy templates, client reporting templates, and budget planners. Comparable to agency services at $500-$2,000/month. Lifetime access with templates that save 10+ hours/week.'
@@ -164,8 +158,6 @@ export const packageProducts: PackageProduct[] = [
     featured: true,
     packageImage: '/package-3.png',
     images: ['/package-3.png'],
-    rating: 4.7,
-    reviewCount: 89,
     duration: 'Self-paced',
     contentHours: '40 files',
     pricingJustification: 'Complete agency package with 40 files: implementation plans, platform setup guides (Systeme.io, GoHighLevel, HubSpot, ClickUp), creative frameworks, client onboarding templates, agency operations templates, and budget planners. Comparable to agency coaching programs at $2,000-$10,000+. ROI potential: $10K-$50K+ monthly revenue increase.'
@@ -182,8 +174,6 @@ export const packageProducts: PackageProduct[] = [
     featured: true,
     packageImage: '/package-4.png',
     images: ['/package-4.png'],
-    rating: 4.6,
-    reviewCount: 156,
     duration: 'Self-paced',
     contentHours: '41 files',
     pricingJustification: 'Complete freelancer package with 41 files: implementation plans, platform setup guides (Fiverr, Upwork, Hello Bonsai, Stripe), creative frameworks, proposal and contract templates, and budget planners. ROI potential: $1K-$10K+ monthly income increase. Accessible pricing that pays for itself with 1-2 projects.'
