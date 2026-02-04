@@ -1113,6 +1113,7 @@ export type Database = {
           order_id: string | null
           product_id: string
           rating: number
+          reviewer_display_name: string | null
           status: string | null
           title: string | null
           updated_at: string | null
@@ -1127,6 +1128,7 @@ export type Database = {
           order_id?: string | null
           product_id: string
           rating: number
+          reviewer_display_name?: string | null
           status?: string | null
           title?: string | null
           updated_at?: string | null
@@ -1141,6 +1143,7 @@ export type Database = {
           order_id?: string | null
           product_id?: string
           rating?: number
+          reviewer_display_name?: string | null
           status?: string | null
           title?: string | null
           updated_at?: string | null
@@ -1253,6 +1256,10 @@ export type Database = {
     }
     Functions: {
       generate_order_number: { Args: never; Returns: string }
+      sync_product_review_aggregates: {
+        Args: { p_product_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

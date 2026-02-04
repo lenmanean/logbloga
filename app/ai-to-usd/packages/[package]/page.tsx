@@ -1,9 +1,11 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import { ProductImageGallery } from '@/components/ui/product-image-gallery';
 import { ProductInfoPanel } from '@/components/ui/product-info-panel';
+import { ProductReviewsSection } from '@/components/ui/product-reviews-section';
+import { PackagePreviewSection } from '@/components/ui/package-preview-section';
 import { WhatsIncluded } from '@/components/ui/whats-included';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -13,20 +15,7 @@ import { hasProductAccess } from '@/lib/db/access';
 import { parsePackageLevels } from '@/lib/db/package-levels';
 import { createClient } from '@/lib/supabase/server';
 import { PackageProduct } from '@/lib/products';
-import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb } from 'lucide-react';
-
-// Lazy load recommendation components (below fold, non-critical)
-const UpsellBanner = dynamic(() => import('@/components/recommendations/upsell-banner').then(mod => ({ default: mod.UpsellBanner })), {
-  loading: () => <div className="h-32 animate-pulse bg-muted rounded-lg" />,
-});
-
-const CrossSellGrid = dynamic(() => import('@/components/recommendations/cross-sell-grid').then(mod => ({ default: mod.CrossSellGrid })), {
-  loading: () => <div className="h-64 animate-pulse bg-muted rounded-lg" />,
-});
-
-const BundleOffer = dynamic(() => import('@/components/recommendations/bundle-offer').then(mod => ({ default: mod.BundleOffer })), {
-  loading: () => <div className="h-48 animate-pulse bg-muted rounded-lg" />,
-});
+import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb, ArrowRight } from 'lucide-react';
 
 // Revalidate every 60s so price/caption updates propagate quickly (avoids stale $0.51 or old placeholder text)
 export const revalidate = 60;
@@ -189,6 +178,29 @@ export default async function PackagePage({ params }: PackagePageProps) {
     hasAccess = await hasProductAccess(user.id, packageData.id);
   }
 
+  // Package pages use only this single master-bundle upsell. Do not use UpsellBanner, CrossSellGrid, or BundleOffer here.
+  const masterBundle = !isBundle ? await getProductBySlug('master-bundle') : null;
+  const masterBundlePrice = masterBundle && (typeof masterBundle.price === 'number' ? masterBundle.price : parseFloat(String(masterBundle.price || 0)));
+  const masterBundleImage = masterBundle?.package_image || (masterBundle?.images as string[])?.[0] || masterBundle?.image_url || '/package-master.png';
+
+  // Initial reviews for SSR (approved only, first page)
+  const supabaseReviews = await createClient();
+  const { data: initialReviewsRows } = await supabaseReviews
+    .from('reviews')
+    .select('id, rating, content, title, reviewer_display_name, created_at')
+    .eq('product_id', packageData.id)
+    .eq('status', 'approved')
+    .order('created_at', { ascending: false })
+    .limit(10);
+  const initialReviews = (initialReviewsRows || []).map((r) => ({
+    id: r.id,
+    rating: r.rating,
+    content: r.content,
+    title: r.title,
+    reviewer_display_name: r.reviewer_display_name,
+    created_at: r.created_at,
+  }));
+
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
@@ -213,7 +225,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
           </div>
 
           {/* Right Side - Product Information & Purchase */}
-          <div className="w-full order-2 lg:order-2">
+          <div id="purchase" className="w-full order-2 lg:order-2">
             <ProductInfoPanel 
               package={packageProduct}
               hasAccess={hasAccess}
@@ -327,6 +339,17 @@ export default async function PackagePage({ params }: PackagePageProps) {
           </Card>
         </div>
 
+        {/* Package content preview (interactive markdown) */}
+        <PackagePreviewSection productId={packageData.id} />
+
+        {/* Reviews Section */}
+        <div className="mb-12">
+          <ProductReviewsSection
+            productId={packageData.id}
+            initialReviews={initialReviews}
+          />
+        </div>
+
         {/* What's Included Section */}
         {isBundle ? (
           <div className="mb-12">
@@ -363,27 +386,41 @@ export default async function PackagePage({ params }: PackagePageProps) {
           </div>
         )}
 
-        {!isBundle && (
-          <>
-            <div className="mb-12">
-              <UpsellBanner productId={packageData.id} />
-            </div>
-            <div className="mb-12">
-              <CrossSellGrid
-                productId={packageData.id}
-                title="You May Also Like"
-                limit={4}
-                excludeProductIds={[packageData.id]}
-              />
-            </div>
-            <div className="mb-12">
-              <BundleOffer
-                productId={packageData.id}
-                title="Complete Your Collection"
-                limit={3}
-              />
-            </div>
-          </>
+        {!isBundle && masterBundle && (
+          <div className="mb-12">
+            <Link href="/ai-to-usd/packages/master-bundle" className="block">
+              <Card className="overflow-hidden border-2 border-primary/30 bg-gradient-to-br from-primary/5 via-primary/10 to-primary/5 hover:shadow-xl hover:border-primary/50 transition-all duration-300">
+                <CardContent className="p-6 md:p-8">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    <div className="flex items-center gap-4 md:gap-6 flex-1">
+                      <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
+                        <Image
+                          src={masterBundleImage}
+                          alt={masterBundle.title || 'Master Bundle'}
+                          fill
+                          className="object-contain p-2"
+                          sizes="(max-width: 768px) 96px, 128px"
+                        />
+                      </div>
+                      <div className="min-w-0">
+                        <CardTitle className="text-xl md:text-2xl mb-2">Get the Master Bundle</CardTitle>
+                        <p className="text-muted-foreground max-w-xl">
+                          Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides.
+                        </p>
+                        {masterBundlePrice != null && !Number.isNaN(masterBundlePrice) && (
+                          <p className="mt-2 text-lg font-semibold">${masterBundlePrice.toLocaleString()}</p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="text-lg font-semibold">View Master Bundle</span>
+                      <ArrowRight className="h-5 w-5" />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </div>
         )}
 
         {/* Related Links */}
