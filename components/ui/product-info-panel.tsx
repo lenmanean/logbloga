@@ -70,13 +70,13 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
       <div className="space-y-2 mb-4">
         <div className="flex items-baseline gap-3">
           <span className="text-4xl md:text-5xl font-bold">${displayPrice.toLocaleString()}</span>
-          {displayOriginalPrice && (
+          {displayOriginalPrice != null && displayOriginalPrice > displayPrice && (
             <span className="text-xl text-muted-foreground line-through">
               ${displayOriginalPrice.toLocaleString()}
             </span>
           )}
         </div>
-        {displayOriginalPrice && (
+        {displayOriginalPrice != null && displayOriginalPrice > displayPrice && (
           <p className="text-sm text-muted-foreground">
             Save ${(displayOriginalPrice - displayPrice).toLocaleString()} 
             ({Math.round((1 - displayPrice / displayOriginalPrice) * 100)}% off)

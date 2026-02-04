@@ -49,13 +49,13 @@ export function PackageHero({ package: pkg, className }: PackageHeroProps) {
           <div className="space-y-2 pt-4 border-t">
             <div className="flex items-baseline gap-3">
               <span className="text-4xl md:text-5xl font-bold">${pkg.price.toLocaleString()}</span>
-              {pkg.originalPrice && (
+              {pkg.originalPrice != null && pkg.originalPrice > pkg.price && (
                 <span className="text-xl text-muted-foreground line-through">
                   ${pkg.originalPrice.toLocaleString()}
                 </span>
               )}
             </div>
-            {pkg.originalPrice && (
+            {pkg.originalPrice != null && pkg.originalPrice > pkg.price && (
               <p className="text-sm text-muted-foreground">
                 Save ${(pkg.originalPrice - pkg.price).toLocaleString()} ({(Math.round((1 - pkg.price / pkg.originalPrice) * 100))}% off)
               </p>

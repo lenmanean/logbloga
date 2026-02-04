@@ -79,7 +79,7 @@ export function ProductCard({ product, className, packageInfo }: ProductCardProp
         <div className="flex flex-col gap-1 w-full">
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold">${product.price}</span>
-            {product.originalPrice && (
+            {product.originalPrice != null && Number(product.originalPrice) > Number(product.price) && (
               <span className="text-sm text-muted-foreground line-through">
                 ${product.originalPrice}
               </span>
@@ -90,9 +90,9 @@ export function ProductCard({ product, className, packageInfo }: ProductCardProp
               Package value: <span className="line-through">${packageInfo.packageValue.toFixed(2)}</span>
             </div>
           )}
-          {!packageInfo && product.originalPrice && (
+          {!packageInfo && product.originalPrice != null && Number(product.originalPrice) > Number(product.price) && (
             <div className="text-xs text-muted-foreground">
-              Save ${((product.originalPrice as number) - (product.price as number)).toFixed(2)}
+              Save ${(Number(product.originalPrice) - Number(product.price)).toFixed(2)}
             </div>
           )}
         </div>
