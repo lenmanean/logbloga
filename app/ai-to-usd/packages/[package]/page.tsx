@@ -323,7 +323,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
           <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
               <div className="flex items-center gap-4 md:gap-6 flex-1">
-                <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden border border-border bg-muted">
+                <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden">
                   <Image
                     src={masterBundleImage}
                     alt={masterBundle.title || 'Master Bundle'}
