@@ -53,8 +53,9 @@ Use the **test** endpoint and its signing secret in test mode; use a separate **
 
 **Main checkout** (cart) and **express checkout** (product-page buttons) both use **Stripe Checkout** (redirect to Stripe’s hosted page). There is no Payment Element or inline payment form on the product page.
 
-- **Product page:** A single **Buy Now** button links to `/checkout/express?productId=...&title=...`. Visible to all users; unauthenticated users are sent to sign-in, then resume to express checkout.
-- **Express flow:** `/checkout/express` (auth required) calls `POST /api/checkout/express-session` to create a single-item order and a Stripe Checkout Session, then redirects to `session.url`. Payment happens on Stripe’s page.
+- **Product page:** A **Buy Now** button links to `/checkout/express?productId=...&title=...`. A separate **Apple Pay / Google Pay** (native) button appears when the user is signed in and the browser supports the Payment Request API; when signed out it links to sign-in with redirect back to the product page. Visible to all users; unauthenticated users are sent to sign-in, then resume.
+- **Express flow (Buy Now):** `/checkout/express` (auth required) calls `POST /api/checkout/express-session` to create a single-item order and a Stripe Checkout Session, then redirects to `session.url`. Payment happens on Stripe’s page.
+- **Product-page Apple Pay / Google Pay:** Uses a dedicated **PaymentIntent** (not Checkout Session). The client calls `POST /api/checkout/express-wallet-intent` (auth required) to get `clientSecret` and `orderId`, then mounts Stripe’s Payment Request Button. On success, the webhook `payment_intent.succeeded` completes the order (same order/access/receipt flow as Checkout Session). **Payment is never possible without sign-in:** all payment endpoints (`express-session`, `express-wallet-intent`, `create-checkout-session`, `create-payment-intent`, `orders/create`) require authentication.
 - **Checkout Session** for express is created with **`payment_method_types: ['card', 'link', 'klarna', 'affirm', 'afterpay_clearpay']`**. Stripe’s hosted Checkout page shows those methods that are enabled in your Dashboard and eligible (amount, currency, country). Enable Klarna, Affirm, Afterpay, and Link in **Settings → Payment methods**. **Apple Pay** on the web requires domain verification in the Dashboard.
 
 **Step-by-step (so card, Link, and other methods show on Stripe Checkout):**
@@ -100,7 +101,9 @@ No code change is required for installments; configuration and eligibility are c
 ## Related files
 
 - `app/api/stripe/create-checkout-session/route.ts` — Creates Stripe Checkout session for cart orders (line items from env price IDs, discount, tax)
-- `app/api/checkout/express-session/route.ts` — Creates single-item order and Stripe Checkout session for express (product-page buttons); redirect URL returned to client
+- `app/api/checkout/express-session/route.ts` — Creates single-item order and Stripe Checkout session for express (Buy Now); redirect URL returned to client. Shares order-creation logic with `lib/checkout/express-order.ts`.
+- `app/api/checkout/express-wallet-intent/route.ts` — Creates single-item order and Stripe PaymentIntent for product-page Apple Pay / Google Pay; returns `clientSecret` and `orderId`. Auth required. Reuses pending order for same user+product within 10 minutes when possible.
+- `lib/checkout/express-order.ts` — Shared helper for single-item express order (validation, coupon, totals, `createOrderWithItems`); used by express-session and express-wallet-intent.
 - `app/api/orders/create/route.ts` — Creates order (or returns existing pending order); does **not** clear cart
 - `lib/stripe/webhooks.ts` — Handles Stripe events; clears cart in `handleCheckoutSessionCompleted`
 - `app/api/cron/daily/route.ts` — Single daily cron (Hobby): piracy monitor + abandoned-cart; `vercel.json` has one cron entry for `/api/cron/daily` at 2 AM UTC

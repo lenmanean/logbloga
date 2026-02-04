@@ -9,6 +9,7 @@ import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
 import { ProductPagePaymentButtons } from '@/components/checkout/product-page-payment-buttons';
+import { ProductPageWalletButton } from '@/components/checkout/product-page-wallet-button';
 import {
   Select,
   SelectContent,
@@ -145,8 +146,15 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
             />
           </div>
 
-          {/* Payment method buttons (redirect to Stripe Checkout); visible to all users. */}
+          {/* Row 1: Buy Now (redirect to Stripe Checkout) */}
           <ProductPagePaymentButtons
+            productId={pkg.id}
+            productTitle={pkg.title}
+            productSlug={pkg.slug}
+          />
+
+          {/* Row 2: Native Apple Pay / Google Pay (only when signed in + wallet available) */}
+          <ProductPageWalletButton
             productId={pkg.id}
             productTitle={pkg.title}
             productSlug={pkg.slug}

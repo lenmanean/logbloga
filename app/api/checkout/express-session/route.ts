@@ -6,26 +6,13 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
-import { getProductById, getProductBySlug } from '@/lib/db/products';
-import { hasProductAccess, hasProductAccessBySlug } from '@/lib/db/access';
-import { getUserProfile } from '@/lib/db/profiles';
-import { createOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
-import type { CartItemWithProduct } from '@/lib/db/cart';
-import { validateCoupon } from '@/lib/db/coupons';
-import { calculateOrderTotals } from '@/lib/checkout/calculations';
-import { getStripeClient } from '@/lib/stripe/client';
+import { createExpressOrder, ExpressOrderError } from '@/lib/checkout/express-order';
+import { updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getStripePriceIdBySlug, SLUG_TO_STRIPE_PRICE_ENV } from '@/lib/stripe/prices';
 import { formatAmountForStripe } from '@/lib/stripe/utils';
+import { getStripeClient } from '@/lib/stripe/client';
 import { formatStripeError } from '@/lib/stripe/errors';
 import type Stripe from 'stripe';
-
-const MIN_CHECKOUT_AMOUNT_USD = 0.5;
-
-function parseProductPrice(price: unknown): number {
-  if (typeof price === 'number' && !Number.isNaN(price)) return price;
-  const parsed = parseFloat(String(price ?? 0));
-  return Number.isNaN(parsed) ? 0 : parsed;
-}
 
 export async function POST(request: Request) {
   try {
@@ -42,116 +29,25 @@ export async function POST(request: Request) {
       );
     }
 
-    const quantity = 1;
-
-    const product = await getProductById(productId);
-    if (!product) {
-      return NextResponse.json(
-        { error: 'Product not found or unavailable' },
-        { status: 400 }
-      );
-    }
-
-    const productType = (product as { product_type?: string }).product_type;
-    if (productType === 'package') {
-      const bundle = await getProductBySlug('master-bundle');
-      if (bundle?.id && (await hasProductAccess(user.id, bundle.id))) {
-        return NextResponse.json(
-          { error: 'You already have the Master Bundle. Individual packages are not sold separately to bundle owners.' },
-          { status: 400 }
-        );
-      }
-    }
-    if (productType === 'bundle') {
-      const PACKAGE_SLUGS = ['web-apps', 'social-media', 'agency', 'freelancing'] as const;
-      const allPackagesOwned = await Promise.all(
-        PACKAGE_SLUGS.map((slug) => hasProductAccessBySlug(user.id, slug))
-      );
-      if (allPackagesOwned.every(Boolean)) {
-        return NextResponse.json(
-          { error: 'You already own all four packages. The Master Bundle is not available.' },
-          { status: 400 }
-        );
-      }
-    }
-
-    const profile = await getUserProfile(user.id);
-    const customerName =
-      (profile as { full_name?: string | null } | null)?.full_name ??
-      (user as { user_metadata?: { full_name?: string } }).user_metadata?.full_name ??
-      user.email ??
-      'Customer';
-    const customerEmail = user.email ?? '';
-    if (!customerEmail) {
-      return NextResponse.json(
-        { error: 'Account email is required for express checkout' },
-        { status: 400 }
-      );
-    }
-
-    const unitPrice = parseProductPrice(product.price);
-    const singleItem: CartItemWithProduct = {
-      id: '',
-      user_id: user.id,
-      product_id: product.id,
-      variant_id: null,
-      quantity,
-      created_at: '',
-      updated_at: '',
-      product: {
-        ...product,
-        title: product.title ?? product.name ?? 'Product',
-        price: unitPrice,
-        slug: product.slug ?? null,
-      } as CartItemWithProduct['product'],
-    };
-
-    let coupon: Awaited<ReturnType<typeof validateCoupon>>['coupon'] = null;
-    if (couponCode) {
-      const subtotal = unitPrice * quantity;
-      const validationResult = await validateCoupon(couponCode, subtotal, [product.id]);
-      if (!validationResult.valid) {
-        return NextResponse.json(
-          { error: validationResult.error ?? 'Invalid coupon code' },
-          { status: 400 }
-        );
-      }
-      coupon = validationResult.coupon ?? null;
-    }
-
-    const orderTotals = calculateOrderTotals([singleItem], coupon ?? undefined);
-    if (orderTotals.total < MIN_CHECKOUT_AMOUNT_USD) {
-      return NextResponse.json(
-        { error: 'Order total must be at least $0.50 to complete payment.' },
-        { status: 400 }
-      );
-    }
-
-    const order = await createOrderWithItems(
-      {
+    let order;
+    try {
+      order = await createExpressOrder({
         userId: user.id,
-        customerEmail,
-        customerName,
-        subtotal: orderTotals.subtotal,
-        totalAmount: orderTotals.total,
-        taxAmount: orderTotals.taxAmount,
-        discountAmount: orderTotals.discountAmount,
-        couponId: coupon?.id,
-        currency: 'USD',
-      },
-      [singleItem]
-    );
-
-    if (!order.items || order.items.length === 0) {
-      return NextResponse.json(
-        { error: 'Order has no items' },
-        { status: 500 }
-      );
+        userEmail: user.email ?? null,
+        productId,
+        productSlug: productSlug ?? null,
+        couponCode: couponCode ?? null,
+      });
+    } catch (err) {
+      if (err instanceof ExpressOrderError) {
+        return NextResponse.json({ error: err.message }, { status: err.status });
+      }
+      throw err;
     }
 
     const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = [];
 
-    for (const item of order.items) {
+    for (const item of order.items ?? []) {
       const slug = item.product_sku?.trim() || null;
       if (!slug) {
         return NextResponse.json(
