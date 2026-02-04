@@ -56,7 +56,7 @@ export function PackageHero({ package: pkg, className }: PackageHeroProps) {
               )}
             </div>
             {pkg.originalPrice != null && pkg.originalPrice > pkg.price && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-lg font-medium text-green-600 dark:text-green-400">
                 Save ${(pkg.originalPrice - pkg.price).toLocaleString()} ({(Math.round((1 - pkg.price / pkg.originalPrice) * 100))}% off)
               </p>
             )}

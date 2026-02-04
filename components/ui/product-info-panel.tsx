@@ -77,7 +77,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
           )}
         </div>
         {displayOriginalPrice != null && displayOriginalPrice > displayPrice && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-lg font-medium text-green-600 dark:text-green-400">
             Save ${(displayOriginalPrice - displayPrice).toLocaleString()} 
             ({Math.round((1 - displayPrice / displayOriginalPrice) * 100)}% off)
           </p>
