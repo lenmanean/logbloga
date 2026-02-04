@@ -12,6 +12,20 @@ import {
   mergeCartItems,
 } from '@/lib/cart/utils';
 
+const GUEST_ITEM_ID_PREFIX = 'guest:';
+function guestCartItemId(productId: string, variantId?: string | null): string {
+  return `${GUEST_ITEM_ID_PREFIX}${productId}:${variantId ?? 'none'}`;
+}
+function parseGuestCartItemId(id: string): { productId: string; variantId: string | null } | null {
+  if (!id.startsWith(GUEST_ITEM_ID_PREFIX)) return null;
+  const rest = id.slice(GUEST_ITEM_ID_PREFIX.length);
+  const colon = rest.indexOf(':');
+  if (colon === -1) return null;
+  const productId = rest.slice(0, colon);
+  const variantPart = rest.slice(colon + 1);
+  return { productId, variantId: variantPart === 'none' ? null : variantPart };
+}
+
 export interface CartContextType {
   items: CartItemWithProduct[];
   isLoading: boolean;
@@ -41,17 +55,59 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const total = calculateCartTotal(items);
 
   /**
-   * Fetch cart items from API (authenticated users)
+   * Fetch cart items from API (authenticated) or guest cart + product details (signed out)
    */
   const fetchCartItems = useCallback(async () => {
     if (!isAuthenticated || !user) {
-      // Load guest cart from localStorage
       const guestCart = getGuestCart();
-      
-      // For guest users, we need to fetch product details
-      // For now, set empty items (will be populated when items are added)
-      setItems([]);
-      setIsLoading(false);
+      if (guestCart.items.length === 0) {
+        setItems([]);
+        setIsLoading(false);
+        return;
+      }
+      try {
+        setIsLoading(true);
+        const productIds = [...new Set(guestCart.items.map((i) => i.productId))];
+        const res = await fetch(
+          `/api/products/cart-details?ids=${encodeURIComponent(productIds.join(','))}`
+        );
+        if (!res.ok) {
+          setItems([]);
+          return;
+        }
+        const { products } = await res.json() as { products?: Array<{ id: string; title?: string; slug?: string | null; price: number; package_image?: string | null; images?: unknown }> };
+        const productMap = new Map((products || []).map((p) => [p.id, p]));
+        const built = guestCart.items
+          .map((gi): CartItemWithProduct | null => {
+            const product = productMap.get(gi.productId);
+            if (!product) return null;
+            return {
+              id: guestCartItemId(gi.productId, gi.variantId),
+              user_id: '',
+              product_id: gi.productId,
+              variant_id: gi.variantId ?? null,
+              quantity: gi.quantity,
+              created_at: gi.addedAt,
+              updated_at: gi.addedAt,
+              product: {
+                id: product.id,
+                title: product.title ?? 'Product',
+                name: product.title ?? 'Product',
+                slug: product.slug,
+                price: product.price,
+                package_image: product.package_image,
+                images: product.images,
+              } as CartItemWithProduct['product'],
+            };
+          })
+          .filter((item): item is CartItemWithProduct => item !== null);
+        setItems(built);
+      } catch (error) {
+        console.error('Error loading guest cart:', error);
+        setItems([]);
+      } finally {
+        setIsLoading(false);
+      }
       return;
     }
 
@@ -165,25 +221,22 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
    * Add item to cart
    */
   const addItem = useCallback(async (productId: string, quantity: number, variantId?: string) => {
-    // Optimistic update
+    const variantIdNorm = variantId ?? null;
     const optimisticItem: CartItemWithProduct = {
-      id: `temp-${Date.now()}`,
+      id: isAuthenticated && user ? `temp-${Date.now()}` : guestCartItemId(productId, variantIdNorm),
       user_id: user?.id || '',
       product_id: productId,
-      variant_id: variantId || null,
+      variant_id: variantIdNorm,
       quantity,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     };
 
     setItems(prev => {
-      // Check if item already exists (same product + variant)
       const existingIndex = prev.findIndex(
-        item => item.product_id === productId && item.variant_id === (variantId || null)
+        item => item.product_id === productId && item.variant_id === variantIdNorm
       );
-
       if (existingIndex >= 0) {
-        // Update quantity
         const updated = [...prev];
         updated[existingIndex] = {
           ...updated[existingIndex],
@@ -191,8 +244,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         };
         return updated;
       }
-
-      // Add new item
       return [optimisticItem, ...prev];
     });
 
@@ -222,7 +273,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         // Save to localStorage for guests
         const guestCart = getGuestCart();
         const existingIndex = guestCart.items.findIndex(
-          item => item.productId === productId && item.variantId === variantId
+          item => item.productId === productId && (item.variantId ?? null) === (variantId ?? null)
         );
 
         if (existingIndex >= 0) {
@@ -232,17 +283,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }
 
         saveGuestCart(guestCart);
-        
-        // For guests, we need to fetch product details to display
-        // For now, refresh will be handled when cart page loads
+        await fetchCartItems();
       }
     } catch (error) {
       console.error('Error adding item to cart:', error);
-      // Revert optimistic update
       setItems(prev => prev.filter(item => item.id !== optimisticItem.id));
       throw error;
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, fetchCartItems]);
 
   /**
    * Update cart item quantity
@@ -272,11 +320,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           item.id === cartItemId ? updatedItem : item
         ));
       } else {
-        // Update in localStorage for guests
-        const guestCart = getGuestCart();
-        // For guests, we need to map cartItemId to productId
-        // This is a limitation - guest cart items don't have stable IDs
-        // We'll refresh cart to get updated state
+        const parsed = parseGuestCartItemId(cartItemId);
+        if (parsed) {
+          const guestCart = getGuestCart();
+          const idx = guestCart.items.findIndex(
+            (i) => i.productId === parsed.productId && (i.variantId ?? null) === parsed.variantId
+          );
+          if (idx >= 0) {
+            guestCart.items[idx].quantity = quantity;
+            saveGuestCart(guestCart);
+          }
+        }
         await fetchCartItems();
       }
     } catch (error) {
@@ -309,7 +363,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         const guestCart = getGuestCart();
         if (removedItem) {
           guestCart.items = guestCart.items.filter(
-            item => !(item.productId === removedItem.product_id && item.variantId === removedItem.variant_id)
+            item => !(item.productId === removedItem.product_id && (item.variantId ?? null) === removedItem.variant_id)
           );
           saveGuestCart(guestCart);
         }

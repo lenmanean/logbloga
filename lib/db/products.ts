@@ -176,6 +176,29 @@ export async function getProductById(id: string): Promise<Product | null> {
   return toProduct(data);
 }
 
+const MAX_PRODUCTS_BY_IDS = 20;
+
+/**
+ * Get multiple products by IDs (for cart display, etc.).
+ * Returns only active products. Limited to MAX_PRODUCTS_BY_IDS.
+ */
+export async function getProductsByIds(ids: string[]): Promise<Product[]> {
+  if (ids.length === 0) return [];
+  const uniqueIds = [...new Set(ids)].slice(0, MAX_PRODUCTS_BY_IDS);
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('active', true)
+    .in('id', uniqueIds);
+
+  if (error) {
+    console.error('Error fetching products by IDs:', error);
+    throw new Error(`Failed to fetch products: ${error.message}`);
+  }
+  return (data || []).map(toProduct);
+}
+
 /**
  * Get products by category
  */
