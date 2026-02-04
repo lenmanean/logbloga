@@ -137,6 +137,13 @@ export const reviewCreateSchema = z.object({
   content: z.string().min(1).max(5000).optional().nullable(),
 });
 
+/** Body for POST /api/products/[id]/reviews (submit review). One per user per product. */
+export const productReviewSubmitSchema = z.object({
+  rating: z.number().int().min(1).max(5),
+  reviewer_display_name: z.string().trim().min(2).max(100).optional().nullable(),
+  content: z.string().trim().min(10).max(2000),
+});
+
 export const reviewUpdateSchema = z.object({
   rating: z.number().int().min(1).max(5).optional(),
   title: z.string().min(1).max(200).optional().nullable(),
