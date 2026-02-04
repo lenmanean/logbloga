@@ -81,13 +81,24 @@ export async function POST(request: Request) {
 
         const response = await createChatCompletion(apiMessages);
 
-        const sanitizedResponse = removeControlCharacters(response);
+        let sanitizedResponse = removeControlCharacters(response);
+        const OFFER_MARKER = '[OFFER_CONTACT_FORM]';
+        const showContactForm =
+          sanitizedResponse.endsWith(OFFER_MARKER) ||
+          sanitizedResponse.endsWith(`\n${OFFER_MARKER}`);
+
+        if (showContactForm) {
+          sanitizedResponse = sanitizedResponse
+            .replace(/\n?\[OFFER_CONTACT_FORM\]\s*$/, '')
+            .trim();
+        }
 
         return NextResponse.json({
           message: {
             role: 'assistant' as const,
             content: sanitizedResponse,
           },
+          ...(showContactForm && { showContactForm: true }),
         });
       } catch (error) {
         console.error('Chat API error:', error);

@@ -162,4 +162,33 @@
   .animate-accordion-up {
     animation: accordion-up 0.2s ease-out;
   }
+
+  @keyframes chatGlow {
+    0%,
+    100% {
+      box-shadow: 0 0 12px rgba(59, 130, 246, 0.25);
+    }
+    50% {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+    }
+  }
+
+  .animate-chat-glow {
+    animation: chatGlow 3s ease-in-out infinite;
+  }
+
+  @keyframes chatPanelFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-chat-panel-in {
+    animation: chatPanelFadeIn 0.25s ease-out forwards;
+  }
 }

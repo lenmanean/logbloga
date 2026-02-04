@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ChatMessage } from './chat-message';
+import { ChatContactForm } from './chat-contact-form';
 import { useChat } from '@/hooks/useChat';
 import { cn } from '@/lib/utils';
 
@@ -19,13 +20,13 @@ export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
-  const { messages, isLoading, error, sendMessage, clearMessages } = useChat();
+  const { messages, isLoading, error, showContactForm, dismissContactForm, addAssistantMessage, sendMessage, clearMessages } = useChat();
 
   useEffect(() => {
-    if (isOpen && (messages.length > 0 || isLoading)) {
+    if (isOpen && (messages.length > 0 || isLoading || showContactForm)) {
       scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
     }
-  }, [messages, isLoading, isOpen]);
+  }, [messages, isLoading, isOpen, showContactForm]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -61,7 +62,7 @@ export function ChatWidget() {
         <div
           className={cn(
             "mb-4 flex flex-col overflow-hidden rounded-xl border bg-background shadow-xl",
-            !prefersReducedMotion && "animate-fade-in"
+            !prefersReducedMotion && "animate-chat-panel-in"
           )}
           style={{ width: PANEL_WIDTH, height: PANEL_HEIGHT }}
           role="dialog"
@@ -70,7 +71,7 @@ export function ChatWidget() {
           <div className="flex shrink-0 items-center justify-between border-b px-4 py-3">
             <h2 className="text-base font-semibold">Logbloga Assistant</h2>
             <div className="flex gap-1">
-              {messages.length > 0 && (
+              {messages.length > 1 && (
                 <Button
                   variant="ghost"
                   size="sm"
@@ -94,11 +95,6 @@ export function ChatWidget() {
 
           <ScrollArea className="flex-1 px-4 py-3" style={{ maxHeight: PANEL_HEIGHT - 180 }}>
             <div className="flex flex-col gap-3">
-              {messages.length === 0 && !isLoading && (
-                <p className="text-muted-foreground text-sm">
-                  Ask me anything about our packages, products, or how to get started. I can point you to the right pages and resources.
-                </p>
-              )}
               {messages.map((msg, i) => (
                 <ChatMessage key={i} role={msg.role} content={msg.content} />
               ))}
@@ -113,6 +109,14 @@ export function ChatWidget() {
                 <div className="rounded-lg border border-destructive/50 bg-destructive/10 px-3 py-2 text-destructive text-sm">
                   {error}
                 </div>
+              )}
+              {showContactForm && (
+                <ChatContactForm
+                  onSuccess={() => {
+                    addAssistantMessage("Thanks for reaching out! We'll get back to you within 24-48 hours.");
+                    dismissContactForm();
+                  }}
+                />
               )}
               <div ref={scrollRef} />
             </div>
@@ -146,7 +150,10 @@ export function ChatWidget() {
       <Button
         onClick={() => setIsOpen(!isOpen)}
         size="icon-lg"
-        className="rounded-full shadow-lg"
+        className={cn(
+          "rounded-full shadow-lg",
+          !prefersReducedMotion && "animate-chat-glow"
+        )}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
         aria-expanded={isOpen}
       >
