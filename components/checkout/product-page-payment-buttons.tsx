@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { CreditCard, Smartphone } from 'lucide-react';
+import { ShoppingBag } from 'lucide-react';
 
 interface ProductPagePaymentButtonsProps {
   productId: string;
@@ -11,8 +11,8 @@ interface ProductPagePaymentButtonsProps {
 }
 
 /**
- * Individual payment method buttons for the product page (like Add to Cart).
- * All link to /checkout/express; auth is enforced there. Visible to all users.
+ * Buy Now button for the product page (like Add to Cart). Links to /checkout/express;
+ * auth is enforced there. Visible to all users. Stripe Checkout offers card, Link, Klarna, Affirm, Afterpay, etc.
  */
 export function ProductPagePaymentButtons({
   productId,
@@ -24,32 +24,17 @@ export function ProductPagePaymentButtons({
     (productSlug ? `&slug=${encodeURIComponent(productSlug)}` : '');
 
   return (
-    <>
-      <div className="mb-6">
-        <Button
-          size="lg"
-          className="w-full font-semibold text-base py-6 rounded-md"
-          asChild
-        >
-          <Link href={expressUrl} className="flex items-center justify-center gap-2">
-            <CreditCard className="h-5 w-5" aria-hidden />
-            Pay with card
-          </Link>
-        </Button>
-      </div>
-      <div className="mb-6">
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full font-semibold text-base py-6 rounded-md"
-          asChild
-        >
-          <Link href={expressUrl} className="flex items-center justify-center gap-2">
-            <Smartphone className="h-5 w-5" aria-hidden />
-            Pay with Apple Pay / Google Pay
-          </Link>
-        </Button>
-      </div>
-    </>
+    <div className="mb-6">
+      <Button
+        size="lg"
+        className="w-full font-semibold text-base py-6 rounded-md"
+        asChild
+      >
+        <Link href={expressUrl} className="flex items-center justify-center gap-2">
+          <ShoppingBag className="h-5 w-5" aria-hidden />
+          Buy Now
+        </Link>
+      </Button>
+    </div>
   );
 }

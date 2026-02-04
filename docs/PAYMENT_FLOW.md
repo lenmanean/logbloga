@@ -53,7 +53,7 @@ Use the **test** endpoint and its signing secret in test mode; use a separate **
 
 **Main checkout** (cart) and **express checkout** (product-page buttons) both use **Stripe Checkout** (redirect to Stripe’s hosted page). There is no Payment Element or inline payment form on the product page.
 
-- **Product page:** Individual buttons (“Pay with card”, “Pay with Apple Pay / Google Pay”) link to `/checkout/express?productId=...&title=...`. Visible to all users; unauthenticated users are sent to sign-in, then resume to express checkout.
+- **Product page:** A single **Buy Now** button links to `/checkout/express?productId=...&title=...`. Visible to all users; unauthenticated users are sent to sign-in, then resume to express checkout.
 - **Express flow:** `/checkout/express` (auth required) calls `POST /api/checkout/express-session` to create a single-item order and a Stripe Checkout Session, then redirects to `session.url`. Payment happens on Stripe’s page.
 - **Checkout Session** for express is created with **`payment_method_types: ['card', 'link', 'klarna', 'affirm', 'afterpay_clearpay']`**. Stripe’s hosted Checkout page shows those methods that are enabled in your Dashboard and eligible (amount, currency, country). Enable Klarna, Affirm, Afterpay, and Link in **Settings → Payment methods**. **Apple Pay** on the web requires domain verification in the Dashboard.
 
@@ -72,6 +72,25 @@ After changing payment method settings, no app redeploy is needed; the next redi
 - Stripe shows methods based on **payment method rules** (amount, country, currency). In **Settings → Payment methods**, open each method (e.g. Klarna, Affirm) and click **Customize availability** to see or change rules (e.g. minimum amount, allowed countries). If the customer’s location or order amount doesn’t match, that method won’t appear.
 - **Apple Pay (web)** requires **Configure domains** for your site (e.g. `logbloga.com`); otherwise it won’t show in the browser.
 - **Blank or no methods:** In Stripe Dashboard go to **Settings → Payment methods → Review** (or the payment method troubleshooting tool) to see which methods are available for your currency, amount, and test/live mode. Enable more methods or adjust rules as needed.
+
+### Business name on Checkout (checkout.stripe.com)
+
+The name shown at the top of Stripe Checkout (e.g. “Pay Logbloga”) comes from **Stripe Dashboard**, not from app code. To fix a typo (e.g. “LogBloga” → “Logbloga”):
+
+1. **Stripe Dashboard** → **Settings** (gear) → **Branding** (or **Public details** / **Business settings** depending on Stripe’s menu).
+2. Set **Business name** (or **Account name** / **Display name**) to **Logbloga** and save.
+
+Checkout will then show “Pay Logbloga” and the correct name elsewhere Stripe uses it.
+
+### Klarna, Affirm, Afterpay: installments not working
+
+If customers can select Klarna, Affirm, or Afterpay but are then forced to pay in full or redirected (installments not offered):
+
+- **Eligibility:** Each BNPL method has **minimum and maximum order amounts** and **allowed countries/currencies**. In **Settings → Payment methods**, open **Klarna**, **Affirm**, and **Afterpay** and check **Customize availability** (or equivalent). Ensure your order amounts (e.g. USD) and customer country are within the allowed ranges (e.g. Affirm USD typically has a minimum; Klarna/Afterpay have country and amount rules).
+- **Stripe activation:** Some methods require completing Stripe’s activation or onboarding (e.g. providing business details) before installments are offered. In the Dashboard, confirm each method shows as fully enabled, not “pending” or “limited.”
+- **Testing:** In **Test mode**, use test amounts and supported test countries per [Stripe’s BNPL docs](https://docs.stripe.com/payments/klarna) so you can confirm the full installment flow.
+
+No code change is required for installments; configuration and eligibility are controlled in the Stripe Dashboard.
 
 ## Stripe price IDs (checkout)
 
