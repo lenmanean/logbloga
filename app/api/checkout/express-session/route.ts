@@ -205,9 +205,10 @@ export async function POST(request: Request) {
     }
 
     const stripe = getStripeClient();
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
+    // automatic_payment_methods is supported by Stripe API for Checkout but not in current SDK types
+    const sessionParams = {
+      automatic_payment_methods: { enabled: true },
+      mode: 'payment' as const,
       line_items: lineItems,
       customer_email: order.customer_email || undefined,
       metadata,
@@ -215,7 +216,10 @@ export async function POST(request: Request) {
       cancel_url: cancelUrl,
       allow_promotion_codes: discountAmount <= 0,
       automatic_tax: { enabled: true },
-    });
+    };
+    const session = await stripe.checkout.sessions.create(
+      sessionParams as Parameters<typeof stripe.checkout.sessions.create>[0]
+    );
 
     await updateOrderWithPaymentInfo(order.id, {
       stripeCheckoutSessionId: session.id,
