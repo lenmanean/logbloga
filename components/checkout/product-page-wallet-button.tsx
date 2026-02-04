@@ -9,10 +9,14 @@ import { Button } from '@/components/ui/button';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
 
+const MIN_CHECKOUT_AMOUNT_USD = 0.5;
+
 interface ProductPageWalletButtonProps {
   productId: string;
   productTitle: string;
   productSlug?: string | null;
+  /** Product price in USD (quantity 1). Used to show wallet button without creating an order until user taps. */
+  amountUsd: number;
 }
 
 /**
@@ -24,6 +28,7 @@ export function ProductPageWalletButton({
   productId,
   productTitle,
   productSlug,
+  amountUsd,
 }: ProductPageWalletButtonProps) {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const pathname = usePathname();
@@ -31,41 +36,20 @@ export function ProductPageWalletButton({
   const [walletAvailable, setWalletAvailable] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  // Defer order creation until user taps Apple Pay / Google Pay (avoids pending orders on page load).
   useEffect(() => {
     if (!isAuthenticated || !stripePublishableKey || !containerRef.current) return;
+    if (amountUsd < MIN_CHECKOUT_AMOUNT_USD) return;
 
     let mounted = true;
     let prButton: { mount: (el: HTMLElement) => void; unmount: () => void } | null = null;
 
     const setup = async () => {
       try {
-        const [stripeModule, res] = await Promise.all([
-          loadStripe(stripePublishableKey),
-          fetch('/api/checkout/express-wallet-intent', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              productId,
-              productSlug: productSlug ?? undefined,
-            }),
-          }),
-        ]);
+        const stripeModule = await loadStripe(stripePublishableKey);
+        if (!mounted || !stripeModule) return;
 
-        if (!mounted) return;
-        if (!res.ok) {
-          const data = await res.json().catch(() => ({}));
-          setError(data.error ?? 'Unable to start payment');
-          setWalletAvailable(false);
-          return;
-        }
-
-        const { clientSecret, orderId, totalAmountUsd } = await res.json();
-        if (!stripeModule || !clientSecret || !orderId) {
-          setWalletAvailable(false);
-          return;
-        }
-
-        const amountCents = Math.round((totalAmountUsd ?? 0) * 100);
+        const amountCents = Math.round(amountUsd * 100);
         const paymentRequest = stripeModule.paymentRequest({
           country: 'US',
           currency: 'usd',
@@ -76,11 +60,37 @@ export function ProductPageWalletButton({
           requestPayerEmail: true,
         });
 
-        // Stripe.js Payment Request API: 'paymentmethod' is supported at runtime (Stripe types may be narrow)
         type PaymentMethodEvent = { paymentMethod: { id: string }; complete: (s: string) => void };
         (paymentRequest as { on(event: string, handler: (ev: PaymentMethodEvent) => void): void }).on(
           'paymentmethod',
           async (ev: PaymentMethodEvent) => {
+            // Create order and PaymentIntent only when user commits (taps wallet button).
+            let res: Response;
+            try {
+              res = await fetch('/api/checkout/express-wallet-intent', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  productId,
+                  productSlug: productSlug ?? undefined,
+                }),
+              });
+            } catch {
+              ev.complete('fail');
+              if (mounted) setError('Unable to start payment');
+              return;
+            }
+
+            const data = await res.json().catch(() => ({}));
+            const clientSecret = data.clientSecret;
+            const orderId = data.orderId;
+
+            if (!res.ok || !stripeModule || !clientSecret || !orderId) {
+              ev.complete('fail');
+              if (mounted) setError(data.error ?? 'Unable to start payment');
+              return;
+            }
+
             const { paymentIntent, error: confirmError } = await stripeModule.confirmCardPayment(
               clientSecret,
               { payment_method: ev.paymentMethod.id },
@@ -140,7 +150,7 @@ export function ProductPageWalletButton({
         } catch (_) {}
       }
     };
-  }, [isAuthenticated, productId, productSlug, productTitle]);
+  }, [isAuthenticated, productId, productSlug, productTitle, amountUsd]);
 
   if (authLoading) {
     return null;

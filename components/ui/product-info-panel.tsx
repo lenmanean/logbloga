@@ -150,6 +150,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
             productId={pkg.id}
             productTitle={pkg.title}
             productSlug={pkg.slug}
+            amountUsd={displayPrice}
           />
 
           {/* Add to Cart Button */}
