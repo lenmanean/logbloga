@@ -55,7 +55,7 @@ Use the **test** endpoint and its signing secret in test mode; use a separate **
 
 - **Product page:** Individual buttons (“Pay with card”, “Pay with Apple Pay / Google Pay”) link to `/checkout/express?productId=...&title=...`. Visible to all users; unauthenticated users are sent to sign-in, then resume to express checkout.
 - **Express flow:** `/checkout/express` (auth required) calls `POST /api/checkout/express-session` to create a single-item order and a Stripe Checkout Session, then redirects to `session.url`. Payment happens on Stripe’s page.
-- **Checkout Session** for express is created with **`automatic_payment_methods: { enabled: true }`**, so all payment methods you enable in the Stripe Dashboard can appear (card, Link, Apple Pay, Google Pay, Klarna, Afterpay, Affirm, etc.). Which methods actually show depends on Stripe Dashboard settings and eligibility (amount, currency, country). **Apple Pay** on the web requires domain verification in the Dashboard.
+- **Checkout Session** for express is created with **`payment_method_types: ['card']`** (same as cart checkout). Stripe’s hosted Checkout page shows card; other methods (Link, Apple Pay, etc.) depend on your Stripe Dashboard and the SDK version. **Apple Pay** on the web requires domain verification in the Dashboard.
 
 **Step-by-step (so card, Link, and other methods show on Stripe Checkout):**
 
