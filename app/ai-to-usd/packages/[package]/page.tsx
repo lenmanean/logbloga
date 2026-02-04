@@ -15,7 +15,6 @@ import { hasProductAccess } from '@/lib/db/access';
 import { parsePackageLevels } from '@/lib/db/package-levels';
 import { createClient } from '@/lib/supabase/server';
 import { PackageProduct } from '@/lib/products';
-import { cn } from '@/lib/utils';
 import { ArrowLeft, CheckCircle, Layers, Settings, Lightbulb, ArrowRight } from 'lucide-react';
 
 // Revalidate every 60s so price/caption updates propagate quickly (avoids stale $0.51 or old placeholder text)
@@ -183,7 +182,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
   const masterBundleImage = masterBundle?.package_image || (masterBundle?.images as string[])?.[0] || masterBundle?.image_url || '/package-master.png';
 
   return (
-    <main className={cn('min-h-screen bg-background', isBundle && 'master-bundle-page')}>
+    <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
         {/* Back Button */}
         <div className="mb-6">

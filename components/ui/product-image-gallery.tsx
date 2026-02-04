@@ -30,7 +30,7 @@ export function ProductImageGallery({ images, alt, className }: ProductImageGall
 
   return (
     <div className={cn('relative w-full', className)}>
-      <div className="relative aspect-square w-full max-w-2xl mx-auto bg-background rounded-lg overflow-hidden border border-border">
+      <div className="relative aspect-square w-full max-w-2xl mx-auto rounded-lg overflow-hidden">
         {currentImage ? (
           <Image
             src={currentImage}

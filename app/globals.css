@@ -221,43 +221,4 @@
     animation: sparkle-fade 1.2s ease-out forwards;
     pointer-events: none;
   }
-
-  /* Master Bundle package page: golden theme */
-  .master-bundle-page {
-    background: linear-gradient(
-      180deg,
-      rgb(255 251 235 / 0.6) 0%,
-      rgb(254 243 199 / 0.4) 30%,
-      rgb(253 230 138 / 0.15) 100%
-    );
-  }
-
-  .dark .master-bundle-page {
-    background: linear-gradient(
-      180deg,
-      rgb(69 26 3 / 0.5) 0%,
-      rgb(120 53 15 / 0.3) 30%,
-      rgb(31 19 4 / 0.6) 100%
-    );
-  }
-
-  .master-bundle-page [data-slot="card"] {
-    border-color: rgb(251 191 36 / 0.4);
-    background: rgb(255 251 235 / 0.7);
-    box-shadow: 0 1px 3px rgb(245 158 11 / 0.1);
-  }
-
-  .dark .master-bundle-page [data-slot="card"] {
-    border-color: rgb(217 119 6 / 0.35);
-    background: rgb(69 26 3 / 0.25);
-    box-shadow: 0 1px 3px rgb(180 83 9 / 0.15);
-  }
-
-  .master-bundle-page [data-slot="card-title"] {
-    color: rgb(146 64 14);
-  }
-
-  .dark .master-bundle-page [data-slot="card-title"] {
-    color: rgb(253 230 138);
-  }
 }
