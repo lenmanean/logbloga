@@ -601,6 +601,7 @@ export type Database = {
       orders: {
         Row: {
           billing_address: Json | null
+          coupon_id: string | null
           created_at: string | null
           currency: string | null
           customer_email: string | null
@@ -627,6 +628,7 @@ export type Database = {
         }
         Insert: {
           billing_address?: Json | null
+          coupon_id?: string | null
           created_at?: string | null
           currency?: string | null
           customer_email?: string | null
@@ -653,6 +655,7 @@ export type Database = {
         }
         Update: {
           billing_address?: Json | null
+          coupon_id?: string | null
           created_at?: string | null
           currency?: string | null
           customer_email?: string | null

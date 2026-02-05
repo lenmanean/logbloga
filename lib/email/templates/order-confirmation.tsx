@@ -292,58 +292,6 @@ const secondaryButton = {
   border: '1px solid #e6ebf1',
 };
 
-const doerCouponSection = {
-  backgroundColor: '#f0f9ff',
-  border: '2px solid #0ea5e9',
-  borderRadius: '8px',
-  padding: '20px',
-  margin: '30px 0',
-};
-
-const couponCodeSection = {
-  backgroundColor: '#ffffff',
-  border: '1px solid #0ea5e9',
-  borderRadius: '4px',
-  padding: '16px',
-  margin: '16px 0',
-  textAlign: 'center' as const,
-};
-
-const couponCodeLabel = {
-  fontSize: '14px',
-  color: '#666',
-  margin: '0 0 8px',
-  textAlign: 'center' as const,
-};
-
-const couponCode = {
-  fontSize: '24px',
-  fontFamily: 'monospace',
-  fontWeight: 'bold',
-  color: '#0ea5e9',
-  margin: '0',
-  textAlign: 'center' as const,
-};
-
-const couponInstructions = {
-  fontSize: '14px',
-  color: '#333',
-  lineHeight: '20px',
-  margin: '8px 0',
-};
-
-const couponExpiry = {
-  fontSize: '12px',
-  color: '#666',
-  margin: '12px 0 0',
-  fontStyle: 'italic',
-};
-
-const link = {
-  color: '#0ea5e9',
-  textDecoration: 'underline',
-};
-
 const footer = {
   color: '#666',
   fontSize: '14px',

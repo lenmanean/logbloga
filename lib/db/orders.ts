@@ -278,6 +278,7 @@ export async function createOrderWithItems(
     discount_amount: orderData.discountAmount || 0,
     currency: orderData.currency || 'USD',
     status: 'pending',
+    coupon_id: orderData.couponId ?? null,
   };
 
   // Add billing address if provided

@@ -6,28 +6,40 @@
  */
 
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireAuth } from '@/lib/auth/utils';
+import { withRateLimit } from '@/lib/security/rate-limit-middleware';
+import { uuidSchema } from '@/lib/security/validation';
 import { createExpressOrder, ExpressOrderError } from '@/lib/checkout/express-order';
 import { getMostRecentPendingOrderForUser, getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getStripeClient } from '@/lib/stripe/client';
 import { formatAmountForStripe } from '@/lib/stripe/utils';
 import { formatStripeError } from '@/lib/stripe/errors';
 
+const expressWalletBodySchema = z.object({
+  productId: uuidSchema,
+  productSlug: z.string().max(100).optional(),
+  couponCode: z.string().max(64).optional(),
+});
+
 const PENDING_ORDER_REUSE_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
 
 export async function POST(request: Request) {
+  let user;
   try {
-    const user = await requireAuth();
+    user = await requireAuth();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return withRateLimit(request, { type: 'payment', userId: user.id, skipInDevelopment: false }, async () => {
+  try {
     const body = await request.json().catch(() => ({}));
-    const productId = typeof body?.productId === 'string' ? body.productId.trim() : undefined;
-    const productSlug = typeof body?.productSlug === 'string' ? body.productSlug.trim() : undefined;
-
-    if (!productId) {
-      return NextResponse.json(
-        { error: 'Product ID is required' },
-        { status: 400 }
-      );
+    const parsed = expressWalletBodySchema.safeParse(body);
+    if (!parsed.success) {
+      const message = parsed.error.issues[0]?.message ?? 'Validation error';
+      return NextResponse.json({ error: message }, { status: 400 });
     }
+    const { productId, productSlug, couponCode } = parsed.data;
 
     let order = await getMostRecentPendingOrderForUser(user.id);
     const createdAt = order?.created_at;
@@ -37,7 +49,8 @@ export async function POST(request: Request) {
       order.items[0].product_id === productId &&
       !order.stripe_checkout_session_id && // only reuse orders not tied to Checkout Session
       createdAt != null &&
-      Date.now() - new Date(createdAt).getTime() <= PENDING_ORDER_REUSE_WINDOW_MS;
+      Date.now() - new Date(createdAt).getTime() <= PENDING_ORDER_REUSE_WINDOW_MS &&
+      !couponCode; // do not reuse when a coupon is provided so discount is applied
 
     if (!canReuse) {
       try {
@@ -46,7 +59,7 @@ export async function POST(request: Request) {
           userEmail: user.email ?? null,
           productId,
           productSlug: productSlug ?? null,
-          couponCode: null,
+          couponCode: couponCode ?? null,
         });
       } catch (err) {
         if (err instanceof ExpressOrderError) {
@@ -127,4 +140,5 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+  });
 }

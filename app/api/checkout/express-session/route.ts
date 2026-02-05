@@ -5,7 +5,10 @@
  */
 
 import { NextResponse } from 'next/server';
+import { z } from 'zod';
 import { requireAuth } from '@/lib/auth/utils';
+import { withRateLimit } from '@/lib/security/rate-limit-middleware';
+import { uuidSchema } from '@/lib/security/validation';
 import { createExpressOrder, ExpressOrderError } from '@/lib/checkout/express-order';
 import { updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getStripePriceIdBySlug, SLUG_TO_STRIPE_PRICE_ENV } from '@/lib/stripe/prices';
@@ -14,20 +17,28 @@ import { getStripeClient } from '@/lib/stripe/client';
 import { formatStripeError } from '@/lib/stripe/errors';
 import type Stripe from 'stripe';
 
-export async function POST(request: Request) {
-  try {
-    const user = await requireAuth();
-    const body = await request.json().catch(() => ({}));
-    const productId = typeof body?.productId === 'string' ? body.productId.trim() : undefined;
-    const couponCode = typeof body?.couponCode === 'string' ? body.couponCode.trim() : undefined;
-    const productSlug = typeof body?.productSlug === 'string' ? body.productSlug.trim() : undefined;
+const expressSessionBodySchema = z.object({
+  productId: uuidSchema,
+  productSlug: z.string().max(100).optional(),
+  couponCode: z.string().max(64).optional(),
+});
 
-    if (!productId) {
-      return NextResponse.json(
-        { error: 'Product ID is required' },
-        { status: 400 }
-      );
+export async function POST(request: Request) {
+  let user;
+  try {
+    user = await requireAuth();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return withRateLimit(request, { type: 'payment', userId: user.id, skipInDevelopment: false }, async () => {
+  try {
+    const body = await request.json().catch(() => ({}));
+    const parsed = expressSessionBodySchema.safeParse(body);
+    if (!parsed.success) {
+      const message = parsed.error.issues[0]?.message ?? 'Validation error';
+      return NextResponse.json({ error: message }, { status: 400 });
     }
+    const { productId, productSlug, couponCode } = parsed.data;
 
     let order;
     try {
@@ -132,4 +143,5 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+  });
 }

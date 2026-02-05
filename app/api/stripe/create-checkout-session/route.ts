@@ -5,6 +5,7 @@
 
 import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/auth/utils';
+import { withRateLimit } from '@/lib/security/rate-limit-middleware';
 import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { getStripeClient } from '@/lib/stripe/client';
 import { getStripePriceIdBySlug, SLUG_TO_STRIPE_PRICE_ENV } from '@/lib/stripe/prices';
@@ -16,8 +17,14 @@ import type Stripe from 'stripe';
 const MIN_CHECKOUT_AMOUNT_USD = 0.5;
 
 export async function POST(request: Request) {
+  let user;
   try {
-    const user = await requireAuth();
+    user = await requireAuth();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return withRateLimit(request, { type: 'payment', userId: user.id, skipInDevelopment: false }, async () => {
+  try {
     const body = await request.json();
     const { orderId } = body;
 
@@ -188,5 +195,6 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+  });
 }
 

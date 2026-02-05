@@ -165,7 +165,7 @@ export async function handlePaymentIntentSucceeded(
     console.error(`Error generating DOER coupon for order ${order.id}:`, error);
   }
 
-  // Send payment receipt email (non-blocking)
+  // Send "payment received" receipt email (non-blocking). DOER coupon is sent in a separate email when applicable.
   if (order.user_id) {
     try {
       const orderWithItems = await getOrderWithItems(order.id);

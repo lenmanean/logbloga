@@ -1,13 +1,25 @@
+import { z } from 'zod';
 import { requireAuth } from '@/lib/auth/utils';
+import { withRateLimit } from '@/lib/security/rate-limit-middleware';
 import { getUserCartItems } from '@/lib/db/cart';
 import { createOrderWithItems, getMostRecentPendingOrderForUser, updateOrderTotals } from '@/lib/db/orders';
 import { validateCoupon } from '@/lib/db/coupons';
 import { calculateOrderTotals } from '@/lib/checkout/calculations';
+import { addressSchema } from '@/lib/checkout/validation';
 import { NextResponse } from 'next/server';
-import type { CustomerInfo } from '@/lib/checkout/validation';
+import { getValidationErrorMessage } from '@/lib/checkout/validation';
 import { createNotification } from '@/lib/db/notifications-db';
 import type { CartItemWithProduct } from '@/lib/db/cart';
 import type { OrderWithItems } from '@/lib/types/database';
+
+const ordersCreateBodySchema = z.object({
+  customerInfo: z.object({
+    name: z.string().min(1, 'Full name is required').max(200),
+    email: z.string().email('Please enter a valid email address'),
+    billingAddress: addressSchema.optional(),
+  }),
+  couponCode: z.string().max(64).optional(),
+});
 
 function cartFingerprint(items: { product_id: string; quantity: number }[]): string {
   const normalized = [...items]
@@ -31,18 +43,21 @@ function cartMatchesOrder(cartItems: CartItemWithProduct[], order: OrderWithItem
  * Create a new order from cart items, or return existing pending order if cart matches (resume payment)
  */
 export async function POST(request: Request) {
+  let user;
   try {
-    const user = await requireAuth();
+    user = await requireAuth();
+  } catch {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  return withRateLimit(request, { type: 'payment', userId: user.id, skipInDevelopment: false }, async () => {
+  try {
     const body = await request.json();
-    const { customerInfo, couponCode } = body;
-
-    // Validate customer info
-    if (!customerInfo || !customerInfo.email || !customerInfo.name) {
-      return NextResponse.json(
-        { error: 'Customer information is required' },
-        { status: 400 }
-      );
+    const parsed = ordersCreateBodySchema.safeParse(body);
+    if (!parsed.success) {
+      const message = getValidationErrorMessage(parsed.error);
+      return NextResponse.json({ error: message }, { status: 400 });
     }
+    const { customerInfo, couponCode } = parsed.data;
 
     // Get cart items
     const cartItems = await getUserCartItems(user.id);
@@ -148,7 +163,7 @@ export async function POST(request: Request) {
       console.error('Error creating order confirmation notification:', error);
     }
 
-    // Send order confirmation email (non-blocking)
+    // Send "order placed" confirmation (cart flow, pending). Payment receipt is sent later by the webhook on success.
     try {
       const { sendOrderConfirmation } = await import('@/lib/email/senders');
       if (order.customer_email) {
@@ -194,5 +209,6 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+  });
 }
 
