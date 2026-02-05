@@ -4,7 +4,6 @@
  */
 
 import { monitorPiracyPlatforms, getPendingPiracyReports } from '@/lib/piracy/monitoring';
-import { notifyDailySummary } from '@/lib/piracy/notifications';
 import { createServiceRoleClient } from '@/lib/supabase/server';
 
 export type PiracyMonitorResult = {
@@ -26,7 +25,8 @@ export async function runPiracyMonitor(): Promise<PiracyMonitorResult> {
     .eq('status', 'submitted')
     .gte('submitted_at', `${today}T00:00:00Z`);
 
-  await notifyDailySummary(newReports.length, pendingCount, submittedToday || 0);
+  // Auto-piracy email disabled for now
+  // await notifyDailySummary(newReports.length, pendingCount, submittedToday || 0);
 
   return {
     newReports: newReports.length,

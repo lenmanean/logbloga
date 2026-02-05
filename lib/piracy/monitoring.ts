@@ -158,11 +158,18 @@ export async function searchForPiracy(
   return uniqueResults;
 }
 
+/** Set to true to re-enable piracy monitoring scans */
+const PIRACY_MONITORING_ENABLED = false;
+
 /**
  * Monitor known piracy platforms
  * Uses free APIs and smart rotation to stay within limits
  */
 export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
+  if (!PIRACY_MONITORING_ENABLED) {
+    return [];
+  }
+
   const supabase = await createServiceRoleClient();
   
   // Get all active products
@@ -244,11 +251,11 @@ export async function monitorPiracyPlatforms(): Promise<PiracyReport[]> {
 
         reports.push(newReport);
 
-        // Send email notification (async, don't wait)
-        const { notifyPiracyDetected } = await import('./notifications');
-        notifyPiracyDetected(newReport).catch(err => {
-          console.error('Failed to send notification:', err);
-        });
+        // Auto-piracy email disabled for now
+        // const { notifyPiracyDetected } = await import('./notifications');
+        // notifyPiracyDetected(newReport).catch(err => {
+        //   console.error('Failed to send notification:', err);
+        // });
       }
     }
   }
