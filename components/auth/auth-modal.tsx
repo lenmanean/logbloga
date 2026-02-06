@@ -26,7 +26,7 @@ type Step = 'email' | 'otp';
 export function AuthModal() {
   const { open, closeAuthModal, onAuthSuccess } = useAuthModal();
   const [step, setStep] = useState<Step>('email');
-  const [mode, setMode] = useState<'signin' | 'signup'>('signin');
+  const [mode, setMode] = useState<'signin' | 'signup'>('signup');
   const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -38,6 +38,7 @@ export function AuthModal() {
 
   const resetForm = useCallback(() => {
     setStep('email');
+    setMode('signup');
     setEmail('');
     setFullName('');
     setTermsAccepted(false);
