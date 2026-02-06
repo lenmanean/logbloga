@@ -4,7 +4,7 @@
  */
 
 import type Stripe from 'stripe';
-import { getOrderWithItems, updateOrderWithPaymentInfo } from '@/lib/db/orders';
+import { getOrderWithItems, getOrderById, updateOrderWithPaymentInfo } from '@/lib/db/orders';
 import { removeCartItemsByProductIds } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
@@ -28,11 +28,11 @@ export async function handleCheckoutSessionCompleted(
 
   const paymentIntentId = getPaymentIntentId(session);
 
-  // Update order with payment information
+  // Update order with payment information (use 'completed' so DB constraint is satisfied; some DBs only allow pending|completed|cancelled|refunded)
   await updateOrderWithPaymentInfo(metadata.orderId, {
     stripeCheckoutSessionId: session.id,
     stripePaymentIntentId: paymentIntentId || undefined,
-    status: 'processing', // Will be updated to 'completed' when payment_intent.succeeded fires
+    status: 'completed',
   });
 
   console.log(`Order ${metadata.orderId} updated: checkout session completed, payment intent: ${paymentIntentId}`);
@@ -108,15 +108,21 @@ export async function handleCheckoutSessionCompleted(
 export async function handlePaymentIntentSucceeded(
   paymentIntent: Stripe.PaymentIntent
 ): Promise<void> {
-  // Find order by payment intent ID
-  const order = await findOrderByPaymentIntentId(paymentIntent.id);
-
+  // Find order by payment intent ID, or by metadata.orderId (when payment_intent.succeeded fires before checkout.session.completed)
+  let order = await findOrderByPaymentIntentId(paymentIntent.id);
+  if (!order && paymentIntent.metadata?.orderId) {
+    const orderById = await getOrderById(paymentIntent.metadata.orderId as string);
+    if (orderById) {
+      order = orderById;
+      await updateOrderWithPaymentInfo(order.id, { stripePaymentIntentId: paymentIntent.id });
+    }
+  }
   if (!order) {
     console.error('Payment intent succeeded but no order found for payment intent:', paymentIntent.id);
     return;
   }
 
-  // Update order status to completed
+  // Update order status to completed (idempotent if already completed by checkout.session.completed)
   await updateOrderWithPaymentInfo(order.id, {
     stripePaymentIntentId: paymentIntent.id,
     status: 'completed',
