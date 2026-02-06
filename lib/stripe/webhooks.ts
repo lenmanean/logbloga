@@ -99,6 +99,13 @@ export async function handleCheckoutSessionCompleted(
   } catch (error) {
     console.error('Error sending order confirmation email:', error);
   }
+
+  // Run fulfillment (receipt + DOER coupon) for Checkout flow so it does not depend on payment_intent.succeeded order
+  try {
+    await runFulfillmentForOrder(metadata.orderId);
+  } catch (error) {
+    console.error('Error running fulfillment after checkout.session.completed:', error);
+  }
 }
 
 /**
@@ -159,94 +166,12 @@ export async function handlePaymentIntentSucceeded(
     console.error('Error creating payment notification:', error);
   }
 
-  // Generate DOER coupon for package purchases
-  try {
-    const { generateDoerCouponForOrder } = await import('@/lib/doer/coupon');
-    const couponGenerated = await generateDoerCouponForOrder(order.id);
-    if (couponGenerated) {
-      console.log(`Doer coupon generated for order ${order.id}`);
-    }
-  } catch (error) {
-    // Log error but don't fail the webhook (coupon generation is optional)
-    console.error(`Error generating DOER coupon for order ${order.id}:`, error);
-  }
-
-  // Send "payment received" receipt email (non-blocking). DOER coupon is sent in a separate email when applicable.
-  if (order.user_id) {
+  // Run fulfillment only for Payment Element flow (no Checkout session). Checkout flow fulfillment runs in handleCheckoutSessionCompleted.
+  if (!order.stripe_checkout_session_id) {
     try {
-      const orderWithItems = await getOrderWithItems(order.id);
-      if (orderWithItems && orderWithItems.customer_email) {
-        const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
-        const doerCouponCode = await getDoerCouponForOrder(order.id);
-
-        let totalAmount = parseFloat(String(orderWithItems.total_amount));
-        let subtotal = parseFloat(String(orderWithItems.subtotal));
-        let taxAmount: number | null = orderWithItems.tax_amount ? parseFloat(String(orderWithItems.tax_amount)) : null;
-        let discountAmount: number | null = orderWithItems.discount_amount ? parseFloat(String(orderWithItems.discount_amount)) : null;
-        let currency = orderWithItems.currency || 'USD';
-        let items: Array<{ productName: string; quantity: number; unitPrice: number; total: number }> = (orderWithItems.items || []).map(item => ({
-          productName: item.product_name,
-          quantity: item.quantity,
-          unitPrice: parseFloat(String(item.unit_price)),
-          total: parseFloat(String(item.total_price)),
-        }));
-
-        // When there is a Checkout Session, use Stripe amounts for receipt; otherwise use DB only (PaymentIntent-only flow)
-        const sessionId = order.stripe_checkout_session_id;
-        if (sessionId) {
-          try {
-            const stripeAmounts = await getReceiptAmountsFromStripe(sessionId);
-            if (stripeAmounts) {
-              totalAmount = stripeAmounts.totalAmount;
-              subtotal = stripeAmounts.subtotal;
-              taxAmount = stripeAmounts.taxAmount;
-              discountAmount = stripeAmounts.discountAmount;
-              currency = stripeAmounts.currency;
-              if (stripeAmounts.items.length > 0) {
-                items = stripeAmounts.items;
-              }
-            }
-          } catch {
-            // Fall back to DB totals; already set above
-          }
-        }
-        // When no session: totalAmount, subtotal, taxAmount, discountAmount, items already from DB above
-
-        // DOER coupon in a separate email (not in receipt)
-        if (doerCouponCode?.trim()) {
-          try {
-            await sendDoerCouponEmail(orderWithItems.customer_email, {
-              to: orderWithItems.customer_email,
-              doerCouponCode,
-              doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? undefined,
-              orderNumber: orderWithItems.order_number || undefined,
-            });
-          } catch (doerError) {
-            console.error('Error sending DOER coupon email:', doerError);
-          }
-        }
-
-        const emailData = {
-          order: {
-            id: orderWithItems.id,
-            orderNumber: orderWithItems.order_number || '',
-            status: orderWithItems.status || 'completed',
-            totalAmount,
-            subtotal,
-            taxAmount,
-            discountAmount,
-            currency,
-            createdAt: orderWithItems.created_at || new Date().toISOString(),
-            customerEmail: orderWithItems.customer_email,
-            customerName: orderWithItems.customer_name,
-          },
-          items,
-        };
-
-        await sendPaymentReceipt(order.user_id, emailData);
-      }
+      await runFulfillmentForOrder(order.id);
     } catch (error) {
-      console.error('Error sending payment receipt email:', error);
+      console.error('Error running fulfillment after payment_intent.succeeded:', error);
     }
   }
 }
@@ -306,6 +231,98 @@ export async function handleChargeRefunded(
   });
 
   console.log(`Order ${order.id} updated: charge refunded, status changed to refunded`);
+}
+
+/**
+ * Run fulfillment for a completed order: generate DOER coupon, send receipt email, send DOER coupon email.
+ * Used by both handleCheckoutSessionCompleted (Checkout flow) and handlePaymentIntentSucceeded (Payment Element flow only).
+ */
+async function runFulfillmentForOrder(orderId: string): Promise<void> {
+  const order = await getOrderById(orderId);
+  if (!order || !order.user_id) return;
+
+  const orderWithItems = await getOrderWithItems(orderId);
+  if (!orderWithItems || !orderWithItems.customer_email) return;
+
+  // Generate DOER coupon for package purchases
+  try {
+    const { generateDoerCouponForOrder } = await import('@/lib/doer/coupon');
+    const couponGenerated = await generateDoerCouponForOrder(orderId);
+    if (couponGenerated) {
+      console.log(`Doer coupon generated for order ${orderId}`);
+    }
+  } catch (error) {
+    console.error(`Error generating DOER coupon for order ${orderId}:`, error);
+  }
+
+  let totalAmount = parseFloat(String(orderWithItems.total_amount));
+  let subtotal = parseFloat(String(orderWithItems.subtotal));
+  let taxAmount: number | null = orderWithItems.tax_amount ? parseFloat(String(orderWithItems.tax_amount)) : null;
+  let discountAmount: number | null = orderWithItems.discount_amount ? parseFloat(String(orderWithItems.discount_amount)) : null;
+  let currency = orderWithItems.currency || 'USD';
+  let items: Array<{ productName: string; quantity: number; unitPrice: number; total: number }> = (orderWithItems.items || []).map(item => ({
+    productName: item.product_name,
+    quantity: item.quantity,
+    unitPrice: parseFloat(String(item.unit_price)),
+    total: parseFloat(String(item.total_price)),
+  }));
+
+  const sessionId = order.stripe_checkout_session_id;
+  if (sessionId) {
+    try {
+      const stripeAmounts = await getReceiptAmountsFromStripe(sessionId);
+      if (stripeAmounts) {
+        totalAmount = stripeAmounts.totalAmount;
+        subtotal = stripeAmounts.subtotal;
+        taxAmount = stripeAmounts.taxAmount;
+        discountAmount = stripeAmounts.discountAmount;
+        currency = stripeAmounts.currency;
+        if (stripeAmounts.items.length > 0) {
+          items = stripeAmounts.items;
+        }
+      }
+    } catch {
+      // Fall back to DB totals
+    }
+  }
+
+  const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
+  const doerCouponCode = await getDoerCouponForOrder(orderId);
+  if (doerCouponCode?.trim()) {
+    try {
+      await sendDoerCouponEmail(orderWithItems.customer_email, {
+        to: orderWithItems.customer_email,
+        doerCouponCode,
+        doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? undefined,
+        orderNumber: orderWithItems.order_number || undefined,
+      });
+    } catch (doerError) {
+      console.error('Error sending DOER coupon email:', doerError);
+    }
+  }
+
+  const emailData = {
+    order: {
+      id: orderWithItems.id,
+      orderNumber: orderWithItems.order_number || '',
+      status: orderWithItems.status || 'completed',
+      totalAmount,
+      subtotal,
+      taxAmount,
+      discountAmount,
+      currency,
+      createdAt: orderWithItems.created_at || new Date().toISOString(),
+      customerEmail: orderWithItems.customer_email,
+      customerName: orderWithItems.customer_name,
+    },
+    items,
+  };
+
+  try {
+    await sendPaymentReceipt(order.user_id, emailData);
+  } catch (error) {
+    console.error('Error sending payment receipt email:', error);
+  }
 }
 
 /**

@@ -1259,6 +1259,7 @@ export type Database = {
     }
     Functions: {
       generate_order_number: { Args: never; Returns: string }
+      get_auth_method: { Args: { user_email: string }; Returns: string }
       sync_product_review_aggregates: {
         Args: { p_product_id: string }
         Returns: undefined

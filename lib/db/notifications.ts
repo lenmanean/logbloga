@@ -3,7 +3,7 @@
  * Provides functions to manage user notification preferences
  */
 
-import { createClient } from '@/lib/supabase/server';
+import { createClient, createServiceRoleClient } from '@/lib/supabase/server';
 
 export interface NotificationPreferences {
   id: string;
@@ -53,12 +53,12 @@ export async function getNotificationPreferences(
 }
 
 /**
- * Create default notification preferences
+ * Create default notification preferences (uses service role so webhook/server context can create for any user)
  */
 async function createDefaultPreferences(
   userId: string
 ): Promise<NotificationPreferences> {
-  const supabase = await createClient();
+  const supabase = await createServiceRoleClient();
 
   const { data, error } = await supabase
     .from('notification_preferences' as any)

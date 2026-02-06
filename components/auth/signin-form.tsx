@@ -13,8 +13,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 import { Loader2, Mail } from 'lucide-react';
+
+const emailOnlySchema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+});
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -22,12 +25,16 @@ const signInSchema = z.object({
   rememberMe: z.boolean().optional(),
 });
 
+type EmailOnlyFormData = z.infer<typeof emailOnlySchema>;
 type SignInFormData = z.infer<typeof signInSchema>;
 
-type SignInMethod = 'password' | 'otp';
+type AuthMethod = 'password' | 'otp';
+type SignInPhase = 'email' | 'password' | 'otp';
 
 function SignInFormContent() {
-  const [method, setMethod] = useState<SignInMethod>('password');
+  const [phase, setPhase] = useState<SignInPhase>('email');
+  const [authMethod, setAuthMethod] = useState<AuthMethod | null>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -43,16 +50,46 @@ function SignInFormContent() {
     },
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<SignInFormData>({
+  const emailForm = useForm<EmailOnlyFormData>({
+    resolver: zodResolver(emailOnlySchema),
+  });
+
+  const passwordForm = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
       rememberMe: false,
     },
   });
+
+  const handleContinue = async (data: EmailOnlyFormData) => {
+    setError(null);
+    setIsCheckingAuth(true);
+    try {
+      const res = await fetch('/api/auth/auth-method', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: data.email.trim() }),
+      });
+      const json = await res.json().catch(() => ({}));
+      const method: AuthMethod = json.authMethod === 'password' ? 'password' : 'otp';
+      setAuthMethod(method);
+
+      if (method === 'password') {
+        passwordForm.setValue('email', data.email);
+        passwordForm.setValue('password', '');
+        setPhase('password');
+      } else {
+        otp.setEmail(data.email);
+        otp.setError(null);
+        await otp.sendOtp();
+        setPhase('otp');
+      }
+    } catch {
+      setError('Could not determine sign-in method. Try again.');
+    } finally {
+      setIsCheckingAuth(false);
+    }
+  };
 
   const onSubmitPassword = async (data: SignInFormData) => {
     setIsLoading(true);
@@ -86,66 +123,38 @@ function SignInFormContent() {
     await otp.verifyOtp(otp.otpCode);
   };
 
+  const backToEmail = () => {
+    setPhase('email');
+    setAuthMethod(null);
+    setError(null);
+    otp.setError(null);
+    otp.setStep('email');
+    otp.setOtpCode('');
+  };
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>
-          {method === 'password'
-            ? 'Enter your credentials to access your account'
-            : 'Use a one-time code sent to your email'}
+          {phase === 'email'
+            ? 'Enter your email to continue'
+            : phase === 'password'
+              ? 'Enter your password'
+              : otp.step === 'otp'
+                ? `Enter the 8-digit code sent to ${otp.email}`
+                : 'Use a one-time code sent to your email'}
         </CardDescription>
       </CardHeader>
 
-      <div className="px-6 pb-2">
-        <div className="flex rounded-lg border border-border p-1" role="tablist" aria-label="Sign in method">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={method === 'password'}
-            onClick={() => {
-              setMethod('password');
-              setError(null);
-              otp.setError(null);
-            }}
-            className={cn(
-              'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-              method === 'password'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            Password
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={method === 'otp'}
-            onClick={() => {
-              setMethod('otp');
-              setError(null);
-              otp.setError(null);
-            }}
-            className={cn(
-              'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-              method === 'otp'
-                ? 'bg-background text-foreground shadow'
-                : 'text-muted-foreground hover:text-foreground'
-            )}
-          >
-            One-time code
-          </button>
-        </div>
-      </div>
-
       {(error || otp.error) && (
         <div className="mx-6 mb-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
-          {method === 'password' ? error : otp.error}
+          {phase === 'otp' ? otp.error : error}
         </div>
       )}
 
-      {method === 'password' ? (
-        <form onSubmit={handleSubmit(onSubmitPassword)}>
+      {phase === 'email' && (
+        <form onSubmit={emailForm.handleSubmit(handleContinue)}>
           <CardContent className="space-y-4 pt-0">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -153,16 +162,50 @@ function SignInFormContent() {
                 id="email"
                 type="email"
                 placeholder="you@example.com"
-                {...register('email')}
-                aria-invalid={errors.email ? 'true' : 'false'}
+                {...emailForm.register('email')}
+                aria-invalid={emailForm.formState.errors.email ? 'true' : 'false'}
               />
-              {errors.email && (
+              {emailForm.formState.errors.email && (
                 <p className="text-sm text-destructive" role="alert">
-                  {errors.email.message}
+                  {emailForm.formState.errors.email.message}
                 </p>
               )}
             </div>
+          </CardContent>
+          <CardFooter className="flex flex-col space-y-4">
+            <Button type="submit" className="w-full" disabled={isCheckingAuth}>
+              {isCheckingAuth ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Continue...
+                </>
+              ) : (
+                'Continue'
+              )}
+            </Button>
+            <p className="text-center text-sm text-muted-foreground">
+              Don&apos;t have an account?{' '}
+              <Link href="/auth/signup" className="text-primary hover:underline">
+                Sign up
+              </Link>
+            </p>
+          </CardFooter>
+        </form>
+      )}
 
+      {phase === 'password' && (
+        <form onSubmit={passwordForm.handleSubmit(onSubmitPassword)}>
+          <CardContent className="space-y-4 pt-0">
+            <div className="space-y-2">
+              <Label htmlFor="password-email">Email</Label>
+              <Input
+                id="password-email"
+                type="email"
+                value={passwordForm.watch('email')}
+                readOnly
+                className="bg-muted"
+              />
+            </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password">Password</Label>
@@ -177,22 +220,21 @@ function SignInFormContent() {
                 id="password"
                 type="password"
                 placeholder="••••••••"
-                {...register('password')}
-                aria-invalid={errors.password ? 'true' : 'false'}
+                {...passwordForm.register('password')}
+                aria-invalid={passwordForm.formState.errors.password ? 'true' : 'false'}
               />
-              {errors.password && (
+              {passwordForm.formState.errors.password && (
                 <p className="text-sm text-destructive" role="alert">
-                  {errors.password.message}
+                  {passwordForm.formState.errors.password.message}
                 </p>
               )}
             </div>
-
             <div className="flex items-center space-x-2">
               <input
                 id="rememberMe"
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300"
-                {...register('rememberMe')}
+                {...passwordForm.register('rememberMe')}
               />
               <Label htmlFor="rememberMe" className="text-sm font-normal">
                 Remember me
@@ -210,6 +252,13 @@ function SignInFormContent() {
                 'Sign In'
               )}
             </Button>
+            <button
+              type="button"
+              onClick={backToEmail}
+              className="text-sm text-muted-foreground hover:text-foreground underline"
+            >
+              Use a different email
+            </button>
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
               <Link href="/auth/signup" className="text-primary hover:underline">
@@ -218,7 +267,9 @@ function SignInFormContent() {
             </p>
           </CardFooter>
         </form>
-      ) : otp.step === 'email' ? (
+      )}
+
+      {phase === 'otp' && otp.step === 'email' && (
         <form onSubmit={handleSendOtp}>
           <CardContent className="space-y-4 pt-0">
             <div className="space-y-2">
@@ -226,11 +277,9 @@ function SignInFormContent() {
               <Input
                 id="otp-email"
                 type="email"
-                placeholder="you@example.com"
                 value={otp.email}
-                onChange={(e) => otp.setEmail(e.target.value)}
-                autoComplete="email"
-                required
+                readOnly
+                className="bg-muted"
               />
             </div>
           </CardContent>
@@ -248,6 +297,13 @@ function SignInFormContent() {
                 </>
               )}
             </Button>
+            <button
+              type="button"
+              onClick={backToEmail}
+              className="text-sm text-muted-foreground hover:text-foreground underline"
+            >
+              Use a different email
+            </button>
             <p className="text-center text-sm text-muted-foreground">
               Don&apos;t have an account?{' '}
               <Link href="/auth/signup" className="text-primary hover:underline">
@@ -256,7 +312,9 @@ function SignInFormContent() {
             </p>
           </CardFooter>
         </form>
-      ) : (
+      )}
+
+      {phase === 'otp' && otp.step === 'otp' && (
         <form onSubmit={handleVerifyOtp}>
           <CardContent className="space-y-4 pt-0">
             <div className="space-y-2">
@@ -269,12 +327,12 @@ function SignInFormContent() {
                 maxLength={8}
                 value={otp.otpCode}
                 onChange={(e) => otp.setOtpCode(e.target.value.replace(/\D/g, ''))}
-                placeholder="000000"
+                placeholder="00000000"
                 className="text-center text-2xl font-mono tracking-widest h-14"
                 disabled={otp.isVerifying}
               />
               <p className="text-xs text-muted-foreground">
-                Enter the 6- or 8-digit code sent to {otp.email}
+                Enter the 8-digit code sent to {otp.email}
               </p>
             </div>
           </CardContent>
@@ -282,7 +340,7 @@ function SignInFormContent() {
             <Button
               type="submit"
               className="w-full"
-              disabled={otp.isVerifying || (otp.otpCode.length !== 6 && otp.otpCode.length !== 8)}
+              disabled={otp.isVerifying || otp.otpCode.length !== 8}
             >
               {otp.isVerifying ? (
                 <>
@@ -308,11 +366,7 @@ function SignInFormContent() {
             </Button>
             <button
               type="button"
-              onClick={() => {
-                otp.setStep('email');
-                otp.setError(null);
-                otp.setOtpCode('');
-              }}
+              onClick={backToEmail}
               className="text-sm text-muted-foreground hover:text-foreground underline"
             >
               Use a different email
@@ -337,7 +391,7 @@ export function SignInForm() {
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
-            <CardDescription>Enter your credentials to access your account</CardDescription>
+            <CardDescription>Enter your email to continue</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

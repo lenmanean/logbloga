@@ -127,8 +127,8 @@ export function useOtpAuth({ onSuccess }: UseOtpAuthOptions): UseOtpAuthReturn {
   const verifyOtp = useCallback(
     async (code: string) => {
       const digits = code.replace(/\D/g, '');
-      if (digits.length !== 6 && digits.length !== 8) {
-        setError('Please enter a valid 6- or 8-digit code');
+      if (digits.length !== 8) {
+        setError('Please enter the 8-digit code');
         return;
       }
       const trimmedEmail = email.trim();
