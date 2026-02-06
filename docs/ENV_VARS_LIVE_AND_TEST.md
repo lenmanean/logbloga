@@ -24,8 +24,8 @@ Use **live** Stripe keys and **live** price IDs in production. Use **test** keys
 | **App** | | | |
 | `NEXT_PUBLIC_APP_URL` | `https://logbloga.com` (or your live URL) | `http://localhost:3000` or preview URL | Redirects, links, webhook base URL |
 | **Email (Resend)** | | | |
-| `RESEND_API_KEY` | Set | Set (can be same) | Sending emails (receipts, etc.) |
-| `RESEND_FROM_EMAIL` | e.g. `mail@logbloga.com` | Optional (defaults used) | From address for emails |
+| `RESEND_API_KEY` | Set | Set (can be same) | App emails via API; same key is used for auth emails when Supabase custom SMTP is configured with Resend (see [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)). |
+| `RESEND_FROM_EMAIL` | e.g. `mail@logbloga.com` | Optional (defaults used) | From address for app emails; use the same domain/address in Supabase SMTP sender for auth emails. |
 | **Payment / coupons** | | | |
 | `LOGBLOGA_PARTNER_SECRET` | Set | Set (or omit; coupon step may be skipped) | Doer coupon on package purchase |
 | **Cron (production)** | | | |

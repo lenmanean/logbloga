@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
     const supabase = await createClient();
 
-    // Update email (Supabase will send verification email)
+    // Update email (Supabase sends verification email; when custom SMTP e.g. Resend is configured, delivery is via that provider)
     const { error: updateError } = await supabase.auth.updateUser({
       email: newEmail,
     });

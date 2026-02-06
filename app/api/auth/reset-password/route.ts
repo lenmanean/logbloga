@@ -5,6 +5,7 @@ import { getAppUrl } from '@/lib/utils';
 /**
  * Server-side password reset handler
  * POST /api/auth/reset-password
+ * Supabase sends the reset email; when custom SMTP is configured (e.g. Resend), delivery is via that provider.
  */
 export async function POST(request: Request) {
   try {

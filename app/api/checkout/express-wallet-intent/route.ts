@@ -113,7 +113,7 @@ export async function POST(request: Request) {
         orderId: order.id,
         userId: order.user_id ?? '',
       },
-      receipt_email: order.customer_email ?? undefined,
+      receipt_email: undefined,
     });
 
     await updateOrderWithPaymentInfo(order.id, {

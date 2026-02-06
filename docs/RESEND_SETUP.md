@@ -69,6 +69,14 @@ Set both in Vercel for the environment(s) where you send real payment receipts (
 3. Check the customer inbox for the **Payment Receipt** email; it should contain the Doer coupon code and redemption instructions.
 4. If it’s in spam, double-check domain verification (SPF/DKIM) and “from” address.
 
+## Auth emails (password reset, email change, signup)
+
+Auth emails (password reset, email change, signup verification, invite) are **sent by Supabase** but can be **delivered via Resend** so all email goes through one provider. To do that, configure Supabase to use Resend as **Custom SMTP** in the Supabase Dashboard (Project Settings → Authentication → SMTP). Supabase continues to generate the emails (tokens, links, OTP); only the delivery transport switches to Resend.
+
+- **Step-by-step:** [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)
+- **All email flows:** [EMAIL_FLOWS.md](EMAIL_FLOWS.md)
+- **Supabase SMTP docs:** [Supabase Auth – Custom SMTP](https://supabase.com/docs/guides/auth/auth-smtp)
+
 ## Related
 
 - **Doer coupon flow**: Generated after payment in the Stripe webhook; stored on the order and included in the payment receipt email. See `lib/doer/coupon.ts` and `lib/email/templates/payment-receipt.tsx`.
