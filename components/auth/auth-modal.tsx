@@ -332,13 +332,6 @@ export function AuthModal() {
                 )}
               </Button>
               <div className="flex flex-col gap-2 items-center w-full text-sm text-muted-foreground">
-                <button
-                  type="button"
-                  onClick={signInBackToCredentials}
-                  className="hover:text-foreground underline"
-                >
-                  Use a different email
-                </button>
                 <p className="text-center">
                   Don&apos;t have an account?{' '}
                   <button
