@@ -9,6 +9,7 @@ import { removeCartItemsByProductIds } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
+import type { OrderEmailData } from '@/lib/email/types';
 import { sendPaymentReceipt } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
 
@@ -255,7 +256,7 @@ async function runFulfillmentForOrder(orderId: string): Promise<void> {
     }
   }
 
-  const emailData = {
+  const emailData: OrderEmailData = {
     order: {
       id: orderWithItems.id,
       orderNumber: orderWithItems.order_number || '',
