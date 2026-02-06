@@ -183,10 +183,11 @@ export async function markDoerCouponAsUsed(
 }
 
 /**
- * Get DOER coupon code for an order
+ * Get DOER coupon code for an order.
+ * Uses service role so it works in webhook context (no user session) and sees updates from storeDoerCoupon.
  */
 export async function getDoerCouponForOrder(orderId: string): Promise<string | null> {
-  const supabase = await createClient();
+  const supabase = await createServiceRoleClient();
 
   const { data, error } = await (supabase as any)
     .from('orders')
