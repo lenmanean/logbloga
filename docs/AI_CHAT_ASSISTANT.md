@@ -38,7 +38,7 @@ Configured in `lib/security/rate-limit.ts`:
 
 - Type: `chat`
 - Default: 30 requests per minute per identifier (IP or user ID)
-- Uses Upstash Redis when configured; otherwise rate limiting is skipped
+- Application-layer rate limit is no-op; auth rate limits are enforced by Supabase (Dashboard > Authentication > Rate Limits)
 
 ## Architecture
 

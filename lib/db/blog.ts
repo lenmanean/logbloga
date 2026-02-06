@@ -84,7 +84,7 @@ export async function getAllBlogPosts(options?: BlogQueryOptions): Promise<BlogP
 
 /**
  * Get all blog posts with caching
- * Uses Redis cache with 15-minute TTL
+ * Uses in-memory cache with 15-minute TTL
  */
 export async function getAllBlogPostsCached(options?: BlogQueryOptions): Promise<BlogPost[]> {
   const { getCachedOrFetch } = await import('@/lib/cache/redis-cache');
@@ -130,7 +130,7 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> 
 
 /**
  * Get a single blog post by slug with caching
- * Uses Redis cache with 15-minute TTL
+ * Uses in-memory cache with 15-minute TTL
  */
 export async function getBlogPostBySlugCached(slug: string): Promise<BlogPost | null> {
   const { getCachedOrFetch } = await import('@/lib/cache/redis-cache');

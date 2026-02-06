@@ -1,9 +1,9 @@
 # Blog Cache Invalidation
 
 ## Overview
-When blog posts are created, updated, or deleted in the database, you need to invalidate both Redis cache and Next.js ISR cache.
+When blog posts are created, updated, or deleted in the database, you need to invalidate both app cache and Next.js ISR cache.
 
-## Redis Cache Invalidation
+## App Cache Invalidation
 
 Use the functions in `lib/db/blog/cache.ts`:
 
@@ -45,7 +45,7 @@ curl -X POST https://your-domain.com/api/revalidate \
 
 When a blog post is published or updated:
 
-1. Invalidate Redis cache
+1. Invalidate app cache
 2. Revalidate Next.js ISR paths
 
 ```typescript

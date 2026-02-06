@@ -40,5 +40,3 @@ process.env.STRIPE_SECRET_KEY = 'sk_test_123';
 process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY = 'pk_test_123';
 process.env.STRIPE_WEBHOOK_SECRET = 'whsec_test_123';
 process.env.RESEND_API_KEY = 're_test_123';
-process.env.UPSTASH_REDIS_REST_URL = 'https://test.upstash.io';
-process.env.UPSTASH_REDIS_REST_TOKEN = 'test-token';

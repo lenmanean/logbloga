@@ -77,7 +77,7 @@ export async function getAllProducts(options?: ProductQueryOptions): Promise<Pro
 
 /**
  * Get all active products with caching
- * Uses Redis cache with 10-minute TTL
+ * Uses in-memory cache with 10-minute TTL
  */
 export async function getAllProductsCached(options?: ProductQueryOptions): Promise<Product[]> {
   const { getCachedOrFetch } = await import('@/lib/cache/redis-cache');
@@ -131,7 +131,7 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
 
 /**
  * Get a single product by slug with caching
- * Uses Redis cache with 15-minute TTL
+ * Uses in-memory cache with 15-minute TTL
  */
 export async function getProductBySlugCached(slug: string): Promise<Product | null> {
   const { getCachedOrFetch } = await import('@/lib/cache/redis-cache');

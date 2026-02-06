@@ -28,16 +28,13 @@ const envSchema = z.object({
   // Email (Resend)
   RESEND_API_KEY: z.string().min(1, 'Resend API key is required').optional(),
   RESEND_FROM_EMAIL: z.string().email('Invalid Resend from email').optional(),
+  RESEND_FROM_NAME: z.string().min(1, 'Resend from name must be non-empty if set').optional(),
 
   // Doer Partner API (for 6-month Pro coupon on AI-to-USD package purchases)
   LOGBLOGA_PARTNER_SECRET: z.string().min(1, 'Doer partner secret is required for coupon generation').optional(),
   
   // App
   NEXT_PUBLIC_APP_URL: z.string().url('Invalid app URL').optional(),
-  
-  // Upstash Redis (optional - only required if using rate limiting)
-  UPSTASH_REDIS_REST_URL: z.string().url('Invalid Upstash Redis URL').optional(),
-  UPSTASH_REDIS_REST_TOKEN: z.string().min(1, 'Upstash Redis token is required').optional(),
   
   // Security
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
@@ -118,12 +115,10 @@ export function getEnvVar<T extends keyof z.infer<typeof envSchema>>(
  * Check if required environment variables for specific features are present
  */
 export function checkFeatureRequirements(): {
-  rateLimiting: boolean;
   email: boolean;
   analytics: boolean;
 } {
   return {
-    rateLimiting: hasEnv('UPSTASH_REDIS_REST_URL') && hasEnv('UPSTASH_REDIS_REST_TOKEN'),
     email: hasEnv('RESEND_API_KEY'),
     analytics: hasEnv('NEXT_PUBLIC_ANALYTICS_ID'),
   };

@@ -26,7 +26,7 @@ This document provides internal documentation for security measures implemented 
 - Payment endpoints: 10 requests/minute per user
 - Admin endpoints: 500 requests/minute per user
 
-**Storage**: Upstash Redis (sliding window algorithm)
+**Auth rate limits**: Configured in Supabase Dashboard (Authentication > Rate Limits). Application-layer rate limit helpers are no-op; auth (sign-in, sign-up, OTP) is limited by Supabase.
 
 **Implementation**:
 ```typescript
@@ -214,8 +214,6 @@ export const POST = withSecureApi(
 
 ### Optional
 
-- `UPSTASH_REDIS_REST_URL`: Upstash Redis URL (for rate limiting)
-- `UPSTASH_REDIS_REST_TOKEN`: Upstash Redis token (for rate limiting)
 - `RESEND_API_KEY`: Resend API key (for emails)
 - `RESEND_FROM_EMAIL`: Resend from email address
 - `NEXT_PUBLIC_APP_URL`: Application URL

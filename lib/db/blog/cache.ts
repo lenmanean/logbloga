@@ -9,8 +9,8 @@
 import { deleteCached, deleteByTag } from '@/lib/cache/redis-cache';
 
 /**
- * Invalidate Redis cache for a specific blog post by slug
- * This only invalidates Redis cache - Next.js ISR revalidation should be done separately
+ * Invalidate cache for a specific blog post by slug
+ * This only invalidates app cache - Next.js ISR revalidation should be done separately
  */
 export async function invalidateBlogPostCache(slug: string): Promise<void> {
   try {
@@ -26,9 +26,9 @@ export async function invalidateBlogPostCache(slug: string): Promise<void> {
 }
 
 /**
- * Invalidate all blog post Redis caches
+ * Invalidate all blog post caches
  * Use when multiple posts are updated or when you want to clear all blog caches
- * This only invalidates Redis cache - Next.js ISR revalidation should be done separately
+ * This only invalidates app cache - Next.js ISR revalidation should be done separately
  */
 export async function invalidateAllBlogCache(): Promise<void> {
   try {

@@ -27,12 +27,6 @@ export async function withRateLimit<T>(
     return handler();
   }
 
-  // Check if Upstash Redis is configured
-  if (!process.env.UPSTASH_REDIS_REST_URL || !process.env.UPSTASH_REDIS_REST_TOKEN) {
-    console.warn('Rate limiting disabled: Upstash Redis not configured');
-    return handler();
-  }
-
   try {
     const identifier = getRateLimitIdentifier(request, options.userId);
     const result = await checkRateLimit(options.type, identifier);

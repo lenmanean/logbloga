@@ -26,13 +26,12 @@ Use **live** Stripe keys and **live** price IDs in production. Use **test** keys
 | **Email (Resend)** | | | |
 | `RESEND_API_KEY` | Set | Set (can be same) | App emails via API; same key is used for auth emails when Supabase custom SMTP is configured with Resend (see [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)). |
 | `RESEND_FROM_EMAIL` | e.g. `mail@logbloga.com` | Optional (defaults used) | From address for app emails; use the same domain/address in Supabase SMTP sender for auth emails. |
+| `RESEND_FROM_NAME` | e.g. `Logbloga` | Optional (default: `Logbloga`) | Sender display name shown in inbox (e.g. "Logbloga" instead of "mail"). |
 | **Payment / coupons** | | | |
 | `LOGBLOGA_PARTNER_SECRET` | Set | Set (or omit; coupon step may be skipped) | Doer coupon on package purchase |
 | **Cron (production)** | | | |
 | `CRON_SECRET` | Set in Vercel | Not needed locally | Secures `/api/cron/daily`, abandoned cart, piracy |
 | **Optional / feature-specific** | | | |
-| `UPSTASH_REDIS_REST_URL` | If using rate limit | If using rate limit | Rate limiting |
-| `UPSTASH_REDIS_REST_TOKEN` | If using rate limit | If using rate limit | Rate limiting |
 | `OPENAI_API_KEY` | If using AI chat | If using AI chat | Chat assistant |
 | `REVALIDATE_SECRET` | If using revalidate script | Optional | On-demand revalidation |
 | `CONTACT_NOTIFICATION_EMAIL` | Optional | Optional | Contact form notifications |

@@ -169,7 +169,7 @@ npx tsx scripts/revalidate-package-pages.ts
 ```
 
 **What it does:**
-- Clears Redis cache for products tag
+- Clears cache for products tag
 - Revalidates all package pages (`/ai-to-usd/packages/*`)
 - Revalidates packages listing page (`/ai-to-usd`)
 - Revalidates products cache tag

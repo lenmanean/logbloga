@@ -119,13 +119,13 @@ async function revalidatePackagePages() {
   console.log('🚀 Starting package page revalidation...\n');
 
   try {
-    // Clear Redis cache for products
+    // Clear cache for products
     console.log('Clearing product cache...');
     try {
       await deleteByTag('products');
-      console.log('  ✓ Cleared Redis cache for products tag\n');
+      console.log('  ✓ Cleared cache for products tag\n');
     } catch (error) {
-      console.log('  ⚠️  Could not clear Redis cache (may not be configured):', error);
+      console.log('  ⚠️  Could not clear cache:', error);
       console.log('  ℹ️  Cache will expire naturally within TTL\n');
     }
 

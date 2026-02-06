@@ -34,11 +34,7 @@ We will acknowledge receipt of your report within 48 hours and provide an update
 
 ### API Security
 
-- **Rate Limiting**: Implemented using Upstash Redis
-  - Public endpoints: 100 requests/minute
-  - Authenticated endpoints: 200 requests/minute
-  - Auth endpoints: 5 requests/minute
-  - Payment endpoints: 10 requests/minute
+- **Rate Limiting**: Auth rate limits (sign-in, sign-up, OTP) enforced by Supabase (Dashboard > Authentication > Rate Limits). Application-layer rate limit helpers are no-op.
 - **CSRF Protection**: Double Submit Cookie pattern for state-changing requests
 - **Input Validation**: All API endpoints validate input using Zod schemas
 - **XSS Prevention**: Input sanitization and HTML escaping

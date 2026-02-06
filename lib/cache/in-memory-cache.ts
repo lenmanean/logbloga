@@ -1,6 +1,6 @@
 /**
  * In-memory cache implementation
- * Fallback for development or when Redis is not available
+ * In-memory cache used for products, blog, and API response caching
  */
 
 import type { CacheEntry, CacheOptions } from './types';
