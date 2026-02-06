@@ -127,3 +127,5 @@ Ensure these are set in production:
 | `CRON_SECRET` | Optional: secures cron routes; set in Vercel. **No leading or trailing whitespace** (Vercel rejects it for HTTP headers). Windows-safe: `node -e "require('fs').writeFileSync('.cron-secret-tmp', require('crypto').randomBytes(32).toString('hex'), 'utf8')"` then `cmd /c "vercel env add CRON_SECRET production < .cron-secret-tmp"`; delete `.cron-secret-tmp` after. |
 
 Use **live** keys and the **live** webhook secret in production. Test with **test** keys and Stripe CLI (`stripe listen --forward-to .../api/stripe/webhook`) locally.
+
+See **`docs/PAYMENT_TEST_CHECKLIST.md`** for a step-by-step payment test checklist.
