@@ -1,5 +1,6 @@
 'use client';
 
+import { useCart } from '@/contexts/cart-context';
 import { useCheckout } from '@/contexts/checkout-context';
 import { DiscountCodeForm } from '@/components/checkout/discount-code-form';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -7,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import { ShoppingBag } from 'lucide-react';
 
 export function CheckoutSummary() {
+  const { items } = useCart();
   const { orderTotals, appliedCoupon } = useCheckout();
 
   return (
@@ -18,6 +20,24 @@ export function CheckoutSummary() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Cart line items (no images) */}
+        <div className="space-y-2">
+          {items.map((item) => {
+            const productTitle = item.product?.title ?? 'Product';
+            const unitPrice = typeof item.product?.price === 'number'
+              ? item.product.price
+              : parseFloat(String(item.product?.price ?? 0));
+            return (
+              <div key={item.id} className="flex justify-between text-sm">
+                <span className="text-foreground">{productTitle}</span>
+                <span className="font-medium">${unitPrice.toLocaleString()}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        <Separator />
+
         {/* Discount Code Form */}
         <DiscountCodeForm />
 

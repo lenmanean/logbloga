@@ -17,7 +17,7 @@ const ordersCreateBodySchema = z.object({
     name: z.string().min(1, 'Full name is required').max(200),
     email: z.string().email('Please enter a valid email address'),
     billingAddress: addressSchema.optional(),
-  }),
+  }).optional(),
   couponCode: z.string().max(64).optional(),
 });
 
@@ -58,6 +58,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
     const { customerInfo, couponCode } = parsed.data;
+
+    // Derive customer email/name from auth when not provided (e.g. Stripe Checkout flow)
+    const customerEmail = customerInfo?.email ?? user.email ?? '';
+    const customerName = customerInfo?.name ?? (user.user_metadata?.full_name as string | undefined) ?? user.email ?? 'Customer';
+    const billingAddress = customerInfo?.billingAddress ?? null;
+
+    if (!customerEmail) {
+      return NextResponse.json(
+        { error: 'Customer email is required. Please ensure your account has an email.' },
+        { status: 400 }
+      );
+    }
 
     // Get cart items
     const cartItems = await getUserCartItems(user.id);
@@ -134,15 +146,15 @@ export async function POST(request: Request) {
     const order = await createOrderWithItems(
       {
         userId: user.id,
-        customerEmail: customerInfo.email,
-        customerName: customerInfo.name,
+        customerEmail,
+        customerName,
         subtotal: orderTotals.subtotal,
         totalAmount: orderTotals.total,
         taxAmount: orderTotals.taxAmount,
         discountAmount: orderTotals.discountAmount,
         couponId: coupon?.id,
         currency: 'USD',
-        billingAddress: customerInfo.billingAddress || null,
+        billingAddress,
       },
       cartItems
     );
