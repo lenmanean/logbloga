@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { Copy, Check, ExternalLink, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -71,14 +72,18 @@ export function DoerCouponDisplay({
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Gift className="h-5 w-5 text-primary" />
+            <span className="relative inline-flex h-6 w-6 flex-shrink-0 items-center justify-center">
+              <Image
+                src="/usedoer_favicon.png"
+                alt="DOER logo"
+                width={24}
+                height={24}
+                className="h-6 w-6 object-contain"
+                unoptimized
+              />
+            </span>
             <CardTitle>6 Months Free DOER Pro</CardTitle>
           </div>
-          {isValid && (
-            <Badge variant="outline" className="bg-green-500/10 text-green-700 dark:text-green-400">
-              Active
-            </Badge>
-          )}
           {used && (
             <Badge variant="outline" className="bg-gray-500/10 text-gray-700 dark:text-gray-400">
               Used
@@ -171,7 +176,6 @@ export function DoerCouponDisplay({
             <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
               <li>Visit usedoer.com/checkout?plan=pro&cycle=monthly (or cycle=annual)</li>
               <li>Enter your code in the Promo Code field at checkout</li>
-              <li>Enter your payment method (required for post-trial billing)</li>
               <li>Enjoy 6 months free Pro subscription</li>
             </ol>
           </div>

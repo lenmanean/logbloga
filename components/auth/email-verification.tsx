@@ -191,7 +191,7 @@ export function EmailVerification() {
           We've sent a verification code to {email || user?.email || 'your email'}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-4 pb-6">
         {error && (
           <div className="flex items-center gap-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive">
             <AlertCircle className="h-4 w-4" />
@@ -236,7 +236,7 @@ export function EmailVerification() {
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex flex-col space-y-2">
+      <CardFooter className="flex flex-col gap-4 pt-4">
         <Button
           className="w-full"
           onClick={handleVerifyOtp}

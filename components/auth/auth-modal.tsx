@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useAuthModal } from '@/contexts/auth-modal-context';
 import { useAuth } from '@/hooks/useAuth';
 import { useOtpAuth } from '@/hooks/useOtpAuth';
+import { useDebounce } from '@/hooks/useDebounce';
 import { getAuthErrorMessage } from '@/lib/auth/errors';
 import {
   Dialog,
@@ -20,22 +21,27 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Mail, Loader2, AlertCircle } from 'lucide-react';
 
-type AuthMethod = 'password' | 'otp';
-type SignInPhase = 'email' | 'password' | 'otp';
+type AuthMethod = 'password' | 'otp' | 'not_found';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function AuthModal() {
   const { open, closeAuthModal, onAuthSuccess } = useAuthModal();
   const [mode, setMode] = useState<'signin' | 'signup'>('signup');
   const [fullName, setFullName] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [signInPhase, setSignInPhase] = useState<SignInPhase>('email');
+
+  const [signInEmail, setSignInEmail] = useState('');
+  const [signInPassword, setSignInPassword] = useState('');
   const [authMethod, setAuthMethod] = useState<AuthMethod | null>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
-  const [password, setPassword] = useState('');
   const [isPasswordLoading, setIsPasswordLoading] = useState(false);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [signInError, setSignInError] = useState<string | null>(null);
 
   const { signIn } = useAuth();
+
+  const debouncedSignInEmail = useDebounce(signInEmail.trim(), 450);
+  const signInEmailLooksValid = EMAIL_REGEX.test(debouncedSignInEmail);
 
   const otp = useOtpAuth({
     onSuccess: () => {
@@ -49,10 +55,10 @@ export function AuthModal() {
     setMode('signup');
     setFullName('');
     setTermsAccepted(false);
-    setSignInPhase('email');
+    setSignInEmail('');
+    setSignInPassword('');
     setAuthMethod(null);
-    setPassword('');
-    setPasswordError(null);
+    setSignInError(null);
     otp.reset();
   }, [otp.reset]);
 
@@ -66,43 +72,85 @@ export function AuthModal() {
     [closeAuthModal, resetForm]
   );
 
-  const isEmailStep = mode === 'signup' ? otp.step === 'email' : signInPhase === 'email';
-  const isSignInPasswordStep = mode === 'signin' && signInPhase === 'password';
-  const isSignInOtpStep = mode === 'signin' && signInPhase === 'otp';
   const isOtpVerifyStep = otp.step === 'otp';
+  const isSignUpEmailStep = mode === 'signup' && otp.step === 'email';
+  const isSignInCredentialsStep = mode === 'signin' && !isOtpVerifyStep;
 
-  const handleContinueSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    otp.setError(null);
-    const email = otp.email.trim();
-    if (!email) {
-      otp.setError('Please enter your email address');
+  // Debounced auth-method lookup for sign-in
+  useEffect(() => {
+    if (mode !== 'signin' || !signInEmailLooksValid || debouncedSignInEmail === '') {
+      setAuthMethod(null);
+      setIsCheckingAuth(false);
       return;
     }
-    setIsCheckingAuth(true);
-    try {
-      const res = await fetch('/api/auth/auth-method', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      });
-      const json = await res.json().catch(() => ({}));
-      const method: AuthMethod = json.authMethod === 'password' ? 'password' : 'otp';
-      setAuthMethod(method);
 
-      if (method === 'password') {
-        setSignInPhase('password');
-        setPassword('');
-        setPasswordError(null);
-      } else {
-        await otp.sendOtp();
-        setSignInPhase('otp');
-      }
-    } catch {
-      otp.setError('Could not determine sign-in method. Try again.');
-    } finally {
-      setIsCheckingAuth(false);
+    let cancelled = false;
+    setIsCheckingAuth(true);
+
+    fetch('/api/auth/auth-method', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: debouncedSignInEmail }),
+    })
+      .then((res) => res.json().catch(() => ({})))
+      .then((json) => {
+        if (cancelled) return;
+        const method: AuthMethod =
+          json.authMethod === 'password' ? 'password' : json.authMethod === 'not_found' ? 'not_found' : 'otp';
+        setAuthMethod(method);
+      })
+      .catch(() => {
+        if (!cancelled) setAuthMethod('otp');
+      })
+      .finally(() => {
+        if (!cancelled) setIsCheckingAuth(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [mode, debouncedSignInEmail, signInEmailLooksValid]);
+
+  const handleSignInSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSignInError(null);
+    otp.setError(null);
+
+    if (authMethod === 'not_found') {
+      setSignInError('No account found with that email. Please sign up or check the address.');
+      return;
     }
+
+    if (authMethod === 'otp') {
+      otp.setEmail(signInEmail.trim());
+      await otp.sendOtp();
+      return;
+    }
+
+    if (authMethod === 'password') {
+      if (!signInPassword.trim()) {
+        setSignInError('Please enter your password');
+        return;
+      }
+      setIsPasswordLoading(true);
+      try {
+        const { error } = await signIn(signInEmail.trim(), signInPassword);
+        if (error) {
+          setSignInError(getAuthErrorMessage(error));
+          setIsPasswordLoading(false);
+          return;
+        }
+        onAuthSuccess();
+        closeAuthModal();
+      } catch {
+        setSignInError('An unexpected error occurred.');
+      } finally {
+        setIsPasswordLoading(false);
+      }
+      return;
+    }
+
+    setSignInError('Please wait while we look up your account.');
   };
 
   const handleSendOtp = async (e: React.FormEvent) => {
@@ -117,51 +165,23 @@ export function AuthModal() {
     );
   };
 
-  const handleSignInWithPassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPasswordError(null);
-    const email = otp.email.trim();
-    if (!email || !password) {
-      setPasswordError('Please enter your password');
-      return;
-    }
-    setIsPasswordLoading(true);
-    try {
-      const { error } = await signIn(email, password);
-      if (error) {
-        setPasswordError(getAuthErrorMessage(error));
-        setIsPasswordLoading(false);
-        return;
-      }
-      onAuthSuccess();
-      closeAuthModal();
-    } catch {
-      setPasswordError('An unexpected error occurred.');
-    } finally {
-      setIsPasswordLoading(false);
-    }
-  };
-
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     await otp.verifyOtp(otp.otpCode);
   };
 
-  const signInBackToEmail = () => {
-    setSignInPhase('email');
-    setAuthMethod(null);
-    otp.setError(null);
+  const signInBackToCredentials = () => {
     otp.setStep('email');
+    otp.setError(null);
     otp.setOtpCode('');
+    setSignInError(null);
   };
 
   const getTitle = () => {
     if (mode === 'signup') {
       return otp.step === 'email' ? 'Create account' : 'Enter verification code';
     }
-    if (signInPhase === 'email') return 'Sign in';
-    if (signInPhase === 'password') return 'Sign in';
-    return 'Enter verification code';
+    return isOtpVerifyStep ? 'Enter verification code' : 'Sign in';
   };
 
   const getDescription = () => {
@@ -170,10 +190,18 @@ export function AuthModal() {
         ? 'Enter your email to get a one-time code'
         : `We sent a code to ${otp.email}. Enter it below.`;
     }
-    if (signInPhase === 'email') return 'Enter your email to continue';
-    if (signInPhase === 'password') return 'Enter your password';
-    return `We sent a code to ${otp.email}. Enter it below.`;
+    return isOtpVerifyStep
+      ? `We sent a code to ${otp.email}. Enter it below.`
+      : 'Enter your email and password, or we\'ll send you a one-time code.';
   };
+
+  const displayError = signInError || otp.error;
+  const primarySignInLabel = authMethod === 'otp' ? 'Send one-time code' : 'Sign in';
+  const primarySignInDisabled =
+    isCheckingAuth ||
+    isPasswordLoading ||
+    !signInEmailLooksValid ||
+    (authMethod === 'password' && !signInPassword.trim());
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -185,91 +213,130 @@ export function AuthModal() {
           'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
         )}
-        aria-describedby={isEmailStep ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}
+        aria-describedby={isSignUpEmailStep || isSignInCredentialsStep ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}
       >
         <DialogHeader>
           <DialogTitle id="auth-modal-title">{getTitle()}</DialogTitle>
-          <DialogDescription id={isEmailStep ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}>
+          <DialogDescription id={isSignUpEmailStep || isSignInCredentialsStep ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}>
             {getDescription()}
           </DialogDescription>
         </DialogHeader>
 
-        {(otp.error || passwordError) && (
+        {displayError && (
           <div
             className="flex items-center gap-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive"
             role="alert"
           >
             <AlertCircle className="h-4 w-4 shrink-0" />
-            <p>{mode === 'signin' && signInPhase === 'password' ? passwordError : otp.error}</p>
+            <p>{displayError}</p>
           </div>
         )}
 
-        {mode === 'signin' && signInPhase === 'password' && (
-          <form onSubmit={handleSignInWithPassword} className="space-y-4">
+        {mode === 'signin' && isSignInCredentialsStep && (
+          <form onSubmit={handleSignInSubmit} className="space-y-4 pb-4">
             <div className="space-y-2">
-              <Label htmlFor="auth-modal-email-readonly">Email</Label>
-              <Input
-                id="auth-modal-email-readonly"
-                type="email"
-                value={otp.email}
-                readOnly
-                className="bg-muted"
-              />
+              <Label htmlFor="auth-modal-email">Email</Label>
+              <div className="relative">
+                <Input
+                  id="auth-modal-email"
+                  type="email"
+                  placeholder="you@example.com"
+                  value={signInEmail}
+                  onChange={(e) => {
+                    setSignInEmail(e.target.value);
+                    setSignInError(null);
+                  }}
+                  className="w-full pr-10"
+                  autoComplete="email"
+                  required
+                />
+                {isCheckingAuth && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  </span>
+                )}
+              </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="auth-modal-password">Password</Label>
-              <Input
-                id="auth-modal-password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoComplete="current-password"
-              />
+
+            <div
+              className={cn(
+                'grid transition-all duration-200 ease-out',
+                authMethod === 'otp' ? 'grid-rows-[0fr] opacity-0' : 'grid-rows-[1fr] opacity-100'
+              )}
+            >
+              <div className="overflow-hidden">
+                <div className="space-y-2">
+                  <Label htmlFor="auth-modal-password">Password</Label>
+                  <Input
+                    id="auth-modal-password"
+                    type="password"
+                    placeholder="••••••••"
+                    value={signInPassword}
+                    onChange={(e) => setSignInPassword(e.target.value)}
+                    autoComplete="current-password"
+                    className={cn('w-full', authMethod === 'otp' && 'pointer-events-none')}
+                  />
+                </div>
+              </div>
             </div>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="submit" className="w-full" disabled={isPasswordLoading}>
+
+            <DialogFooter className="flex flex-col gap-4 pt-4">
+              <Button type="submit" className="w-full" disabled={primarySignInDisabled}>
                 {isPasswordLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
                     Signing in…
                   </>
+                ) : isCheckingAuth ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Checking…
+                  </>
                 ) : (
-                  'Sign in'
+                  primarySignInLabel
                 )}
               </Button>
               <button
                 type="button"
-                onClick={signInBackToEmail}
+                onClick={signInBackToCredentials}
                 className="text-sm text-muted-foreground hover:text-foreground underline"
               >
                 Use a different email
               </button>
+              <p className="text-center text-sm text-muted-foreground">
+                Don&apos;t have an account?{' '}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMode('signup');
+                    setAuthMethod(null);
+                    setSignInError(null);
+                    otp.setError(null);
+                  }}
+                  className="text-primary hover:underline"
+                >
+                  Sign up
+                </button>
+              </p>
             </DialogFooter>
           </form>
         )}
 
-        {isEmailStep && !isSignInPasswordStep && (
-          <form
-            onSubmit={mode === 'signin' ? handleContinueSignIn : handleSendOtp}
-            className="space-y-4"
-          >
+        {isSignUpEmailStep && (
+          <form onSubmit={handleSendOtp} className="space-y-4 pb-4">
             <div className="flex rounded-lg border border-border p-1">
               <button
                 type="button"
                 onClick={() => {
                   setMode('signin');
-                  setSignInPhase('email');
                   setAuthMethod(null);
                   otp.setError(null);
                 }}
                 className={cn(
                   'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                  mode === 'signin'
-                    ? 'bg-background text-foreground shadow'
-                    : 'text-muted-foreground hover:text-foreground'
+                  'text-muted-foreground hover:text-foreground'
                 )}
-                aria-pressed={mode === 'signin'}
+                aria-pressed={false}
               >
                 Sign in
               </button>
@@ -277,41 +344,36 @@ export function AuthModal() {
                 type="button"
                 onClick={() => {
                   setMode('signup');
-                  setSignInPhase('email');
                   setAuthMethod(null);
                   otp.setError(null);
                 }}
                 className={cn(
                   'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-                  mode === 'signup'
-                    ? 'bg-background text-foreground shadow'
-                    : 'text-muted-foreground hover:text-foreground'
+                  'bg-background text-foreground shadow'
                 )}
-                aria-pressed={mode === 'signup'}
+                aria-pressed={true}
               >
                 Sign up
               </button>
             </div>
 
-            {mode === 'signup' && (
-              <div className="space-y-2">
-                <Label htmlFor="auth-modal-fullname">Full name (optional)</Label>
-                <Input
-                  id="auth-modal-fullname"
-                  type="text"
-                  placeholder="Jane Doe"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full"
-                  autoComplete="name"
-                />
-              </div>
-            )}
+            <div className="space-y-2">
+              <Label htmlFor="auth-modal-fullname">Full name (optional)</Label>
+              <Input
+                id="auth-modal-fullname"
+                type="text"
+                placeholder="Jane Doe"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full"
+                autoComplete="name"
+              />
+            </div>
 
             <div className="space-y-2">
-              <Label htmlFor="auth-modal-email">Email</Label>
+              <Label htmlFor="auth-modal-signup-email">Email</Label>
               <Input
-                id="auth-modal-email"
+                id="auth-modal-signup-email"
                 type="email"
                 placeholder="you@example.com"
                 value={otp.email}
@@ -322,44 +384,33 @@ export function AuthModal() {
               />
             </div>
 
-            {mode === 'signup' && (
-              <label
-                htmlFor="auth-modal-terms"
-                className="grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
-              >
-                <input
-                  id="auth-modal-terms"
-                  type="checkbox"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
-                  aria-describedby="auth-modal-terms-desc"
-                />
-                <span id="auth-modal-terms-desc" className="text-sm text-foreground block min-w-0">
-                  I agree to the{' '}
-                  <Link href="/legal/terms" className="text-primary hover:underline whitespace-nowrap" target="_blank" rel="noopener noreferrer">
-                    Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link href="/legal/privacy" className="text-primary hover:underline whitespace-nowrap" target="_blank" rel="noopener noreferrer">
-                    Privacy Policy
-                  </Link>
-                </span>
-              </label>
-            )}
+            <label
+              htmlFor="auth-modal-terms"
+              className="grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
+            >
+              <input
+                id="auth-modal-terms"
+                type="checkbox"
+                checked={termsAccepted}
+                onChange={(e) => setTermsAccepted(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
+                aria-describedby="auth-modal-terms-desc"
+              />
+              <span id="auth-modal-terms-desc" className="text-sm text-foreground block min-w-0">
+                I agree to the{' '}
+                <Link href="/legal/terms" className="text-primary hover:underline whitespace-nowrap" target="_blank" rel="noopener noreferrer">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link href="/legal/privacy" className="text-primary hover:underline whitespace-nowrap" target="_blank" rel="noopener noreferrer">
+                  Privacy Policy
+                </Link>
+              </span>
+            </label>
 
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={mode === 'signin' ? isCheckingAuth : otp.isSending}
-              >
-                {mode === 'signin' && isCheckingAuth ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Continue…
-                  </>
-                ) : mode === 'signup' && otp.isSending ? (
+            <DialogFooter className="flex flex-col gap-4 pt-4">
+              <Button type="submit" className="w-full" disabled={otp.isSending}>
+                {otp.isSending ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
                     Sending code…
@@ -367,7 +418,7 @@ export function AuthModal() {
                 ) : (
                   <>
                     <Mail className="h-4 w-4" />
-                    {mode === 'signin' ? 'Continue' : 'Continue with email'}
+                    Continue with email
                   </>
                 )}
               </Button>
@@ -375,8 +426,8 @@ export function AuthModal() {
           </form>
         )}
 
-        {((mode === 'signup' && isOtpVerifyStep) || (isSignInOtpStep && isOtpVerifyStep)) && (
-          <form onSubmit={handleVerifyOtp} className="space-y-4">
+        {isOtpVerifyStep && (
+          <form onSubmit={handleVerifyOtp} className="space-y-4 pb-4">
             <div className="space-y-2">
               <Label htmlFor="auth-modal-otp">Verification code</Label>
               <Input
@@ -397,7 +448,7 @@ export function AuthModal() {
               </p>
             </div>
 
-            <DialogFooter className="flex-col gap-2 sm:flex-col">
+            <DialogFooter className="flex flex-col gap-4 pt-4">
               <Button
                 type="submit"
                 className="w-full"
@@ -423,44 +474,7 @@ export function AuthModal() {
               </Button>
               <button
                 type="button"
-                onClick={mode === 'signin' ? signInBackToEmail : () => { otp.setStep('email'); otp.setError(null); otp.setOtpCode(''); }}
-                className="text-sm text-muted-foreground hover:text-foreground underline"
-              >
-                Use a different email
-              </button>
-            </DialogFooter>
-          </form>
-        )}
-
-        {mode === 'signin' && signInPhase === 'otp' && otp.step === 'email' && (
-          <form onSubmit={handleSendOtp} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="auth-modal-otp-email">Email</Label>
-              <Input
-                id="auth-modal-otp-email"
-                type="email"
-                value={otp.email}
-                readOnly
-                className="bg-muted"
-              />
-            </div>
-            <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="submit" className="w-full" disabled={otp.isSending}>
-                {otp.isSending ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Sending code…
-                  </>
-                ) : (
-                  <>
-                    <Mail className="h-4 w-4" />
-                    Send one-time code
-                  </>
-                )}
-              </Button>
-              <button
-                type="button"
-                onClick={signInBackToEmail}
+                onClick={mode === 'signin' ? signInBackToCredentials : () => { otp.setStep('email'); otp.setError(null); otp.setOtpCode(''); }}
                 className="text-sm text-muted-foreground hover:text-foreground underline"
               >
                 Use a different email

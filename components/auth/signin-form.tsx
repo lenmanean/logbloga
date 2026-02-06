@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -8,31 +8,29 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
 import { useOtpAuth } from '@/hooks/useOtpAuth';
+import { useDebounce } from '@/hooks/useDebounce';
 import { getAuthErrorMessage } from '@/lib/auth/errors';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Mail } from 'lucide-react';
-
-const emailOnlySchema = z.object({
-  email: z.string().email('Please enter a valid email address'),
-});
+import { cn } from '@/lib/utils';
 
 const signInSchema = z.object({
   email: z.string().email('Please enter a valid email address'),
-  password: z.string().min(1, 'Password is required'),
+  password: z.string().optional(),
   rememberMe: z.boolean().optional(),
 });
 
-type EmailOnlyFormData = z.infer<typeof emailOnlySchema>;
 type SignInFormData = z.infer<typeof signInSchema>;
 
-type AuthMethod = 'password' | 'otp';
-type SignInPhase = 'email' | 'password' | 'otp';
+type AuthMethod = 'password' | 'otp' | 'not_found';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function SignInFormContent() {
-  const [phase, setPhase] = useState<SignInPhase>('email');
+  const [email, setEmail] = useState('');
   const [authMethod, setAuthMethod] = useState<AuthMethod | null>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +41,9 @@ function SignInFormContent() {
 
   const redirectTo = searchParams.get('redirect') || '/account/profile';
 
+  const debouncedEmail = useDebounce(email.trim(), 450);
+  const emailLooksValid = EMAIL_REGEX.test(debouncedEmail);
+
   const otp = useOtpAuth({
     onSuccess: () => {
       router.push(redirectTo);
@@ -50,72 +51,101 @@ function SignInFormContent() {
     },
   });
 
-  const emailForm = useForm<EmailOnlyFormData>({
-    resolver: zodResolver(emailOnlySchema),
-  });
-
-  const passwordForm = useForm<SignInFormData>({
+  const form = useForm<SignInFormData>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
+      email: '',
+      password: '',
       rememberMe: false,
     },
   });
 
-  const handleContinue = async (data: EmailOnlyFormData) => {
-    setError(null);
-    setIsCheckingAuth(true);
-    try {
-      const res = await fetch('/api/auth/auth-method', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: data.email.trim() }),
-      });
-      const json = await res.json().catch(() => ({}));
-      const method: AuthMethod = json.authMethod === 'password' ? 'password' : 'otp';
-      setAuthMethod(method);
-
-      if (method === 'password') {
-        passwordForm.setValue('email', data.email);
-        passwordForm.setValue('password', '');
-        setPhase('password');
-      } else {
-        otp.setEmail(data.email);
-        otp.setError(null);
-        await otp.sendOtp();
-        setPhase('otp');
-      }
-    } catch {
-      setError('Could not determine sign-in method. Try again.');
-    } finally {
+  // Debounced auth-method lookup
+  useEffect(() => {
+    if (!emailLooksValid || debouncedEmail === '') {
+      setAuthMethod(null);
       setIsCheckingAuth(false);
+      return;
     }
-  };
 
-  const onSubmitPassword = async (data: SignInFormData) => {
-    setIsLoading(true);
+    let cancelled = false;
+    setIsCheckingAuth(true);
+
+    fetch('/api/auth/auth-method', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: debouncedEmail }),
+    })
+      .then((res) => res.json().catch(() => ({})))
+      .then((json) => {
+        if (cancelled) return;
+        const method: AuthMethod =
+          json.authMethod === 'password' ? 'password' : json.authMethod === 'not_found' ? 'not_found' : 'otp';
+        setAuthMethod(method);
+      })
+      .catch(() => {
+        if (!cancelled) setAuthMethod('otp');
+      })
+      .finally(() => {
+        if (!cancelled) setIsCheckingAuth(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [debouncedEmail, emailLooksValid]);
+
+  // Sync form email with local email state
+  useEffect(() => {
+    const sub = form.watch((value, { name }) => {
+      if (name === 'email' && value.email !== undefined) {
+        setEmail(value.email);
+      }
+    });
+    return () => sub.unsubscribe();
+  }, [form]);
+
+  const isOtpCodeStep = otp.step === 'otp';
+
+  const handleSubmitCredentials = async (data: SignInFormData) => {
     setError(null);
 
-    try {
-      const { error: signInError } = await signIn(data.email, data.password);
+    if (authMethod === 'not_found') {
+      setError('No account found with that email. Please sign up or check the address.');
+      return;
+    }
 
-      if (signInError) {
-        setError(getAuthErrorMessage(signInError));
-        setIsLoading(false);
+    if (authMethod === 'otp') {
+      otp.setEmail(data.email);
+      otp.setError(null);
+      await otp.sendOtp();
+      return;
+    }
+
+    if (authMethod === 'password') {
+      const pwd = data.password?.trim();
+      if (!pwd) {
+        form.setError('password', { message: 'Password is required' });
         return;
       }
-
-      router.push(redirectTo);
-      router.refresh();
-    } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-      setIsLoading(false);
+      setIsLoading(true);
+      try {
+        const { error: signInError } = await signIn(data.email, pwd);
+        if (signInError) {
+          setError(getAuthErrorMessage(signInError));
+          setIsLoading(false);
+          return;
+        }
+        router.push(redirectTo);
+        router.refresh();
+      } catch (err) {
+        setError('An unexpected error occurred. Please try again.');
+        setIsLoading(false);
+      }
+      return;
     }
-  };
 
-  const handleSendOtp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    otp.setError(null);
-    await otp.sendOtp();
+    setError('Please wait while we look up your account.');
   };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
@@ -123,200 +153,36 @@ function SignInFormContent() {
     await otp.verifyOtp(otp.otpCode);
   };
 
-  const backToEmail = () => {
-    setPhase('email');
-    setAuthMethod(null);
-    setError(null);
-    otp.setError(null);
+  const backToCredentials = () => {
     otp.setStep('email');
+    otp.setError(null);
     otp.setOtpCode('');
+    setError(null);
   };
 
-  return (
-    <Card className="w-full max-w-md">
-      <CardHeader>
-        <CardTitle>Sign In</CardTitle>
-        <CardDescription>
-          {phase === 'email'
-            ? 'Enter your email to continue'
-            : phase === 'password'
-              ? 'Enter your password'
-              : otp.step === 'otp'
-                ? `Enter the 8-digit code sent to ${otp.email}`
-                : 'Use a one-time code sent to your email'}
-        </CardDescription>
-      </CardHeader>
+  const primaryButtonLabel =
+    authMethod === 'otp' ? 'Send one-time code' : 'Sign in';
+  const primaryDisabled =
+    isCheckingAuth || isLoading || !emailLooksValid || (authMethod === 'password' && !form.watch('password'));
 
-      {(error || otp.error) && (
-        <div className="mx-6 mb-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
-          {phase === 'otp' ? otp.error : error}
-        </div>
-      )}
+  if (isOtpCodeStep) {
+    return (
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle>Sign In</CardTitle>
+          <CardDescription>
+            Enter the 8-digit code sent to {otp.email}
+          </CardDescription>
+        </CardHeader>
 
-      {phase === 'email' && (
-        <form onSubmit={emailForm.handleSubmit(handleContinue)}>
-          <CardContent className="space-y-4 pt-0">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                {...emailForm.register('email')}
-                aria-invalid={emailForm.formState.errors.email ? 'true' : 'false'}
-              />
-              {emailForm.formState.errors.email && (
-                <p className="text-sm text-destructive" role="alert">
-                  {emailForm.formState.errors.email.message}
-                </p>
-              )}
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isCheckingAuth}>
-              {isCheckingAuth ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Continue...
-                </>
-              ) : (
-                'Continue'
-              )}
-            </Button>
-            <p className="text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{' '}
-              <Link href="/auth/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
-      )}
+        {otp.error && (
+          <div className="mx-6 mb-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
+            {otp.error}
+          </div>
+        )}
 
-      {phase === 'password' && (
-        <form onSubmit={passwordForm.handleSubmit(onSubmitPassword)}>
-          <CardContent className="space-y-4 pt-0">
-            <div className="space-y-2">
-              <Label htmlFor="password-email">Email</Label>
-              <Input
-                id="password-email"
-                type="email"
-                value={passwordForm.watch('email')}
-                readOnly
-                className="bg-muted"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="password">Password</Label>
-                <Link
-                  href="/auth/reset-password"
-                  className="text-sm text-primary hover:underline"
-                >
-                  Forgot password?
-                </Link>
-              </div>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                {...passwordForm.register('password')}
-                aria-invalid={passwordForm.formState.errors.password ? 'true' : 'false'}
-              />
-              {passwordForm.formState.errors.password && (
-                <p className="text-sm text-destructive" role="alert">
-                  {passwordForm.formState.errors.password.message}
-                </p>
-              )}
-            </div>
-            <div className="flex items-center space-x-2">
-              <input
-                id="rememberMe"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300"
-                {...passwordForm.register('rememberMe')}
-              />
-              <Label htmlFor="rememberMe" className="text-sm font-normal">
-                Remember me
-              </Label>
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                'Sign In'
-              )}
-            </Button>
-            <button
-              type="button"
-              onClick={backToEmail}
-              className="text-sm text-muted-foreground hover:text-foreground underline"
-            >
-              Use a different email
-            </button>
-            <p className="text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{' '}
-              <Link href="/auth/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
-      )}
-
-      {phase === 'otp' && otp.step === 'email' && (
-        <form onSubmit={handleSendOtp}>
-          <CardContent className="space-y-4 pt-0">
-            <div className="space-y-2">
-              <Label htmlFor="otp-email">Email</Label>
-              <Input
-                id="otp-email"
-                type="email"
-                value={otp.email}
-                readOnly
-                className="bg-muted"
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="flex flex-col space-y-4">
-            <Button type="submit" className="w-full" disabled={otp.isSending}>
-              {otp.isSending ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Sending code...
-                </>
-              ) : (
-                <>
-                  <Mail className="h-4 w-4" />
-                  Send one-time code
-                </>
-              )}
-            </Button>
-            <button
-              type="button"
-              onClick={backToEmail}
-              className="text-sm text-muted-foreground hover:text-foreground underline"
-            >
-              Use a different email
-            </button>
-            <p className="text-center text-sm text-muted-foreground">
-              Don&apos;t have an account?{' '}
-              <Link href="/auth/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </p>
-          </CardFooter>
-        </form>
-      )}
-
-      {phase === 'otp' && otp.step === 'otp' && (
         <form onSubmit={handleVerifyOtp}>
-          <CardContent className="space-y-4 pt-0">
+          <CardContent className="space-y-4 pt-0 pb-6">
             <div className="space-y-2">
               <Label htmlFor="otp-code">Verification code</Label>
               <Input
@@ -336,7 +202,7 @@ function SignInFormContent() {
               </p>
             </div>
           </CardContent>
-          <CardFooter className="flex flex-col gap-2">
+          <CardFooter className="flex flex-col gap-4 pt-4">
             <Button
               type="submit"
               className="w-full"
@@ -366,7 +232,7 @@ function SignInFormContent() {
             </Button>
             <button
               type="button"
-              onClick={backToEmail}
+              onClick={backToCredentials}
               className="text-sm text-muted-foreground hover:text-foreground underline"
             >
               Use a different email
@@ -379,7 +245,138 @@ function SignInFormContent() {
             </p>
           </CardFooter>
         </form>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription>
+          Enter your email and password, or we&apos;ll send you a one-time code.
+        </CardDescription>
+      </CardHeader>
+
+      {(error || otp.error) && (
+        <div className="mx-6 mb-4 rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
+          {otp.error || error}
+        </div>
       )}
+
+      <form onSubmit={form.handleSubmit(handleSubmitCredentials)}>
+        <CardContent className="space-y-4 pt-0 pb-6">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <div className="relative">
+              <Input
+                id="email"
+                type="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  form.setValue('email', e.target.value);
+                  setError(null);
+                }}
+                className="pr-10"
+                aria-invalid={!!form.formState.errors.email}
+                autoComplete="email"
+              />
+              {isCheckingAuth && (
+                <span
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-opacity"
+                  aria-hidden
+                >
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                </span>
+              )}
+            </div>
+            {form.formState.errors.email && (
+              <p className="text-sm text-destructive" role="alert">
+                {form.formState.errors.email.message}
+              </p>
+            )}
+          </div>
+
+          <div
+            className={cn(
+              'grid transition-all duration-200 ease-out',
+              authMethod === 'otp'
+                ? 'grid-rows-[0fr] opacity-0'
+                : 'grid-rows-[1fr] opacity-100'
+            )}
+          >
+            <div className="overflow-hidden">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password">Password</Label>
+                    <Link
+                      href="/auth/reset-password"
+                      className="text-sm text-primary hover:underline"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    {...form.register('password')}
+                    aria-invalid={!!form.formState.errors.password}
+                    autoComplete="current-password"
+                    className={authMethod === 'otp' ? 'pointer-events-none' : ''}
+                  />
+                  {form.formState.errors.password && (
+                    <p className="text-sm text-destructive" role="alert">
+                      {form.formState.errors.password.message}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    id="rememberMe"
+                    type="checkbox"
+                    className="h-4 w-4 rounded border-gray-300"
+                    {...form.register('rememberMe')}
+                  />
+                  <Label htmlFor="rememberMe" className="text-sm font-normal">
+                    Remember me
+                  </Label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-col gap-4 pt-4">
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={primaryDisabled}
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Signing in...
+              </>
+            ) : isCheckingAuth ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Checking...
+              </>
+            ) : (
+              primaryButtonLabel
+            )}
+          </Button>
+          <p className="text-center text-sm text-muted-foreground">
+            Don&apos;t have an account?{' '}
+            <Link href="/auth/signup" className="text-primary hover:underline">
+              Sign up
+            </Link>
+          </p>
+        </CardFooter>
+      </form>
     </Card>
   );
 }
@@ -391,9 +388,9 @@ export function SignInForm() {
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Sign In</CardTitle>
-            <CardDescription>Enter your email to continue</CardDescription>
+            <CardDescription>Enter your email and password</CardDescription>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pb-6">
             <div className="space-y-4">
               <div className="h-10 bg-muted animate-pulse rounded-md" />
               <div className="h-10 bg-muted animate-pulse rounded-md" />

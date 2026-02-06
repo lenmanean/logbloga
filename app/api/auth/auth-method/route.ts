@@ -1,13 +1,12 @@
 import { createServiceRoleClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
-export type AuthMethod = 'password' | 'otp';
+export type AuthMethod = 'password' | 'otp' | 'not_found';
 
 /**
  * POST /api/auth/auth-method
- * Returns { authMethod: 'password' | 'otp' } for the given email.
- * Used by sign-in UI to show password field or "Send one-time code" without user enumeration.
- * Unknown or invalid emails return 'otp'.
+ * Returns { authMethod: 'password' | 'otp' | 'not_found' } for the given email.
+ * Used by sign-in UI to show password, OTP, or "no account" error on submit.
  */
 export async function POST(request: Request) {
   try {
@@ -35,7 +34,7 @@ export async function POST(request: Request) {
     }
 
     const authMethod: AuthMethod =
-      data === 'password' ? 'password' : 'otp';
+      data === 'password' ? 'password' : data === 'not_found' ? 'not_found' : 'otp';
 
     return NextResponse.json({ authMethod }, { status: 200 });
   } catch (error) {
