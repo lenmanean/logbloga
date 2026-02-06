@@ -208,7 +208,7 @@ export function AuthModal() {
       <DialogContent
         showCloseButton={true}
         className={cn(
-          'duration-200 sm:max-w-md',
+          'duration-200 sm:max-w-md max-h-[90vh] overflow-y-auto',
           'data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:slide-out-to-top-2',
           'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
@@ -234,6 +234,41 @@ export function AuthModal() {
 
         {mode === 'signin' && isSignInCredentialsStep && (
           <form onSubmit={handleSignInSubmit} className="space-y-4 pb-4">
+            <div className="flex rounded-lg border border-border p-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('signin');
+                  setAuthMethod(null);
+                  setSignInError(null);
+                  otp.setError(null);
+                }}
+                className={cn(
+                  'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'bg-background text-foreground shadow'
+                )}
+                aria-pressed={true}
+              >
+                Sign in
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setMode('signup');
+                  setAuthMethod(null);
+                  setSignInError(null);
+                  otp.setError(null);
+                  otp.setStep('email');
+                }}
+                className={cn(
+                  'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
+                  'text-muted-foreground hover:text-foreground'
+                )}
+                aria-pressed={false}
+              >
+                Sign up
+              </button>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="auth-modal-email">Email</Label>
               <div className="relative">
@@ -296,28 +331,31 @@ export function AuthModal() {
                   primarySignInLabel
                 )}
               </Button>
-              <button
-                type="button"
-                onClick={signInBackToCredentials}
-                className="text-sm text-muted-foreground hover:text-foreground underline"
-              >
-                Use a different email
-              </button>
-              <p className="text-center text-sm text-muted-foreground">
-                Don&apos;t have an account?{' '}
+              <div className="flex flex-col gap-2 items-center w-full text-sm text-muted-foreground">
                 <button
+                  type="button"
+                  onClick={signInBackToCredentials}
+                  className="hover:text-foreground underline"
+                >
+                  Use a different email
+                </button>
+                <p className="text-center">
+                  Don&apos;t have an account?{' '}
+                  <button
                   type="button"
                   onClick={() => {
                     setMode('signup');
                     setAuthMethod(null);
                     setSignInError(null);
                     otp.setError(null);
+                    otp.setStep('email');
                   }}
                   className="text-primary hover:underline"
                 >
                   Sign up
                 </button>
               </p>
+            </div>
             </DialogFooter>
           </form>
         )}
