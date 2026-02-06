@@ -9,7 +9,7 @@ import { removeCartItemsByProductIds } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
-import { sendOrderConfirmation, sendPaymentReceipt, sendDoerCouponEmail } from '@/lib/email/senders';
+import { sendPaymentReceipt, sendDoerCouponEmail } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
 
 /**
@@ -69,38 +69,7 @@ export async function handleCheckoutSessionCompleted(
     console.error('Error creating order confirmation notification:', error);
   }
 
-  // Send order confirmation email (non-blocking)
-  try {
-    const orderWithItems = await getOrderWithItems(metadata.orderId);
-    if (orderWithItems && orderWithItems.user_id && orderWithItems.customer_email) {
-      const emailData = {
-        order: {
-          id: orderWithItems.id,
-          orderNumber: orderWithItems.order_number || '',
-          status: orderWithItems.status || 'processing',
-          totalAmount: parseFloat(String(orderWithItems.total_amount)),
-          subtotal: parseFloat(String(orderWithItems.subtotal)),
-          taxAmount: orderWithItems.tax_amount ? parseFloat(String(orderWithItems.tax_amount)) : null,
-          discountAmount: orderWithItems.discount_amount ? parseFloat(String(orderWithItems.discount_amount)) : null,
-          currency: orderWithItems.currency || 'USD',
-          createdAt: orderWithItems.created_at || new Date().toISOString(),
-          customerEmail: orderWithItems.customer_email,
-          customerName: orderWithItems.customer_name,
-        },
-        items: (orderWithItems.items || []).map(item => ({
-          productName: item.product_name,
-          quantity: item.quantity,
-          unitPrice: parseFloat(String(item.unit_price)),
-          total: parseFloat(String(item.total_price)),
-        })),
-      };
-      await sendOrderConfirmation(orderWithItems.user_id, emailData);
-    }
-  } catch (error) {
-    console.error('Error sending order confirmation email:', error);
-  }
-
-  // Run fulfillment (receipt + DOER coupon) for Checkout flow so it does not depend on payment_intent.succeeded order
+  // Run fulfillment (payment receipt + DOER coupon). Single post-purchase email: receipt only; no separate order confirmation to avoid duplicate receipt emails.
   try {
     await runFulfillmentForOrder(metadata.orderId);
   } catch (error) {
@@ -236,13 +205,13 @@ export async function handleChargeRefunded(
 /**
  * Run fulfillment for a completed order: generate DOER coupon, send receipt email, send DOER coupon email.
  * Used by both handleCheckoutSessionCompleted (Checkout flow) and handlePaymentIntentSucceeded (Payment Element flow only).
+ * Uses getOrderWithItems (service role) so this works in webhook context where there is no user session.
  */
 async function runFulfillmentForOrder(orderId: string): Promise<void> {
-  const order = await getOrderById(orderId);
-  if (!order || !order.user_id) return;
-
   const orderWithItems = await getOrderWithItems(orderId);
-  if (!orderWithItems || !orderWithItems.customer_email) return;
+  if (!orderWithItems || !orderWithItems.user_id || !orderWithItems.customer_email) return;
+
+  const order = orderWithItems;
 
   // Generate DOER coupon for package purchases
   try {
