@@ -345,6 +345,28 @@ function extractPackageIdFromOrder(
 }
 
 /**
+ * Resolve product slugs for order items that have product_id but missing product_sku
+ */
+async function resolveSlugsForOrderItems(
+  items: Array<{ product_id?: string | null; product_sku?: string | null }>
+): Promise<Array<{ product_sku: string | null }>> {
+  const withSlug = items.map((item) => ({
+    product_sku: item.product_sku ?? null,
+  }));
+  const missingSlug = items.filter((item) => item.product_id && !(item.product_sku?.trim()));
+  if (missingSlug.length === 0) return withSlug;
+
+  const supabase = await createServiceRoleClient();
+  const ids = missingSlug.map((i) => i.product_id).filter(Boolean) as string[];
+  const { data: products } = await supabase.from('products').select('id, slug').in('id', ids);
+  const slugById = new Map((products ?? []).map((p: { id: string; slug: string | null }) => [p.id, p.slug ?? null]));
+
+  return items.map((item) => ({
+    product_sku: item.product_sku?.trim() || (item.product_id ? slugById.get(item.product_id) ?? null : null),
+  }));
+}
+
+/**
  * Generate and store DOER coupon for an order (if it's a package purchase)
  * Requests coupon from Doer's partner API
  */
@@ -356,18 +378,34 @@ export async function generateDoerCouponForOrder(orderId: string): Promise<strin
 
   const orderWithItems = await getOrderWithItems(orderId);
   if (!orderWithItems || !orderWithItems.customer_email) {
+    console.warn(`[DOER coupon] Order ${orderId}: no order or customer_email`);
     return null;
   }
 
-  const packageId = extractPackageIdFromOrder(orderWithItems.items ?? []);
+  const items = orderWithItems.items ?? [];
+  const itemsWithSlug = await resolveSlugsForOrderItems(items);
+  const packageId = extractPackageIdFromOrder(itemsWithSlug);
   if (!packageId) {
-    return null; // Only generate for AI-to-USD package purchases
+    console.warn(`[DOER coupon] Order ${orderId}: no AI-to-USD package in order (slugs: ${itemsWithSlug.map((i) => i.product_sku || '(none)').join(', ')})`);
+    return null;
+  }
+
+  if (!process.env.LOGBLOGA_PARTNER_SECRET) {
+    console.warn('[DOER coupon] LOGBLOGA_PARTNER_SECRET is not set; skipping coupon generation');
+    return null;
   }
 
   const email = orderWithItems.customer_email;
 
-  const result = await requestDoerCouponFromApi(email, orderId, packageId);
+  let result = await requestDoerCouponFromApi(email, orderId, packageId);
+  // If Doer API does not support master-bundle, retry with first included package so the customer still gets a coupon
+  if (!result && packageId === 'master-bundle') {
+    const fallbackPackageId: DoerPackageId = 'agency';
+    console.warn(`[DOER coupon] Order ${orderId}: Doer API did not return coupon for master-bundle; retrying with ${fallbackPackageId}`);
+    result = await requestDoerCouponFromApi(email, orderId, fallbackPackageId);
+  }
   if (!result) {
+    console.warn(`[DOER coupon] Order ${orderId}: Doer API did not return a coupon`);
     return null;
   }
 

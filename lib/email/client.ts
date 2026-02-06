@@ -27,11 +27,14 @@ export function getResendClient(): Resend {
 }
 
 /**
- * Get the default sender email address
- * Uses mail@logbloga.com for production, or environment variable override
+ * Get the default sender for Resend (display name + address).
+ * Uses quoted display name so inboxes show "Logbloga" instead of the local part of the email (e.g. "mail").
  */
 export function getDefaultSender(): string {
-  return process.env.RESEND_FROM_EMAIL || 'mail@logbloga.com';
+  const fromEmail = process.env.RESEND_FROM_EMAIL || 'mail@logbloga.com';
+  const rawName = process.env.RESEND_FROM_NAME ?? 'Logbloga';
+  const fromName = (typeof rawName === 'string' ? rawName.trim() : '') || 'Logbloga';
+  return `"${fromName.replace(/"/g, '')}" <${fromEmail}>`;
 }
 
 /**
