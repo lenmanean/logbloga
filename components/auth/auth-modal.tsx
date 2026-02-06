@@ -2,9 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/client';
 import { useAuthModal } from '@/contexts/auth-modal-context';
-import { getAuthErrorMessage } from '@/lib/auth/errors';
+import { useOtpAuth } from '@/hooks/useOtpAuth';
 import {
   Dialog,
   DialogContent,
@@ -19,33 +18,26 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Mail, Loader2, AlertCircle } from 'lucide-react';
 
-const RESEND_COOLDOWN_SEC = 60;
-
-type Step = 'email' | 'otp';
-
 export function AuthModal() {
   const { open, closeAuthModal, onAuthSuccess } = useAuthModal();
-  const [step, setStep] = useState<Step>('email');
   const [mode, setMode] = useState<'signin' | 'signup'>('signup');
-  const [email, setEmail] = useState('');
   const [fullName, setFullName] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [otpCode, setOtpCode] = useState('');
-  const [isSending, setIsSending] = useState(false);
-  const [isVerifying, setIsVerifying] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [resendCooldown, setResendCooldown] = useState(0);
+
+  const otp = useOtpAuth({
+    onSuccess: () => {
+      onAuthSuccess();
+      otp.reset();
+      closeAuthModal();
+    },
+  });
 
   const resetForm = useCallback(() => {
-    setStep('email');
     setMode('signup');
-    setEmail('');
     setFullName('');
     setTermsAccepted(false);
-    setOtpCode('');
-    setError(null);
-    setResendCooldown(0);
-  }, []);
+    otp.reset();
+  }, [otp.reset]);
 
   const handleOpenChange = useCallback(
     (next: boolean) => {
@@ -59,112 +51,19 @@ export function AuthModal() {
 
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    const trimmedEmail = email.trim();
-    if (!trimmedEmail) {
-      setError('Please enter your email address');
-      return;
-    }
+    otp.setError(null);
     if (mode === 'signup' && !termsAccepted) {
-      setError('Please accept the terms of service and privacy policy');
+      otp.setError('Please accept the terms of service and privacy policy');
       return;
     }
-    setIsSending(true);
-    try {
-      const res = await fetch('/api/auth/otp/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: trimmedEmail,
-          fullName: mode === 'signup' && fullName.trim() ? fullName.trim() : undefined,
-        }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setError(getAuthErrorMessage(new Error(data.error || 'Failed to send code')));
-        return;
-      }
-      setStep('otp');
-      setOtpCode('');
-      setResendCooldown(RESEND_COOLDOWN_SEC);
-      const interval = setInterval(() => {
-        setResendCooldown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } finally {
-      setIsSending(false);
-    }
-  };
-
-  const handleResend = async () => {
-    if (resendCooldown > 0) return;
-    setError(null);
-    const trimmedEmail = email.trim();
-    if (!trimmedEmail) return;
-    setIsSending(true);
-    try {
-      const res = await fetch('/api/auth/otp/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: trimmedEmail }),
-      });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) {
-        setError(getAuthErrorMessage(new Error(data.error || 'Failed to send code')));
-        return;
-      }
-      setOtpCode('');
-      setResendCooldown(RESEND_COOLDOWN_SEC);
-      const interval = setInterval(() => {
-        setResendCooldown((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    } finally {
-      setIsSending(false);
-    }
+    await otp.sendOtp(
+      mode === 'signup' && fullName.trim() ? { fullName: fullName.trim() } : undefined
+    );
   };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
     e.preventDefault();
-    const code = otpCode.replace(/\D/g, '');
-    if (code.length !== 6 && code.length !== 8) {
-      setError('Please enter a valid 6- or 8-digit code');
-      return;
-    }
-    const trimmedEmail = email.trim();
-    if (!trimmedEmail) {
-      setError('Email is required');
-      return;
-    }
-    setError(null);
-    setIsVerifying(true);
-    try {
-      const supabase = createClient();
-      const { error: verifyError } = await supabase.auth.verifyOtp({
-        email: trimmedEmail,
-        token: code,
-        type: 'email',
-      });
-      if (verifyError) {
-        setError(getAuthErrorMessage(verifyError));
-        return;
-      }
-      onAuthSuccess();
-      resetForm();
-      handleOpenChange(false);
-    } finally {
-      setIsVerifying(false);
-    }
+    await otp.verifyOtp(otp.otpCode);
   };
 
   return (
@@ -177,37 +76,37 @@ export function AuthModal() {
           'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
         )}
-        aria-describedby={step === 'email' ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}
+        aria-describedby={otp.step === 'email' ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}
       >
         <DialogHeader>
           <DialogTitle id="auth-modal-title">
-            {step === 'email' ? (mode === 'signup' ? 'Create account' : 'Sign in') : 'Enter verification code'}
+            {otp.step === 'email' ? (mode === 'signup' ? 'Create account' : 'Sign in') : 'Enter verification code'}
           </DialogTitle>
-          <DialogDescription id={step === 'email' ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}>
-            {step === 'email'
+          <DialogDescription id={otp.step === 'email' ? 'auth-modal-email-desc' : 'auth-modal-otp-desc'}>
+            {otp.step === 'email'
               ? mode === 'signup'
                 ? 'Enter your email to get a one-time code'
                 : 'Enter your email to receive a one-time sign-in code'
-              : `We sent a code to ${email}. Enter it below.`}
+              : `We sent a code to ${otp.email}. Enter it below.`}
           </DialogDescription>
         </DialogHeader>
 
-        {error && (
+        {otp.error && (
           <div
             className="flex items-center gap-2 rounded-md bg-destructive/15 p-3 text-sm text-destructive"
             role="alert"
           >
             <AlertCircle className="h-4 w-4 shrink-0" />
-            <p>{error}</p>
+            <p>{otp.error}</p>
           </div>
         )}
 
-        {step === 'email' ? (
+        {otp.step === 'email' ? (
           <form onSubmit={handleSendOtp} className="space-y-4">
             <div className="flex rounded-lg border border-border p-1">
               <button
                 type="button"
-                onClick={() => { setMode('signin'); setError(null); }}
+                onClick={() => { setMode('signin'); otp.setError(null); }}
                 className={cn(
                   'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   mode === 'signin'
@@ -220,7 +119,7 @@ export function AuthModal() {
               </button>
               <button
                 type="button"
-                onClick={() => { setMode('signup'); setError(null); }}
+                onClick={() => { setMode('signup'); otp.setError(null); }}
                 className={cn(
                   'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
                   mode === 'signup'
@@ -254,8 +153,8 @@ export function AuthModal() {
                 id="auth-modal-email"
                 type="email"
                 placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                value={otp.email}
+                onChange={(e) => otp.setEmail(e.target.value)}
                 className="w-full"
                 autoComplete="email"
                 required
@@ -289,8 +188,8 @@ export function AuthModal() {
             )}
 
             <DialogFooter className="gap-2 sm:gap-0">
-              <Button type="submit" className="w-full" disabled={isSending}>
-                {isSending ? (
+              <Button type="submit" className="w-full" disabled={otp.isSending}>
+                {otp.isSending ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
                     Sending code…
@@ -314,11 +213,11 @@ export function AuthModal() {
                 inputMode="numeric"
                 pattern="[0-9]*"
                 maxLength={8}
-                value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, ''))}
+                value={otp.otpCode}
+                onChange={(e) => otp.setOtpCode(e.target.value.replace(/\D/g, ''))}
                 placeholder="000000"
                 className="text-center text-2xl font-mono tracking-widest h-14"
-                disabled={isVerifying}
+                disabled={otp.isVerifying}
                 aria-describedby="auth-modal-otp-hint"
               />
               <p id="auth-modal-otp-hint" className="text-xs text-muted-foreground">
@@ -327,8 +226,8 @@ export function AuthModal() {
             </div>
 
             <DialogFooter className="flex-col gap-2 sm:flex-col">
-              <Button type="submit" className="w-full" disabled={isVerifying || (otpCode.length !== 6 && otpCode.length !== 8)}>
-                {isVerifying ? (
+              <Button type="submit" className="w-full" disabled={otp.isVerifying || (otp.otpCode.length !== 6 && otp.otpCode.length !== 8)}>
+                {otp.isVerifying ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin" />
                     Verifying…
@@ -341,14 +240,14 @@ export function AuthModal() {
                 type="button"
                 variant="outline"
                 className="w-full"
-                onClick={handleResend}
-                disabled={isSending || resendCooldown > 0}
+                onClick={otp.resend}
+                disabled={otp.isSending || otp.resendCooldown > 0}
               >
-                {resendCooldown > 0 ? `Resend code in ${resendCooldown}s` : isSending ? 'Sending…' : 'Resend code'}
+                {otp.resendCooldown > 0 ? `Resend code in ${otp.resendCooldown}s` : otp.isSending ? 'Sending…' : 'Resend code'}
               </Button>
               <button
                 type="button"
-                onClick={() => { setStep('email'); setError(null); setOtpCode(''); }}
+                onClick={() => { otp.setStep('email'); otp.setError(null); otp.setOtpCode(''); }}
                 className="text-sm text-muted-foreground hover:text-foreground underline"
               >
                 Use a different email
