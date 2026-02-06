@@ -89,6 +89,14 @@ export function getAuthErrorMessage(error: Error | null): string {
     return 'Authentication failed. Please try again or use a different method';
   }
 
+  // OTP / verification code errors
+  if (errorMessage.includes('otp') || errorMessage.includes('token') || errorMessage.includes('verification')) {
+    if (errorMessage.includes('expired') || errorMessage.includes('invalid')) {
+      return 'Verification code is invalid or has expired. Please request a new code.';
+    }
+    return 'Invalid verification code. Please check the code and try again.';
+  }
+
   // Return the original error message if no match found
   return error.message || 'An error occurred. Please try again';
 }

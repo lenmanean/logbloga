@@ -1,10 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { loadStripe } from '@stripe/stripe-js';
 import { useAuth } from '@/hooks/useAuth';
+import { useAuthModal } from '@/contexts/auth-modal-context';
 import { Button } from '@/components/ui/button';
 
 const stripePublishableKey = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY;
@@ -31,7 +30,7 @@ export function ProductPageWalletButton({
   amountUsd,
 }: ProductPageWalletButtonProps) {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
-  const pathname = usePathname();
+  const { openAuthModal } = useAuthModal();
   const containerRef = useRef<HTMLDivElement>(null);
   const [walletAvailable, setWalletAvailable] = useState<boolean | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -157,19 +156,22 @@ export function ProductPageWalletButton({
   }
 
   if (!isAuthenticated) {
-    const signInRedirect = pathname || '/';
-    const signInUrl = `/auth/signin?redirect=${encodeURIComponent(signInRedirect)}`;
     return (
       <div className="mb-6">
         <Button
           variant="outline"
           size="lg"
           className="w-full font-semibold text-base py-6 rounded-md border border-gray-300 dark:border-gray-600"
-          asChild
+          onClick={() =>
+            openAuthModal('wallet', {
+              productId,
+              productTitle,
+              productSlug: productSlug ?? undefined,
+              amountUsd: amountUsd,
+            })
+          }
         >
-          <Link href={signInUrl}>
-            Apple Pay / Google Pay
-          </Link>
+          Apple Pay / Google Pay
         </Button>
         <p className="text-xs text-muted-foreground mt-1 text-center">
           Sign in to pay with Apple Pay or Google Pay

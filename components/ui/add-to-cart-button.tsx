@@ -1,11 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ShoppingCart, Loader2, Check, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/contexts/cart-context';
+import { useAuth } from '@/hooks/useAuth';
+import { useAuthModal } from '@/contexts/auth-modal-context';
+
+function isPackagePage(pathname: string | null): boolean {
+  return pathname != null && pathname.startsWith('/ai-to-usd/packages/') && pathname.length > '/ai-to-usd/packages/'.length;
+}
 
 interface AddToCartButtonProps {
   productId: string;
@@ -30,7 +36,10 @@ export function AddToCartButton({
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname();
   const { addItem } = useCart();
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
+  const { openAuthModal } = useAuthModal();
 
   const handleGrantAccess = async () => {
     setIsLoading(true);
@@ -89,8 +98,12 @@ export function AddToCartButton({
     }
   };
 
-  // Use grant access flow if bypassPayment is enabled
-  const handleClick = bypassPayment ? handleGrantAccess : handleAddToCart;
+  const requireAuthOnPackagePage = !authLoading && !isAuthenticated && isPackagePage(pathname);
+  const handleClick = bypassPayment
+    ? handleGrantAccess
+    : requireAuthOnPackagePage
+      ? () => openAuthModal('add_to_cart', { productId, quantity, variantId })
+      : handleAddToCart;
 
   return (
     <div className="w-full">

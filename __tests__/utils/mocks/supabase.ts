@@ -88,6 +88,10 @@ export function createMockSupabaseClient(
       signUp: vi.fn(),
       signOut: vi.fn().mockResolvedValue({ error: null }),
       resetPasswordForEmail: vi.fn().mockResolvedValue({ error: null }),
+      signInWithOtp: vi.fn().mockResolvedValue({
+        data: { user: null, session: null },
+        error: null,
+      }),
       verifyOtp: vi.fn().mockResolvedValue({
         data: { user: null, session: null },
         error: null,

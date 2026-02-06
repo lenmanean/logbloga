@@ -7,6 +7,8 @@ import "./globals.css";
 import { Header } from "@/components/layout/header";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/cart-context";
+import { AuthModalProvider } from "@/contexts/auth-modal-context";
+import { AuthModal } from "@/components/auth/auth-modal";
 import { CookieConsent } from "@/components/legal/cookie-consent";
 import ServiceWorkerRegistration from "@/components/pwa/service-worker-registration";
 import AnalyticsProvider from "@/components/analytics/analytics-provider";
@@ -58,14 +60,17 @@ export default function RootLayout({
       >
         <AuthProvider>
           <CartProvider>
-            <Header />
-            {children}
-            <CookieConsent />
-            <ServiceWorkerRegistration />
-            <AnalyticsProvider />
-            <ChatWidget />
-            <Analytics />
-            <SpeedInsights />
+            <AuthModalProvider>
+              <Header />
+              {children}
+              <CookieConsent />
+              <ServiceWorkerRegistration />
+              <AnalyticsProvider />
+              <ChatWidget />
+              <AuthModal />
+              <Analytics />
+              <SpeedInsights />
+            </AuthModalProvider>
           </CartProvider>
         </AuthProvider>
       </body>
