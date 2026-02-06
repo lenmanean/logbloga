@@ -53,12 +53,12 @@ export function CheckoutCustomerInfo({ singlePage }: CheckoutCustomerInfoProps =
     return () => subscription.unsubscribe();
   }, [singlePage, watch, setCustomerInfo]);
 
-  // Pre-fill email from auth
+  // Pre-fill email from auth when user is signed in
   useEffect(() => {
-    if (user?.email && !customerInfo?.email) {
+    if (user?.email) {
       setValue('email', user.email);
     }
-  }, [user?.email, customerInfo?.email, setValue]);
+  }, [user?.email, setValue]);
 
   // Fetch saved addresses if authenticated
   useEffect(() => {
