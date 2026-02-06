@@ -77,7 +77,7 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
                   <Text style={totalLabel}>Discount:</Text>
                 </Column>
                 <Column style={totalValue}>
-                  <Text style={totalText}>-{formatCurrency(order.discountAmount, order.currency)}</Text>
+                  <Text style={totalText}>-{formatCurrency(order.discountAmount ?? 0, order.currency)}</Text>
                 </Column>
               </Row>
             )}
@@ -87,7 +87,7 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
                   <Text style={totalLabel}>Tax:</Text>
                 </Column>
                 <Column style={totalValue}>
-                  <Text style={totalText}>{formatCurrency(order.taxAmount, order.currency)}</Text>
+                  <Text style={totalText}>{formatCurrency(order.taxAmount ?? 0, order.currency)}</Text>
                 </Column>
               </Row>
             )}
