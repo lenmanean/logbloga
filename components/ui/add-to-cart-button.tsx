@@ -124,7 +124,7 @@ export function AddToCartButton({
             ) : (
               <>
                 <ShoppingCart className="h-5 w-5" />
-                Add to Cart - ${price.toLocaleString()}
+                Add to Cart
               </>
             )}
           </>
