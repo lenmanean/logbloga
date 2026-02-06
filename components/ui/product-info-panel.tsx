@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { PackageProduct } from '@/lib/products';
-import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { AddToCartButton } from '@/components/ui/add-to-cart-button';
 import { AddToWishlistButton } from '@/components/wishlist/add-to-wishlist-button';
 import { ProductPagePaymentButtons } from '@/components/checkout/product-page-payment-buttons';
@@ -33,13 +32,11 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 interface ProductInfoPanelProps {
   package: PackageProduct;
   className?: string;
-  onQuantityChange?: (quantity: number) => void;
   /** When true, user already owns this product; show Access Package only */
   hasAccess?: boolean;
 }
 
-export function ProductInfoPanel({ package: pkg, className, onQuantityChange, hasAccess = false }: ProductInfoPanelProps) {
-  const [quantity, setQuantity] = useState(1);
+export function ProductInfoPanel({ package: pkg, className, hasAccess = false }: ProductInfoPanelProps) {
   const [selectedVariant, setSelectedVariant] = useState<string | null>(
     pkg.variants && pkg.variants.length > 0 ? pkg.variants[0].id : null
   );
@@ -48,13 +45,6 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
   const currentVariant = pkg.variants?.find(v => v.id === selectedVariant);
   const displayPrice = currentVariant?.price ?? pkg.price;
   const displayOriginalPrice = currentVariant?.originalPrice ?? pkg.originalPrice;
-
-  const handleQuantityChange = (newQuantity: number) => {
-    setQuantity(newQuantity);
-    onQuantityChange?.(newQuantity);
-  };
-
-  const finalPrice = displayPrice * quantity;
 
   return (
     <div className={cn('space-y-6', className)}>
@@ -128,16 +118,6 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
         </div>
       ) : (
         <>
-          {/* Quantity Selector — one per package/bundle */}
-          <div className="mb-6">
-            <QuantitySelector
-              min={1}
-              max={1}
-              defaultValue={1}
-              onChange={handleQuantityChange}
-            />
-          </div>
-
           {/* Row 1: Buy Now (redirect to Stripe Checkout) */}
           <ProductPagePaymentButtons
             productId={pkg.id}
@@ -157,8 +137,8 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
           <div className="mb-6">
             <AddToCartButton
               productId={pkg.id}
-              price={finalPrice}
-              quantity={quantity}
+              price={displayPrice}
+              quantity={1}
               variantId={selectedVariant || undefined}
               size="lg"
               className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md"
@@ -254,7 +234,7 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
                         <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground ml-4">
                           <li>Purchase your Logbloga AI to USD package</li>
                           <li>Receive your unique DOER Pro coupon code after purchase</li>
-                          <li>Visit usedoer.com/checkout?plan=pro&cycle=monthly and enter your code in the Promo Code field</li>
+                          <li>Visit <Link href="https://usedoer.com/checkout?plan=pro&cycle=monthly" target="_blank" rel="noopener noreferrer" className="underline text-green-700 dark:text-green-300 hover:opacity-90">usedoer.com/checkout</Link> and enter your code in the Promo Code field</li>
                           <li>Set up your DOER workspace and import your package implementation plan</li>
                           <li>Start tracking your progress through each level</li>
                         </ol>
@@ -277,7 +257,8 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
                       <div className="bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-900 rounded-lg p-4">
                         <p className="text-sm text-green-900 dark:text-green-100">
                           <strong>Note:</strong> Your DOER Pro coupon code will be available in your account 
-                          after purchase. The 6-month free subscription starts when you redeem the code on usedoer.com.
+                          after purchase. The 6-month free subscription starts when you redeem the code on{' '}
+                          <Link href="https://usedoer.com" target="_blank" rel="noopener noreferrer" className="underline text-green-700 dark:text-green-300 hover:opacity-90">usedoer.com</Link>.
                         </p>
                       </div>
                     </div>
@@ -286,7 +267,16 @@ export function ProductInfoPanel({ package: pkg, className, onQuantityChange, ha
               </Dialog>
             </div>
             <p className="text-sm text-green-700 dark:text-green-300">
-              Get 6 months of free DOER Pro subscription on usedoer.com with your package purchase. 
+              Get 6 months of free DOER Pro subscription on{' '}
+              <Link
+                href="https://usedoer.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-medium underline underline-offset-2 hover:opacity-90 text-green-800 dark:text-green-200"
+              >
+                usedoer.com
+              </Link>
+              {' '}with your package purchase.
               Perfect for managing your projects and tasks. Your unique coupon code will be provided after purchase.
             </p>
           </div>

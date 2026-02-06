@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '@/contexts/cart-context';
-import { QuantitySelector } from '@/components/ui/quantity-selector';
 import { Button } from '@/components/ui/button';
 import { Trash2, Loader2 } from 'lucide-react';
 import type { CartItemWithProduct } from '@/lib/db/cart';
@@ -15,8 +14,7 @@ interface CartItemProps {
 }
 
 export function CartItem({ item }: CartItemProps) {
-  const { updateQuantity, removeItem } = useCart();
-  const [isUpdating, setIsUpdating] = useState(false);
+  const { removeItem } = useCart();
   const [isRemoving, setIsRemoving] = useState(false);
 
   const product = item.product;
@@ -26,20 +24,7 @@ export function CartItem({ item }: CartItemProps) {
   const unitPrice = typeof product?.price === 'number' 
     ? product.price 
     : parseFloat(String(product?.price || 0));
-  const lineTotal = unitPrice * (item.quantity || 0);
-
-  const handleQuantityChange = async (newQuantity: number) => {
-    if (newQuantity === item.quantity) return;
-
-    setIsUpdating(true);
-    try {
-      await updateQuantity(item.id, newQuantity);
-    } catch (error) {
-      console.error('Error updating quantity:', error);
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+  const lineTotal = unitPrice * (item.quantity || 1);
 
   const handleRemove = async () => {
     if (!confirm('Remove this item from your cart?')) {
@@ -103,27 +88,9 @@ export function CartItem({ item }: CartItemProps) {
             {productTitle}
           </h3>
         </Link>
-        <p className="text-xs text-muted-foreground">
-          ${unitPrice.toLocaleString()} each
+        <p className="text-xs text-muted-foreground mt-1">
+          ${lineTotal.toLocaleString()}
         </p>
-        {/* Quantity and line total on their own row, below title */}
-        <div className="flex items-center justify-between gap-2 mt-1">
-          <div className="flex items-center gap-2">
-            {isUpdating ? (
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-            ) : (
-              <QuantitySelector
-                min={1}
-                max={1}
-                defaultValue={item.quantity || 1}
-                onChange={handleQuantityChange}
-              />
-            )}
-          </div>
-          <p className="font-semibold text-sm shrink-0">
-            ${lineTotal.toLocaleString()}
-          </p>
-        </div>
       </div>
     </div>
   );

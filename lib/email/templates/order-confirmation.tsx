@@ -54,7 +54,6 @@ export function OrderConfirmationEmail({ data }: OrderConfirmationEmailProps) {
               <Row key={index} style={itemRow}>
                 <Column style={itemName}>
                   <Text style={itemText}>{item.productName}</Text>
-                  <Text style={itemQuantity}>Quantity: {item.quantity}</Text>
                 </Column>
                 <Column style={itemPrice}>
                   <Text style={itemText}>{formatCurrency(item.total, order.currency)}</Text>
@@ -200,12 +199,6 @@ const itemText = {
   fontSize: '16px',
   color: '#333',
   margin: '0',
-};
-
-const itemQuantity = {
-  fontSize: '14px',
-  color: '#666',
-  margin: '4px 0 0',
 };
 
 const totalsSection = {

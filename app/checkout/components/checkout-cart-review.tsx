@@ -80,10 +80,7 @@ export function CheckoutCartReview({ singlePage }: CheckoutCartReviewProps = {})
                 >
                   <h3 className="font-semibold text-sm md:text-base">{productTitle}</h3>
                 </Link>
-                <div className="mt-1 flex items-center justify-between">
-                  <span className="text-sm text-muted-foreground">
-                    Qty: {item.quantity || 0}
-                  </span>
+                <div className="mt-1 flex items-center justify-end">
                   <span className="font-semibold">
                     ${lineTotal.toLocaleString()}
                   </span>

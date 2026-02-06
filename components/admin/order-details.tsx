@@ -95,7 +95,6 @@ export function OrderDetails({ order }: OrderDetailsProps) {
                     {item.product_sku && (
                       <p className="text-sm text-muted-foreground">SKU: {item.product_sku}</p>
                     )}
-                    <p className="text-sm text-muted-foreground">Quantity: {item.quantity}</p>
                   </div>
                   <div className="text-right">
                     <p className="font-semibold">
