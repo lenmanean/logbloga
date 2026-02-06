@@ -166,25 +166,28 @@ export function SignUpForm() {
             )}
           </div>
 
-          <div className="flex items-start space-x-2">
+          <label
+            htmlFor="terms"
+            className="grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
+          >
             <input
               id="terms"
               type="checkbox"
-              className="mt-1 h-4 w-4 rounded border-gray-300"
+              className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300"
               {...register('terms')}
               aria-invalid={errors.terms ? 'true' : 'false'}
             />
-            <Label htmlFor="terms" className="text-sm font-normal">
+            <span className="text-sm text-foreground block min-w-0">
               I agree to the{' '}
-              <Link href="/terms" className="text-primary hover:underline">
+              <Link href="/terms" className="text-primary hover:underline whitespace-nowrap">
                 Terms of Service
               </Link>{' '}
               and{' '}
-              <Link href="/privacy" className="text-primary hover:underline">
+              <Link href="/privacy" className="text-primary hover:underline whitespace-nowrap">
                 Privacy Policy
               </Link>
-            </Label>
-          </div>
+            </span>
+          </label>
           {errors.terms && (
             <p className="text-sm text-destructive" role="alert">
               {errors.terms.message}

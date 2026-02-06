@@ -263,26 +263,29 @@ export function AuthModal() {
             </div>
 
             {mode === 'signup' && (
-              <div className="flex items-start gap-2">
+              <label
+                htmlFor="auth-modal-terms"
+                className="grid grid-cols-[auto_1fr] gap-2 items-start cursor-pointer"
+              >
                 <input
                   id="auth-modal-terms"
                   type="checkbox"
                   checked={termsAccepted}
                   onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="mt-1 h-4 w-4 rounded border-border"
+                  className="mt-0.5 h-4 w-4 shrink-0 rounded border-border"
                   aria-describedby="auth-modal-terms-desc"
                 />
-                <Label htmlFor="auth-modal-terms" className="text-sm font-normal" id="auth-modal-terms-desc">
+                <span id="auth-modal-terms-desc" className="text-sm text-foreground block min-w-0">
                   I agree to the{' '}
-                  <Link href="/legal/terms" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                  <Link href="/legal/terms" className="text-primary hover:underline whitespace-nowrap" target="_blank" rel="noopener noreferrer">
                     Terms of Service
                   </Link>{' '}
                   and{' '}
-                  <Link href="/legal/privacy" className="text-primary hover:underline" target="_blank" rel="noopener noreferrer">
+                  <Link href="/legal/privacy" className="text-primary hover:underline whitespace-nowrap" target="_blank" rel="noopener noreferrer">
                     Privacy Policy
                   </Link>
-                </Label>
-              </div>
+                </span>
+              </label>
             )}
 
             <DialogFooter className="gap-2 sm:gap-0">

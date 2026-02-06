@@ -9,7 +9,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Label } from '@/components/ui/label';
 import Link from 'next/link';
 import { Loader2 } from 'lucide-react';
 
@@ -87,16 +86,16 @@ export function CheckoutPaymentForm({
           />
 
           <div className="space-y-2">
-            <div className="flex items-start gap-3">
+            <div className="grid grid-cols-[auto_1fr] gap-2 items-start">
               <Checkbox
                 id="checkout-terms-pay"
                 checked={termsAccepted}
                 onCheckedChange={(checked) => onTermsChange(checked === true)}
-                className="mt-1 shrink-0"
+                className="mt-0.5 shrink-0"
                 aria-invalid={!termsAccepted ? 'false' : 'false'}
               />
-              <div className="min-w-0 text-sm leading-relaxed">
-                <Label htmlFor="checkout-terms-pay" className="cursor-pointer">
+              <label htmlFor="checkout-terms-pay" className="block min-w-0 text-sm leading-relaxed cursor-pointer">
+                <span className="block min-w-0">
                   I agree to the{' '}
                   <Link
                     href="/legal/terms"
@@ -116,8 +115,8 @@ export function CheckoutPaymentForm({
                     Refund Policy
                   </Link>
                   .
-                </Label>
-              </div>
+                </span>
+              </label>
             </div>
           </div>
 

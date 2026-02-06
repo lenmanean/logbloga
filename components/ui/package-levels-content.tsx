@@ -407,7 +407,7 @@ export function PackageLevelsContent({ package: pkg, className }: PackageLevelsC
               href="/legal/terms" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-primary underline hover:text-primary/80"
+              className="text-primary underline hover:text-primary/80 whitespace-nowrap"
             >
               Terms of Service
             </Link>
