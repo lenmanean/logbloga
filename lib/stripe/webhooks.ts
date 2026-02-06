@@ -9,7 +9,7 @@ import { removeCartItemsByProductIds } from '@/lib/db/cart';
 import { getPaymentIntentId, extractCheckoutMetadata } from './utils';
 import { getReceiptAmountsFromStripe } from './receipt-from-stripe';
 import type { Order } from '@/lib/types/database';
-import { sendPaymentReceipt, sendDoerCouponEmail } from '@/lib/email/senders';
+import { sendPaymentReceipt } from '@/lib/email/senders';
 import { createNotification } from '@/lib/db/notifications-db';
 
 /**
@@ -255,44 +255,6 @@ async function runFulfillmentForOrder(orderId: string): Promise<void> {
     }
   }
 
-  const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
-  const doerCouponCode = await getDoerCouponForOrder(orderId);
-  if (doerCouponCode?.trim()) {
-    const doerPayload = {
-      to: orderWithItems.customer_email,
-      doerCouponCode,
-      doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? undefined,
-      orderNumber: orderWithItems.order_number || undefined,
-    };
-    let doerSent = false;
-    try {
-      const doerResult = await sendDoerCouponEmail(orderWithItems.customer_email, doerPayload);
-      doerSent = doerResult.success;
-      if (!doerResult.success) {
-        console.error('Error sending DOER coupon email:', doerResult.error);
-        await new Promise((r) => setTimeout(r, 2000));
-        const retryResult = await sendDoerCouponEmail(orderWithItems.customer_email, doerPayload);
-        if (retryResult.success) doerSent = true;
-        else console.error('DOER coupon email retry failed:', retryResult.error);
-      }
-    } catch (doerError) {
-      console.error('Error sending DOER coupon email:', doerError);
-      await new Promise((r) => setTimeout(r, 2000));
-      try {
-        const retryResult = await sendDoerCouponEmail(orderWithItems.customer_email, doerPayload);
-        if (retryResult.success) doerSent = true;
-        else console.error('DOER coupon email retry failed:', retryResult.error);
-      } catch (retryErr) {
-        console.error('DOER coupon email retry threw:', retryErr);
-      }
-    }
-    if (!doerSent) {
-      console.error(`DOER coupon email was not delivered for order ${orderId}`);
-    }
-  } else {
-    console.log(`No DOER coupon code for order ${orderId} (skipping DOER email)`);
-  }
-
   const emailData = {
     order: {
       id: orderWithItems.id,
@@ -309,6 +271,13 @@ async function runFulfillmentForOrder(orderId: string): Promise<void> {
     },
     items,
   };
+
+  const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
+  const doerCouponCode = await getDoerCouponForOrder(orderId);
+  if (doerCouponCode?.trim()) {
+    emailData.doerCouponCode = doerCouponCode;
+    emailData.doerCouponExpiresAt = orderWithItems.doer_coupon_expires_at ?? undefined;
+  }
 
   try {
     await sendPaymentReceipt(order.user_id, emailData);

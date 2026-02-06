@@ -38,8 +38,7 @@ Sent by the Next.js app via `lib/email/senders.ts` and `lib/email/client.ts`. Al
 | Email type | Sender function | Preferences |
 |------------|----------------|-------------|
 | Order confirmation | `sendOrderConfirmation` | `email_order_confirmation` |
-| Payment receipt | `sendPaymentReceipt` | `email_order_confirmation` |
-| Doer coupon | `sendDoerCouponEmail` | Always sent |
+| Payment receipt | `sendPaymentReceipt` | `email_order_confirmation`; when the order has a DOER coupon, the same email includes the coupon section (single post-purchase email) |
 | Welcome | `sendWelcomeEmail` | Always sent |
 | Abandoned cart | `sendAbandonedCartReminder` | `email_promotional` |
 | Order status update | `sendOrderStatusUpdateEmail` | `email_order_shipped` |

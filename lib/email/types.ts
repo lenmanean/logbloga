@@ -5,20 +5,12 @@
 export type EmailTemplate =
   | 'order-confirmation'
   | 'payment-receipt'
-  | 'doer-coupon'
   | 'welcome'
   | 'password-reset'
   | 'email-verification'
   | 'abandoned-cart'
   | 'order-status-update'
   | 'product-update';
-
-export interface DoerCouponEmailData {
-  to: string;
-  doerCouponCode: string;
-  doerCouponExpiresAt?: string | null;
-  orderNumber?: string;
-}
 
 export interface EmailOptions {
   to: string | string[];
