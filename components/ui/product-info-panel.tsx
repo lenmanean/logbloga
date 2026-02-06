@@ -110,7 +110,7 @@ export function ProductInfoPanel({ package: pkg, className, hasAccess = false }:
       {hasAccess ? (
         <div className="mb-6">
           <Button asChild size="lg" className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold text-base py-6 rounded-md gap-2">
-            <Link href={`/account/library/${pkg.id}`} className="flex items-center justify-center gap-2">
+            <Link href={pkg.slug === 'master-bundle' ? '/account/library' : `/account/library/${pkg.id}`} className="flex items-center justify-center gap-2">
               Access Package
               <ArrowRight className="h-4 w-4" />
             </Link>

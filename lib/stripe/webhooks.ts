@@ -258,16 +258,39 @@ async function runFulfillmentForOrder(orderId: string): Promise<void> {
   const { getDoerCouponForOrder } = await import('@/lib/doer/coupon');
   const doerCouponCode = await getDoerCouponForOrder(orderId);
   if (doerCouponCode?.trim()) {
+    const doerPayload = {
+      to: orderWithItems.customer_email,
+      doerCouponCode,
+      doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? undefined,
+      orderNumber: orderWithItems.order_number || undefined,
+    };
+    let doerSent = false;
     try {
-      await sendDoerCouponEmail(orderWithItems.customer_email, {
-        to: orderWithItems.customer_email,
-        doerCouponCode,
-        doerCouponExpiresAt: orderWithItems.doer_coupon_expires_at ?? undefined,
-        orderNumber: orderWithItems.order_number || undefined,
-      });
+      const doerResult = await sendDoerCouponEmail(orderWithItems.customer_email, doerPayload);
+      doerSent = doerResult.success;
+      if (!doerResult.success) {
+        console.error('Error sending DOER coupon email:', doerResult.error);
+        await new Promise((r) => setTimeout(r, 2000));
+        const retryResult = await sendDoerCouponEmail(orderWithItems.customer_email, doerPayload);
+        if (retryResult.success) doerSent = true;
+        else console.error('DOER coupon email retry failed:', retryResult.error);
+      }
     } catch (doerError) {
       console.error('Error sending DOER coupon email:', doerError);
+      await new Promise((r) => setTimeout(r, 2000));
+      try {
+        const retryResult = await sendDoerCouponEmail(orderWithItems.customer_email, doerPayload);
+        if (retryResult.success) doerSent = true;
+        else console.error('DOER coupon email retry failed:', retryResult.error);
+      } catch (retryErr) {
+        console.error('DOER coupon email retry threw:', retryErr);
+      }
     }
+    if (!doerSent) {
+      console.error(`DOER coupon email was not delivered for order ${orderId}`);
+    }
+  } else {
+    console.log(`No DOER coupon code for order ${orderId} (skipping DOER email)`);
   }
 
   const emailData = {

@@ -33,8 +33,8 @@ export function PackageOverview({ product, progress, className }: PackageOvervie
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Progress Stepper */}
-      <div className="mb-6">
+      {/* Progress Stepper - hidden on mobile, desktop only */}
+      <div className="mb-6 hidden md:block">
         <ProgressStepper
           productId={product.id}
           slug={slug}

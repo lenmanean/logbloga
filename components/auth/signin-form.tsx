@@ -161,7 +161,7 @@ function SignInFormContent() {
   };
 
   const primaryButtonLabel =
-    authMethod === 'otp' ? 'Send one-time code' : 'Sign in';
+    authMethod === 'otp' ? 'Sign in with one-time code' : 'Sign in';
   const primaryDisabled =
     isCheckingAuth || isLoading || !emailLooksValid || (authMethod === 'password' && !form.watch('password'));
 

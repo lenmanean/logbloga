@@ -147,12 +147,14 @@ export async function sendDoerCouponEmail(
       return { success: false, error: result.error.message };
     }
 
+    console.log('DOER coupon email sent successfully', { messageId: result.data?.id });
     return { success: true, messageId: result.data?.id };
   } catch (error) {
+    const errMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error sending DOER coupon email:', error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error',
+      error: errMessage,
     };
   }
 }

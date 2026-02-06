@@ -137,8 +137,8 @@ export function LevelContent({
 
   return (
     <div className={cn('space-y-6', className)}>
-      {/* Level Progress Bar */}
-      <div className="mb-6">
+      {/* Level Progress Bar - hidden on mobile, desktop only */}
+      <div className="mb-6 hidden md:block">
         <ProgressStepper
           productId={productId}
           slug={slug}

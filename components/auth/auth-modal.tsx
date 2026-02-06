@@ -196,7 +196,7 @@ export function AuthModal() {
   };
 
   const displayError = signInError || otp.error;
-  const primarySignInLabel = authMethod === 'otp' ? 'Send one-time code' : 'Sign in';
+  const primarySignInLabel = authMethod === 'otp' ? 'Sign in with one-time code' : 'Sign in';
   const primarySignInDisabled =
     isCheckingAuth ||
     isPasswordLoading ||
@@ -208,7 +208,7 @@ export function AuthModal() {
       <DialogContent
         showCloseButton={true}
         className={cn(
-          'duration-200 sm:max-w-md max-h-[90vh] overflow-y-auto',
+          'duration-200 sm:max-w-md max-h-[90vh] overflow-y-auto min-w-0',
           'data-[state=open]:slide-in-from-bottom-2 data-[state=closed]:slide-out-to-top-2',
           'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
           'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95'
@@ -315,7 +315,7 @@ export function AuthModal() {
               </div>
             </div>
 
-            <DialogFooter className="flex flex-col gap-4 pt-4">
+            <DialogFooter className="flex flex-col gap-4 pt-4 w-full sm:flex-col sm:justify-stretch">
               <Button type="submit" className="w-full" disabled={primarySignInDisabled}>
                 {isPasswordLoading ? (
                   <>
@@ -439,7 +439,7 @@ export function AuthModal() {
               </span>
             </label>
 
-            <DialogFooter className="flex flex-col gap-4 pt-4">
+            <DialogFooter className="flex flex-col gap-4 pt-4 w-full sm:flex-col sm:justify-stretch">
               <Button type="submit" className="w-full" disabled={otp.isSending}>
                 {otp.isSending ? (
                   <>
@@ -479,7 +479,7 @@ export function AuthModal() {
               </p>
             </div>
 
-            <DialogFooter className="flex flex-col gap-4 pt-4">
+            <DialogFooter className="flex flex-col gap-4 pt-4 w-full sm:flex-col sm:justify-stretch">
               <Button
                 type="submit"
                 className="w-full"
@@ -503,13 +503,15 @@ export function AuthModal() {
               >
                 {otp.resendCooldown > 0 ? `Resend code in ${otp.resendCooldown}s` : otp.isSending ? 'Sending…' : 'Resend code'}
               </Button>
-              <button
-                type="button"
-                onClick={mode === 'signin' ? signInBackToCredentials : () => { otp.setStep('email'); otp.setError(null); otp.setOtpCode(''); }}
-                className="text-sm text-muted-foreground hover:text-foreground underline"
-              >
-                Use a different email
-              </button>
+              <div className="w-full text-center">
+                <button
+                  type="button"
+                  onClick={mode === 'signin' ? signInBackToCredentials : () => { otp.setStep('email'); otp.setError(null); otp.setOtpCode(''); }}
+                  className="text-sm text-muted-foreground hover:text-foreground underline"
+                >
+                  Use a different email
+                </button>
+              </div>
             </DialogFooter>
           </form>
         )}

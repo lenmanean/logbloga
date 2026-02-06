@@ -30,6 +30,10 @@ export default async function ProductAccessPage({ params }: ProductAccessPagePro
   const product = await getProductById(productId);
   if (!product) notFound();
 
+  if (product.slug === 'master-bundle') {
+    redirect('/account/library');
+  }
+
   const hasAccess = await hasProductAccess(user.id, productId);
   if (!hasAccess) {
     redirect(`/ai-to-usd/packages/${product.slug || product.id}`);
