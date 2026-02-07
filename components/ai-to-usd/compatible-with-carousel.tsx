@@ -22,7 +22,7 @@ import {
 
 const SLOT_WIDTH_PX = 140;
 /** Time between each cycle step (one logo moves left). */
-const CYCLE_INTERVAL_MS = 3000;
+const CYCLE_INTERVAL_MS = 5000;
 const STEP_TRANSITION_MS = 400;
 
 export interface PlatformItem {
