@@ -24,12 +24,12 @@ export default function AiToUsdPage() {
               Turn AI Into Revenue
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Structured packages to monetize AI—whether you build products, grow a following, run an agency, or freelance. Learn once, earn on your terms.
+              Structured packages to monetize AI. Whether you build products, grow a following, run an agency, or freelance: learn once, earn on your terms.
             </p>
           </div>
         </section>
 
-        {/* Compatible with – platform carousel */}
+        {/* Compatible with platform carousel */}
         <CompatibleWithCarousel />
 
         {/* Explore Our Packages */}
@@ -39,7 +39,7 @@ export default function AiToUsdPage() {
               Explore Our Packages
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Pick your path. One package or all four—each gets you from idea to income.
+              Pick your path. One package or all four; each gets you from idea to income.
             </p>
           </div>
           <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-8">
@@ -57,7 +57,7 @@ export default function AiToUsdPage() {
                 <div className="min-w-0">
                   <Badge className="mb-2 bg-amber-500/20 text-amber-800 dark:bg-amber-400/20 dark:text-amber-200 border-amber-500/30">Best Value</Badge>
                   <h3 className="text-2xl md:text-3xl font-bold mb-2 text-amber-900 dark:text-amber-100">
-                    Complete AI Monetization – Master Bundle
+                    Complete AI Monetization: Master Bundle
                   </h3>
                   <p className="text-muted-foreground max-w-2xl">
                     All four packages. 145+ hours, templates & guides. One purchase.
@@ -99,7 +99,7 @@ export default function AiToUsdPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Start where you are. Each level builds to the next—no overwhelm.
+                  Start where you are. Each level builds to the next, no overwhelm.
                 </p>
               </CardContent>
             </Card>
@@ -163,7 +163,7 @@ export default function AiToUsdPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Platform setup, integrations, and best practices—so you actually ship.
+                  Platform setup, integrations, and best practices so you actually ship.
                 </p>
               </CardContent>
             </Card>
