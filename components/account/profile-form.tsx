@@ -10,17 +10,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 const profileSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters').optional().or(z.literal('')),
 });
 
-const changeEmailSchema = z.object({
-  newEmail: z.string().email('Please enter a valid email address'),
-});
+const emailSchema = z.string().email('Please enter a valid email address');
 
 type ProfileFormData = z.infer<typeof profileSchema>;
-type ChangeEmailFormData = z.infer<typeof changeEmailSchema>;
 
 interface ProfileFormProps {
   initialData?: {
@@ -33,10 +31,13 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [emailValue, setEmailValue] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [emailSuccess, setEmailSuccess] = useState(false);
   const { user, updateUser } = useAuth();
+
+  const originalEmail = user?.email ?? '';
 
   const {
     register,
@@ -50,12 +51,8 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
     },
   });
 
-  const emailForm = useForm<ChangeEmailFormData>({
-    resolver: zodResolver(changeEmailSchema),
-    defaultValues: {
-      newEmail: user?.email || '',
-    },
-  });
+  const emailEdited = emailValue.trim() !== '' && emailValue.trim() !== originalEmail;
+  const emailValid = emailSchema.safeParse(emailValue.trim()).success;
 
   useEffect(() => {
     if (initialData) {
@@ -67,9 +64,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
 
   useEffect(() => {
     if (user?.email) {
-      emailForm.reset({
-        newEmail: user.email,
-      });
+      setEmailValue(user.email);
     }
   }, [user?.email]);
 
@@ -105,7 +100,16 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
     }
   };
 
-  const onSubmitEmail = async (data: ChangeEmailFormData) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = emailValue.trim();
+    if (!trimmed || trimmed === originalEmail) return;
+    const parsed = emailSchema.safeParse(trimmed);
+    if (!parsed.success) {
+      setEmailError(parsed.error.errors[0]?.message ?? 'Please enter a valid email address');
+      return;
+    }
+
     setEmailLoading(true);
     setEmailError(null);
     setEmailSuccess(false);
@@ -113,12 +117,8 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
     try {
       const response = await fetch('/api/account/change-email', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          newEmail: data.newEmail,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ newEmail: parsed.data }),
       });
 
       const result = await response.json();
@@ -132,14 +132,16 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
       setEmailSuccess(true);
       setEmailLoading(false);
 
-      setTimeout(() => {
-        setEmailSuccess(false);
-        emailForm.reset({ newEmail: user?.email || '' });
-      }, 5000);
+      setTimeout(() => setEmailSuccess(false), 5000);
     } catch (err) {
       setEmailError('An unexpected error occurred. Please try again.');
       setEmailLoading(false);
     }
+  };
+
+  const handleEmailCancel = () => {
+    setEmailValue(originalEmail);
+    setEmailError(null);
   };
 
   return (
@@ -167,10 +169,57 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
             <Input
               id="email"
               type="email"
-              value={user?.email || ''}
-              disabled
-              className="bg-muted"
+              value={emailValue}
+              onChange={(e) => setEmailValue(e.target.value)}
+              placeholder="you@example.com"
+              className={cn(emailError && 'border-destructive')}
+              aria-invalid={!!emailError}
+              aria-describedby={emailError ? 'email-error' : undefined}
             />
+            {emailError && (
+              <p id="email-error" className="text-sm text-destructive" role="alert">
+                {emailError}
+              </p>
+            )}
+            {emailSuccess && (
+              <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
+                Verification email sent! Please check your new email address to confirm the change.
+              </div>
+            )}
+
+            <div
+              className={cn(
+                'grid transition-all duration-200 ease-out',
+                emailEdited ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+              )}
+            >
+              <div className="min-h-0 overflow-hidden">
+                <div className="space-y-3 pt-2">
+                  <p className="text-xs text-muted-foreground">
+                    You&apos;ll receive a verification email at the new address to confirm the change.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      onClick={handleEmailSubmit}
+                      disabled={emailLoading || !emailValid}
+                    >
+                      {emailLoading ? 'Sending...' : 'Save email'}
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="ghost"
+                      onClick={handleEmailCancel}
+                      disabled={emailLoading}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -197,48 +246,6 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
           </CardFooter>
         )}
       </form>
-
-      <CardContent className="pt-0 border-t">
-        <form onSubmit={emailForm.handleSubmit(onSubmitEmail)} className="space-y-4">
-          {emailError && (
-            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
-              {emailError}
-            </div>
-          )}
-
-          {emailSuccess && (
-            <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
-              Verification email sent! Please check your new email address to confirm the change.
-            </div>
-          )}
-
-          <div className="space-y-2">
-            <Label htmlFor="newEmail">New email</Label>
-            <Input
-              id="newEmail"
-              type="email"
-              placeholder="new@example.com"
-              {...emailForm.register('newEmail')}
-              aria-invalid={emailForm.formState.errors.newEmail ? 'true' : 'false'}
-            />
-            {emailForm.formState.errors.newEmail && (
-              <p className="text-sm text-destructive" role="alert">
-                {emailForm.formState.errors.newEmail.message}
-              </p>
-            )}
-            <p className="text-xs text-muted-foreground">
-              You&apos;ll receive a verification email at the new address to confirm the change.
-            </p>
-          </div>
-          <Button
-            type="submit"
-            variant="secondary"
-            disabled={emailLoading || !emailForm.formState.isDirty}
-          >
-            {emailLoading ? 'Sending verification...' : 'Change Email'}
-          </Button>
-        </form>
-      </CardContent>
     </Card>
   );
 }

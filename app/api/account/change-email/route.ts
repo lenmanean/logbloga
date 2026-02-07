@@ -9,11 +9,20 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const user = await requireAuth();
-    const { newEmail } = await request.json();
+    const body = await request.json();
+    const newEmail = typeof body?.newEmail === 'string' ? body.newEmail.trim() : '';
 
     if (!newEmail) {
       return NextResponse.json(
         { error: 'New email is required' },
+        { status: 400 }
+      );
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(newEmail)) {
+      return NextResponse.json(
+        { error: 'Please enter a valid email address' },
         { status: 400 }
       );
     }
