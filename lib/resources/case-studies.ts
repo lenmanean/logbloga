@@ -10,106 +10,100 @@ export const caseStudies: CaseStudy[] = [
     id: '1',
     slug: 'doer-ai-goal-achievement-platform',
     title: 'DOER: Building an AI-Powered Goal Achievement Platform',
-    description: 'How DOER was built using AI to USD principles to create a production-ready SaaS platform that transforms goals into actionable plans.',
+    description: 'How DOER evolved from an AI roadmap generator to a full goal-achievement platform—core planning, monetization, integrations, compliance, and the Logbloga partner channel.',
     category: 'Web Apps',
     tags: ['web-apps', 'saas', 'ai-integration', 'product-development'],
     content: `# DOER: Building an AI-Powered Goal Achievement Platform
 
-## Background
+## From Roadmap Generator to Full Platform
 
-DOER is an AI-powered goal achievement platform that transforms user goals into structured, actionable plans. Built using principles and methodologies from the AI to USD Web Apps package, DOER demonstrates how AI can be leveraged to create production-ready SaaS applications that generate real value.
+DOER began as a simple idea: users state a goal, and the product turns it into a **structured plan** with checkpoints, tasks, and a personalized timeline. From that core, it grew into a full goal-achievement platform at [usedoer.com](https://usedoer.com)—with a clear sequence of stages that mirrors the AI to USD Web Apps package progression.
 
-## The Vision
+The story is one of consistent growth: *core AI planning first, then monetization and security, then deep integrations, then trust and compliance, and finally a structured partner channel.*
 
-The goal was to create a platform that could take any user goal—from "Learn to play guitar" to "Start a business"—and automatically generate a personalized plan with tasks, checkpoints, and timelines. This required sophisticated AI integration, smart scheduling algorithms, and seamless calendar integrations.
 
-## Challenge
+## Phase 1: The Foundation
 
-Building a platform like DOER presented several challenges:
+The foundation was the **core data model**: plans, tasks, task scheduling, scheduling history, user settings, onboarding, and health snapshots. That established **AI-generated planning** and **time-block scheduling** as the product spine—the "goal in, plan out" experience that defines DOER.
 
-- **AI Integration Complexity**: Implementing AI that could understand natural language goals and break them down into actionable tasks
-- **Smart Scheduling**: Creating an intelligent scheduler that considers dependencies, priorities, and user availability
-- **Calendar Synchronization**: Integrating with multiple calendar platforms (Google Calendar, Outlook, Apple Calendar) while maintaining data consistency
-- **Real-time Updates**: Ensuring that plan changes and rescheduling happen instantly across all integrated platforms
-- **Scalability**: Building a system that could handle thousands of concurrent users and plans
 
-## Solution: AI to USD Approach
+## Phase 2: Trust and Monetization
 
-DOER was developed following the structured approach outlined in the AI to USD Web Apps package:
+With the core in place, the next phase focused on trust and monetization. **Robust authentication** and profile handling—including username and referral source—ensured users could own their data. **Stripe-backed subscriptions** (monthly and annual Pro plans), usage and credits, and **API tokens for power users** made billing production-ready.
 
-### Level 1: Foundation
-- Built core AI plan generation functionality
-- Implemented basic task management and scheduling
-- Created user authentication and plan storage
+**RLS and security hardening** ensured billing and data access were locked down. DOER could now charge, protect user data, and scale confidently.
 
-### Level 2: Advanced Features
-- Developed smart scheduling algorithms with dependency resolution
-- Integrated multiple calendar platforms
-- Added progress tracking and health score systems
-- Implemented auto-rescheduling capabilities
 
-### Level 3: Enterprise Features
-- Built comprehensive API for third-party integrations
-- Added integrations with task management tools (Todoist, Asana, Trello, etc.)
-- Implemented analytics and insights dashboard
-- Created team collaboration features
+## Phase 3: Integrations—Sitting Inside Existing Tools
 
-## Key Features Implemented
+DOER expanded into the user's existing toolset rather than replacing it. **Google Calendar** first, then provider-agnostic calendar sync—**two-way event sync** and conflict-aware scheduling so tasks land in the user's calendar without collisions.
 
-### AI Plan Generation
-DOER uses advanced AI to analyze goals, break them down into actionable tasks, estimate timelines, and create personalized roadmaps. The AI considers complexity, dependencies, and realistic scheduling.
+Then **task-management integrations**: Todoist, Asana, Trello—pushing AI-scheduled tasks and due dates into existing workflows. Then **Slack** for notifications and rescheduling, and **Notion** for plan context. The AI scheduler sits *inside* calendars and task tools instead of forcing users to switch.
 
-### Smart Scheduling & Auto-Rescheduling
-The AI-powered scheduler analyzes available time, task priorities, and dependencies to automatically place tasks in calendars. It considers work hours, existing commitments, and optimal productivity patterns.
 
-### Calendar Integrations
-DOER seamlessly integrates with Google Calendar, Outlook, and Apple Calendar, keeping tasks synchronized as calendar events and respecting existing commitments.
+## Phase 4: Trust and Compliance
 
-### Progress Tracking
-Real-time progress tracking with health scores (0-100) that reflect how well users maintain their commitments. The system provides analytics and insights to help users optimize their approach.
+In parallel, the product added responsible growth and compliance. A **pre-launch and waitlist flow** with feature flags. **Cookie consent** and marketing analytics (e.g. GA4, Meta Pixel). Newsletter and contact-sales flows. **Misuse reporting**. And **full account deletion** with audit and trial-abuse prevention—so deletion didn't grant repeated free trials.
 
-### Extensive Integrations
-DOER connects with popular tools including Todoist, Asana, Trello, Notion, Slack, Strava, and more, creating a unified workflow ecosystem.
+These policies set the stage for partnerships and enterprise readiness.
 
-## Technical Implementation
 
-The platform was built using modern web technologies and AI tools, following the implementation plans and best practices from the AI to USD packages. Key technical achievements include:
+## The Evolution Path
 
-- **AI-Powered Goal Analysis**: Natural language processing to understand user intent
-- **Dependency Resolution**: Complex algorithm to handle task dependencies and conflicts
-- **Real-time Synchronization**: Bidirectional sync with multiple calendar and task management platforms
-- **Scalable Architecture**: Built to handle growth from individual users to enterprise teams
+\`\`\`mermaid
+flowchart LR
+  A[AI Roadmap Generator] --> B[Foundation: Data Model]
+  B --> C[Trust & Monetization]
+  C --> D[Calendar & Task Integrations]
+  D --> E[Compliance & Policies]
+  E --> F[Partner Channel]
+  F --> G[Logbloga Bundled Offer]
+\`\`\`
 
-## Results
 
-DOER successfully launched as a production-ready SaaS platform, demonstrating the power of AI to USD methodologies:
+## Evolution at a Glance
 
-- **Platform Launch**: Successfully deployed and available at usedoer.com
-- **User Adoption**: Growing user base leveraging AI-powered goal achievement
-- **Integration Ecosystem**: Comprehensive integrations with major productivity tools
-- **Proven Methodology**: Validates the AI to USD approach for building AI-powered SaaS applications
+| Phase | Focus | Key Deliverables |
+|-------|-------|------------------|
+| **1. Foundation** | Core data model | Plans, tasks, scheduling, health snapshots, AI planning spine |
+| **2. Trust & Monetization** | Billing and security | Stripe subscriptions, usage/credits, API tokens, RLS hardening |
+| **3. Integrations** | User's existing tools | Calendar sync, Todoist/Asana/Trello, Slack, Notion |
+| **4. Compliance** | Responsible growth | Cookie consent, analytics, misuse reporting, account deletion, trial-abuse prevention |
+| **5. Partner Channel** | Bundled distribution | Logbloga integration, HMAC-secured API, single-use Pro coupons |
 
-## Impact
 
-DOER serves as a real-world example of how the AI to USD Web Apps package can be used to build sophisticated, AI-powered applications. It demonstrates:
+## The Logbloga Integration
 
-- How AI can be integrated into production applications
-- The value of structured implementation plans and level-based progression
-- The importance of comprehensive resources and templates
-- How AI-powered tools can create real business value
+The Logbloga integration is the next step: a **partner API** that issues single-use, time-limited Pro coupons (e.g. \`LBG-XXXXXXXX\`) for Logbloga's Web Apps Package and other packages. HMAC-secured requests, **idempotency by order**, and redemption on usedoer.com mean DOER can be offered as a **bundled benefit** in Logbloga's offerings.
 
-The platform continues to evolve, with new features and integrations being added based on user feedback and the ongoing application of AI to USD principles.`,
+The case study—and the Web Apps Package—captures that evolution and the platform's readiness for bundled distribution.
+
+
+## Key Results
+
+| Metric | Value |
+|--------|-------|
+| **Platform Status** | Production Ready |
+| **AI Integration** | Goal analysis, scheduling, time-block placement |
+| **Calendar Integrations** | Google, provider-agnostic sync, two-way events |
+| **Task Tools** | Todoist, Asana, Trello, Notion, Slack |
+| **Partner Channel** | Logbloga Web Apps Package (bundled Pro coupons) |
+
+
+## The Bottom Line
+
+From inception as an AI roadmap generator to today, DOER's story is one of consistent growth. Core AI planning first. Monetization and security. Deep calendar and task-tool integrations. Trust and compliance. And finally a structured partner channel—with the Logbloga Web Apps Package case study capturing that evolution and the platform's readiness for bundled distribution.`,
     company: 'DOER',
     industry: 'SaaS',
-    outcome: 'Production-ready AI-powered SaaS platform successfully launched, demonstrating real-world application of AI to USD principles',
+    outcome: 'Production-ready goal-achievement platform with AI planning, Stripe subscriptions, calendar and task-tool integrations, compliance, and Logbloga-bundled Pro coupons.',
     testimonial: 'Building DOER using the AI to USD Web Apps package provided the structured approach, resources, and implementation plans needed to create a sophisticated AI-powered platform. The level-based progression and comprehensive templates were invaluable in going from concept to production.',
     featuredImage: '/usedoer_favicon.png',
     results: [
       { metric: 'Platform Status', value: 'Production Ready' },
-      { metric: 'AI Integration', value: 'Advanced Goal Analysis & Scheduling' },
-      { metric: 'Calendar Integrations', value: 'Google, Outlook, Apple Calendar' },
-      { metric: 'Task Management Integrations', value: 'Todoist, Asana, Trello, Notion' },
-      { metric: 'API Availability', value: 'REST API with Full Documentation' }
+      { metric: 'AI Integration', value: 'Goal analysis, scheduling, time-block placement' },
+      { metric: 'Calendar Integrations', value: 'Google, provider-agnostic sync, two-way events' },
+      { metric: 'Task Tools', value: 'Todoist, Asana, Trello, Notion, Slack' },
+      { metric: 'Partner Channel', value: 'Logbloga Web Apps Package (bundled Pro coupons)' }
     ],
     createdAt: '2024-01-15',
     updatedAt: '2025-01-25'
