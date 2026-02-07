@@ -15,11 +15,11 @@ export async function GET(request: NextRequest) {
 
   const supabase = await createClient();
 
-  // Handle email verification (token_hash)
+  // Handle email verification (token_hash) - includes signup, recovery, invite, email_change, magiclink
   if (token_hash && type) {
     const { error } = await supabase.auth.verifyOtp({
       token_hash,
-      type: type as 'signup' | 'email' | 'recovery' | 'invite',
+      type: type as 'signup' | 'email' | 'recovery' | 'invite' | 'email_change' | 'magiclink',
     });
 
     if (!error) {

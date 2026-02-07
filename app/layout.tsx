@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "./globals.css";
 import { Header } from "@/components/layout/header";
+import { EmailChangeMessageBanner } from "@/components/auth/email-change-message-banner";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/cart-context";
 import { AuthModalProvider } from "@/contexts/auth-modal-context";
@@ -61,6 +63,9 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <AuthModalProvider>
+              <Suspense fallback={null}>
+                <EmailChangeMessageBanner />
+              </Suspense>
               <Header />
               {children}
               <CookieConsent />

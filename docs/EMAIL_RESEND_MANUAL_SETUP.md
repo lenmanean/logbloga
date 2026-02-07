@@ -8,7 +8,7 @@ This guide walks through the manual steps required so that **all** email (auth a
 
 - Resend account with a **verified sending domain** (e.g. `logbloga.com`) and **API key** (see [RESEND_SETUP.md](RESEND_SETUP.md)).
 - Supabase project (hosted; local dev will still use Inbucket).
-- `NEXT_PUBLIC_APP_URL` and `RESEND_FROM_EMAIL` (or default) already set for your environment.
+- `NEXT_PUBLIC_APP_URL`, `RESEND_FROM_EMAIL`, and optionally `RESEND_FROM_NAME` (default: Logbloga) already set for your environment.
 
 ---
 
@@ -73,12 +73,9 @@ You can align auth email copy and branding with your app.
 
 1. In Supabase Dashboard: **Authentication** → **Email Templates**.
 
-2. Edit the templates you use:
-   - **Confirm signup** (and/or Magic Link / OTP, depending on your flow).
-   - **Recovery** (password reset).
-   - **Change Email Address.**
+2. Edit the templates you use. [SUPABASE_EMAIL_TEMPLATES_GUIDE.md](SUPABASE_EMAIL_TEMPLATES_GUIDE.md) lists every template (Authentication and Security) with suggested subject, body HTML, and required variables.
 
-3. Use the same tone and sign-off as your Resend templates (e.g. “The Logbloga Team”). For OTP-based signup, see [supabase-email-template-otp.md](../supabase-email-template-otp.md) in the project root for the `{{ .Token }}` variable.
+3. Use the same tone and sign-off as your Resend templates (e.g. “The Logbloga Team”). For per-template copy and variables (including OTP `{{ .Token }}` for signup), see [SUPABASE_EMAIL_TEMPLATES_GUIDE.md](SUPABASE_EMAIL_TEMPLATES_GUIDE.md).
 
 4. **Save** each template.
 
@@ -110,6 +107,7 @@ If auth emails do not appear in Resend, double-check Supabase SMTP settings (hos
 - [ ] Resend domain verified; API key available.
 - [ ] Supabase: Custom SMTP enabled; host `smtp.resend.com`, port 465 or 587, user `resend`, password = API key; sender = verified from address.
 - [ ] Supabase: Site URL = `NEXT_PUBLIC_APP_URL`.
+- [ ] Supabase: Add `https://your-domain.com/auth/callback` to Redirect URLs (Authentication → URL Configuration) for email change and password reset links.
 - [ ] Optional: Supabase email templates updated for branding.
 - [ ] Verified: password reset and signup emails delivered and visible in Resend Logs.
 

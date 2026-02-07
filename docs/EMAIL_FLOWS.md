@@ -27,6 +27,8 @@ Supabase Auth generates these emails (tokens, links, OTP). When **Custom SMTP** 
 | Invite | Supabase invite flow | Supabase: **Invite** template |
 
 - **Code:** `app/api/auth/reset-password/route.ts`, `app/api/account/change-email/route.ts`, `hooks/useAuth.tsx`, `components/auth/email-verification.tsx`, `app/api/auth/signup/route.ts`, `app/api/auth/verify-email/route.ts`. Change-email UI is on the profile page (`/account/profile`).
+
+**Email change (double confirm):** When `double_confirm_changes` is enabled in Supabase (Auth → Providers → Email), users must confirm from BOTH their old and new email. Add `https://your-domain.com/auth/callback` to Redirect URLs in Supabase Dashboard (Authentication → URL Configuration). The banner on the home page explains the flow when users land after the first confirmation. To require only the new-email confirmation, set `double_confirm_changes` to false in Supabase Dashboard (simpler UX, slightly lower security).
 - **Manual setup:** [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)
 
 ---

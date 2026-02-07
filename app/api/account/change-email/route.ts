@@ -36,10 +36,14 @@ export async function POST(request: Request) {
 
     const supabase = await createClient();
 
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const redirectTo = `${appUrl}/auth/callback`;
+
     // Update email (Supabase sends verification email; when custom SMTP e.g. Resend is configured, delivery is via that provider)
-    const { error: updateError } = await supabase.auth.updateUser({
-      email: newEmail,
-    });
+    const { error: updateError } = await supabase.auth.updateUser(
+      { email: newEmail },
+      { emailRedirectTo: redirectTo }
+    );
 
     if (updateError) {
       return NextResponse.json(
