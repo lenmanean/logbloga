@@ -55,18 +55,19 @@ export async function BlogContent({ content, mdxFilePath, className }: BlogConte
     return (
       <div
         className={cn(
-          'prose prose-lg dark:prose-invert max-w-3xl mx-auto text-center',
+          'prose prose-lg dark:prose-invert max-w-none text-left',
           'prose-headings:font-bold prose-headings:text-foreground',
-          'prose-h2:mt-12 prose-h2:mb-4 prose-h3:mt-8 prose-h3:mb-3',
-          'prose-p:text-foreground/90 prose-p:leading-relaxed prose-p:mb-6',
+          'prose-h2:mt-16 prose-h2:mb-6 prose-h2:text-xl prose-h2:md:text-2xl prose-h2:tracking-tight',
+          'prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-lg prose-h3:font-semibold',
+          'prose-p:text-foreground/90 prose-p:leading-relaxed prose-p:mb-5',
           'prose-a:text-primary prose-a:no-underline hover:prose-a:underline',
           'prose-strong:text-foreground prose-strong:font-semibold',
           'prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded',
           'prose-pre:bg-muted prose-pre:border',
-          'prose-img:rounded-lg prose-img:shadow-md',
-          'prose-ul:my-6 prose-ol:my-6 prose-li:mb-2 prose-ul:list-inside prose-ol:list-inside',
-          'prose-hr:my-12 prose-hr:border-muted-foreground/30',
-          'prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:py-2 prose-blockquote:my-6',
+          'prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto',
+          'prose-ul:my-6 prose-ol:my-6 prose-li:mb-2 prose-li:leading-relaxed',
+          'prose-hr:border-0 prose-hr:my-16',
+          'prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:pl-6',
           className
         )}
         dangerouslySetInnerHTML={{ __html: sanitized }}
@@ -79,7 +80,7 @@ export async function BlogContent({ content, mdxFilePath, className }: BlogConte
     return (
       <div
         className={cn(
-          'prose prose-lg dark:prose-invert max-w-3xl mx-auto text-center',
+          'prose prose-lg dark:prose-invert max-w-none text-left',
           className
         )}
         dangerouslySetInnerHTML={{ __html: fallbackContent }}

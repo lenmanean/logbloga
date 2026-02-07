@@ -8,7 +8,6 @@ import { BlogContent } from '@/components/blog/blog-content';
 import { BlogTags } from '@/components/blog/blog-tags';
 import { AdPlacement } from '@/components/blog/ad-placement';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { ArrowLeft, Calendar, User } from 'lucide-react';
 import { format } from 'date-fns';
@@ -148,9 +147,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       />
 
       <main className="min-h-screen bg-background">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="max-w-3xl mx-auto px-4 md:px-6 py-8 md:py-12">
           {/* Back Button */}
-          <div className="mb-6">
+          <div className="mb-6 flex justify-center">
             <Link href="/blog">
               <Button variant="ghost" className="gap-2">
                 <ArrowLeft className="h-4 w-4" />
@@ -160,16 +159,14 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </div>
 
           {/* Header Ad Zone */}
-          <div className="mb-6">
+          <div className="mb-8">
             <AdPlacement zone="header" className="w-full" />
           </div>
 
-          {/* Main Content - 2 Column Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
-            {/* Main Content */}
-            <article className="lg:col-span-2">
-              {/* Post Header */}
-              <header className="mb-8 text-center">
+          {/* Main Content - Centered Single Column */}
+          <article>
+            {/* Post Header */}
+            <header className="mb-12 text-center">
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                   {post.title}
                 </h1>
@@ -224,28 +221,19 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 )}
               </header>
 
-              {/* Post Content */}
-              <div className="prose-wrapper max-w-3xl mx-auto">
-                <BlogContent
-                  content={(post as { content?: string | null }).content}
-                  mdxFilePath={post.mdx_file_path || undefined}
-                />
-              </div>
+            {/* Post Content */}
+            <div className="prose-wrapper">
+              <BlogContent
+                content={(post as { content?: string | null }).content}
+                mdxFilePath={post.mdx_file_path || undefined}
+              />
+            </div>
 
-              {/* Footer Ad Zone */}
-              <div className="mt-12">
-                <AdPlacement zone="footer" className="w-full" />
-              </div>
-            </article>
-
-            {/* Sidebar */}
-            <aside className="lg:col-span-1 space-y-6">
-              {/* Sidebar Ad Zone */}
-              <div className="sticky top-24">
-                <AdPlacement zone="sidebar" className="w-full" />
-              </div>
-            </aside>
-          </div>
+            {/* Footer Ad Zone */}
+            <div className="mt-16">
+              <AdPlacement zone="footer" className="w-full" />
+            </div>
+          </article>
 
           <Separator className="my-12" />
 

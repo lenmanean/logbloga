@@ -455,13 +455,13 @@ When comparing in-house vs. agency, most people compare salary to monthly fee. T
 
 ## What In-House Actually Costs
 
-**Direct costs:**
+### Direct costs
 - Salary (or multiple salaries for specialists)
 - Benefits (often 25–35% of salary)
 - Tools: ad platforms, analytics, creative tools, project management
 - Training and certifications
 
-**Hidden costs:**
+### Hidden costs
 - Recruiting and onboarding (3–6 months to full productivity)
 - Management time (your time, or a marketing lead’s)
 - Vacations, sick days, turnover—you cover the gap
@@ -473,11 +473,11 @@ A single mid-level paid media manager might cost $80K–$120K all-in. Add tools 
 
 ## What an Agency Actually Costs
 
-**Direct costs:**
+### Direct costs
 - Monthly retainer (varies by scope: $5K–$20K+ for performance work)
 - Ad spend (separate; you control this)
 
-**What you get:**
+### What you get
 - A team: strategist, media buyer, analyst, creative support
 - Tool access and expertise
 - No benefits, recruiting, or turnover on your books
@@ -485,7 +485,6 @@ A single mid-level paid media manager might cost $80K–$120K all-in. Add tools 
 
 The tradeoff: less control, potential for misalignment, and the need to manage the relationship. But for many brands, the total cost and risk are lower than building in-house from scratch.
 
----
 
 ## When In-House Makes Sense
 
@@ -503,7 +502,6 @@ The tradeoff: less control, potential for misalignment, and the need to manage t
 - You prefer variable cost over fixed headcount
 - You want access to cross-client learnings and best practices
 
----
 
 ## Framing the Decision
 
