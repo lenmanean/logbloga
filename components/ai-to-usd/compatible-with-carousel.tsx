@@ -19,11 +19,11 @@ import {
   SiUpwork,
   SiPaypal,
 } from 'react-icons/si';
-import { Sparkles, Code2, PenLine, Calendar, BarChart3, Layout, Building2, FileSignature, Box } from 'lucide-react';
 
 const SLOT_WIDTH_PX = 140;
-/** One slot passes by in this many ms for a continuous stream */
-const MS_PER_SLOT = 3500;
+/** Time between each cycle step (one logo moves left). */
+const CYCLE_INTERVAL_MS = 500;
+const STEP_TRANSITION_MS = 400;
 
 export interface PlatformItem {
   id: string;
@@ -32,14 +32,11 @@ export interface PlatformItem {
 }
 
 const DEFAULT_PLATFORMS: PlatformItem[] = [
-  // AI (all packages)
+  // AI
   { id: 'openai', name: 'OpenAI', icon: <SiOpenai className="size-full shrink-0" aria-hidden /> },
   { id: 'anthropic', name: 'Anthropic', icon: <SiAnthropic className="size-full shrink-0" aria-hidden /> },
-  { id: 'cursor', name: 'Cursor', icon: <Code2 className="size-full shrink-0" aria-hidden /> },
   { id: 'canva', name: 'Canva', icon: <SiCanva className="size-full shrink-0" aria-hidden /> },
   { id: 'github', name: 'GitHub Copilot', icon: <SiGithub className="size-full shrink-0" aria-hidden /> },
-  { id: 'jasper', name: 'Jasper', icon: <PenLine className="size-full shrink-0" aria-hidden /> },
-  { id: 'midjourney', name: 'Midjourney', icon: <Sparkles className="size-full shrink-0" aria-hidden /> },
   // Web Apps
   { id: 'nextjs', name: 'Next.js', icon: <SiNextdotjs className="size-full shrink-0" aria-hidden /> },
   { id: 'supabase', name: 'Supabase', icon: <SiSupabase className="size-full shrink-0" aria-hidden /> },
@@ -47,17 +44,11 @@ const DEFAULT_PLATFORMS: PlatformItem[] = [
   { id: 'vercel', name: 'Vercel', icon: <SiVercel className="size-full shrink-0" aria-hidden /> },
   // Social Media
   { id: 'buffer', name: 'Buffer', icon: <SiBuffer className="size-full shrink-0" aria-hidden /> },
-  { id: 'later', name: 'Later', icon: <Calendar className="size-full shrink-0" aria-hidden /> },
-  { id: 'metricool', name: 'Metricool', icon: <BarChart3 className="size-full shrink-0" aria-hidden /> },
   { id: 'google-analytics', name: 'Google Analytics', icon: <SiGoogleanalytics className="size-full shrink-0" aria-hidden /> },
   { id: 'hootsuite', name: 'Hootsuite', icon: <SiHootsuite className="size-full shrink-0" aria-hidden /> },
   // Agency
-  { id: 'systeme-io', name: 'Systeme.io', icon: <Layout className="size-full shrink-0" aria-hidden /> },
-  { id: 'gohighlevel', name: 'GoHighLevel', icon: <Building2 className="size-full shrink-0" aria-hidden /> },
   { id: 'hubspot', name: 'HubSpot', icon: <SiHubspot className="size-full shrink-0" aria-hidden /> },
   { id: 'clickup', name: 'ClickUp', icon: <SiClickup className="size-full shrink-0" aria-hidden /> },
-  { id: 'hello-bonsai', name: 'Hello Bonsai', icon: <FileSignature className="size-full shrink-0" aria-hidden /> },
-  { id: 'zite', name: 'Zite', icon: <Box className="size-full shrink-0" aria-hidden /> },
   // Freelancing
   { id: 'fiverr', name: 'Fiverr', icon: <SiFiverr className="size-full shrink-0" aria-hidden /> },
   { id: 'upwork', name: 'Upwork', icon: <SiUpwork className="size-full shrink-0" aria-hidden /> },
@@ -66,8 +57,8 @@ const DEFAULT_PLATFORMS: PlatformItem[] = [
 
 interface CompatibleWithCarouselProps {
   platforms?: PlatformItem[];
-  /** Milliseconds for one logo to travel one slot width (controls stream speed). */
-  msPerSlot?: number;
+  /** Milliseconds between each cycle step (one slot moves left). */
+  cycleIntervalMs?: number;
   slotWidth?: number;
 }
 
@@ -87,37 +78,36 @@ function getOpacity(distance: number): number {
 
 export function CompatibleWithCarousel({
   platforms = DEFAULT_PLATFORMS,
-  msPerSlot = MS_PER_SLOT,
+  cycleIntervalMs = CYCLE_INTERVAL_MS,
   slotWidth = SLOT_WIDTH_PX,
 }: CompatibleWithCarouselProps) {
-  const [position, setPosition] = useState(0);
-  const lastTimeRef = useRef<number>(0);
+  const [scrollOffset, setScrollOffset] = useState(0);
+  const skipTransitionRef = useRef(false);
   const n = platforms.length;
   const strip = [...platforms, ...platforms];
-  const wrapAt = n * slotWidth;
-  const pxPerMs = slotWidth / msPerSlot;
 
   useEffect(() => {
-    let rafId: number;
-    lastTimeRef.current = performance.now();
+    const t = setInterval(() => setScrollOffset((prev) => prev + 1), cycleIntervalMs);
+    return () => clearInterval(t);
+  }, [cycleIntervalMs]);
 
-    const tick = (now: number) => {
-      const delta = now - lastTimeRef.current;
-      lastTimeRef.current = now;
-      setPosition((prev) => {
-        let next = prev + pxPerMs * delta;
-        while (next >= wrapAt) next -= wrapAt;
-        return next;
+  useEffect(() => {
+    if (scrollOffset >= n) {
+      skipTransitionRef.current = true;
+      const raf = requestAnimationFrame(() => {
+        setScrollOffset(0);
+        requestAnimationFrame(() => {
+          skipTransitionRef.current = false;
+        });
       });
-      rafId = requestAnimationFrame(tick);
-    };
-
-    rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
-  }, [wrapAt, pxPerMs]);
+      return () => cancelAnimationFrame(raf);
+    }
+  }, [scrollOffset, n]);
 
   const containerWidth = slotWidth * 3;
-  const translateX = -position;
+  const effectiveOffset = scrollOffset >= n ? 0 : scrollOffset;
+  const translateX = -(effectiveOffset * slotWidth);
+  const useTransition = !skipTransitionRef.current;
 
   return (
     <section className="mb-12" aria-label="Compatible with tools and platforms">
@@ -134,11 +124,11 @@ export function CompatibleWithCarousel({
             width: strip.length * slotWidth,
             minHeight: slotWidth,
             transform: `translateX(${translateX}px)`,
+            transition: useTransition ? `transform ${STEP_TRANSITION_MS}ms ease-in-out` : 'none',
           }}
         >
           {strip.map((platform, i) => {
-            const centerOffset = position / slotWidth;
-            const distance = i - centerOffset - 1;
+            const distance = i - effectiveOffset - 1;
             const scale = getScale(distance);
             const opacity = getOpacity(distance);
             return (
@@ -150,6 +140,9 @@ export function CompatibleWithCarousel({
                   height: slotWidth,
                   transform: `scale(${scale})`,
                   opacity,
+                  transition: useTransition
+                    ? `transform ${STEP_TRANSITION_MS}ms ease-in-out, opacity ${STEP_TRANSITION_MS}ms ease-in-out`
+                    : 'none',
                 }}
               >
                 <div
