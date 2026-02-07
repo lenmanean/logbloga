@@ -57,7 +57,7 @@ const POSTS: BlogPostSeed[] = [
       'Campaign failure is rarely about creative or targeting. The real culprits are structural mistakes made before the first click. Here’s how to fix the foundation.',
     published: true,
     published_at: '2026-01-03T12:00:00Z',
-    tags: ['paid-ads', 'campaign-structure', 'strategy'],
+    tags: ['paid-ads', 'strategy'],
     seo_title: 'Why Most Paid Ad Campaigns Fail in the First 30 Days',
     seo_description:
       'Learn the structural mistakes that kill paid campaigns before tactics even matter—and how to avoid them.',
@@ -70,7 +70,7 @@ const POSTS: BlogPostSeed[] = [
       'ROAS sounds simple, but it can mislead. Here’s what 2x ROAS really tells you—and when it’s actually a red flag.',
     published: true,
     published_at: '2026-01-10T12:00:00Z',
-    tags: ['roas', 'metrics', 'paid-ads'],
+    tags: ['paid-ads', 'strategy'],
     seo_title: "What a 2x ROAS Actually Means and When It's a Bad Metric",
     seo_description:
       'Understanding ROAS beyond the number: when 2x is great, and when it means you’re leaving money on the table.',
@@ -83,7 +83,7 @@ const POSTS: BlogPostSeed[] = [
       'Traffic, attention, and buyers are not the same. Understanding the distinction is the key to building a quality funnel.',
     published: true,
     published_at: '2026-01-17T12:00:00Z',
-    tags: ['funnel', 'traffic', 'conversion'],
+    tags: ['funnel', 'strategy'],
     seo_title: 'Traffic, Attention, and Buyers: Why Brands Confuse Them',
     seo_description:
       'Most brands treat traffic as a goal. Learn why that’s wrong and how to focus on attention and buyers instead.',
@@ -96,7 +96,7 @@ const POSTS: BlogPostSeed[] = [
       'Don’t bet your ad budget on a guess. Validate demand, pricing, and positioning before you scale paid acquisition.',
     published: true,
     published_at: '2026-01-23T12:00:00Z',
-    tags: ['validation', 'ecommerce', 'product-market-fit'],
+    tags: ['ecommerce', 'strategy'],
     seo_title: 'How to Validate a Product Before Spending on Ads',
     seo_description:
       'Pre-launch validation steps for e-commerce and DTC brands: validate demand, pricing, and positioning before paid ads.',
@@ -109,7 +109,7 @@ const POSTS: BlogPostSeed[] = [
       'Both platforms work—but for different goals and customer journeys. Here’s when to lean on Meta, when on Google, and when on both.',
     published: true,
     published_at: '2026-01-30T12:00:00Z',
-    tags: ['meta-ads', 'google-ads', 'premium-brands'],
+    tags: ['paid-ads', 'strategy'],
     seo_title: 'Meta Ads vs Google Ads for Premium Brands',
     seo_description:
       'When to use Meta vs Google for premium and DTC brands: channel strengths, use cases, and decision framework.',
@@ -122,7 +122,7 @@ const POSTS: BlogPostSeed[] = [
       'Profitable at $5K/month doesn’t mean ready for $50K. Premature scaling destroys margin, data quality, and long-term viability.',
     published: true,
     published_at: '2026-02-04T12:00:00Z',
-    tags: ['scaling', 'paid-ads', 'restraint'],
+    tags: ['paid-ads', 'strategy'],
     seo_title: 'Why Scaling Ads Too Early Kills Profitable Products',
     seo_description:
       'The dangers of scaling paid ads before you’re ready—and how to know when it’s safe to grow spend.',
@@ -135,7 +135,7 @@ const POSTS: BlogPostSeed[] = [
       'In-house versus agency isn’t just about hourly rates. It’s about total cost, speed, and risk. Here’s a clear framework.',
     published: true,
     published_at: '2026-02-06T12:00:00Z',
-    tags: ['agency', 'in-house', 'pricing'],
+    tags: ['agency', 'strategy'],
     seo_title: 'In-House vs Performance Agency: The Real Cost',
     seo_description:
       'A transparent comparison of in-house marketing costs vs. hiring a performance agency—without the spin.',
