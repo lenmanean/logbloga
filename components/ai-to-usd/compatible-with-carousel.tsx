@@ -24,6 +24,8 @@ const SLOT_WIDTH_PX = 140;
 /** Time between each cycle step (one logo moves left). */
 const CYCLE_INTERVAL_MS = 3000;
 const STEP_TRANSITION_MS = 400;
+/** Idle time (no interaction) before auto-advance resumes. */
+const IDLE_BEFORE_RESUME_MS = 3000;
 
 export interface PlatformItem {
   id: string;
@@ -59,6 +61,8 @@ interface CompatibleWithCarouselProps {
   platforms?: PlatformItem[];
   /** Milliseconds between each cycle step (one slot moves left). */
   cycleIntervalMs?: number;
+  /** Idle ms after last interaction before auto-advance resumes. */
+  idleBeforeResumeMs?: number;
   slotWidth?: number;
 }
 
@@ -79,46 +83,118 @@ function getOpacity(distance: number): number {
 export function CompatibleWithCarousel({
   platforms = DEFAULT_PLATFORMS,
   cycleIntervalMs = CYCLE_INTERVAL_MS,
+  idleBeforeResumeMs = IDLE_BEFORE_RESUME_MS,
   slotWidth = SLOT_WIDTH_PX,
 }: CompatibleWithCarouselProps) {
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const [position, setPosition] = useState(0);
+  const [paused, setPaused] = useState(false);
   const skipTransitionRef = useRef(false);
+  const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dragStartXRef = useRef(0);
+  const dragStartPositionRef = useRef(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   const n = platforms.length;
   const strip = [...platforms, ...platforms];
 
-  useEffect(() => {
-    const t = setInterval(() => setScrollOffset((prev) => prev + 1), cycleIntervalMs);
-    return () => clearInterval(t);
-  }, [cycleIntervalMs]);
+  const scheduleResume = () => {
+    if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    resumeTimeoutRef.current = setTimeout(() => setPaused(false), idleBeforeResumeMs);
+  };
+
+  const onInteract = () => {
+    setPaused(true);
+    scheduleResume();
+  };
 
   useEffect(() => {
-    if (scrollOffset >= n) {
+    if (paused) return;
+    const t = setInterval(() => setPosition((p) => p + 1), cycleIntervalMs);
+    return () => clearInterval(t);
+  }, [paused, cycleIntervalMs, n]);
+
+  useEffect(() => {
+    return () => {
+      if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
+    };
+  }, []);
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    onInteract();
+    dragStartXRef.current = e.clientX;
+    dragStartPositionRef.current = position;
+    containerRef.current?.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (e.buttons === 0) return;
+    const deltaX = dragStartXRef.current - e.clientX;
+    const deltaSlots = deltaX / slotWidth;
+    setPosition(() => {
+      const next = dragStartPositionRef.current + deltaSlots;
+      return Math.max(0, Math.min(n - 0.01, next));
+    });
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    containerRef.current?.releasePointerCapture(e.pointerId);
+    setPosition((p) => {
+      if (p < 0) return ((p % n) + n) % n;
+      if (p >= n) return p % n;
+      return p;
+    });
+  };
+
+  const handleWheel = (e: React.WheelEvent) => {
+    const delta = e.deltaX !== 0 ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) < 5) return;
+    e.preventDefault();
+    onInteract();
+    setPosition((p) => {
+      const step = delta > 0 ? 1 : -1;
+      let next = p + step;
+      if (next < 0) next = 0;
+      if (next >= n) next = n - 0.01;
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    if (position >= n) {
       skipTransitionRef.current = true;
       const raf = requestAnimationFrame(() => {
-        setScrollOffset(0);
+        setPosition((prev) => (prev >= n ? prev - n : prev));
         requestAnimationFrame(() => {
           skipTransitionRef.current = false;
         });
       });
       return () => cancelAnimationFrame(raf);
     }
-  }, [scrollOffset, n]);
+  }, [position, n]);
 
   const containerWidth = slotWidth * 3;
   const slotHeight = slotWidth + 32;
-  const effectiveOffset = scrollOffset >= n ? 0 : scrollOffset;
+  const effectiveOffset = position >= n ? position - n : position;
   const translateX = -(effectiveOffset * slotWidth);
   const useTransition = !skipTransitionRef.current;
 
   return (
-    <section className="mb-12" aria-label="Compatible with tools and platforms">
+    <section className="mb-12 w-full" aria-label="Compatible with tools and platforms">
       <h2 className="text-center text-xl md:text-2xl font-semibold mb-6 text-foreground">
         Compatible with
       </h2>
-      <div
-        className="mx-auto overflow-hidden relative"
-        style={{ width: containerWidth, minHeight: slotHeight }}
-      >
+      <div className="w-full flex justify-center">
+        <div
+          ref={containerRef}
+          className="overflow-hidden relative cursor-grab active:cursor-grabbing touch-none select-none"
+          style={{ width: containerWidth, minHeight: slotHeight }}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerLeave={handlePointerUp}
+          onWheel={handleWheel}
+          role="region"
+          aria-label="Scroll to browse compatible platforms"
+        >
         <div
           className="flex flex-nowrap items-stretch"
           style={{
@@ -159,6 +235,7 @@ export function CompatibleWithCarousel({
               </div>
             );
           })}
+        </div>
         </div>
       </div>
     </section>
