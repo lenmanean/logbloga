@@ -21,10 +21,10 @@ export default function AiToUsdPage() {
         <section className="mb-16">
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              Turn AI Into Revenue
+              Unlock $1k, $5k, and $10k+/mo: levels for scaling your business.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Structured packages to monetize AI. Whether you build products, grow a following, run an agency, or freelance: learn once, earn on your terms.
+              Structured packages with clear levels, templates, and guides. Ship and earn. No fluff.
             </p>
           </div>
         </section>
@@ -33,44 +33,44 @@ export default function AiToUsdPage() {
         <CompatibleWithCarousel />
 
         {/* Explore Our Packages */}
-        <div id="explore-packages" className="mb-16">
+        <div id="explore-packages" className="mb-10 md:mb-16">
           <div className="text-center mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
-              Explore Our Packages
+              Choose your level
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Pick your path. One package or all four; each gets you from idea to income.
+              One package or all four. Each level has a path to the next income tier.
             </p>
           </div>
-          <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex items-center gap-4 md:gap-6 flex-1">
-                <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden">
+          <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-6 md:mb-8">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-6">
+              <div className="flex items-center gap-3 md:gap-6 flex-1">
+                <div className="relative w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 flex-shrink-0 rounded-lg overflow-hidden">
                   <Image
                     src="/package-master.png"
                     alt="Master Bundle - All four AI to USD packages"
                     fill
                     className="object-contain p-2"
-                    sizes="(max-width: 768px) 96px, 128px"
+                    sizes="(max-width: 768px) 64px, (max-width: 1024px) 96px, 128px"
                   />
                 </div>
                 <div className="min-w-0">
                   <Badge className="mb-2 bg-amber-500/20 text-amber-800 dark:bg-amber-400/20 dark:text-amber-200 border-amber-500/30">Best Value</Badge>
-                  <h3 className="text-2xl md:text-3xl font-bold mb-2 text-amber-900 dark:text-amber-100">
-                    Complete AI Monetization: Master Bundle
+                  <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 text-amber-900 dark:text-amber-100">
+                    Master Bundle: All levels. One purchase.
                   </h3>
-                  <p className="text-muted-foreground max-w-2xl">
-                    All four packages. 145+ hours, templates & guides. One purchase.
+                  <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
+                    All four packages. 145+ hours, templates and guides. One purchase.
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2 shrink-0">
-                <span className="text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
-                <ArrowRight className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                <span className="text-base md:text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
+                <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-amber-600 dark:text-amber-400" />
               </div>
             </div>
           </MasterBundleCard>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {categories.map((category) => (
               <CategoryCard key={category.id} category={category} />
             ))}
@@ -81,10 +81,10 @@ export default function AiToUsdPage() {
         <section className="mb-16">
           <div className="text-center mb-10">
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Why AI to USD
+              Why this works
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto">
-              Built for people who want to execute, not just learn.
+              Built for people who execute, not just learn.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -99,7 +99,7 @@ export default function AiToUsdPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Start where you are. Each level builds to the next, no overwhelm.
+                  Start where you are; each level builds to the next.
                 </p>
               </CardContent>
             </Card>
@@ -147,7 +147,7 @@ export default function AiToUsdPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Every module ties to income. Learn to build and to get paid.
+                  Every module ties to income. Learn to build and get paid.
                 </p>
               </CardContent>
             </Card>
@@ -194,7 +194,7 @@ export default function AiToUsdPage() {
                 Success Story
               </h2>
               <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                See how AI to USD principles were used to build a real-world, production-ready application.
+                See it in action: a real-world, production-ready app built with these principles.
               </p>
             </div>
             <div className="max-w-4xl mx-auto">
@@ -255,10 +255,10 @@ export default function AiToUsdPage() {
         {/* Call-to-Action Section */}
         <section className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 rounded-lg p-8 md:p-12 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Transform AI into Revenue?
+            Ready to unlock your level?
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8">
-            Choose the package that aligns with your goals and start your journey to monetizing artificial intelligence today.
+            Choose the package that fits. Start turning AI into revenue.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="#explore-packages">

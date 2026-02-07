@@ -25,16 +25,16 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
         'group hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer h-full',
         className
       )}>
-        <CardContent className="p-6">
-          <div className="flex flex-col items-center text-center space-y-4">
-            <div className="p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
-              <IconComponent className="h-8 w-8 text-primary" />
+        <CardContent className="p-4 md:p-6">
+          <div className="flex flex-col items-center text-center space-y-3 md:space-y-4">
+            <div className="p-3 md:p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+              <IconComponent className="h-6 w-6 md:h-8 md:w-8 text-primary" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-xl font-semibold group-hover:text-primary transition-colors">
+              <h3 className="text-lg md:text-xl font-semibold group-hover:text-primary transition-colors">
                 {category.name}
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground line-clamp-2">
                 {category.description}
               </p>
             </div>
