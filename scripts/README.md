@@ -1,5 +1,27 @@
 # Scripts
 
+## Blog
+
+### `seed-blog-posts.ts`
+
+Seeds the `blog_posts` table with 7 performance-marketing-focused articles. Idempotent: re-running upserts by slug.
+
+**Prerequisites:**
+1. Migration `000057_add_blog_posts_content.sql` must be applied (adds `content` column if missing)
+2. Environment variables: `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` (e.g. in `.env.local`)
+
+**Usage:**
+```bash
+npx tsx scripts/seed-blog-posts.ts
+```
+
+**What it does:**
+- Inserts/updates 7 blog posts (title, excerpt, content, tags, SEO fields)
+- Sets `author: null` (no author display)
+- Uses `published_at` dates from Jan 3 to Feb 6, 2026
+
+---
+
 ## Stripe Product Sync
 
 ### `sync-products-to-stripe.ts`

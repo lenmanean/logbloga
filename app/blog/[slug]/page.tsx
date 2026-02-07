@@ -226,8 +226,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
               {/* Post Content */}
               <div className="prose-wrapper">
-                <BlogContent 
-                  mdxFilePath={post.mdx_file_path}
+                <BlogContent
+                  content={(post as { content?: string | null }).content}
+                  mdxFilePath={post.mdx_file_path || undefined}
                 />
               </div>
 
