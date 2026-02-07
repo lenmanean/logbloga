@@ -40,10 +40,11 @@ export default async function ProfilePage() {
                 fullName: profile?.full_name || null,
                 email: user.email ?? null,
               }}
+              hasPassword={hasPassword}
             />
           </div>
 
-          <div className="md:col-span-2">
+          <div id="password" className="md:col-span-2">
             <ChangePasswordForm hasPassword={hasPassword} />
           </div>
         </div>

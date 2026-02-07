@@ -25,14 +25,16 @@ interface ProfileFormProps {
     fullName?: string | null;
     email?: string | null;
   };
+  hasPassword?: boolean;
   onSuccess?: () => void;
 }
 
-export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
+export function ProfileForm({ initialData, hasPassword = false, onSuccess }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [emailValue, setEmailValue] = useState('');
+  const [emailPassword, setEmailPassword] = useState('');
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [emailSuccess, setEmailSuccess] = useState(false);
@@ -118,6 +120,10 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
       setEmailError(parsed.error.issues[0]?.message ?? 'Please enter a valid email address');
       return;
     }
+    if (hasPassword && !emailPassword.trim()) {
+      setEmailError('Please enter your password to confirm the change');
+      return;
+    }
 
     setEmailLoading(true);
     setEmailError(null);
@@ -127,7 +133,10 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
       const response = await fetch('/api/account/change-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newEmail: parsed.data }),
+        body: JSON.stringify({
+          newEmail: parsed.data,
+          password: hasPassword ? emailPassword : undefined,
+        }),
       });
 
       const result = await response.json();
@@ -139,6 +148,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
       }
 
       setEmailSuccess(true);
+      setEmailPassword('');
       setEmailLoading(false);
 
       setTimeout(() => setEmailSuccess(false), 5000);
@@ -150,6 +160,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
 
   const handleEmailCancel = () => {
     setEmailValue(originalEmail);
+    setEmailPassword('');
     setEmailError(null);
   };
 
@@ -181,10 +192,19 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
               value={emailValue}
               onChange={(e) => setEmailValue(e.target.value)}
               placeholder="you@example.com"
-              className={cn(emailError && 'border-destructive')}
+              disabled={!hasPassword}
+              className={cn(
+                emailError && 'border-destructive',
+                !hasPassword && 'cursor-not-allowed opacity-60'
+              )}
               aria-invalid={!!emailError}
               aria-describedby={emailError ? 'email-error' : undefined}
             />
+            {!hasPassword && (
+              <p className="text-xs text-muted-foreground">
+                Add a password in the section below to change your email.
+              </p>
+            )}
             {emailError && (
               <p id="email-error" className="text-sm text-destructive" role="alert">
                 {emailError}
@@ -199,7 +219,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
             <div
               className={cn(
                 'grid transition-all duration-200 ease-out',
-                emailEdited ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                emailEdited && hasPassword ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
               )}
             >
               <div className="min-h-0 overflow-hidden">
@@ -207,12 +227,30 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
                   <p className="text-xs text-muted-foreground">
                     Click the link in the verification email sent to your new address to confirm the change.
                   </p>
+                  {hasPassword && (
+                    <div className="space-y-2">
+                      <Label htmlFor="email-password">Confirm your password</Label>
+                      <Input
+                        id="email-password"
+                        type="password"
+                        value={emailPassword}
+                        onChange={(e) => setEmailPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className={cn(emailError && 'border-destructive')}
+                        aria-invalid={!!emailError}
+                      />
+                    </div>
+                  )}
                   <div className="flex flex-wrap gap-2">
                     <Button
                       type="button"
                       size="sm"
                       onClick={handleEmailSubmit}
-                      disabled={emailLoading || !emailValid}
+                      disabled={
+                        emailLoading ||
+                        !emailValid ||
+                        (hasPassword && !emailPassword.trim())
+                      }
                     >
                       {emailLoading ? 'Sending...' : 'Save email'}
                     </Button>

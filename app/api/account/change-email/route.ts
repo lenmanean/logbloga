@@ -1,16 +1,19 @@
 import { requireAuth } from '@/lib/auth/utils';
+import { getHasPassword } from '@/lib/auth/has-password';
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
 /**
  * POST /api/account/change-email
- * Change user email (requires verification)
+ * Change user email (requires verification).
+ * When user has a password, requires password re-authentication.
  */
 export async function POST(request: Request) {
   try {
     const user = await requireAuth();
     const body = await request.json();
     const newEmail = typeof body?.newEmail === 'string' ? body.newEmail.trim() : '';
+    const password = typeof body?.password === 'string' ? body.password : undefined;
 
     if (!newEmail) {
       return NextResponse.json(
@@ -34,12 +37,39 @@ export async function POST(request: Request) {
       );
     }
 
+    const hasPassword = await getHasPassword(user.email ?? '');
+
+    if (!hasPassword) {
+      return NextResponse.json(
+        { error: 'Add a password in the password section below to change your email.' },
+        { status: 400 }
+      );
+    }
+
+    if (!password || !password.trim()) {
+      return NextResponse.json(
+        { error: 'Password is required to change your email.' },
+        { status: 401 }
+      );
+    }
+
     const supabase = await createClient();
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: user.email!,
+      password: password.trim(),
+    });
+
+    if (signInError) {
+      return NextResponse.json(
+        { error: 'Invalid password. Please try again.' },
+        { status: 401 }
+      );
+    }
 
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
     const redirectTo = `${appUrl}/auth/callback`;
 
-    // Update email (Supabase sends verification email; when custom SMTP e.g. Resend is configured, delivery is via that provider)
     const { error: updateError } = await supabase.auth.updateUser(
       { email: newEmail },
       { emailRedirectTo: redirectTo }

@@ -28,7 +28,7 @@ Supabase Auth generates these emails (tokens, links, OTP). When **Custom SMTP** 
 
 - **Code:** `app/api/auth/reset-password/route.ts`, `app/api/account/change-email/route.ts`, `hooks/useAuth.tsx`, `components/auth/email-verification.tsx`, `app/api/auth/signup/route.ts`, `app/api/auth/verify-email/route.ts`. Change-email UI is on the profile page (`/account/profile`).
 
-**Email change:** Add `https://your-domain.com/auth/callback` to Redirect URLs in Supabase Dashboard (Authentication → URL Configuration). Users receive a verification email at their new address; they click the link to confirm.
+**Email change:** Add `https://your-domain.com/auth/callback` to Redirect URLs in Supabase Dashboard (Authentication → URL Configuration). Users receive a verification email at their new address; they click the link to confirm. When the user has a password set, they must re-enter it to change email (prevents account takeover). Users without a password must add one first.
 - **Manual setup:** [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)
 
 ### Email change troubleshooting

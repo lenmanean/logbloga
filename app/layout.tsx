@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import dynamic from "next/dynamic";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "./globals.css";
 import { Header } from "@/components/layout/header";
+import { PasswordNotice } from "@/components/auth/password-notice";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/cart-context";
 import { AuthModalProvider } from "@/contexts/auth-modal-context";
@@ -62,6 +64,9 @@ export default function RootLayout({
           <CartProvider>
             <AuthModalProvider>
               <Header />
+              <Suspense fallback={null}>
+                <PasswordNotice />
+              </Suspense>
               {children}
               <CookieConsent />
               <ServiceWorkerRegistration />

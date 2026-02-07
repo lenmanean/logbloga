@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -53,6 +54,7 @@ export interface ChangePasswordFormProps {
 const passwordHint = 'Must be at least 8 characters with uppercase, lowercase, and a number';
 
 export function ChangePasswordForm({ hasPassword }: ChangePasswordFormProps) {
+  const router = useRouter();
   const [showFields, setShowFields] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -84,6 +86,7 @@ export function ChangePasswordForm({ hasPassword }: ChangePasswordFormProps) {
       setSuccess(true);
       addForm.reset();
       setShowFields(false);
+      router.refresh();
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
