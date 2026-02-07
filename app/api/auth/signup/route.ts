@@ -23,7 +23,10 @@ export async function POST(request: Request) {
       email,
       password,
       options: {
-        data: fullName ? { full_name: fullName } : {},
+        data: {
+          full_name: fullName || undefined,
+          has_set_password: true,
+        },
         // No emailRedirectTo - Supabase will send OTP code automatically
       },
     });

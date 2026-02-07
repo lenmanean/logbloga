@@ -49,7 +49,10 @@ export async function POST(request: Request) {
       email: trimmedEmail,
       options: {
         shouldCreateUser: true,
-        data: typeof fullName === 'string' && fullName.trim() ? { full_name: fullName.trim() } : undefined,
+        data: {
+          signup_method: 'otp',
+          ...(typeof fullName === 'string' && fullName.trim() ? { full_name: fullName.trim() } : {}),
+        },
       },
     });
 
