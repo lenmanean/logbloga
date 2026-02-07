@@ -17,23 +17,6 @@ export default function AiToUsdPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
-        {/* What is AI to USD Section */}
-        <section className="mb-16">
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              What is AI to USD?
-            </h1>
-            <div className="max-w-3xl mx-auto">
-              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                AI to USD is a comprehensive collection of packages designed to help you monetize artificial intelligence and build profitable businesses. Each package provides structured learning paths, implementation guides, and production-ready resources to transform AI capabilities into sustainable revenue streams.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Compatible with – platform carousel */}
-        <CompatibleWithCarousel />
-
         {/* Master Bundle Featured Section */}
         <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
@@ -64,6 +47,23 @@ export default function AiToUsdPage() {
             </div>
           </div>
         </MasterBundleCard>
+
+        {/* What is AI to USD Section */}
+        <section className="mb-16">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+              What is AI to USD?
+            </h1>
+            <div className="max-w-3xl mx-auto">
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                AI to USD is a comprehensive collection of packages designed to help you monetize artificial intelligence and build profitable businesses. Each package provides structured learning paths, implementation guides, and production-ready resources to transform AI capabilities into sustainable revenue streams.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Compatible with – platform carousel */}
+        <CompatibleWithCarousel />
 
         {/* Package Navigation Cards */}
         <div id="explore-packages" className="mb-16">
