@@ -213,7 +213,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="newEmail">New Email</Label>
+            <Label htmlFor="newEmail">New email</Label>
             <Input
               id="newEmail"
               type="email"
