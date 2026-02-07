@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { MessageCircle, X } from 'lucide-react';
+import { MessageCircle, HelpCircle, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -15,11 +15,10 @@ import { cn } from '@/lib/utils';
 const PANEL_WIDTH = 400;
 const PANEL_HEIGHT = 560;
 
-const CTA_MESSAGE =
-  'Sign in and purchase a package to unlock your personal assistant.';
-
 /**
- * AI Chat Assistant widget - fixed bottom-right. Only entitled users (signed in + at least one package) can use chat.
+ * AI Chat Assistant widget - fixed bottom-right.
+ * Entitled users (signed in + at least one package): blue chat icon opens chat.
+ * Others: grey ? icon opens "Need help?" modal (FAQ, View Packages, Contact).
  */
 export function ChatWidget() {
   const { user, isLoading: authLoading } = useAuth();
@@ -89,8 +88,7 @@ export function ChatWidget() {
   const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const showChatPanel = canUseChat && isOpen;
-  const showCTAPanel = isOpen && !authLoading && !isCheckingEntitlement && !canUseChat;
-  const showCheckingPanel = isOpen && user && isCheckingEntitlement;
+  const showHelpModal = !canUseChat && isOpen;
 
   return (
     <div className="fixed bottom-6 right-6 z-[100]" aria-live="polite">
@@ -187,59 +185,43 @@ export function ChatWidget() {
         </div>
       )}
 
-      {showCheckingPanel && (
+      {showHelpModal && (
         <div
           className={cn(
-            'mb-4 flex flex-col overflow-hidden rounded-xl border bg-background shadow-xl p-4',
+            'mb-4 flex flex-col overflow-hidden rounded-xl border bg-background shadow-xl p-5',
             !prefersReducedMotion && 'animate-chat-panel-in'
           )}
           style={{ width: PANEL_WIDTH, maxWidth: 'calc(100vw - 3rem)' }}
           role="dialog"
-          aria-label="Chat assistant"
+          aria-labelledby="need-help-title"
+          aria-label="Need help"
         >
-          <div className="flex items-center justify-between border-b pb-3 mb-3">
-            <h2 className="text-base font-semibold">Logbloga Assistant</h2>
+          <div className="flex items-center justify-between border-b border-border pb-4 mb-4">
+            <h2 id="need-help-title" className="text-base font-semibold">
+              Need help?
+            </h2>
             <Button
               variant="ghost"
-              size="icon-sm"
+              size="icon"
               onClick={() => setIsOpen(false)}
               aria-label="Close"
+              className="size-8 rounded-full"
             >
               <X className="size-4" />
             </Button>
           </div>
-          <p className="text-muted-foreground text-sm">Checking access...</p>
-        </div>
-      )}
-
-      {showCTAPanel && (
-        <div
-          className={cn(
-            'mb-4 flex flex-col overflow-hidden rounded-xl border bg-background shadow-xl p-4',
-            !prefersReducedMotion && 'animate-chat-panel-in'
-          )}
-          style={{ width: PANEL_WIDTH, maxWidth: 'calc(100vw - 3rem)' }}
-          role="dialog"
-          aria-label="Chat assistant unlock"
-        >
-          <div className="flex items-center justify-between border-b pb-3 mb-3">
-            <h2 className="text-base font-semibold">Logbloga Assistant</h2>
-            <Button
-              variant="ghost"
-              size="icon-sm"
-              onClick={() => setIsOpen(false)}
-              aria-label="Close"
-            >
-              <X className="size-4" />
-            </Button>
-          </div>
-          <p className="text-muted-foreground text-sm mb-4">{CTA_MESSAGE}</p>
+          <p className="text-muted-foreground text-sm mb-4">
+            Visit our FAQ, explore packages, or get in touch.
+          </p>
           <div className="flex flex-col gap-2">
-            <Button asChild size="sm" className="w-full">
-              <Link href="/auth/signin">Sign in</Link>
+            <Button asChild variant="outline" size="sm" className="w-full justify-center">
+              <Link href="/resources/faq">Visit FAQ</Link>
             </Button>
-            <Button asChild variant="outline" size="sm" className="w-full">
+            <Button asChild variant="outline" size="sm" className="w-full justify-center">
               <Link href="/ai-to-usd">View packages</Link>
+            </Button>
+            <Button asChild variant="outline" size="sm" className="w-full justify-center">
+              <Link href="/contact">Contact us</Link>
             </Button>
           </div>
         </div>
@@ -248,15 +230,22 @@ export function ChatWidget() {
       {!authLoading && (
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          size="icon-lg"
+          size="icon"
           className={cn(
-            'rounded-full shadow-lg',
-            !prefersReducedMotion && 'animate-chat-glow'
+            'size-12 rounded-full shadow-lg',
+            canUseChat
+              ? 'bg-primary text-primary-foreground hover:bg-primary/90'
+              : 'bg-muted text-muted-foreground hover:bg-muted/80 border border-border',
+            canUseChat && !prefersReducedMotion && 'animate-chat-glow'
           )}
-          aria-label={isOpen ? 'Close chat' : 'Open chat'}
+          aria-label={canUseChat ? (isOpen ? 'Close chat' : 'Open chat') : (isOpen ? 'Close help' : 'Need help?')}
           aria-expanded={isOpen}
         >
-          <MessageCircle className="size-6" />
+          {canUseChat ? (
+            <MessageCircle className="size-6" />
+          ) : (
+            <HelpCircle className="size-6" />
+          )}
         </Button>
       )}
     </div>
