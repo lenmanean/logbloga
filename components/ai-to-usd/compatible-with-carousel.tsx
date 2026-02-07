@@ -21,6 +21,7 @@ import {
 } from 'react-icons/si';
 
 const SLOT_WIDTH_PX = 140;
+const CONTAINER_MAX_WIDTH_PX = SLOT_WIDTH_PX * 3;
 /** Time between each cycle step (one logo moves left). */
 const CYCLE_INTERVAL_MS = 3000;
 const STEP_TRANSITION_MS = 400;
@@ -96,6 +97,9 @@ export function CompatibleWithCarousel({
   const containerRef = useRef<HTMLDivElement>(null);
   const n = platforms.length;
   const strip = [...platforms, ...platforms];
+  /** One slot = 1/3 of container; strip has 2n slots so width = (200*n/3)% of container. Each slot = 100/(2n)% of strip. */
+  const stripWidthPercent = (200 * n) / 3;
+  const slotWidthPercentOfStrip = 100 / (2 * n);
 
   const scheduleResume = () => {
     if (resumeTimeoutRef.current) clearTimeout(resumeTimeoutRef.current);
@@ -129,7 +133,9 @@ export function CompatibleWithCarousel({
   const handlePointerMove = (e: React.PointerEvent) => {
     if (e.buttons === 0) return;
     const totalDeltaX = dragStartXRef.current - e.clientX;
-    const slotDelta = Math.round(totalDeltaX / slotWidth);
+    const containerW = containerRef.current?.getBoundingClientRect().width ?? CONTAINER_MAX_WIDTH_PX;
+    const slotW = containerW / 3;
+    const slotDelta = Math.round(totalDeltaX / slotW);
     const oneStep = Math.max(-1, Math.min(1, slotDelta));
     const target = dragStartOffsetRef.current + oneStep;
     setScrollOffset(Math.max(0, Math.min(n, target)));
@@ -166,22 +172,21 @@ export function CompatibleWithCarousel({
     }
   }, [scrollOffset, n]);
 
-  const containerWidth = slotWidth * 3;
-  const slotHeight = slotWidth + 32;
   const effectiveOffset = scrollOffset >= n ? scrollOffset - n : scrollOffset;
-  const translateX = -(effectiveOffset * slotWidth);
+  const translateXPercent = (effectiveOffset / (2 * n)) * 100;
   const useTransition = !skipTransitionRef.current;
+  const slotHeightMin = slotWidth + 32;
 
   return (
-    <section className="mb-12 w-full" aria-label="Compatible with tools and platforms">
+    <section className="mb-12 w-full overflow-x-hidden" aria-label="Compatible with tools and platforms">
       <h2 className="text-center text-xl md:text-2xl font-semibold mb-6 text-foreground">
         Compatible with
       </h2>
       <div className="w-full flex justify-center">
         <div
           ref={containerRef}
-          className="overflow-hidden relative cursor-grab active:cursor-grabbing touch-none select-none"
-          style={{ width: containerWidth, minHeight: slotHeight }}
+          className="overflow-hidden relative cursor-grab active:cursor-grabbing touch-none select-none w-full"
+          style={{ maxWidth: CONTAINER_MAX_WIDTH_PX, minHeight: slotHeightMin }}
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}
@@ -193,9 +198,9 @@ export function CompatibleWithCarousel({
         <div
           className="flex flex-nowrap items-stretch"
           style={{
-            width: strip.length * slotWidth,
-            minHeight: slotHeight,
-            transform: `translateX(${translateX}px)`,
+            width: `${stripWidthPercent}%`,
+            minHeight: slotHeightMin,
+            transform: `translateX(-${translateXPercent}%)`,
             transition: useTransition ? `transform ${STEP_TRANSITION_MS}ms ease-in-out` : 'none',
           }}
         >
@@ -208,8 +213,8 @@ export function CompatibleWithCarousel({
                 key={`${platform.id}-${i}`}
                 className="flex flex-shrink-0 flex-col items-center justify-center gap-2"
                 style={{
-                  width: slotWidth,
-                  height: slotHeight,
+                  width: `${slotWidthPercentOfStrip}%`,
+                  minHeight: slotHeightMin,
                   transform: `scale(${scale})`,
                   opacity,
                   transition: useTransition
