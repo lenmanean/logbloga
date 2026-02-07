@@ -150,7 +150,7 @@ export default async function CaseStudyPage({ params }: CaseStudyPageProps) {
                     src={study.featuredImage}
                     alt={study.title}
                     fill
-                    className="object-cover"
+                    className="object-contain p-8"
                     priority
                   />
                 </div>
