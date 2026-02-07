@@ -1,23 +1,27 @@
 # Inside the package
 
-A taste of the **Freelancing** package: getting paid and staying protected.
+A technical peek at the **Freelancing** package: getting paid securely and staying protected with contracts and invoicing.
 
-## PayPal and invoicing
+## How it fits together
 
-The package’s PayPal setup guide recommends using a **Business account** for freelancing:
+The package ties payment and protection into one flow:
 
-- **PayPal.Me link** for quick payment requests
-- **Invoicing** for formal client work
-- **Clear records** for taxes and disputes
+- **PayPal Business**: PayPal.Me for quick requests, Invoicing for formal work, clear records for taxes and disputes
+- **Env-based config**: Store client ID and secret in environment variables; the guides show where to plug them into your app or scripts
+- **Contracts and proposals**: Templates that set scope, revisions, and payment terms so you’re protected from day one
 
-Create `.env` or a config file for your PayPal client ID and secret (never commit secrets):
+You’ll configure a Business account, optional SDK usage for server-side flows, and use the included contract and proposal templates with real clients.
+
+## Config you’ll use
+
+From the PayPal setup guide (never commit secrets):
 
 ```env
 PAYPAL_CLIENT_ID=your_client_id
 PAYPAL_CLIENT_SECRET=your_secret
 ```
 
-Use environment variables in your app; the package shows where and how.
+Use these in your app or scripts; the package shows where and how. You’ll also get Fiverr/Upwork profile and gig guidance, plus first-client and direct-acquisition steps.
 
 ## What you get
 

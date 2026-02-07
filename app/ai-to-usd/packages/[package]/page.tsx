@@ -215,6 +215,37 @@ export default async function PackagePage({ params }: PackagePageProps) {
 
         <Separator className="my-12" />
 
+        {!isBundle && masterBundle && (
+          <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+              <div className="flex items-center gap-4 md:gap-6 flex-1">
+                <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden">
+                  <Image
+                    src={masterBundleImage}
+                    alt={masterBundle.title || 'Master Bundle'}
+                    fill
+                    className="object-contain p-2"
+                    sizes="(max-width: 768px) 96px, 128px"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <CardTitle className="text-xl md:text-2xl mb-2 text-amber-800 dark:text-amber-200">Get the Master Bundle</CardTitle>
+                  <p className="text-muted-foreground max-w-xl">
+                    Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides.
+                  </p>
+                  {masterBundlePrice != null && !Number.isNaN(masterBundlePrice) && (
+                    <p className="mt-2 text-lg font-semibold text-amber-700 dark:text-amber-300">${masterBundlePrice.toLocaleString()}</p>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
+                <ArrowRight className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+              </div>
+            </div>
+          </MasterBundleCard>
+        )}
+
         {/* Description Section */}
         <div className="mb-12">
           <Card>
@@ -318,37 +349,6 @@ export default async function PackagePage({ params }: PackagePageProps) {
             </CardContent>
           </Card>
         </div>
-
-        {!isBundle && masterBundle && (
-          <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-              <div className="flex items-center gap-4 md:gap-6 flex-1">
-                <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 rounded-lg overflow-hidden">
-                  <Image
-                    src={masterBundleImage}
-                    alt={masterBundle.title || 'Master Bundle'}
-                    fill
-                    className="object-contain p-2"
-                    sizes="(max-width: 768px) 96px, 128px"
-                  />
-                </div>
-                <div className="min-w-0">
-                  <CardTitle className="text-xl md:text-2xl mb-2 text-amber-800 dark:text-amber-200">Get the Master Bundle</CardTitle>
-                  <p className="text-muted-foreground max-w-xl">
-                    Get full access to all four packages—Web Apps, Social Media, Agency, and Freelancing. 145+ hours of content, production-ready templates, and implementation guides.
-                  </p>
-                  {masterBundlePrice != null && !Number.isNaN(masterBundlePrice) && (
-                    <p className="mt-2 text-lg font-semibold text-amber-700 dark:text-amber-300">${masterBundlePrice.toLocaleString()}</p>
-                  )}
-                </div>
-              </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
-                <ArrowRight className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-              </div>
-            </div>
-          </MasterBundleCard>
-        )}
 
         {/* Package content preview (interactive markdown) */}
         <PackagePreviewSection productId={packageData.id} />

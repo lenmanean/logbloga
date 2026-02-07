@@ -56,9 +56,10 @@ export function PackagePreviewSection({ productId, className }: PackagePreviewSe
   if (loading) {
     return (
       <section className={cn('mb-12', className)} aria-labelledby="preview-heading">
-        <h2 id="preview-heading" className="text-2xl font-semibold mb-4">
+        <h2 id="preview-heading" className="text-2xl font-semibold mb-1">
           Inside the package
         </h2>
+        <p className="text-sm text-muted-foreground mb-4">A technical peek at what you&apos;ll get</p>
         <Card>
           <CardContent className="flex items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" aria-hidden />
@@ -71,9 +72,10 @@ export function PackagePreviewSection({ productId, className }: PackagePreviewSe
   if (error) {
     return (
       <section className={cn('mb-12', className)} aria-labelledby="preview-heading">
-        <h2 id="preview-heading" className="text-2xl font-semibold mb-4">
+        <h2 id="preview-heading" className="text-2xl font-semibold mb-1">
           Inside the package
         </h2>
+        <p className="text-sm text-muted-foreground mb-4">A technical peek at what you&apos;ll get</p>
         <Card>
           <CardContent className="flex flex-col items-center justify-center gap-2 py-12 text-center">
             <AlertCircle className="h-10 w-10 text-muted-foreground" />
@@ -88,14 +90,15 @@ export function PackagePreviewSection({ productId, className }: PackagePreviewSe
 
   return (
     <section className={cn('mb-12', className)} aria-labelledby="preview-heading">
-      <h2 id="preview-heading" className="text-2xl font-semibold mb-4">
+      <h2 id="preview-heading" className="text-2xl font-semibold mb-1">
         Inside the package
       </h2>
+      <p className="text-sm text-muted-foreground mb-4">A technical peek at what you&apos;ll get</p>
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-lg font-medium flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            Preview
+            Key highlights
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
