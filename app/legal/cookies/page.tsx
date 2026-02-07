@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 export default function CookiePolicyPage() {
-  const lastUpdated = '2026-01-23';
+  const lastUpdated = '2026-02-07';
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -53,6 +53,11 @@ export default function CookiePolicyPage() {
           <p className="mb-4">
             <strong>Examples:</strong> Authentication cookies, session cookies, security cookies
           </p>
+          <p className="mb-4">
+            <strong>Duration:</strong> Session cookies are deleted when you close your browser; 
+            some persistent cookies (e.g., for keeping you logged in) may last up to 7–30 days or 
+            until you sign out.
+          </p>
 
           <h3 className="text-xl font-semibold mb-3 mt-6">3.2 Analytics Cookies</h3>
           <p className="mb-4">
@@ -61,6 +66,10 @@ export default function CookiePolicyPage() {
           </p>
           <p className="mb-4">
             <strong>Examples:</strong> Google Analytics cookies, performance tracking cookies
+          </p>
+          <p className="mb-4">
+            <strong>Duration:</strong> Typically up to 24 months for persistent analytics cookies, 
+            depending on the provider.
           </p>
           <p className="mb-4">
             <em>You can opt out of these cookies through our cookie consent banner.</em>
@@ -76,6 +85,10 @@ export default function CookiePolicyPage() {
             <strong>Examples:</strong> Advertising cookies, social media cookies, retargeting cookies
           </p>
           <p className="mb-4">
+            <strong>Duration:</strong> Typically up to 12 months or as set by the advertising 
+            provider.
+          </p>
+          <p className="mb-4">
             <em>You can opt out of these cookies through our cookie consent banner.</em>
           </p>
         </section>
@@ -87,10 +100,10 @@ export default function CookiePolicyPage() {
             usage statistics, deliver advertisements, and more. These include:
           </p>
           <ul className="list-disc pl-6 mb-4">
-            <li><strong>Stripe:</strong> Payment processing cookies</li>
-            <li><strong>Supabase:</strong> Authentication and database cookies</li>
-            <li><strong>Google Analytics:</strong> Website analytics (if consented)</li>
-            <li><strong>Resend:</strong> Email service cookies</li>
+            <li><strong>Stripe:</strong> Payment processing cookies. <a href="https://stripe.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Stripe Privacy Policy</a></li>
+            <li><strong>Supabase:</strong> Authentication and database cookies. <a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Supabase Privacy Policy</a></li>
+            <li><strong>Google Analytics:</strong> Website analytics (if consented). <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Google Privacy Policy</a> and <a href="https://policies.google.com/technologies/cookies" target="_blank" rel="noopener noreferrer" className="text-primary underline">Google Cookies</a></li>
+            <li><strong>Resend:</strong> Email service. <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" className="text-primary underline">Resend Privacy Policy</a></li>
           </ul>
         </section>
 

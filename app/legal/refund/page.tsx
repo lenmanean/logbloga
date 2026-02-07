@@ -2,11 +2,11 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Refund Policy | Logbloga',
-  description: 'Our refund policy explains the terms and conditions for returns and refunds.',
+  description: 'Our refund policy for digital products: all sales are final except where required by applicable law.',
 };
 
 export default function RefundPolicyPage() {
-  const lastUpdated = '2026-01-23';
+  const lastUpdated = '2026-02-07';
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -18,125 +18,110 @@ export default function RefundPolicyPage() {
 
       <div className="prose prose-lg dark:prose-invert max-w-none">
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">1. Refund Eligibility</h2>
+          <h2 className="text-2xl font-semibold mb-4">1. No Refunds — All Sales Final</h2>
           <p className="mb-4">
-            Due to the digital nature of our products, all sales are generally final. However, we 
-            understand that exceptional circumstances may arise, and we will review refund requests 
-            submitted within <strong>30 days</strong> of the purchase date on a case-by-case basis.
+            <strong>All sales of digital products and intellectual property are final.</strong> No refunds 
+            are offered except where required by applicable law. By purchasing from Logbloga, you 
+            acknowledge and agree to this policy.
           </p>
           <p className="mb-4">
-            Refunds may be considered in the following situations:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>The product does not match its description</li>
-            <li>The product is defective or non-functional</li>
-            <li>Duplicate purchases due to technical errors</li>
-            <li>Unauthorized purchase (fraudulent transaction)</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">2. Refund Timeframe</h2>
-          <p className="mb-4">
-            Refund requests must be submitted within <strong>30 days</strong> of the purchase date. 
-            Requests submitted after this period will not be considered unless exceptional 
-            circumstances apply.
+            <strong>Digital products</strong> include, but are not limited to: downloadable content (e.g., 
+            PDFs, templates, guides), access to courses or learning materials, software, tools, and any 
+            other intellectual property or digital goods provided by Logbloga. These products cannot 
+            be returned or physically surrendered; once access is granted or content is delivered, the 
+            sale is complete.
           </p>
           <p className="mb-4">
-            Processing times vary by payment method. Credit card refunds typically appear in your 
-            account within 5-10 business days after approval, while other payment methods may take 
-            longer. We will notify you once your refund has been processed.
+            <strong>Dissatisfaction, change of mind, or failure to achieve any results does not entitle 
+            you to a refund.</strong> Refunds are only available as set out in Section 2 below.
           </p>
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">3. How to Request a Refund</h2>
+          <h2 className="text-2xl font-semibold mb-4">2. Exception: Where Required by Law</h2>
           <p className="mb-4">
-            To request a refund, please contact us at:
+            Refunds may be provided only where <strong>applicable law</strong> in your jurisdiction 
+            requires it. For example, some jurisdictions grant non-excludable rights such as a 
+            statutory cooling-off period, rights in relation to defective digital content, or other 
+            mandatory consumer protections (e.g., in the EU/EEA, UK, Australia, or elsewhere).
+          </p>
+          <p className="mb-4">
+            If you believe you have a legally required right to a refund, please contact us at 
+            support@logbloga.com with your <strong>order number</strong>, <strong>jurisdiction 
+            (country/region)</strong>, and a brief explanation. We will review your request in light 
+            of the applicable law. We do not guarantee any particular outcome; eligibility depends 
+            on the law that applies to you. Any timeframe for legally required refunds (e.g., 14-day 
+            rights where applicable) is determined by that law, not by a general satisfaction period.
+          </p>
+          <p className="mb-4">
+            At our sole discretion, we may also address exceptional situations such as duplicate 
+            charges or confirmed fraudulent or unauthorized use of your payment method. Such 
+            resolution is not a guarantee and does not create a contractual right to a refund in 
+            other circumstances.
+          </p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">3. How to Contact Us About Refunds</h2>
+          <p className="mb-4">
+            For any refund-related inquiry (including where required by law), contact us at:
           </p>
           <ul className="list-disc pl-6 mb-4">
             <li><strong>Email:</strong> support@logbloga.com</li>
             <li><strong>Subject:</strong> Refund Request - Order #[Order Number]</li>
           </ul>
           <p className="mb-4">
-            Please include the following information in your request:
+            Please include your order number or transaction ID, your country/region, and the basis 
+            for your request (e.g., reference to applicable law or duplicate charge).
+          </p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">4. Refund Process (Where Applicable)</h2>
+          <p className="mb-4">
+            If a refund is granted (e.g., where required by law or at our discretion in exceptional 
+            cases), we will process it to the original payment method. Processing times vary by 
+            payment provider; credit card refunds often appear within 5–10 business days. We will 
+            notify you when the refund has been processed. Upon refund, access to the relevant 
+            product may be revoked.
+          </p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">5. Non-Refundable Circumstances</h2>
+          <p className="mb-4">
+            The following do <strong>not</strong> entitle you to a refund, except where applicable 
+            law provides otherwise:
           </p>
           <ul className="list-disc pl-6 mb-4">
-            <li>Order number or transaction ID</li>
-            <li>Reason for refund request</li>
-            <li>Supporting documentation (if applicable)</li>
+            <li>Dissatisfaction with the product or change of mind</li>
+            <li>Failure to achieve any stated or implied earnings, revenue, or profit figures</li>
+            <li>Having downloaded, used, or modified the product</li>
+            <li>Having shared access or allowed others to use the product</li>
+            <li>Any reason that is not a legally required right in your jurisdiction</li>
           </ul>
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">4. Refund Process</h2>
-          <p className="mb-4">
-            Once we receive your refund request:
-          </p>
-          <ol className="list-decimal pl-6 mb-4">
-            <li>We will review your request within <strong>5 business days</strong></li>
-            <li>We may contact you for additional information if needed</li>
-            <li>If approved, the refund will be processed within <strong>10 business days</strong></li>
-            <li>The refund will be issued to the original payment method</li>
-          </ol>
-          <p className="mb-4">
-            Please note that it may take additional time for the refund to appear in your account, 
-            depending on your payment provider. In some cases, partial refunds may be issued if only 
-            a portion of your purchase qualifies for a refund.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">5. Refund Methods</h2>
-          <p className="mb-4">
-            Refunds will be processed using the same payment method used for the original purchase. 
-            If this is not possible, we will work with you to find an alternative solution.
-          </p>
-          <p className="mb-4">
-            <strong>Timeline Expectations:</strong> After we process your refund, it typically takes 
-            5-10 business days for the funds to appear in your account, depending on your payment provider 
-            and financial institution. Some payment methods may take longer.
-          </p>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">6. Non-Refundable Items</h2>
-          <p className="mb-4">
-            The following are not eligible for refunds:
-          </p>
-          <ul className="list-disc pl-6 mb-4">
-            <li>Products downloaded more than 30 days after purchase</li>
-            <li>Products that have been used or modified</li>
-            <li>Products that have been shared or accessed by unauthorized users</li>
-            <li>Refund requests based on failure to achieve stated or implied earnings, revenue, or profit figures</li>
-            <li>Refund requests that do not meet our eligibility criteria</li>
-          </ul>
-        </section>
-
-        <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">7. Chargebacks</h2>
+          <h2 className="text-2xl font-semibold mb-4">6. Chargebacks</h2>
           <p className="mb-4">
             If you initiate a chargeback through your payment provider instead of contacting us 
-            directly, we reserve the right to dispute the chargeback and may suspend or terminate 
-            your account.
-          </p>
-          <p className="mb-4">
-            We encourage you to contact us first so we can resolve any issues promptly. We work 
-            with payment processors to resolve disputes fairly and will provide all necessary 
-            documentation to support our position.
+            first, we reserve the right to dispute the chargeback and may suspend or terminate 
+            your account. We encourage you to contact us so we can address any issue in accordance 
+            with this policy and applicable law.
           </p>
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">8. Access Revocation</h2>
+          <h2 className="text-2xl font-semibold mb-4">7. Access Revocation</h2>
           <p className="mb-4">
-            Upon approval of a refund, access to the purchased product will be revoked, 
-            and you will no longer be able to access the product content or downloads.
+            If a refund is approved, access to the purchased product will be revoked, and you will 
+            no longer be able to access the product content or downloads.
           </p>
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">9. Earnings and Results</h2>
+          <h2 className="text-2xl font-semibold mb-4">8. Earnings and Results</h2>
           <p className="mb-4">
             <strong>No Refund for Business Results:</strong> Refunds will not be granted based on 
             your failure to achieve any stated or implied earnings, revenue, or profit figures 
@@ -144,26 +129,22 @@ export default function RefundPolicyPage() {
             We do not guarantee any level of business success, income, or financial results.
           </p>
           <p className="mb-4">
-            Your purchase is made with the understanding that business outcomes vary based on numerous 
-            factors including your effort, skill, experience, market conditions, competition, and 
-            many other variables beyond our control. Individual results vary significantly, and past 
-            results of others do not guarantee your future results.
-          </p>
-          <p className="mb-4">
-            If you are dissatisfied with your business results after using our products, this does 
-            not constitute a valid reason for a refund. Refunds are only available for the specific 
-            circumstances outlined in Section 1 (Refund Eligibility) of this policy.
+            Your purchase is made with the understanding that business outcomes vary based on 
+            numerous factors including your effort, skill, experience, market conditions, and 
+            other variables beyond our control. Individual results vary; past results of others do 
+            not guarantee your future results. Dissatisfaction with your business results does not 
+            constitute a valid reason for a refund under this policy.
           </p>
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">10. Contact Us</h2>
+          <h2 className="text-2xl font-semibold mb-4">9. Contact Us</h2>
           <p className="mb-4">
-            If you have questions about our refund policy, please contact us at:
+            If you have questions about this refund policy, please contact us at:
           </p>
           <p className="mb-4">
             <strong>Email:</strong> support@logbloga.com<br />
-            <strong>Response Time:</strong> We typically respond within 24-48 hours
+            <strong>Response Time:</strong> We typically respond within 24–48 hours during business days.
           </p>
         </section>
       </div>

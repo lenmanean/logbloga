@@ -208,6 +208,9 @@ export function Header() {
                 <Link href="/legal/cookies">Cookie Policy</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
+                <Link href="/legal/refund">Refund Policy</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
                 <Link href="/contact">Contact</Link>
               </DropdownMenuItem>
             </NavDropdown>
@@ -558,6 +561,13 @@ export function Header() {
                       className="text-base transition-colors hover:text-primary py-1"
                     >
                       Cookie Policy
+                    </Link>
+                    <Link
+                      href="/legal/refund"
+                      onClick={() => setOpen(false)}
+                      className="text-base transition-colors hover:text-primary py-1"
+                    >
+                      Refund Policy
                     </Link>
                     <Link
                       href="/contact"

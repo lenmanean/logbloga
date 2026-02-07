@@ -6,6 +6,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "./globals.css";
 import { Header } from "@/components/layout/header";
+import { Footer } from "@/components/layout/footer";
 import { PasswordNotice } from "@/components/auth/password-notice";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/cart-context";
@@ -58,7 +59,7 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/logo.png" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex min-h-screen flex-col`}
       >
         <AuthProvider>
           <CartProvider>
@@ -67,7 +68,10 @@ export default function RootLayout({
               <Suspense fallback={null}>
                 <PasswordNotice />
               </Suspense>
-              {children}
+              <main className="flex flex-1 flex-col">
+                {children}
+              </main>
+              <Footer />
               <CookieConsent />
               <ServiceWorkerRegistration />
               <AnalyticsProvider />

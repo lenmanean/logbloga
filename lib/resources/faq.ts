@@ -33,9 +33,9 @@ export const faqs: FAQ[] = [
   {
     id: '4',
     question: 'Can I get a refund if I\'m not satisfied?',
-    answer: 'Yes, we offer a 30-day money-back guarantee on all digital products. If you\'re not satisfied with your purchase, contact our support team within 30 days of purchase, and we\'ll process a full refund. Please note that refunds may take 5-10 business days to appear in your account.',
+    answer: 'All sales of digital products are final. Refunds are only available where required by applicable law (for example, in some jurisdictions you may have statutory rights for defective digital content or a cooling-off period). If you believe you have a legally required right to a refund, contact support@logbloga.com with your order number and country/region so we can review your request.',
     category: 'Refunds',
-    tags: ['refund', 'guarantee', 'policy'],
+    tags: ['refund', 'policy', 'digital-products'],
     helpfulCount: 203
   },
   {

@@ -6,7 +6,7 @@ export const metadata: Metadata = {
 };
 
 export default function TermsOfServicePage() {
-  const lastUpdated = '2026-01-23';
+  const lastUpdated = '2026-02-07';
 
   return (
     <div className="container mx-auto px-4 py-16 max-w-4xl">
@@ -88,9 +88,13 @@ export default function TermsOfServicePage() {
             <li>Understand that payment processing fees may apply and are non-refundable</li>
           </ul>
           <p className="mb-4">
-            Prices are subject to change without notice. If a payment fails, we may attempt to process 
-            it again or contact you to update your payment method. Refunds are handled according to our 
+            <strong>All sales of digital products and intellectual property are final.</strong> Refunds 
+            are not available except where required by applicable law. For full details, see our 
             <a href="/legal/refund" className="text-primary underline"> Refund Policy</a>.
+          </p>
+          <p className="mb-4">
+            Prices are subject to change without notice. If a payment fails, we may attempt to process 
+            it again or contact you to update your payment method.
           </p>
         </section>
 
@@ -154,7 +158,18 @@ export default function TermsOfServicePage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">10. Termination</h2>
+          <h2 className="text-2xl font-semibold mb-4">10. Indemnification</h2>
+          <p className="mb-4">
+            You agree to indemnify, defend, and hold harmless Logbloga and its officers, directors, 
+            employees, and agents from and against any and all claims, damages, losses, liabilities, 
+            costs, and expenses (including reasonable attorneys&apos; fees) arising from or related to: 
+            (a) your use of our services; (b) your violation of these Terms; or (c) your violation of 
+            any third-party rights, including intellectual property or privacy rights.
+          </p>
+        </section>
+
+        <section className="mb-12">
+          <h2 className="text-2xl font-semibold mb-4">11. Termination</h2>
           <p className="mb-4">
             We may terminate or suspend your account and access to our services immediately, without 
             prior notice, for any breach of these Terms of Service. Upon termination, your right to 
@@ -169,7 +184,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">11. Governing Law and Dispute Resolution</h2>
+          <h2 className="text-2xl font-semibold mb-4">12. Governing Law and Dispute Resolution</h2>
           <p className="mb-4">
             These terms shall be governed by and construed in accordance with the laws of Washington State, 
             United States, without regard to its conflict of law provisions.
@@ -184,7 +199,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">12. Contact Information</h2>
+          <h2 className="text-2xl font-semibold mb-4">13. Contact Information</h2>
           <p className="mb-4">
             If you have any questions about these Terms of Service, please contact us at:
           </p>
@@ -198,7 +213,7 @@ export default function TermsOfServicePage() {
         </section>
 
         <section className="mb-12">
-          <h2 className="text-2xl font-semibold mb-4">13. Earnings and Results Disclaimer</h2>
+          <h2 className="text-2xl font-semibold mb-4">14. Earnings and Results Disclaimer</h2>
           <p className="mb-4">
             <strong>No Guarantee of Income:</strong> Logbloga makes no representations, warranties, or 
             guarantees regarding any level of income, revenue, or profit that you may achieve by using 
@@ -222,7 +237,8 @@ export default function TermsOfServicePage() {
             <strong>No Refund for Results:</strong> Refunds will not be granted based on your failure to 
             achieve any stated or implied earnings, revenue, or profit figures. You acknowledge that you 
             are purchasing educational content, templates, and tools, not a guarantee of business success 
-            or income. Refunds are only available as specified in our Refund Policy.
+            or income. Refunds are not available except where required by applicable law, as set out in 
+            our <a href="/legal/refund" className="text-primary underline">Refund Policy</a>.
           </p>
           <p className="mb-4">
             <strong>Assumption of Risk:</strong> By purchasing our products, you acknowledge that you 
