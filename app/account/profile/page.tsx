@@ -38,6 +38,7 @@ export default async function ProfilePage() {
             <ProfileForm
               initialData={{
                 fullName: profile?.full_name || null,
+                email: user.email ?? null,
               }}
             />
           </div>

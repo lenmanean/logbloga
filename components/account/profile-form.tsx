@@ -23,6 +23,7 @@ type ProfileFormData = z.infer<typeof profileSchema>;
 interface ProfileFormProps {
   initialData?: {
     fullName?: string | null;
+    email?: string | null;
   };
   onSuccess?: () => void;
 }
@@ -35,9 +36,9 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
   const [emailLoading, setEmailLoading] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);
   const [emailSuccess, setEmailSuccess] = useState(false);
-  const { user, updateUser } = useAuth();
+  const { user, updateUser, refreshSession } = useAuth();
 
-  const originalEmail = user?.email ?? '';
+  const originalEmail = user?.email ?? initialData?.email ?? '';
 
   const {
     register,
@@ -65,8 +66,16 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
   useEffect(() => {
     if (user?.email) {
       setEmailValue(user.email);
+    } else if (initialData?.email) {
+      setEmailValue(initialData.email);
     }
-  }, [user?.email]);
+  }, [user?.email, initialData?.email]);
+
+  useEffect(() => {
+    refreshSession();
+    // Run on mount to ensure we have fresh user data (e.g. after email change confirmation)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);

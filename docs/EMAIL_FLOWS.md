@@ -31,6 +31,14 @@ Supabase Auth generates these emails (tokens, links, OTP). When **Custom SMTP** 
 **Email change (double confirm):** When `double_confirm_changes` is enabled in Supabase (Auth → Providers → Email), users must confirm from BOTH their old and new email. Add `https://your-domain.com/auth/callback` to Redirect URLs in Supabase Dashboard (Authentication → URL Configuration). The banner on the home page explains the flow when users land after the first confirmation. To require only the new-email confirmation, set `double_confirm_changes` to false in Supabase Dashboard (simpler UX, slightly lower security).
 - **Manual setup:** [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)
 
+### Email change troubleshooting
+
+| Issue | Cause | Fix |
+|-------|-------|-----|
+| Old email still shows in profile after confirming | Session not refreshed or profiles table out of sync | Profile page calls `refreshSession()` on load. A migration (`000055_sync_profiles_email_on_auth_update.sql`) syncs `profiles.email` when `auth.users.email` changes. Run the migration if not applied. |
+| Cannot sign in with new email | Email change not fully completed, or redirect went to Site URL instead of callback | Ensure `https://your-domain.com/auth/callback` is in **Redirect URLs** (Supabase Dashboard → Authentication → URL Configuration). Without this, confirmation links may redirect to the Site URL; our callback never runs and the session is not updated. Add the URL, then have the user request a new email change and complete both confirmations. |
+| Lands on homepage with "Confirmation link accepted..." message | Supabase redirected to Site URL instead of `/auth/callback` | Same as above: add `/auth/callback` to Redirect URLs. The link in the email should send users to `/auth/callback` so we can verify the OTP and establish the new session. |
+
 ---
 
 ## App emails (Resend API)
