@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { CategoryCard } from '@/components/ui/category-card';
 import { MasterBundleCard } from '@/components/ui/master-bundle-card';
+import { CompatibleWithCarousel } from '@/components/ai-to-usd/compatible-with-carousel';
 import { categories } from '@/lib/products';
 import { caseStudies } from '@/lib/resources/case-studies';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -29,6 +30,9 @@ export default function AiToUsdPage() {
             </div>
           </div>
         </section>
+
+        {/* Compatible with – platform carousel */}
+        <CompatibleWithCarousel />
 
         {/* Master Bundle Featured Section */}
         <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-12">
