@@ -98,7 +98,7 @@ export function PackagePreviewSection({ productId, className }: PackagePreviewSe
         <CardHeader className="pb-2">
           <CardTitle className="text-lg font-medium flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            Key highlights
+            Preview
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

@@ -12,6 +12,8 @@ The package ties payment and protection into one flow:
 
 You’ll configure a Business account, optional SDK usage for server-side flows, and use the included contract and proposal templates with real clients.
 
+**Revenue focus:** Get paid reliably—PayPal and invoicing, set your rates, and land your first client payment.
+
 ## Config you’ll use
 
 From the PayPal setup guide (never commit secrets):

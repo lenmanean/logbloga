@@ -12,6 +12,8 @@ The guides walk you through a production-ready flow:
 
 You’ll configure Stripe (test/live), add webhook signing, and wire access control so only paying users see protected content.
 
+**Revenue focus:** From zero to first payment—pricing page, checkout session, and webhook to grant access so you can start charging.
+
 ## Code you’ll use
 
 Environment setup from the package (add to `.env.local`; never commit):

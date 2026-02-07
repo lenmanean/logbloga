@@ -2,6 +2,7 @@
 
 import { PackageProduct } from '@/lib/products';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { WhatsIncludedFullList } from '@/components/ui/whats-included-full-list';
 import { MessageCircle, Headphones, Infinity, Gift } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -13,7 +14,7 @@ interface WhatsIncludedProps {
 const INCLUDED_ITEMS = [
   {
     icon: MessageCircle,
-    title: 'Official Logbloga chat assistant',
+    title: 'Official Logbloga Chat Assistant',
     description: 'Highly intelligent, context-aware assistant for this package and your library.',
   },
   {
@@ -35,10 +36,10 @@ const INCLUDED_ITEMS = [
 
 /**
  * Single panel listing what's included with every package purchase:
- * chat assistant, priority support, lifetime access, DOER Pro coupon.
+ * Chat Assistant, priority support, lifetime access, DOER Pro coupon.
  * Used on package product pages only (bundle page uses its own What's Included).
  */
-export function WhatsIncluded({ package: _pkg, className }: WhatsIncludedProps) {
+export function WhatsIncluded({ package: pkg, className }: WhatsIncludedProps) {
   return (
     <div className={cn(className)}>
       <Card>
@@ -63,6 +64,7 @@ export function WhatsIncluded({ package: _pkg, className }: WhatsIncludedProps) 
               </div>
             ))}
           </div>
+          <WhatsIncludedFullList package={pkg} />
         </CardContent>
       </Card>
     </div>

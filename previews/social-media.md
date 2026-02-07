@@ -12,6 +12,8 @@ The package gives you a repeatable reporting flow:
 
 You’ll get the exact report markdown template and a short guide on wiring it to your chosen tooling.
 
+**Revenue focus:** Price your service (retainers, packages), tie reporting to renewals and upsell, and get paid consistently.
+
 ## Report template (from the package)
 
 ```markdown

@@ -12,6 +12,8 @@ The package’s GoHighLevel (and best-of-breed) setup uses a clear flow:
 
 You’ll get a stage-by-stage config and example automations so your pipeline matches how you actually sell.
 
+**Revenue focus:** From lead to closed deal and invoice—pipeline value, revenue per client, and team pricing so you scale income.
+
 ## Pipeline structure (example)
 
 From the package’s GHL setup guide:

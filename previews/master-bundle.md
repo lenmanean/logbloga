@@ -12,6 +12,8 @@ The bundle uses the same implementation pattern across packages:
 
 You’ll get 145+ hours of structured content, production-ready templates, and implementation plans for every path.
 
+**Revenue focus:** Earning patterns for SaaS subscriptions, client retainers, agency deals, and freelance projects—one bundle, every monetization path.
+
 ## One snippet from the bundle
 
 The Web Apps Stripe setup (included in the bundle) uses the same pattern you’ll see in other platform guides:

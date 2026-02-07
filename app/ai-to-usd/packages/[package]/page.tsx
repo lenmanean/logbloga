@@ -6,6 +6,7 @@ import { ProductImageGallery } from '@/components/ui/product-image-gallery';
 import { ProductInfoPanel } from '@/components/ui/product-info-panel';
 import { PackagePreviewSection } from '@/components/ui/package-preview-section';
 import { WhatsIncluded } from '@/components/ui/whats-included';
+import { WhatsIncludedFullList } from '@/components/ui/whats-included-full-list';
 import { MasterBundleCard } from '@/components/ui/master-bundle-card';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -380,6 +381,7 @@ export default async function PackagePage({ params }: PackagePageProps) {
                     </Link>
                   ))}
                 </div>
+                <WhatsIncludedFullList includedPackages={includedPackages} />
               </CardContent>
             </Card>
           </div>
