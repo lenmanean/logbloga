@@ -128,9 +128,14 @@ export async function BlogContent({ content, mdxFilePath, className }: BlogConte
   let markdownContent = '';
 
   try {
-    if (mdxFilePath) {
+    const safePath =
+      mdxFilePath &&
+      !mdxFilePath.includes('..') &&
+      !mdxFilePath.startsWith('/') &&
+      mdxFilePath;
+    if (safePath) {
       try {
-        const filePath = join(process.cwd(), 'public', 'content', mdxFilePath);
+        const filePath = join(process.cwd(), 'public', 'content', safePath);
         const fileContent = await readFile(filePath, 'utf-8');
         markdownContent = fileContent;
       } catch (error) {
