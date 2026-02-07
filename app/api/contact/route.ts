@@ -4,6 +4,11 @@ import { withRateLimit } from '@/lib/security/rate-limit-middleware';
 import { createContactSubmission } from '@/lib/db/contact';
 import { sendContactSubmissionNotification, sendContactConfirmation } from '@/lib/email/senders';
 
+const chatContextSchema = z.object({
+  lastUserMessage: z.string().max(500).optional(),
+  lastAssistantMessage: z.string().max(500).optional(),
+}).optional();
+
 /**
  * Contact form submission schema
  */
@@ -13,9 +18,12 @@ const contactFormSchema = z.object({
   subject: z.string().min(3, 'Subject must be at least 3 characters').max(200, 'Subject must be less than 200 characters'),
   message: z.string().min(10, 'Message must be at least 10 characters').max(5000, 'Message must be less than 5000 characters'),
   website: z.string().max(0, 'Spam detected').optional(), // Honeypot field - must be empty
+  chat_context: chatContextSchema,
 });
 
 type ContactFormData = z.infer<typeof contactFormSchema>;
+
+const CHAT_FOLLOW_UP_SUBJECT = 'Chat Assistant - Follow-up';
 
 /**
  * Extract IP address from request headers
@@ -79,6 +87,13 @@ export async function POST(request: Request) {
           );
         }
 
+        const metadata: Record<string, unknown> = {};
+        if (data.subject === CHAT_FOLLOW_UP_SUBJECT && data.chat_context) {
+          metadata.source = 'chat';
+          if (data.chat_context.lastUserMessage) metadata.lastUserMessage = data.chat_context.lastUserMessage.trim().slice(0, 500);
+          if (data.chat_context.lastAssistantMessage) metadata.lastAssistantMessage = data.chat_context.lastAssistantMessage.trim().slice(0, 500);
+        }
+
         // Extract IP address and user agent
         const ipAddress = getIpAddress(request);
         const userAgent = getUserAgent(request);
@@ -93,8 +108,13 @@ export async function POST(request: Request) {
           user_agent: userAgent,
           status: 'pending',
           spam_score: 0,
-          metadata: {},
+          metadata,
         });
+
+        const chatContext = metadata.source === 'chat' ? {
+          lastUserMessage: (metadata.lastUserMessage as string) || undefined,
+          lastAssistantMessage: (metadata.lastAssistantMessage as string) || undefined,
+        } : undefined;
 
         // Send emails asynchronously (don't block response)
         // Send notification to support team
@@ -106,6 +126,7 @@ export async function POST(request: Request) {
           ipAddress: ipAddress || undefined,
           submissionId: submission.id,
           submittedAt: submission.created_at,
+          chatContext,
         }).catch((error) => {
           console.error('Error sending contact submission notification email:', error);
           // Don't fail the request if email fails

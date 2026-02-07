@@ -106,6 +106,10 @@ export interface ContactSubmissionData {
   ipAddress?: string;
   submissionId: string;
   submittedAt: string;
+  chatContext?: {
+    lastUserMessage?: string;
+    lastAssistantMessage?: string;
+  };
 }
 
 export interface ContactConfirmationData {

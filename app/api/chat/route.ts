@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 import { withRateLimit } from '@/lib/security/rate-limit-middleware';
+import { requireAuth } from '@/lib/auth/utils';
+import { userHasAnyPackageAccess } from '@/lib/db/access';
 import { retrieveKnowledgeContext } from '@/lib/chat/knowledge-retrieval';
 import { buildSystemPrompt } from '@/lib/chat/system-prompt';
 import { createChatCompletion, type ChatMessage } from '@/lib/chat/openai-client';
@@ -34,6 +36,28 @@ export async function POST(request: Request) {
     },
     async () => {
       try {
+        let user: { id: string };
+        try {
+          user = await requireAuth();
+        } catch (authErr) {
+          const status = (authErr as { status?: number })?.status;
+          if (status === 401) {
+            return NextResponse.json(
+              { error: 'Sign in to use the assistant.', code: 'UNAUTHORIZED' },
+              { status: 401 }
+            );
+          }
+          throw authErr;
+        }
+
+        const hasAccess = await userHasAnyPackageAccess(user.id);
+        if (!hasAccess) {
+          return NextResponse.json(
+            { error: 'Purchase a package to unlock the assistant.', code: 'FORBIDDEN' },
+            { status: 403 }
+          );
+        }
+
         if (!process.env.OPENAI_API_KEY) {
           return NextResponse.json(
             { error: 'Chat is not available. Please try again later.' },
@@ -68,7 +92,7 @@ export async function POST(request: Request) {
           );
         }
 
-        const context = await retrieveKnowledgeContext(lastUserMessage.content);
+        const context = await retrieveKnowledgeContext(lastUserMessage.content, user.id);
         const systemPrompt = buildSystemPrompt(context);
 
         const apiMessages: ChatMessage[] = [

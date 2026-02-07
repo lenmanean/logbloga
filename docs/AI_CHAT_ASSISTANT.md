@@ -1,94 +1,89 @@
 # AI Chat Assistant
 
-The Logbloga AI Chat Assistant is a site-wide chatbot that helps users learn about our packages, products, and platform. It uses OpenAI's ChatGPT model (gpt-4o-mini) with a retrieval-augmented generation (RAG) approach to ensure factual, non-hallucinated responses.
+The Logbloga AI Chat Assistant is a **gated** chatbot for signed-in users who have purchased at least one package. It uses OpenAI's gpt-4o-mini with **vector RAG** (retrieval-augmented generation) so answers are grounded in Logbloga content, package materials, and platform docs. It is marketed as an included benefit of each package ("A personalized chat assistant to assist in your package progress").
+
+## Access control
+
+- **Who can use it:** Only users who are (1) signed in and (2) have purchased at least one package (or the Master Bundle). Entitlement is checked via `lib/db/access.ts` (`userHasAnyPackageAccess`, `getOwnedPackageSlugs`).
+- **Chat API:** `POST /api/chat` requires auth; returns 401 if not signed in, 403 if signed in but no package purchase.
+- **Entitlement API:** `GET /api/chat/entitlement` returns `{ canUse: boolean }` for the current user. Used by the client to show the chat widget only when entitled; otherwise a CTA is shown ("Sign in and purchase a package to unlock your personal assistant").
 
 ## Features
 
-- **Fixed floating button** in the bottom-right corner of every page (with faint glow animation)
-- **Chat panel** that opens on click, with smooth fade-in, message history, and input
-- **Welcome message** — the assistant greets users and asks how it may help
-- **Customer service tone** — warm, professional, empathetic responses per industry standards
-- **Context-aware answers** drawn from products, FAQs, resources, and package structure
-- **Clarification flow** — when inquiries are unclear or outside scope, the AI asks for clarification first; if still unanswerable, offers an inline contact form
-- **Inline contact form** — after failed clarification, users can submit a message via `/api/contact` (Resend)
-- **Anti-hallucination safeguards** — the model is instructed to answer only from provided context
-- **Rate limiting** — 30 requests per minute per user/IP
-- **Accessibility** — keyboard navigation (Esc to close), ARIA labels, focus management, respects `prefers-reduced-motion`
+- **Floating button** in the bottom-right (only after auth and entitlement are known). When not entitled, opening the panel shows a CTA with sign-in and package links.
+- **Chat panel** with message history, input, and Markdown rendering. Links use relative paths or sanitized external URLs.
+- **Welcome message** positions the assistant as the guide to Logbloga, the user's packages, and the tools used in packages.
+- **Vector RAG** — context is built from shared content (site structure, products, FAQs, resources) plus **package-scoped** similarity search over `chat_embeddings`. Only chunks for packages the user owns (and shared platform docs) are retrieved.
+- **Conversational tone** — system prompt instructs short, concise responses (2–4 sentences or brief bullets); no long-winded replies.
+- **Clarification flow** — if the inquiry is unclear or out of scope, the AI asks for clarification once; if still unanswerable, it offers the inline contact form via `[OFFER_CONTACT_FORM]`.
+- **Escalation** — inline contact form posts to `/api/contact` with subject "Chat Assistant - Follow-up". Optional `chat_context` (last user question, last assistant reply) is sent so support sees the conversation; it is stored in `contact_submissions.metadata` and included in the notification email.
+- **Rate limiting** — 30 requests per minute per identifier (chat type).
+- **Accessibility** — keyboard (Esc to close), ARIA labels, focus management, `prefers-reduced-motion`.
 
-## Knowledge Sources
+## Knowledge sources
 
-The assistant retrieves context from:
+1. **Shared context** (always included): site structure, products/categories, FAQs (relevance-ranked), case studies, tools. Built in `lib/chat/knowledge-retrieval.ts`.
+2. **Vector store** (`chat_embeddings`): Chunks from package markdown (per-package) and curated platform docs (`docs/chat-platforms/*.md`). Retrieved by semantic similarity; filtered by **owned package slugs** so users only get content for packages they purchased (plus `shared` content for platform docs).
 
-1. **Products & packages** — `lib/products.ts` (packageProducts, categories), including Master Bundle
-2. **Package content structure** — `lib/data/package-level-content.ts`, `lib/data/package-level-titles.ts`
-3. **FAQs** — `lib/resources/faq.ts` (prioritized by relevance to the user query)
-4. **Resources** — Case studies and tools from `lib/resources/case-studies.ts`, `lib/resources/tools.ts`
-5. **Site structure** — Canonical URLs for packages, resources, about, contact, etc.
+## Vector RAG
+
+- **Table:** `chat_embeddings` (migration `000058_chat_embeddings.sql`). Columns: content_hash, package_slug, source_type, source_id, chunk_index, content, embedding (vector(1536)), created_at. Index: HNSW on embedding for cosine similarity.
+- **RPC:** `match_chat_embeddings(query_embedding, package_slugs[], match_count)` returns the top-N chunks from owned packages or `shared`.
+- **Retrieval:** `lib/chat/vector-retrieval.ts` — `queryVectorStore(query, ownedPackageSlugs, limit)` embeds the query with OpenAI text-embedding-3-small and calls the RPC. Used by `retrieveKnowledgeContext(query, userId)` when `userId` is set.
+- **Ingest:** `scripts/ingest-chat-embeddings.ts` chunks package `.md` files (from repo dirs `web-apps-content/`, etc.) and `docs/chat-platforms/*.md`, embeds with text-embedding-3-small, and inserts into `chat_embeddings`. Idempotent (skips by content_hash). After deploying the migration, run once to populate the vector store (e.g. from CI or a one-off run with production env vars): `npm run chat:ingest`. Requires OPENAI_API_KEY, NEXT_PUBLIC_SUPABASE_URL, and SUPABASE_SERVICE_ROLE_KEY. Re-run when package or platform docs change.
 
 ## Configuration
 
-### Environment Variables
+### Environment variables
 
-- **OPENAI_API_KEY** (required for chat) — Your OpenAI API key. Set in `.env.local`. Without it, the chat API returns 503.
-- **RESEND_API_KEY**, **RESEND_FROM_EMAIL**, **CONTACT_NOTIFICATION_EMAIL** — Used by the inline contact form (same as main contact page). Chat submissions post to `/api/contact` with subject "Chat Assistant - Follow-up".
+- **OPENAI_API_KEY** — Required for chat and for ingest. Without it, the chat API returns 503.
+- **RESEND_API_KEY**, **RESEND_FROM_EMAIL**, **CONTACT_NOTIFICATION_EMAIL** — Inline contact form uses `/api/contact` (same as main contact page).
+- **NEXT_PUBLIC_SUPABASE_URL**, **SUPABASE_SERVICE_ROLE_KEY** — For ingest script and server-side vector/access.
 
-### Rate Limits
+### Rate limits
 
-Configured in `lib/security/rate-limit.ts`:
-
-- Type: `chat`
-- Default: 30 requests per minute per identifier (IP or user ID)
-- Application-layer rate limit is no-op; auth rate limits are enforced by Supabase (Dashboard > Authentication > Rate Limits)
+- Chat: type `chat`, 30/min (see `lib/security/rate-limit.ts`; implementation may be no-op until enforced).
+- Contact: type `public` for the escalation form.
 
 ## Architecture
 
 ```
-Client (ChatWidget) → POST /api/chat → Rate Limit → Knowledge Retrieval → OpenAI Chat Completions
+Client: ChatWidget (useAuth, entitlement fetch) → only if canUse: chat panel + useChat
+         useChat → POST /api/chat (with cookies)
+API:     POST /api/chat → requireAuth → userHasAnyPackageAccess → retrieveKnowledgeContext(query, userId)
+         retrieveKnowledgeContext → getOwnedPackageSlugs(userId) + queryVectorStore + shared context
+         → buildSystemPrompt(context) → OpenAI Chat Completions
+         GET /api/chat/entitlement → requireAuth → userHasAnyPackageAccess → { canUse }
 ```
 
-- **lib/chat/knowledge-retrieval.ts** — Aggregates and scores context from all sources
-- **lib/chat/system-prompt.ts** — Builds the system prompt with anti-hallucination rules
-- **lib/chat/openai-client.ts** — Thin wrapper around the OpenAI SDK
-- **app/api/chat/route.ts** — API route with validation, rate limiting, and error handling
-- **components/chat/chat-widget.tsx** — Floating button and chat panel UI (animations, contact form integration)
-- **components/chat/chat-message.tsx** — Message bubbles with Markdown support
-- **components/chat/chat-contact-form.tsx** — Compact inline contact form (name, email, message; posts to `/api/contact`)
-- **hooks/useChat.ts** — Client-side chat state, welcome message, contact form state, API calls
+- **lib/db/access.ts** — `userHasAnyPackageAccess`, `getOwnedPackageSlugs`, `getUserProductAccess`
+- **lib/chat/knowledge-retrieval.ts** — Shared context builders + vector retrieval when userId present
+- **lib/chat/vector-retrieval.ts** — `queryVectorStore`, query embedding
+- **lib/chat/system-prompt.ts** — Oracle role, conciseness, links, clarification and `[OFFER_CONTACT_FORM]`
+- **app/api/chat/route.ts** — Auth, entitlement, rate limit, sanitization, marker strip
+- **app/api/chat/entitlement/route.ts** — GET entitlement for client
+- **components/chat/chat-widget.tsx** — Button visibility, CTA vs chat panel, contact form with chatContext
+- **components/chat/chat-contact-form.tsx** — Sends chat_context when provided
 
-## Clarification Flow and Contact Form
+## Escalation (contact form with chat context)
 
-When the user's inquiry is unclear or outside the assistant's scope:
+When the AI cannot answer after clarification it appends `[OFFER_CONTACT_FORM]`. The client shows the inline contact form. The form can receive `chatContext: { lastUserMessage, lastAssistantMessage }` from the parent and sends it in the POST body as `chat_context`. The contact API validates and stores it in `contact_submissions.metadata` (source: 'chat', lastUserMessage, lastAssistantMessage) and passes `chatContext` to the notification email template so support sees the user's question and last assistant reply. Security: honeypot, Zod validation, rate limit; no logging of full message/metadata.
 
-1. **First time:** The AI asks for clarification (e.g., "Could you tell me more about what you're looking for?")
-2. **After clarification:** If the user's follow-up is still outside scope, the AI ends its response with `[OFFER_CONTACT_FORM]` (exact string, on its own line).
-3. **API behavior:** The chat route parses responses for this marker, strips it, and returns `showContactForm: true`.
-4. **Client:** When `showContactForm` is true, an inline contact form is rendered. On successful submit, the form dismisses and a confirmation message is appended. Submissions go to `/api/contact` with subject "Chat Assistant - Follow-up" and use the same Resend configuration as the main contact page.
+## Updating the system prompt
 
-## Updating the System Prompt
+Edit `lib/chat/system-prompt.ts`. Sections: role and scope (definitive source for Logbloga, packages, platform docs); tone (concise, conversational); critical rules (context-only, links, no off-topic); clarification flow and `[OFFER_CONTACT_FORM]`.
 
-Edit `lib/chat/system-prompt.ts`. The `buildSystemPrompt(context)` function receives the retrieved context and returns the full system message. Key sections:
+## Adding content for RAG
 
-- **TONE & STYLE** — Customer service guidelines (warm, professional, empathetic, clear)
-- **CRITICAL RULES** — Context-only answers, no fabrication, Markdown links, stay on-topic
-- **CLARIFICATION FLOW** — First ask for clarification; if still unanswerable, end with `[OFFER_CONTACT_FORM]`
-
-## Adding New Context
-
-To include new data in the assistant's knowledge base:
-
-1. Add the data source in `lib/chat/knowledge-retrieval.ts`
-2. Create a new `build*Context()` function or extend an existing one
-3. Call it from `retrieveKnowledgeContext()` and append to the context string
-4. Keep total context under ~28K characters (approx. 8K tokens) to stay within model limits
+- **Package markdown:** Add or edit files in `web-apps-content/`, `agency-content/`, etc. Run `npm run chat:ingest` to re-chunk and re-embed (idempotent for unchanged chunks).
+- **Platform docs:** Add short, Logbloga-specific `.md` files under `docs/chat-platforms/`. Ingest gives them `package_slug: 'shared'` and `source_type: 'platform_doc'` so all entitled users can get them in retrieval.
 
 ## Security
 
-- API key is server-side only; never exposed to the client
-- Input validation via Zod (max 20 messages, 2000 chars per message)
-- Output sanitization (removeControlCharacters)
-- Client renders Markdown with react-markdown; internal links use Next.js Link
-- Rate limiting prevents abuse and cost overruns
+- API key and Supabase service role are server-side only.
+- Chat and entitlement require a valid session; chat additionally requires package access.
+- Input validation (Zod), output sanitization, rate limiting. Contact form: honeypot and validated chat_context length (500 chars per field).
 
 ## Model
 
-Currently uses **gpt-4o-mini** for cost-effectiveness. To switch to gpt-4o for higher quality, update `lib/chat/openai-client.ts`.
+Chat uses **gpt-4o-mini**. Embeddings use **text-embedding-3-small** (1536 dimensions). To change the chat model, update `lib/chat/openai-client.ts`.

@@ -29,13 +29,15 @@ type ChatContactFormData = z.infer<typeof chatContactSchema>;
 
 export interface ChatContactFormProps {
   onSuccess?: () => void;
+  /** When provided, sent to support so they see the unanswered question and last reply */
+  chatContext?: { lastUserMessage?: string; lastAssistantMessage?: string };
 }
 
 /**
  * Compact inline contact form for the chat panel.
  * Submits to /api/contact with subject "Chat Assistant - Follow-up".
  */
-export function ChatContactForm({ onSuccess }: ChatContactFormProps) {
+export function ChatContactForm({ onSuccess, chatContext }: ChatContactFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -63,6 +65,12 @@ export function ChatContactForm({ onSuccess }: ChatContactFormProps) {
           subject: CHAT_CONTACT_SUBJECT,
           message: data.message,
           website: data.website || '',
+          ...(chatContext && {
+            chat_context: {
+              lastUserMessage: chatContext.lastUserMessage?.slice(0, 500),
+              lastAssistantMessage: chatContext.lastAssistantMessage?.slice(0, 500),
+            },
+          }),
         }),
       });
 

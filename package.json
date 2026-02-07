@@ -31,7 +31,8 @@
     "content:build-social-media-docx": "tsx scripts/build-social-media-docx.ts",
     "content:build-social-media-zips": "tsx scripts/build-social-media-zips.ts",
     "content:build-agency-zips": "tsx scripts/build-agency-zips.ts",
-    "content:audit": "tsx scripts/audit-package-content.ts"
+    "content:audit": "tsx scripts/audit-package-content.ts",
+    "chat:ingest": "tsx scripts/ingest-chat-embeddings.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -80,6 +81,7 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.70.0",
+    "react-icons": "^5.4.0",
     "react-image-gallery": "^1.4.0",
     "react-markdown": "^10.1.0",
     "react-syntax-highlighter": "^16.1.0",

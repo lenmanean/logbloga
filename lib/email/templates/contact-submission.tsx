@@ -24,7 +24,7 @@ interface ContactSubmissionEmailProps {
 }
 
 export function ContactSubmissionEmail({ data }: ContactSubmissionEmailProps) {
-  const { name, email, subject, message, ipAddress, submittedAt, submissionId } = data;
+  const { name, email, subject, message, ipAddress, submittedAt, submissionId, chatContext } = data;
   const replyTo = `mailto:${email}?subject=Re: ${encodeURIComponent(subject)}`;
 
   return (
@@ -55,6 +55,27 @@ export function ContactSubmissionEmail({ data }: ContactSubmissionEmailProps) {
             <Text style={label}>Submission ID:</Text>
             <Text style={value}>{submissionId}</Text>
           </Section>
+
+          {chatContext && (chatContext.lastUserMessage || chatContext.lastAssistantMessage) && (
+            <>
+              <Hr style={hr} />
+              <Section style={messageSection}>
+                <Heading style={h2}>Chat context</Heading>
+                {chatContext.lastUserMessage && (
+                  <>
+                    <Text style={label}>User question:</Text>
+                    <Text style={messageText}>{chatContext.lastUserMessage}</Text>
+                  </>
+                )}
+                {chatContext.lastAssistantMessage && (
+                  <>
+                    <Text style={label}>Assistant reply:</Text>
+                    <Text style={messageText}>{chatContext.lastAssistantMessage}</Text>
+                  </>
+                )}
+              </Section>
+            </>
+          )}
 
           <Hr style={hr} />
 

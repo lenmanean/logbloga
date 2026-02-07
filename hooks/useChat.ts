@@ -8,7 +8,7 @@ export interface ChatMessage {
 }
 
 const WELCOME_MESSAGE =
-  "Hello! Welcome to Logbloga. I'm here to help you learn about our AI to USD packages, pricing, resources, and how to get started. How may I help you today?";
+  "I'm your guide to Logbloga—our platform, your packages, and the tools we use. Ask me anything about these.";
 
 export interface UseChatReturn {
   messages: ChatMessage[];

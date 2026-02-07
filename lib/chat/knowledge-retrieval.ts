@@ -1,7 +1,7 @@
 /**
  * Knowledge retrieval for AI Chat Assistant
  * Aggregates products, FAQs, resources, and package content for RAG-style context injection.
- * Ensures the model only answers from factual platform data to prevent hallucination.
+ * When userId is provided, vector RAG adds chunks from the user's owned packages and shared platform docs.
  */
 
 import { packageProducts, categories } from '@/lib/products';
@@ -10,6 +10,8 @@ import { caseStudies } from '@/lib/resources/case-studies';
 import { tools } from '@/lib/resources/tools';
 import { packageLevelTitles } from '@/lib/data/package-level-titles';
 import { packageLevelContent } from '@/lib/data/package-level-content';
+import { getOwnedPackageSlugs } from '@/lib/db/access';
+import { queryVectorStore } from '@/lib/chat/vector-retrieval';
 
 // Approximate token limit (~8K tokens ≈ 32K chars). We'll cap context size.
 const MAX_CONTEXT_CHARS = 28000;
@@ -151,8 +153,9 @@ function buildSiteStructureContext(): string {
 /**
  * Retrieve and format knowledge context for a user query.
  * Returns a string suitable for injection into the system prompt.
+ * When userId is provided, vector RAG adds content from the user's owned packages and shared platform docs.
  */
-export async function retrieveKnowledgeContext(query: string): Promise<string> {
+export async function retrieveKnowledgeContext(query: string, userId?: string): Promise<string> {
   const sections: string[] = [
     buildSiteStructureContext(),
     buildProductsContext(query),
@@ -160,6 +163,21 @@ export async function retrieveKnowledgeContext(query: string): Promise<string> {
     buildResourcesContext(query),
     buildPackageContentContext(query),
   ];
+
+  if (userId) {
+    try {
+      const ownedSlugs = await getOwnedPackageSlugs(userId);
+      const vectorChunks = await queryVectorStore(query, ownedSlugs, 15);
+      if (vectorChunks.length > 0) {
+        const vectorSection =
+          '## Retrieved package and platform content\n\n' +
+          vectorChunks.map((c) => c.content.trim()).join('\n\n---\n\n');
+        sections.push(vectorSection);
+      }
+    } catch (err) {
+      console.error('Vector retrieval failed, using shared context only:', err);
+    }
+  }
 
   let context = sections.join('\n\n');
   if (context.length > MAX_CONTEXT_CHARS) {

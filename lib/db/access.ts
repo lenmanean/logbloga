@@ -177,6 +177,36 @@ export async function getUserProductAccess(userId: string): Promise<Product[]> {
   return products;
 }
 
+const PACKAGE_SLUGS = ['web-apps', 'social-media', 'agency', 'freelancing'] as const;
+
+/**
+ * Returns true if the user has purchased at least one package (or the master bundle).
+ * Used to gate the chat assistant.
+ */
+export async function userHasAnyPackageAccess(userId: string): Promise<boolean> {
+  const products = await getUserProductAccess(userId);
+  return products.length > 0;
+}
+
+/**
+ * Returns the list of package slugs the user has access to (from direct package purchase or bundle).
+ * Used to scope RAG retrieval to owned packages only.
+ */
+export async function getOwnedPackageSlugs(userId: string): Promise<string[]> {
+  const products = await getUserProductAccess(userId);
+  const slugs = new Set<string>();
+  for (const p of products) {
+    const slug = (p as { slug?: string }).slug;
+    if (slug && PACKAGE_SLUGS.includes(slug as (typeof PACKAGE_SLUGS)[number])) {
+      slugs.add(slug);
+    }
+    if ((p as { product_type?: string }).product_type === 'bundle') {
+      PACKAGE_SLUGS.forEach((s) => slugs.add(s));
+    }
+  }
+  return Array.from(slugs);
+}
+
 /**
  * Product with purchase information for library display
  */
