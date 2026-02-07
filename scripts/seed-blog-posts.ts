@@ -20,6 +20,7 @@ config({ path: resolve(process.cwd(), '.env') });
 
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '../lib/types/supabase';
+import { IN_HOUSE_VS_AGENCY_CONTENT } from './blog-content/in-house-vs-agency';
 
 function createSupabaseClient() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -447,71 +448,7 @@ Profitable at small scale is a signal to refine, not necessarily to spend more. 
     seo_title: 'In-House vs Performance Agency: The Real Cost',
     seo_description:
       'A transparent comparison of in-house marketing costs vs. hiring a performance agency—without the spin.',
-    content: `## It’s Not Just the Retainer
-
-When comparing in-house vs. agency, most people compare salary to monthly fee. That’s incomplete. The real cost includes hiring, tools, management, turnover, and opportunity cost.
-
----
-
-## What In-House Actually Costs
-
-### Direct costs
-- Salary (or multiple salaries for specialists)
-- Benefits (often 25–35% of salary)
-- Tools: ad platforms, analytics, creative tools, project management
-- Training and certifications
-
-### Hidden costs
-- Recruiting and onboarding (3–6 months to full productivity)
-- Management time (your time, or a marketing lead’s)
-- Vacations, sick days, turnover—you cover the gap
-- Opportunity cost of a generalist vs. specialists
-
-A single mid-level paid media manager might cost $80K–$120K all-in. Add tools ($2K–$5K/month) and management overhead. You’re easily at $10K–$12K/month for one person—and they can’t do strategy, creative, analytics, and execution at a high level alone.
-
----
-
-## What an Agency Actually Costs
-
-### Direct costs
-- Monthly retainer (varies by scope: $5K–$20K+ for performance work)
-- Ad spend (separate; you control this)
-
-### What you get
-- A team: strategist, media buyer, analyst, creative support
-- Tool access and expertise
-- No benefits, recruiting, or turnover on your books
-- Faster ramp-up—days or weeks, not months
-
-The tradeoff: less control, potential for misalignment, and the need to manage the relationship. But for many brands, the total cost and risk are lower than building in-house from scratch.
-
-
-## When In-House Makes Sense
-
-- You’re spending enough to justify a full-time specialist ($500K+ annual ad spend, often more)
-- You need deep integration with product, sales, or operations
-- You have existing marketing leadership to manage and develop talent
-- You’re playing a long game and want institutional knowledge in-house
-
----
-
-## When an Agency Makes Sense
-
-- You’re sub-scale for a full team but need expert execution
-- You want speed—launch and iterate without a long hiring process
-- You prefer variable cost over fixed headcount
-- You want access to cross-client learnings and best practices
-
-
-## Framing the Decision
-
-Don’t compare “agency retainer” to “one salary.” Compare:
-
-- Total cost of ownership (in-house) vs. total cost of engagement (agency)
-- Time to value (how fast can you get results?)
-- Risk (turnover, ramp-up, single points of failure)
-
-The right choice depends on your stage, spend, and capacity to hire and manage. Be honest about both the numbers and the intangibles.`,
+    content: IN_HOUSE_VS_AGENCY_CONTENT,
   },
 ];
 

@@ -1,8 +1,11 @@
-import { sanitizeHtml } from '@/lib/security/sanitization';
-import { marked } from 'marked';
+import React from 'react';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { cn } from '@/lib/utils';
+import { MermaidDiagram } from './mermaid-diagram';
+import type { Components } from 'react-markdown';
 
 interface BlogContentProps {
   content?: string | null;
@@ -10,81 +13,149 @@ interface BlogContentProps {
   className?: string;
 }
 
+const blogComponents: Components = {
+  h1: ({ children }) => (
+    <h1 className="mb-4 mt-12 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+      {children}
+    </h1>
+  ),
+  h2: ({ children }) => (
+    <h2 className="mb-4 mt-16 text-2xl font-bold tracking-tight text-foreground md:text-3xl">
+      {children}
+    </h2>
+  ),
+  h3: ({ children }) => (
+    <h3 className="mb-3 mt-10 text-lg font-semibold text-foreground md:text-xl">
+      {children}
+    </h3>
+  ),
+  p: ({ children }) => (
+    <p className="mb-5 leading-relaxed text-foreground/90">{children}</p>
+  ),
+  ul: ({ children }) => (
+    <ul className="my-6 list-disc space-y-2 pl-6 text-foreground">{children}</ul>
+  ),
+  ol: ({ children }) => (
+    <ol className="my-6 list-decimal space-y-2 pl-6 text-foreground">{children}</ol>
+  ),
+  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+  code: ({ className: codeClassName, children, ...props }) => {
+    const match = /language-(\w+)/.exec(codeClassName || '');
+    const language = match ? match[1] : '';
+    const codeString = String(children).replace(/\n$/, '');
+    if (language === 'mermaid') {
+      return (
+        <div data-mermaid-block="true">
+          <MermaidDiagram code={codeString} />
+        </div>
+      );
+    }
+    return (
+      <code
+        className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm text-primary"
+        {...props}
+      >
+        {children}
+      </code>
+    );
+  },
+  pre: ({ children }) => {
+    const child = React.Children.only(children);
+    const props = React.isValidElement(child) ? (child.props as Record<string, unknown>) : {};
+    const isMermaid = props['data-mermaid-block'] !== undefined;
+    const inner = props.children;
+    if (isMermaid && inner) return <>{inner}</>;
+    return (
+      <pre className="my-6 overflow-x-auto rounded-lg border bg-muted p-4 text-sm">
+        {children}
+      </pre>
+    );
+  },
+  blockquote: ({ children }) => (
+    <blockquote className="my-8 border-l-4 border-l-primary bg-muted/50 py-2 pl-6 not-italic text-foreground/90">
+      {children}
+    </blockquote>
+  ),
+  a: ({ href, children }) => (
+    <a
+      href={href}
+      className="font-medium text-primary no-underline hover:underline"
+      target={href?.startsWith('http') ? '_blank' : undefined}
+      rel={href?.startsWith('http') ? 'noopener noreferrer' : undefined}
+    >
+      {children}
+    </a>
+  ),
+  strong: ({ children }) => (
+    <strong className="font-semibold text-foreground">{children}</strong>
+  ),
+  em: ({ children }) => (
+    <em className="italic text-foreground/90">{children}</em>
+  ),
+  hr: () => <div className="my-16" aria-hidden />,
+  img: ({ src, alt }) => (
+    <img
+      src={src}
+      alt={alt || ''}
+      className="mx-auto rounded-lg shadow-md"
+    />
+  ),
+  table: ({ children }) => (
+    <div className="my-8 overflow-x-auto">
+      <table className="w-full border-collapse">{children}</table>
+    </div>
+  ),
+  thead: ({ children }) => <thead className="bg-muted">{children}</thead>,
+  tbody: ({ children }) => (
+    <tbody className="[&_tr:nth-child(even)]:bg-muted/30">{children}</tbody>
+  ),
+  tr: ({ children }) => <tr>{children}</tr>,
+  th: ({ children }) => (
+    <th className="border border-border bg-muted px-4 py-3 text-left font-semibold">
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td className="border border-border px-4 py-3">{children}</td>
+  ),
+};
+
 /**
  * Blog content renderer (Server Component)
- * Supports both HTML and Markdown formats
- * Sanitizes all content for XSS protection
+ * Uses react-markdown with remark-gfm for tables, Mermaid diagrams, and custom styling.
  */
 export async function BlogContent({ content, mdxFilePath, className }: BlogContentProps) {
-  let htmlContent = '';
+  let markdownContent = '';
 
   try {
-    // If mdx_file_path exists, try to load and render markdown from file
     if (mdxFilePath) {
       try {
-        // Try to read from public directory or content directory
-        // Adjust path based on your file structure
         const filePath = join(process.cwd(), 'public', 'content', mdxFilePath);
         const fileContent = await readFile(filePath, 'utf-8');
-        htmlContent = fileContent;
+        markdownContent = fileContent;
       } catch (error) {
-        // If file reading fails, fall back to content field
         console.warn('Could not load MDX file, using content field:', error);
-        htmlContent = content || '';
+        markdownContent = content || '';
       }
     } else {
-      // Use content field directly
-      htmlContent = content || '';
+      markdownContent = content || '';
     }
-
-    // Check if content is markdown (starts with # or contains markdown syntax)
-    const isMarkdown = /^#+\s|^\*\s|^-\s|^```|^`/.test(htmlContent.trim()) || 
-                      htmlContent.includes('\n##') || 
-                      htmlContent.includes('\n**') ||
-                      htmlContent.includes('\n* ');
-
-    if (isMarkdown) {
-      // Render markdown to HTML
-      const markdownHtml = await marked.parse(htmlContent);
-      htmlContent = markdownHtml as string;
-    }
-
-    // Sanitize HTML content (removes scripts, event handlers; safe for serverless)
-    const sanitized = sanitizeHtml(htmlContent);
 
     return (
-      <div
-        className={cn(
-          'prose prose-lg dark:prose-invert max-w-none text-left',
-          'prose-headings:font-bold prose-headings:text-foreground',
-          'prose-h2:mt-16 prose-h2:mb-6 prose-h2:text-xl prose-h2:md:text-2xl prose-h2:tracking-tight',
-          'prose-h3:mt-10 prose-h3:mb-4 prose-h3:text-lg prose-h3:font-semibold',
-          'prose-p:text-foreground/90 prose-p:leading-relaxed prose-p:mb-5',
-          'prose-a:text-primary prose-a:no-underline hover:prose-a:underline',
-          'prose-strong:text-foreground prose-strong:font-semibold',
-          'prose-code:text-primary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded',
-          'prose-pre:bg-muted prose-pre:border',
-          'prose-img:rounded-lg prose-img:shadow-md prose-img:mx-auto',
-          'prose-ul:my-6 prose-ol:my-6 prose-li:mb-2 prose-li:leading-relaxed',
-          'prose-hr:border-0 prose-hr:my-16',
-          'prose-blockquote:not-italic prose-blockquote:border-l-4 prose-blockquote:border-l-primary prose-blockquote:bg-muted/50 prose-blockquote:py-2 prose-blockquote:my-8 prose-blockquote:pl-6',
-          className
-        )}
-        dangerouslySetInnerHTML={{ __html: sanitized }}
-      />
+      <div className={cn('prose prose-lg dark:prose-invert max-w-none text-left', className)}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={blogComponents}>
+          {markdownContent}
+        </ReactMarkdown>
+      </div>
     );
   } catch (error) {
     console.error('Error rendering blog content:', error);
-    // Fallback: sanitize and display content as-is
-    const fallbackContent = sanitizeHtml(content || '');
     return (
-      <div
-        className={cn(
-          'prose prose-lg dark:prose-invert max-w-none text-left',
-          className
-        )}
-        dangerouslySetInnerHTML={{ __html: fallbackContent }}
-      />
+      <div className={cn('prose prose-lg dark:prose-invert max-w-none text-left', className)}>
+        <ReactMarkdown remarkPlugins={[remarkGfm]} components={blogComponents}>
+          {content || ''}
+        </ReactMarkdown>
+      </div>
     );
   }
 }

@@ -70,6 +70,7 @@
     "jsdom": "^27.4.0",
     "lucide-react": "^0.562.0",
     "marked": "^17.0.1",
+    "mermaid": "^11.12.2",
     "next": "^16.1.6",
     "next-mdx-remote": "^5.0.0",
     "next-seo": "^7.0.1",
