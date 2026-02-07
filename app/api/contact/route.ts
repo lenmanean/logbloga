@@ -87,7 +87,7 @@ export async function POST(request: Request) {
           );
         }
 
-        const metadata: Record<string, unknown> = {};
+        const metadata: Record<string, string> = {};
         if (data.subject === CHAT_FOLLOW_UP_SUBJECT && data.chat_context) {
           metadata.source = 'chat';
           if (data.chat_context.lastUserMessage) metadata.lastUserMessage = data.chat_context.lastUserMessage.trim().slice(0, 500);
