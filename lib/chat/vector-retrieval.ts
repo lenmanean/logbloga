@@ -46,7 +46,8 @@ export async function queryVectorStore(
   const slugs = ownedPackageSlugs.length > 0 ? ownedPackageSlugs : ['shared'];
   const queryEmbedding = await embedQuery(query);
   const supabase = await createServiceRoleClient();
-  const { data, error } = await supabase.rpc('match_chat_embeddings', {
+  // RPC added in migration 000058; types will include it after next `supabase gen types`
+  const { data, error } = await (supabase as { rpc: (name: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }> }).rpc('match_chat_embeddings', {
     query_embedding: `[${queryEmbedding.join(',')}]`,
     package_slugs: slugs,
     match_count: limit,
