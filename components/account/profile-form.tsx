@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useAuth } from '@/hooks/useAuth';
+import { getAuthErrorMessage } from '@/lib/auth/errors';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,7 +15,12 @@ const profileSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters').optional().or(z.literal('')),
 });
 
+const changeEmailSchema = z.object({
+  newEmail: z.string().email('Please enter a valid email address'),
+});
+
 type ProfileFormData = z.infer<typeof profileSchema>;
+type ChangeEmailFormData = z.infer<typeof changeEmailSchema>;
 
 interface ProfileFormProps {
   initialData?: {
@@ -27,6 +33,9 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [emailSuccess, setEmailSuccess] = useState(false);
   const { user, updateUser } = useAuth();
 
   const {
@@ -41,6 +50,13 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
     },
   });
 
+  const emailForm = useForm<ChangeEmailFormData>({
+    resolver: zodResolver(changeEmailSchema),
+    defaultValues: {
+      newEmail: user?.email || '',
+    },
+  });
+
   useEffect(() => {
     if (initialData) {
       reset({
@@ -48,6 +64,14 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
       });
     }
   }, [initialData, reset]);
+
+  useEffect(() => {
+    if (user?.email) {
+      emailForm.reset({
+        newEmail: user.email,
+      });
+    }
+  }, [user?.email]);
 
   const onSubmit = async (data: ProfileFormData) => {
     setIsLoading(true);
@@ -69,16 +93,52 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
 
       setSuccess(true);
       setIsLoading(false);
-      
+
       if (onSuccess) {
         onSuccess();
       }
-      
-      // Reset success message after 3 seconds
+
       setTimeout(() => setSuccess(false), 3000);
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
       setIsLoading(false);
+    }
+  };
+
+  const onSubmitEmail = async (data: ChangeEmailFormData) => {
+    setEmailLoading(true);
+    setEmailError(null);
+    setEmailSuccess(false);
+
+    try {
+      const response = await fetch('/api/account/change-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          newEmail: data.newEmail,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        setEmailError(getAuthErrorMessage(new Error(result.error || 'Failed to change email')));
+        setEmailLoading(false);
+        return;
+      }
+
+      setEmailSuccess(true);
+      setEmailLoading(false);
+
+      setTimeout(() => {
+        setEmailSuccess(false);
+        emailForm.reset({ newEmail: user?.email || '' });
+      }, 5000);
+    } catch (err) {
+      setEmailError('An unexpected error occurred. Please try again.');
+      setEmailLoading(false);
     }
   };
 
@@ -111,9 +171,6 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
               disabled
               className="bg-muted"
             />
-            <p className="text-xs text-muted-foreground">
-              Email cannot be changed here. Use account settings to change your email.
-            </p>
           </div>
 
           <div className="space-y-2">
@@ -140,7 +197,48 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
           </CardFooter>
         )}
       </form>
+
+      <CardContent className="pt-0 border-t">
+        <form onSubmit={emailForm.handleSubmit(onSubmitEmail)} className="space-y-4">
+          {emailError && (
+            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+              {emailError}
+            </div>
+          )}
+
+          {emailSuccess && (
+            <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
+              Verification email sent! Please check your new email address to confirm the change.
+            </div>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="newEmail">New Email</Label>
+            <Input
+              id="newEmail"
+              type="email"
+              placeholder="new@example.com"
+              {...emailForm.register('newEmail')}
+              aria-invalid={emailForm.formState.errors.newEmail ? 'true' : 'false'}
+            />
+            {emailForm.formState.errors.newEmail && (
+              <p className="text-sm text-destructive" role="alert">
+                {emailForm.formState.errors.newEmail.message}
+              </p>
+            )}
+            <p className="text-xs text-muted-foreground">
+              You&apos;ll receive a verification email at the new address to confirm the change.
+            </p>
+          </div>
+          <Button
+            type="submit"
+            variant="secondary"
+            disabled={emailLoading || !emailForm.formState.isDirty}
+          >
+            {emailLoading ? 'Sending verification...' : 'Change Email'}
+          </Button>
+        </form>
+      </CardContent>
     </Card>
   );
 }
-

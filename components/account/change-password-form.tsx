@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils';
 
 const newPasswordSchema = z
   .string()
@@ -46,10 +45,11 @@ const changePasswordSchema = z
 type AddPasswordFormData = z.infer<typeof addPasswordSchema>;
 type ChangePasswordFormData = z.infer<typeof changePasswordSchema>;
 
-type PasswordMode = 'add' | 'change';
+export interface ChangePasswordFormProps {
+  hasPassword: boolean;
+}
 
-export function ChangePasswordForm() {
-  const [mode, setMode] = useState<PasswordMode>('add');
+export function ChangePasswordForm({ hasPassword }: ChangePasswordFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
@@ -118,64 +118,26 @@ export function ChangePasswordForm() {
 
   const passwordHint = 'Must be at least 8 characters with uppercase, lowercase, and a number';
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Password</CardTitle>
-        <CardDescription>
-          Add a password to sign in with email and password, or change your existing password.
-        </CardDescription>
-      </CardHeader>
-      <div className="px-6 pb-2">
-        <div className="flex rounded-lg border border-border p-1" role="tablist" aria-label="Password action">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'add'}
-            onClick={() => {
-              setMode('add');
-              setError(null);
-              setSuccess(false);
-            }}
-            className={cn(
-              'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-              mode === 'add' ? 'bg-background text-foreground shadow' : 'text-muted-foreground hover:text-foreground'
+  if (hasPassword) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Password</CardTitle>
+          <CardDescription>Change your password.</CardDescription>
+        </CardHeader>
+        <form onSubmit={changeForm.handleSubmit(onSubmitChange)}>
+          <CardContent className="space-y-4">
+            {error && (
+              <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
+                {error}
+              </div>
             )}
-          >
-            Add a password
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'change'}
-            onClick={() => {
-              setMode('change');
-              setError(null);
-              setSuccess(false);
-            }}
-            className={cn(
-              'flex-1 rounded-md px-3 py-2 text-sm font-medium transition-colors',
-              mode === 'change' ? 'bg-background text-foreground shadow' : 'text-muted-foreground hover:text-foreground'
+            {success && (
+              <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
+                Password updated successfully!
+              </div>
             )}
-          >
-            Change password
-          </button>
-        </div>
-      </div>
-      <form onSubmit={mode === 'add' ? addForm.handleSubmit(onSubmitAdd) : changeForm.handleSubmit(onSubmitChange)}>
-        <CardContent className="space-y-4 pt-0">
-          {error && (
-            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
-              {error}
-            </div>
-          )}
-          {success && (
-            <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
-              {mode === 'add' ? 'Password added successfully!' : 'Password updated successfully!'}
-            </div>
-          )}
 
-          {mode === 'change' && (
             <div className="space-y-2">
               <Label htmlFor="currentPassword">Current Password</Label>
               <Input
@@ -191,52 +153,105 @@ export function ChangePasswordForm() {
                 </p>
               )}
             </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="newPassword">New Password</Label>
+              <Input
+                id="newPassword"
+                type="password"
+                placeholder="••••••••"
+                {...changeForm.register('newPassword')}
+                aria-invalid={!!changeForm.formState.errors.newPassword}
+              />
+              {changeForm.formState.errors.newPassword && (
+                <p className="text-sm text-destructive" role="alert">
+                  {changeForm.formState.errors.newPassword.message}
+                </p>
+              )}
+              <p className="text-xs text-muted-foreground">{passwordHint}</p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirm New Password</Label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                placeholder="••••••••"
+                {...changeForm.register('confirmPassword')}
+                aria-invalid={!!changeForm.formState.errors.confirmPassword}
+              />
+              {changeForm.formState.errors.confirmPassword && (
+                <p className="text-sm text-destructive" role="alert">
+                  {changeForm.formState.errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? 'Updating...' : 'Update password'}
+            </Button>
+          </CardFooter>
+        </form>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Password</CardTitle>
+        <CardDescription>Add a password to sign in with email and password.</CardDescription>
+      </CardHeader>
+      <form onSubmit={addForm.handleSubmit(onSubmitAdd)}>
+        <CardContent className="space-y-4">
+          {error && (
+            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive" role="alert">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-950 dark:text-green-200">
+              Password added successfully!
+            </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="newPassword">{mode === 'add' ? 'New Password' : 'New Password'}</Label>
+            <Label htmlFor="newPassword">New Password</Label>
             <Input
               id="newPassword"
               type="password"
               placeholder="••••••••"
-              {...(mode === 'add' ? addForm.register('newPassword') : changeForm.register('newPassword'))}
-              aria-invalid={
-                mode === 'add'
-                  ? !!addForm.formState.errors.newPassword
-                  : !!changeForm.formState.errors.newPassword
-              }
+              {...addForm.register('newPassword')}
+              aria-invalid={!!addForm.formState.errors.newPassword}
             />
-            {(mode === 'add' ? addForm.formState.errors.newPassword : changeForm.formState.errors.newPassword) && (
+            {addForm.formState.errors.newPassword && (
               <p className="text-sm text-destructive" role="alert">
-                {(mode === 'add' ? addForm.formState.errors.newPassword : changeForm.formState.errors.newPassword)?.message}
+                {addForm.formState.errors.newPassword.message}
               </p>
             )}
             <p className="text-xs text-muted-foreground">{passwordHint}</p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">{mode === 'add' ? 'Confirm Password' : 'Confirm New Password'}</Label>
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
             <Input
               id="confirmPassword"
               type="password"
               placeholder="••••••••"
-              {...(mode === 'add' ? addForm.register('confirmPassword') : changeForm.register('confirmPassword'))}
-              aria-invalid={
-                mode === 'add'
-                  ? !!addForm.formState.errors.confirmPassword
-                  : !!changeForm.formState.errors.confirmPassword
-              }
+              {...addForm.register('confirmPassword')}
+              aria-invalid={!!addForm.formState.errors.confirmPassword}
             />
-            {(mode === 'add' ? addForm.formState.errors.confirmPassword : changeForm.formState.errors.confirmPassword) && (
+            {addForm.formState.errors.confirmPassword && (
               <p className="text-sm text-destructive" role="alert">
-                {(mode === 'add' ? addForm.formState.errors.confirmPassword : changeForm.formState.errors.confirmPassword)?.message}
+                {addForm.formState.errors.confirmPassword.message}
               </p>
             )}
           </div>
         </CardContent>
         <CardFooter>
           <Button type="submit" disabled={isLoading}>
-            {isLoading ? 'Updating...' : mode === 'add' ? 'Add password' : 'Update password'}
+            {isLoading ? 'Updating...' : 'Add password'}
           </Button>
         </CardFooter>
       </form>

@@ -1,6 +1,5 @@
 import { requireAuth } from '@/lib/auth/utils';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChangeEmailForm } from '@/components/account/change-email-form';
 import { NotificationPreferencesForm } from '@/components/account/notification-preferences-form';
 import { DeleteAccountButton } from '@/components/account/delete-account-button';
 import { getNotificationPreferences } from '@/lib/db/notifications';
@@ -28,8 +27,6 @@ export default async function SettingsPage() {
         </div>
 
         <div className="space-y-6">
-          <ChangeEmailForm />
-
           <NotificationPreferencesForm initialPreferences={notificationPreferences} />
 
           <Card>

@@ -1,8 +1,8 @@
 import { requireAuth } from '@/lib/auth/utils';
+import { getHasPassword } from '@/lib/auth/has-password';
 import { getUserProfile } from '@/lib/db/profiles';
 import { ProfileForm } from '@/components/account/profile-form';
 import { AvatarUpload } from '@/components/account/avatar-upload';
-import { PasswordNotice } from '@/components/account/password-notice';
 import { ChangePasswordForm } from '@/components/account/change-password-form';
 
 export const dynamic = 'force-dynamic';
@@ -15,6 +15,7 @@ export const metadata = {
 export default async function ProfilePage() {
   const user = await requireAuth();
   const profile = await getUserProfile(user.id);
+  const hasPassword = await getHasPassword(user.email ?? '');
 
   return (
     <main className="min-h-screen bg-background">
@@ -42,10 +43,7 @@ export default async function ProfilePage() {
           </div>
 
           <div className="md:col-span-2">
-            <PasswordNotice />
-          </div>
-          <div className="md:col-span-2">
-            <ChangePasswordForm />
+            <ChangePasswordForm hasPassword={hasPassword} />
           </div>
         </div>
       </div>

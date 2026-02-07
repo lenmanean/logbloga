@@ -26,7 +26,7 @@ Supabase Auth generates these emails (tokens, links, OTP). When **Custom SMTP** 
 | Resend verification | `supabase.auth.resend({ type: 'signup', email })` | Same as signup |
 | Invite | Supabase invite flow | Supabase: **Invite** template |
 
-- **Code:** `app/api/auth/reset-password/route.ts`, `app/api/account/change-email/route.ts`, `hooks/useAuth.tsx`, `components/auth/email-verification.tsx`, `app/api/auth/signup/route.ts`, `app/api/auth/verify-email/route.ts`
+- **Code:** `app/api/auth/reset-password/route.ts`, `app/api/account/change-email/route.ts`, `hooks/useAuth.tsx`, `components/auth/email-verification.tsx`, `app/api/auth/signup/route.ts`, `app/api/auth/verify-email/route.ts`. Change-email UI is on the profile page (`/account/profile`).
 - **Manual setup:** [EMAIL_RESEND_MANUAL_SETUP.md](EMAIL_RESEND_MANUAL_SETUP.md)
 
 ---
