@@ -1,4 +1,4 @@
-import { sanitizeHtml } from '@/lib/security/xss';
+import { sanitizeHtml } from '@/lib/security/sanitization';
 import { marked } from 'marked';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
@@ -49,23 +49,8 @@ export async function BlogContent({ content, mdxFilePath, className }: BlogConte
       htmlContent = markdownHtml as string;
     }
 
-    // Sanitize HTML content
-    const sanitized = sanitizeHtml(htmlContent, {
-      allowedTags: [
-        'p', 'br', 'strong', 'em', 'u', 's', 'a', 'ul', 'ol', 'li',
-        'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre',
-        'img', 'table', 'thead', 'tbody', 'tr', 'th', 'td', 'hr',
-        'div', 'span'
-      ],
-      allowedAttributes: {
-        a: ['href', 'title', 'target', 'rel'],
-        img: ['src', 'alt', 'title', 'width', 'height'],
-        code: ['class'],
-        pre: ['class'],
-        div: ['class'],
-        span: ['class'],
-      },
-    });
+    // Sanitize HTML content (removes scripts, event handlers; safe for serverless)
+    const sanitized = sanitizeHtml(htmlContent);
 
     return (
       <div
