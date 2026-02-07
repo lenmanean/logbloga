@@ -87,10 +87,13 @@ export async function sendPaymentReceipt(
     const resend = getResendClient();
     const html = await render(PaymentReceiptEmail({ data }));
 
+    const subject = data.doerCouponCode?.trim()
+      ? `Your receipt and DOER Pro coupon – ${data.order.orderNumber}`
+      : `Payment Receipt – ${data.order.orderNumber}`;
     const result = await resend.emails.send({
       from: getDefaultSender(),
       to: data.order.customerEmail,
-      subject: `Payment Receipt - ${data.order.orderNumber}`,
+      subject,
       html,
       tags: [
         { name: 'email_type', value: 'payment_receipt' },

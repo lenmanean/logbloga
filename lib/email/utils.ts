@@ -101,3 +101,11 @@ export function getLibraryUrl(): string {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   return `${appUrl}/account/library`;
 }
+
+/**
+ * Logo URL for email templates (absolute URL so it loads in email clients)
+ */
+export function getLogoUrl(): string {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  return `${appUrl}/logo.png`;
+}

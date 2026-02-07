@@ -9,7 +9,7 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "/logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
@@ -28,14 +28,14 @@
       "short_name": "Products",
       "description": "View all products",
       "url": "/products",
-      "icons": [{ "src": "/icon.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
     },
     {
       "name": "Account",
       "short_name": "Account",
       "description": "View your account",
       "url": "/account",
-      "icons": [{ "src": "/icon.png", "sizes": "96x96" }]
+      "icons": [{ "src": "/logo.png", "sizes": "96x96" }]
     }
   ]
 }
