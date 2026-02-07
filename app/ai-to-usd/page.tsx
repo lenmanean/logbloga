@@ -60,7 +60,7 @@ export default function AiToUsdPage() {
                     Complete AI Monetization – Master Bundle
                   </h3>
                   <p className="text-muted-foreground max-w-2xl">
-                    All four packages: Web Apps, Social Media, Agency, Freelancing. 145+ hours, templates, and guides. One purchase, every path.
+                    All four packages. 145+ hours, templates & guides. One purchase.
                   </p>
                 </div>
               </div>
