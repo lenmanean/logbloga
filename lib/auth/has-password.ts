@@ -1,5 +1,5 @@
 /**
- * Server-only: determine if a user has a password set (vs OTP/magic link only).
+ * Server-only: determines if a user has a password set (vs OTP/magic link only).
  * Uses get_auth_method RPC which reads auth.users; requires service role.
  */
 
