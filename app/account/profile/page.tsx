@@ -15,7 +15,8 @@ export const metadata = {
 export default async function ProfilePage() {
   const user = await requireAuth();
   const profile = await getUserProfile(user.id);
-  const hasPassword = await getHasPassword(user.email ?? '');
+  const emailForAuth = profile?.email ?? user.email ?? '';
+  const hasPassword = await getHasPassword(emailForAuth);
 
   return (
     <main className="min-h-screen bg-background">
@@ -38,7 +39,7 @@ export default async function ProfilePage() {
             <ProfileForm
               initialData={{
                 fullName: profile?.full_name || null,
-                email: user.email ?? null,
+                email: emailForAuth || null,
               }}
               hasPassword={hasPassword}
             />

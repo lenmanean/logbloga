@@ -1,21 +1,29 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getHasPassword } from '@/lib/auth/has-password';
+import { getUserProfile } from '@/lib/db/profiles';
 import { Shield } from 'lucide-react';
 
 /**
  * Server component: shows a banner when signed-in user has no password set.
  * Renders nothing if not signed in or if user has a password.
+ * Uses profile email (synced from auth) to avoid stale session email after email change.
  */
 export async function PasswordNotice() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
-  if (!user?.email) {
+  if (!user?.id) {
     return null;
   }
 
-  const hasPassword = await getHasPassword(user.email);
+  const profile = await getUserProfile(user.id);
+  const email = profile?.email ?? user.email ?? '';
+  if (!email) {
+    return null;
+  }
+
+  const hasPassword = await getHasPassword(email);
   if (hasPassword) {
     return null;
   }

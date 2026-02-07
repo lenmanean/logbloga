@@ -1,5 +1,6 @@
 import { requireAuth } from '@/lib/auth/utils';
 import { getHasPassword } from '@/lib/auth/has-password';
+import { getUserProfile } from '@/lib/db/profiles';
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
@@ -11,6 +12,8 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const user = await requireAuth();
+    const profile = await getUserProfile(user.id);
+    const currentEmail = profile?.email ?? user.email ?? '';
     const body = await request.json();
     const newEmail = typeof body?.newEmail === 'string' ? body.newEmail.trim() : '';
     const password = typeof body?.password === 'string' ? body.password : undefined;
@@ -30,14 +33,14 @@ export async function POST(request: Request) {
       );
     }
 
-    if (newEmail === user.email) {
+    if (newEmail === currentEmail) {
       return NextResponse.json(
         { error: 'New email must be different from current email' },
         { status: 400 }
       );
     }
 
-    const hasPassword = await getHasPassword(user.email ?? '');
+    const hasPassword = await getHasPassword(currentEmail);
 
     if (!hasPassword) {
       return NextResponse.json(
@@ -56,7 +59,7 @@ export async function POST(request: Request) {
     const supabase = await createClient();
 
     const { error: signInError } = await supabase.auth.signInWithPassword({
-      email: user.email!,
+      email: currentEmail,
       password: password.trim(),
     });
 

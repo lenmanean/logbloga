@@ -1,4 +1,5 @@
 import { requireAuth } from '@/lib/auth/utils';
+import { getUserProfile } from '@/lib/db/profiles';
 import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
@@ -34,6 +35,8 @@ function validatePasswordStrength(password: string): string | null {
 export async function POST(request: Request) {
   try {
     const user = await requireAuth();
+    const profile = await getUserProfile(user.id);
+    const currentEmail = profile?.email ?? user.email ?? '';
     const body = await request.json();
     const { mode, currentPassword, newPassword } = body;
 
@@ -63,7 +66,7 @@ export async function POST(request: Request) {
       }
 
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: user.email!,
+        email: currentEmail,
         password: currentPassword,
       });
 

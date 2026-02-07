@@ -40,7 +40,7 @@ export function ProfileForm({ initialData, hasPassword = false, onSuccess }: Pro
   const [emailSuccess, setEmailSuccess] = useState(false);
   const { user, updateUser, refreshSession } = useAuth();
 
-  const originalEmail = user?.email ?? initialData?.email ?? '';
+  const originalEmail = initialData?.email ?? user?.email ?? '';
 
   const {
     register,
@@ -66,12 +66,11 @@ export function ProfileForm({ initialData, hasPassword = false, onSuccess }: Pro
   }, [initialData, reset]);
 
   useEffect(() => {
-    if (user?.email) {
-      setEmailValue(user.email);
-    } else if (initialData?.email) {
-      setEmailValue(initialData.email);
+    const email = initialData?.email ?? user?.email ?? '';
+    if (email) {
+      setEmailValue(email);
     }
-  }, [user?.email, initialData?.email]);
+  }, [initialData?.email, user?.email]);
 
   useEffect(() => {
     refreshSession();
