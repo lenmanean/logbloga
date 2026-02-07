@@ -106,7 +106,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
     if (!trimmed || trimmed === originalEmail) return;
     const parsed = emailSchema.safeParse(trimmed);
     if (!parsed.success) {
-      setEmailError(parsed.error.errors[0]?.message ?? 'Please enter a valid email address');
+      setEmailError(parsed.error.issues[0]?.message ?? 'Please enter a valid email address');
       return;
     }
 
