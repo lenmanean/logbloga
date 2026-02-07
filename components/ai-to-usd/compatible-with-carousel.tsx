@@ -22,7 +22,7 @@ import {
 
 const SLOT_WIDTH_PX = 140;
 /** Time between each cycle step (one logo moves left). */
-const CYCLE_INTERVAL_MS = 500;
+const CYCLE_INTERVAL_MS = 3000;
 const STEP_TRANSITION_MS = 400;
 
 export interface PlatformItem {
@@ -105,6 +105,7 @@ export function CompatibleWithCarousel({
   }, [scrollOffset, n]);
 
   const containerWidth = slotWidth * 3;
+  const slotHeight = slotWidth + 32;
   const effectiveOffset = scrollOffset >= n ? 0 : scrollOffset;
   const translateX = -(effectiveOffset * slotWidth);
   const useTransition = !skipTransitionRef.current;
@@ -116,13 +117,13 @@ export function CompatibleWithCarousel({
       </h2>
       <div
         className="mx-auto overflow-hidden relative"
-        style={{ width: containerWidth, minHeight: slotWidth + 24 }}
+        style={{ width: containerWidth, minHeight: slotHeight }}
       >
         <div
-          className="flex flex-nowrap items-center"
+          className="flex flex-nowrap items-stretch"
           style={{
             width: strip.length * slotWidth,
-            minHeight: slotWidth,
+            minHeight: slotHeight,
             transform: `translateX(${translateX}px)`,
             transition: useTransition ? `transform ${STEP_TRANSITION_MS}ms ease-in-out` : 'none',
           }}
@@ -134,10 +135,10 @@ export function CompatibleWithCarousel({
             return (
               <div
                 key={`${platform.id}-${i}`}
-                className="flex flex-shrink-0 items-center justify-center"
+                className="flex flex-shrink-0 flex-col items-center justify-center gap-2"
                 style={{
                   width: slotWidth,
-                  height: slotWidth,
+                  height: slotHeight,
                   transform: `scale(${scale})`,
                   opacity,
                   transition: useTransition
@@ -146,12 +147,15 @@ export function CompatibleWithCarousel({
                 }}
               >
                 <div
-                  className="flex items-center justify-center text-foreground [&_svg]:h-full [&_svg]:w-full [&_svg]:fill-current [&_svg]:shrink-0"
+                  className="flex items-center justify-center text-foreground [&_svg]:h-full [&_svg]:w-full [&_svg]:fill-current [&_svg]:shrink-0 transition-transform duration-200 ease-out hover:scale-110 cursor-default"
                   style={{ width: 72, height: 72, color: 'var(--foreground)' }}
                   title={platform.name}
                 >
                   {platform.icon}
                 </div>
+                <span className="text-xs font-medium text-muted-foreground text-center leading-tight truncate max-w-full px-1">
+                  {platform.name}
+                </span>
               </div>
             );
           })}
