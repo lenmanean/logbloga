@@ -169,7 +169,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {/* Main Content */}
             <article className="lg:col-span-2">
               {/* Post Header */}
-              <header className="mb-8">
+              <header className="mb-8 text-center">
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4">
                   {post.title}
                 </h1>
@@ -181,7 +181,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 )}
 
                 {/* Post Meta */}
-                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
+                <div className="flex flex-wrap items-center justify-center gap-4 text-sm text-muted-foreground mb-6">
                   {post.author && (
                     <div className="flex items-center gap-2">
                       <User className="h-4 w-4" />
@@ -205,8 +205,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
                 {/* Tags */}
                 {post.tags && post.tags.length > 0 && (
-                  <div className="mb-6">
-                    <BlogTags tags={post.tags} />
+                  <div className="mb-6 flex justify-center">
+                    <BlogTags tags={post.tags} className="justify-center" />
                   </div>
                 )}
 
@@ -225,7 +225,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </header>
 
               {/* Post Content */}
-              <div className="prose-wrapper">
+              <div className="prose-wrapper max-w-3xl mx-auto">
                 <BlogContent
                   content={(post as { content?: string | null }).content}
                   mdxFilePath={post.mdx_file_path || undefined}
