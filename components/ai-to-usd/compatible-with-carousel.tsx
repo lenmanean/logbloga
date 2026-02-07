@@ -86,12 +86,13 @@ export function CompatibleWithCarousel({
   idleBeforeResumeMs = IDLE_BEFORE_RESUME_MS,
   slotWidth = SLOT_WIDTH_PX,
 }: CompatibleWithCarouselProps) {
-  const [position, setPosition] = useState(0);
+  /** Integer index 0..n (wrap when n). One logo per slot; keeps left/middle/right centered. */
+  const [scrollOffset, setScrollOffset] = useState(0);
   const [paused, setPaused] = useState(false);
   const skipTransitionRef = useRef(false);
   const resumeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dragStartXRef = useRef(0);
-  const dragStartPositionRef = useRef(0);
+  const dragStartOffsetRef = useRef(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const n = platforms.length;
   const strip = [...platforms, ...platforms];
@@ -108,7 +109,7 @@ export function CompatibleWithCarousel({
 
   useEffect(() => {
     if (paused) return;
-    const t = setInterval(() => setPosition((p) => p + 1), cycleIntervalMs);
+    const t = setInterval(() => setScrollOffset((p) => p + 1), cycleIntervalMs);
     return () => clearInterval(t);
   }, [paused, cycleIntervalMs, n]);
 
@@ -121,27 +122,21 @@ export function CompatibleWithCarousel({
   const handlePointerDown = (e: React.PointerEvent) => {
     onInteract();
     dragStartXRef.current = e.clientX;
-    dragStartPositionRef.current = position;
+    dragStartOffsetRef.current = scrollOffset;
     containerRef.current?.setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (e.buttons === 0) return;
-    const deltaX = dragStartXRef.current - e.clientX;
-    const deltaSlots = deltaX / slotWidth;
-    setPosition(() => {
-      const next = dragStartPositionRef.current + deltaSlots;
-      return Math.max(0, Math.min(n - 0.01, next));
-    });
+    const totalDeltaX = dragStartXRef.current - e.clientX;
+    const slotDelta = Math.round(totalDeltaX / slotWidth);
+    const oneStep = Math.max(-1, Math.min(1, slotDelta));
+    const target = dragStartOffsetRef.current + oneStep;
+    setScrollOffset(Math.max(0, Math.min(n, target)));
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
     containerRef.current?.releasePointerCapture(e.pointerId);
-    setPosition((p) => {
-      if (p < 0) return ((p % n) + n) % n;
-      if (p >= n) return p % n;
-      return p;
-    });
   };
 
   const handleWheel = (e: React.WheelEvent) => {
@@ -149,31 +144,31 @@ export function CompatibleWithCarousel({
     if (Math.abs(delta) < 5) return;
     e.preventDefault();
     onInteract();
-    setPosition((p) => {
+    setScrollOffset((p) => {
       const step = delta > 0 ? 1 : -1;
-      let next = p + step;
-      if (next < 0) next = 0;
-      if (next >= n) next = n - 0.01;
+      const next = p + step;
+      if (next < 0) return 0;
+      if (next >= n) return n;
       return next;
     });
   };
 
   useEffect(() => {
-    if (position >= n) {
+    if (scrollOffset >= n) {
       skipTransitionRef.current = true;
       const raf = requestAnimationFrame(() => {
-        setPosition((prev) => (prev >= n ? prev - n : prev));
+        setScrollOffset((prev) => (prev >= n ? prev - n : prev));
         requestAnimationFrame(() => {
           skipTransitionRef.current = false;
         });
       });
       return () => cancelAnimationFrame(raf);
     }
-  }, [position, n]);
+  }, [scrollOffset, n]);
 
   const containerWidth = slotWidth * 3;
   const slotHeight = slotWidth + 32;
-  const effectiveOffset = position >= n ? position - n : position;
+  const effectiveOffset = scrollOffset >= n ? scrollOffset - n : scrollOffset;
   const translateX = -(effectiveOffset * slotWidth);
   const useTransition = !skipTransitionRef.current;
 
