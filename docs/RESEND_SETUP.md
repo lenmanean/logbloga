@@ -51,6 +51,7 @@ Resend will only send from addresses whose domain is verified; otherwise sends w
 |----------------------|----------|-------------|
 | `RESEND_API_KEY`     | Yes      | Resend API key (Production for live). |
 | `RESEND_FROM_EMAIL` | No       | From address (e.g. `noreply@logbloga.com`). Defaults to `mail@logbloga.com`. |
+| `RESEND_FROM_NAME`  | No       | Sender display name in inbox (e.g. `Logbloga`). Defaults to `Logbloga`. |
 
 Set both in Vercel for the environment(s) where you send real payment receipts (usually **Production**).
 
