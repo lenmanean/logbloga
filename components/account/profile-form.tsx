@@ -205,8 +205,7 @@ export function ProfileForm({ initialData, onSuccess }: ProfileFormProps) {
               <div className="min-h-0 overflow-hidden">
                 <div className="space-y-3 pt-2">
                   <p className="text-xs text-muted-foreground">
-                    You&apos;ll receive confirmation emails at both your current and new addresses. You must click
-                    the link in <strong>each</strong> email to complete the change. Then sign in with your new email.
+                    Click the link in the verification email sent to your new address to confirm the change.
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <Button
