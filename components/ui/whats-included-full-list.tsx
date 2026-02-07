@@ -116,7 +116,7 @@ function LevelContentBlock({
         </div>
       )}
 
-      {content.launchMarketing?.length > 0 && (
+      {content.launchMarketing && content.launchMarketing.length > 0 && (
         <div>
           <p className="text-xs font-medium text-muted-foreground mb-1">Launch & Marketing</p>
           <ul className="space-y-0.5">
@@ -130,7 +130,7 @@ function LevelContentBlock({
         </div>
       )}
 
-      {content.troubleshooting?.length > 0 && (
+      {content.troubleshooting && content.troubleshooting.length > 0 && (
         <div>
           <p className="text-xs font-medium text-muted-foreground mb-1">Troubleshooting</p>
           <ul className="space-y-0.5">
@@ -144,7 +144,7 @@ function LevelContentBlock({
         </div>
       )}
 
-      {content.planning?.length > 0 && (
+      {content.planning && content.planning.length > 0 && (
         <div>
           <p className="text-xs font-medium text-muted-foreground mb-1">Time & Budget Planning</p>
           <ul className="space-y-0.5">
@@ -158,7 +158,7 @@ function LevelContentBlock({
         </div>
       )}
 
-      {content.templates?.length > 0 && (
+      {content.templates && content.templates.length > 0 && (
         <div>
           <p className="text-xs font-medium text-muted-foreground mb-1">Templates & Checklists</p>
           <ul className="space-y-0.5">
