@@ -15,11 +15,11 @@ export interface PlatformItem {
 }
 
 const DEFAULT_PLATFORMS: PlatformItem[] = [
-  { id: 'openai', name: 'OpenAI', icon: <SiOpenai className="w-full h-full" aria-hidden /> },
-  { id: 'anthropic', name: 'Anthropic', icon: <SiAnthropic className="w-full h-full" aria-hidden /> },
-  { id: 'canva', name: 'Canva', icon: <SiCanva className="w-full h-full" aria-hidden /> },
-  { id: 'github', name: 'GitHub Copilot', icon: <SiGithub className="w-full h-full" aria-hidden /> },
-  { id: 'midjourney', name: 'Midjourney', icon: <Sparkles className="w-full h-full" aria-hidden /> },
+  { id: 'openai', name: 'OpenAI', icon: <SiOpenai className="size-full shrink-0" aria-hidden /> },
+  { id: 'anthropic', name: 'Anthropic', icon: <SiAnthropic className="size-full shrink-0" aria-hidden /> },
+  { id: 'canva', name: 'Canva', icon: <SiCanva className="size-full shrink-0" aria-hidden /> },
+  { id: 'github', name: 'GitHub Copilot', icon: <SiGithub className="size-full shrink-0" aria-hidden /> },
+  { id: 'midjourney', name: 'Midjourney', icon: <Sparkles className="size-full shrink-0" aria-hidden /> },
 ];
 
 interface CompatibleWithCarouselProps {
@@ -83,12 +83,14 @@ export function CompatibleWithCarousel({
         Compatible with
       </h2>
       <div
-        className="mx-auto overflow-hidden"
-        style={{ width: containerWidth }}
+        className="mx-auto overflow-hidden relative"
+        style={{ width: containerWidth, minHeight: slotWidth + 24 }}
       >
         <div
-          className="flex items-center justify-center"
+          className="flex flex-nowrap items-center"
           style={{
+            width: strip.length * slotWidth,
+            minHeight: slotWidth,
             transform: `translateX(${translateX}px)`,
             transition: useTransition ? `transform ${TRANSITION_MS}ms ease-in-out` : 'none',
           }}
@@ -112,7 +114,8 @@ export function CompatibleWithCarousel({
                 }}
               >
                 <div
-                  className="w-16 h-16 md:w-20 md:h-20 text-muted-foreground"
+                  className="flex items-center justify-center text-foreground [&_svg]:h-full [&_svg]:w-full [&_svg]:fill-current [&_svg]:shrink-0"
+                  style={{ width: 72, height: 72, color: 'var(--foreground)' }}
                   title={platform.name}
                 >
                   {platform.icon}
