@@ -8,7 +8,6 @@ import {
   Head,
   Heading,
   Html,
-  Img,
   Link,
   Preview,
   Section,
@@ -18,7 +17,7 @@ import {
   Column,
 } from '@react-email/components';
 import * as React from 'react';
-import { formatCurrency, formatEmailDate, getOrderTrackingUrl, getInvoiceUrl, getLibraryUrl, getLogoUrl } from '../utils';
+import { formatCurrency, formatEmailDate, getOrderTrackingUrl, getInvoiceUrl, getLibraryUrl } from '../utils';
 import type { OrderEmailData } from '../types';
 
 interface PaymentReceiptEmailProps {
@@ -30,7 +29,6 @@ export function PaymentReceiptEmail({ data }: PaymentReceiptEmailProps) {
   const orderTrackingUrl = getOrderTrackingUrl(order.id);
   const invoiceUrl = getInvoiceUrl(order.id);
   const libraryUrl = getLibraryUrl();
-  const logoUrl = getLogoUrl();
   const hasDoerCoupon = Boolean(data.doerCouponCode?.trim());
 
   return (
@@ -43,9 +41,6 @@ export function PaymentReceiptEmail({ data }: PaymentReceiptEmailProps) {
       </Preview>
       <Body style={main}>
         <Container style={container}>
-          <Section style={logoSection}>
-            <Img src={logoUrl} alt="Logbloga" width={140} style={logoImg} />
-          </Section>
           <Heading style={h1}>Thank You for Your Purchase!</Heading>
           <Text style={text}>
             Hi {order.customerName || 'there'},
@@ -423,14 +418,4 @@ const couponExpiry = {
 const doerLink = {
   color: '#0ea5e9',
   textDecoration: 'underline',
-};
-
-const logoSection = {
-  marginBottom: '24px',
-};
-
-const logoImg = {
-  display: 'block',
-  maxWidth: '140px',
-  height: 'auto',
 };
