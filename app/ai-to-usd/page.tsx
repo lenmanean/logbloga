@@ -46,30 +46,32 @@ export default function AiToUsdPage() {
             </p>
           </div>
           <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-6 md:mb-8">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-6">
-              <div className="flex items-center gap-3 md:gap-6 flex-1">
-                <div className="relative w-16 h-16 md:w-24 md:h-24 lg:w-32 lg:h-32 flex-shrink-0 rounded-lg overflow-hidden">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
+              <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 flex-1 min-w-0">
+                <div className="relative w-28 h-28 md:w-24 md:h-24 lg:w-32 lg:h-32 flex-shrink-0 rounded-lg overflow-hidden mx-auto md:mx-0">
                   <Image
                     src="/package-master.png"
                     alt="Master Bundle - All four AI to USD packages"
                     fill
                     className="object-contain p-2"
-                    sizes="(max-width: 768px) 64px, (max-width: 1024px) 96px, 128px"
+                    sizes="(max-width: 768px) 112px, (max-width: 1024px) 96px, 128px"
                   />
                 </div>
-                <div className="min-w-0">
+                <div className="min-w-0 text-center md:text-left">
                   <Badge className="mb-2 bg-amber-500/20 text-amber-800 dark:bg-amber-400/20 dark:text-amber-200 border-amber-500/30">Best Value</Badge>
                   <h3 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 text-amber-900 dark:text-amber-100">
                     Master Bundle: All levels. One purchase.
                   </h3>
-                  <p className="text-sm md:text-base text-muted-foreground max-w-2xl">
+                  <p className="text-sm md:text-base text-muted-foreground max-w-2xl mx-auto md:mx-0">
                     All four packages. 145+ hours, templates and guides. One purchase.
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2 shrink-0">
-                <span className="text-base md:text-lg font-semibold text-amber-700 dark:text-amber-300">View Master Bundle</span>
-                <ArrowRight className="h-4 w-4 md:h-5 md:w-5 text-amber-600 dark:text-amber-400" />
+              <div className="w-full md:w-auto flex justify-center md:justify-end shrink-0">
+                <span className="inline-flex items-center gap-2 text-base md:text-lg font-semibold text-amber-700 dark:text-amber-300">
+                  View Master Bundle
+                  <ArrowRight className="h-4 w-4 md:h-5 md:w-5" />
+                </span>
               </div>
             </div>
           </MasterBundleCard>
@@ -134,11 +136,14 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">AI-Powered Approach</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                AI is treated as leverage, not novelty. The systems focus on using AI to reduce manual work, increase speed, and scale output across content, services, and products in realistic ways.{' '}
-                <Link href="#compatible-with" className="font-medium text-primary hover:underline">
-                  Compatible with -&gt;
-                </Link>
+                AI is treated as leverage, not novelty. The systems focus on using AI to reduce manual work, increase speed, and scale output across content, services, and products in realistic ways.
               </p>
+              <Link
+                href="#compatible-with"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-muted-foreground/80 transition-colors"
+              >
+                Compatible with <span aria-hidden>→</span>
+              </Link>
             </div>
 
             <div className="text-center">
@@ -178,6 +183,7 @@ export default function AiToUsdPage() {
         <ScrollFadeIn>
         <div id="compatible-with">
           <CompatibleWithCarousel />
+          <p className="text-xs text-muted-foreground text-center mt-3">Swipe me!</p>
         </div>
         </ScrollFadeIn>
 

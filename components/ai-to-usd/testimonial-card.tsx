@@ -93,7 +93,6 @@ export function TestimonialCard({ testimonial, delay = 0, className }: Testimoni
           View case study -&gt;
         </Link>
       )}
-      <p className="text-xs text-muted-foreground mt-auto">{testimonial.date}</p>
     </Card>
   );
 }

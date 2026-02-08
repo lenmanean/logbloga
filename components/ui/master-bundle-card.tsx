@@ -21,7 +21,7 @@ export function MasterBundleCard({ href, children, className }: MasterBundleCard
   return (
     <Link href={href} className={cn('block', className)}>
       <Card className={cn('relative', goldCardClassName)}>
-        <CardContent className="relative z-10 p-4 md:p-6 lg:p-8 text-foreground">
+        <CardContent className="relative z-10 p-5 md:p-6 lg:p-8 text-foreground">
           {children}
         </CardContent>
       </Card>
