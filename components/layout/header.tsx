@@ -23,14 +23,15 @@ import { CartSheet } from '@/components/cart/cart-sheet';
 
 interface NavDropdownProps {
   label: string;
-  href: string;
+  href?: string;
   children: React.ReactNode;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   onNavigate: () => void;
+  disableNavigate?: boolean;
 }
 
-function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }: NavDropdownProps) {
+function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate, disableNavigate }: NavDropdownProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleMouseEnter = useCallback(() => {
@@ -68,7 +69,7 @@ function NavDropdown({ label, href, children, isOpen, onOpenChange, onNavigate }
             className="text-sm font-medium transition-all duration-200 hover:text-primary hover:scale-105 flex items-center gap-1 outline-none"
             onClick={(e) => {
               e.preventDefault();
-              onNavigate();
+              if (!disableNavigate) onNavigate();
             }}
             onMouseDown={(e) => {
               // Prevent dropdown from opening on click
@@ -98,7 +99,6 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [cartSheetOpen, setCartSheetOpen] = useState(false);
   const [typingComplete, setTypingComplete] = useState(false);
-  const [aiToUsdOpen, setAiToUsdOpen] = useState(false);
   const [resourcesOpen, setResourcesOpen] = useState(false);
   const [aboutOpen, setAboutOpen] = useState(false);
 
@@ -145,35 +145,12 @@ export function Header() {
           {/* Navigation Links - Desktop */}
           <nav className={`hidden md:flex items-center space-x-8 transition-opacity duration-1000 ${typingComplete ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
             <NavDropdown
-              label="AI to USD"
-              href="/ai-to-usd"
-              isOpen={aiToUsdOpen}
-              onOpenChange={setAiToUsdOpen}
-              onNavigate={() => router.push('/ai-to-usd')}
-            >
-              <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/packages/master-bundle">Master Bundle</Link>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/packages/web-apps">Web Apps</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/packages/social-media">Social Media</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/packages/agency">Agency</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/ai-to-usd/packages/freelancing">Freelancing</Link>
-              </DropdownMenuItem>
-            </NavDropdown>
-            <NavDropdown
               label="Resources"
               href="/resources"
               isOpen={resourcesOpen}
               onOpenChange={setResourcesOpen}
               onNavigate={() => router.push('/resources')}
+              disableNavigate
             >
               <DropdownMenuItem asChild>
                 <Link href="/blog">Blog</Link>
@@ -194,6 +171,7 @@ export function Header() {
               isOpen={aboutOpen}
               onOpenChange={setAboutOpen}
               onNavigate={() => router.push('/about')}
+              disableNavigate
             >
               <DropdownMenuItem asChild>
                 <Link href="/about">About</Link>
@@ -445,53 +423,6 @@ export function Header() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px] flex flex-col px-6 pb-8 pt-14">
               <div className="flex-1 min-h-0 overflow-y-auto -mx-1 px-1">
               <nav className="flex flex-col space-y-4">
-                <div className="flex flex-col">
-                  <Link
-                    href="/ai-to-usd"
-                    onClick={() => setOpen(false)}
-                    className="text-lg font-medium transition-colors hover:text-primary py-2"
-                  >
-                    AI to USD
-                  </Link>
-                  <div className="flex flex-col pl-4 space-y-2">
-                    <Link
-                      href="/ai-to-usd/packages/master-bundle"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Master Bundle
-                    </Link>
-                    <div className="border-t border-border my-1" />
-                    <Link
-                      href="/ai-to-usd/packages/web-apps"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Web Apps
-                    </Link>
-                    <Link
-                      href="/ai-to-usd/packages/social-media"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Social Media
-                    </Link>
-                    <Link
-                      href="/ai-to-usd/packages/agency"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Agency
-                    </Link>
-                    <Link
-                      href="/ai-to-usd/packages/freelancing"
-                      onClick={() => setOpen(false)}
-                      className="text-base transition-colors hover:text-primary py-1"
-                    >
-                      Freelancing
-                    </Link>
-                  </div>
-                </div>
                 <div className="flex flex-col">
                   <div className="text-lg font-medium py-2">Resources</div>
                   <div className="flex flex-col pl-4 space-y-2">

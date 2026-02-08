@@ -7,6 +7,7 @@ import { Globe, Share2, Building2, Briefcase } from 'lucide-react';
 interface CategoryCardProps {
   category: Category;
   className?: string;
+  disableLink?: boolean;
 }
 
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
@@ -16,15 +17,16 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Briefcase: Briefcase,
 };
 
-export function CategoryCard({ category, className }: CategoryCardProps) {
+export function CategoryCard({ category, className, disableLink }: CategoryCardProps) {
   const IconComponent = iconMap[category.icon] || Globe;
 
-  return (
-    <Link href={category.href}>
-      <Card className={cn(
-        'group hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer h-full',
-        className
-      )}>
+  const cardContent = (
+    <Card className={cn(
+      'group h-full',
+      !disableLink && 'hover:shadow-lg hover:border-primary/50 transition-all duration-300 cursor-pointer',
+      disableLink && 'cursor-default',
+      className
+    )}>
         <CardContent className="p-4 md:p-6">
           <div className="flex flex-col items-center text-center space-y-3 md:space-y-4">
             <div className="p-3 md:p-4 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
@@ -41,7 +43,12 @@ export function CategoryCard({ category, className }: CategoryCardProps) {
           </div>
         </CardContent>
       </Card>
-    </Link>
   );
+
+  if (disableLink) {
+    return cardContent;
+  }
+
+  return <Link href={category.href}>{cardContent}</Link>;
 }
 

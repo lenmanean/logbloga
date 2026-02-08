@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { CategoryCard } from '@/components/ui/category-card';
@@ -21,11 +20,9 @@ export default function HomePage() {
                 Discover our comprehensive collection of AI to USD products. Transform your skills, unlock new opportunities, and start your journey to earning with artificial intelligence.
               </p>
               <div className="animate-fade-in-delay-300">
-                <Link href="/ai-to-usd">
-                  <Button className="bg-white text-red-500 hover:bg-red-50">
-                    Learn More
-                  </Button>
-                </Link>
+                <Button className="bg-white text-red-500 hover:bg-red-50" asChild>
+                  <span>Learn More</span>
+                </Button>
               </div>
             </div>
             {/* Right side - Product packages image */}
@@ -61,7 +58,7 @@ export default function HomePage() {
                                 index === 2 ? 'animate-fade-in-delay-400' : 'animate-fade-in-delay-500';
               return (
                 <div key={category.id} className={delayClass}>
-                  <CategoryCard category={category} />
+                  <CategoryCard category={category} disableLink />
                 </div>
               );
             })}

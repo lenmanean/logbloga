@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const PUBLIC_PATH_PREFIXES = ['/', '/about', '/contact', '/blog', '/resources', '/ai-to-usd', '/legal', '/checkout'];
+const PUBLIC_PATH_PREFIXES = ['/', '/about', '/contact', '/blog', '/resources', '/legal', '/checkout'];
 const PRIVATE_PATH_PREFIXES = ['/account', '/admin', '/auth'];
 
 function isPublicPage(pathname: string): boolean {
@@ -23,7 +23,7 @@ export function Footer() {
   return (
     <footer className="mt-auto border-t bg-muted/30">
       <div className="container mx-auto px-4 py-10 md:py-12">
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-10">
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-3 md:gap-10">
           {/* Legal */}
           <div>
             <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
@@ -101,44 +101,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Products */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              Products
-            </h3>
-            <ul className="space-y-3">
-              <li>
-                <Link href="/ai-to-usd" className="text-sm text-foreground/80 transition-colors hover:text-primary">
-                  AI to USD
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai-to-usd/packages/master-bundle" className="text-sm text-foreground/80 transition-colors hover:text-primary">
-                  Master Bundle
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai-to-usd/packages/web-apps" className="text-sm text-foreground/80 transition-colors hover:text-primary">
-                  Web Apps
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai-to-usd/packages/social-media" className="text-sm text-foreground/80 transition-colors hover:text-primary">
-                  Social Media
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai-to-usd/packages/agency" className="text-sm text-foreground/80 transition-colors hover:text-primary">
-                  Agency
-                </Link>
-              </li>
-              <li>
-                <Link href="/ai-to-usd/packages/freelancing" className="text-sm text-foreground/80 transition-colors hover:text-primary">
-                  Freelancing
-                </Link>
-              </li>
-            </ul>
-          </div>
         </div>
 
         <div className="mt-10 border-t pt-8 md:mt-12">

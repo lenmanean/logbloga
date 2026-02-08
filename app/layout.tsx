@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import "./globals.css";
-import { Header } from "@/components/layout/header";
-import { Footer } from "@/components/layout/footer";
+import { ConditionalHeader } from "@/components/layout/conditional-layout";
+import { ConditionalFooter } from "@/components/layout/conditional-layout";
 import { PasswordNotice } from "@/components/auth/password-notice";
 import { AuthProvider } from "@/hooks/useAuth";
 import { CartProvider } from "@/contexts/cart-context";
@@ -64,14 +64,14 @@ export default function RootLayout({
         <AuthProvider>
           <CartProvider>
             <AuthModalProvider>
-              <Header />
+              <ConditionalHeader />
               <Suspense fallback={null}>
                 <PasswordNotice />
               </Suspense>
               <main className="flex flex-1 flex-col">
                 {children}
               </main>
-              <Footer />
+              <ConditionalFooter />
               <CookieConsent />
               <ServiceWorkerRegistration />
               <AnalyticsProvider />
