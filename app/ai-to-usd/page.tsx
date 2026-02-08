@@ -1,9 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { CompatibleWithCarousel } from '@/components/ai-to-usd/compatible-with-carousel';
+import { DoerPromoBanner } from '@/components/ai-to-usd/doer-promo-banner';
+import { ScrollFadeIn } from '@/components/ai-to-usd/scroll-fade-in';
+import { TestimonialCard } from '@/components/ai-to-usd/testimonial-card';
 import { CategoryCard } from '@/components/ui/category-card';
 import { MasterBundleCard } from '@/components/ui/master-bundle-card';
 import { categories } from '@/lib/products';
+import { TESTIMONIALS } from '@/lib/ai-to-usd/testimonials';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Sparkles, Layers, FileText, TrendingUp, Users, BookOpen } from 'lucide-react';
@@ -12,7 +16,12 @@ export default function AiToUsdPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <ScrollFadeIn>
+          <DoerPromoBanner />
+        </ScrollFadeIn>
+
         {/* Hero */}
+        <ScrollFadeIn>
         <section className="mb-12 text-center">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
@@ -23,8 +32,10 @@ export default function AiToUsdPage() {
             </p>
           </div>
         </section>
+        </ScrollFadeIn>
 
         {/* Choose your monetization path */}
+        <ScrollFadeIn>
         <div id="explore-packages" className="mb-10 md:mb-16 text-center">
           <div className="mb-8">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
@@ -68,18 +79,25 @@ export default function AiToUsdPage() {
             ))}
           </div>
         </div>
+        </ScrollFadeIn>
 
-        {/* Testimonials placeholder */}
+        {/* Testimonials */}
+        <ScrollFadeIn>
         <section className="mb-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">
-            Testimonials
+          <p className="text-sm text-muted-foreground mb-2">Testimonials</p>
+          <h2 className="text-2xl md:text-3xl font-bold mb-8">
+            Don&apos;t take our word for it
           </h2>
-          <p className="text-base text-muted-foreground max-w-xl mx-auto">
-            Coming soon.
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {TESTIMONIALS.map((t) => (
+              <TestimonialCard key={t.name} testimonial={t} />
+            ))}
+          </div>
         </section>
+        </ScrollFadeIn>
 
         {/* Why these systems work */}
+        <ScrollFadeIn>
         <section className="mb-16 text-center">
           <div className="mb-10">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
@@ -151,11 +169,15 @@ export default function AiToUsdPage() {
             </div>
           </div>
         </section>
+        </ScrollFadeIn>
 
         {/* Compatible with */}
+        <ScrollFadeIn>
         <CompatibleWithCarousel />
+        </ScrollFadeIn>
 
         {/* Call-to-Action */}
+        <ScrollFadeIn>
         <section className="py-12 text-center">
           <h2 className="text-2xl md:text-3xl font-bold mb-4">
             Ready to apply AI to USD systems?
@@ -178,6 +200,7 @@ export default function AiToUsdPage() {
             </Link>
           </div>
         </section>
+        </ScrollFadeIn>
       </div>
     </main>
   );
