@@ -25,7 +25,7 @@ export function DoerPromoBanner({ className }: { className?: string }) {
         />
       </div>
       <p className="text-sm md:text-base text-center sm:text-left text-foreground font-medium">
-        Limited time: 6-month DOER Pro coupon bonus with any package purchase
+        Limited time: 6-month DOER Pro coupon bonus with ANY package purchase
       </p>
     </div>
   );

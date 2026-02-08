@@ -2,18 +2,29 @@ import type { Testimonial } from '@/components/ai-to-usd/testimonial-card';
 
 export const TESTIMONIALS: Testimonial[] = [
   {
+    name: 'DOER Team',
+    initials: 'DT',
+    rating: 5,
+    text: 'We used the Web Apps package to build DOER from the ground up. The templates, implementation plans, and level-based structure gave us a clear path from concept to production. Within the first four months of applying these systems, we scaled DOER 7x. The package was genuinely useful in shipping a real product. As a thank you to Logbloga for their help, we now offer 6-month DOER Pro coupons with every package purchase so buyers can experience the platform they helped us build.',
+    date: 'Jan 2025',
+    avatarImage: '/usedoer_favicon.png',
+    caseStudyLink: '/resources/case-studies/doer-ai-goal-achievement-platform',
+  },
+  {
     name: 'Marcus Chen',
     initials: 'MC',
     rating: 5,
-    text: 'The Web Apps package gave me exactly what I needed to ship my first SaaS. The templates and implementation plans were Monday-morning ready. I went from idea to deployed app in under six weeks. No fluff—just structure and prompts I could actually use. The AI to USD approach is legit.',
+    text: 'The Web Apps package gave me exactly what I needed to ship my first SaaS. The templates and implementation plans were Monday-morning ready. I went from idea to deployed app in under six weeks. No fluff, just structure and prompts I could actually use. The AI to USD approach is legit.',
     date: 'Jan 2025',
+    displayName: 'Marcus Chen',
   },
   {
     name: 'Sarah Mitchell',
     initials: 'SM',
     rating: 5,
-    text: 'I bought the Social Media package and finally have a content system that actually works. The templates and guides are practical. I\'m not drowning in theory—I\'m posting consistently and seeing engagement. Worth every penny.',
+    text: "I bought the Social Media package and finally have a content system that actually works. The templates and guides are practical. I'm not drowning in theory. I'm posting consistently and seeing engagement. Worth every penny.",
     date: 'Dec 2024',
+    displayName: 'Sarah',
   },
   {
     name: 'James Rivera',
@@ -21,20 +32,23 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 4,
     text: 'Agency package got me my first two clients. Clear frameworks, no hype. Still figuring out scaling but the foundation is solid.',
     date: 'Nov 2024',
+    displayName: 'James Rivera',
   },
   {
     name: 'Elena Kostova',
     initials: 'EK',
     rating: 5,
-    text: 'I got the Master Bundle because I wasn\'t sure which path to take. Having all four—Web Apps, Social Media, Agency, Freelancing—let me test and pick. I\'m now doing a mix of freelancing and social media. The systems are consistent across packages, so it all fits together. If you\'re serious about execution, this is the move.',
+    text: "I got the Master Bundle because I wasn't sure which path to take. Having all four (Web Apps, Social Media, Agency, Freelancing) let me test and pick. I'm now doing a mix of freelancing and social media. The systems are consistent across packages, so it all fits together. If you're serious about execution, this is the move.",
     date: 'Jan 2025',
+    displayName: 'Elena',
   },
   {
     name: 'David Okonkwo',
     initials: 'DO',
     rating: 5,
-    text: 'Freelancing package helped me structure my Upwork profile and proposals. Landed three clients in two months. The templates and checklists are the real value—no guesswork.',
+    text: 'Freelancing package helped me structure my Upwork profile and proposals. Landed three clients in two months. The templates and checklists are the real value, no guesswork.',
     date: 'Dec 2024',
+    displayName: 'David Okonkwo',
   },
   {
     name: 'Rachel Torres',
@@ -42,12 +56,14 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     text: 'Templates alone are worth it. Monday morning, I had something I could use. No more blank-page syndrome.',
     date: 'Nov 2024',
+    displayName: 'Rachel',
   },
   {
     name: 'Alex Kim',
     initials: 'AK',
     rating: 5,
-    text: 'The execution focus is what sold me. I\'ve bought plenty of courses that never got used. This one actually helped me build systems I run every week. Social + freelancing combo is working.',
+    text: "The execution focus is what sold me. I've bought plenty of courses that never got used. This one actually helped me build systems I run every week. Social + freelancing combo is working.",
     date: 'Jan 2025',
+    displayName: 'Alex Kim',
   },
 ];

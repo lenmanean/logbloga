@@ -10,7 +10,7 @@ import { categories } from '@/lib/products';
 import { TESTIMONIALS } from '@/lib/ai-to-usd/testimonials';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowRight, Sparkles, Layers, FileText, TrendingUp, Users, BookOpen } from 'lucide-react';
+import { ArrowRight, Sparkles, Layers, FileText, TrendingUp, MessageCircle, BookOpen } from 'lucide-react';
 
 export default function AiToUsdPage() {
   return (
@@ -25,10 +25,10 @@ export default function AiToUsdPage() {
         <section className="mb-12 text-center">
           <div className="mb-8">
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
-              AI to USD
+              Convert AI to USD
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Applied workflows for monetization paths. Structured packages with templates and guides for social media, client services, web apps, and freelancing.
+              Systems for turning AI into revenue-generating operations across multiple business models.
             </p>
           </div>
         </section>
@@ -114,7 +114,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Structured Monetization Paths</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Each package maps to a monetization path: social media, agency services, web apps, freelancing.
+                Each package is designed around a specific monetization lane: Social Media, Freelancing, Web Apps, and Agencies, so you aren&apos;t left guessing how skills translate into real revenue. Every system has a defined application context.
               </p>
             </div>
 
@@ -124,7 +124,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Comprehensive Resources</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Templates, guides, and frameworks you can use Monday morning.
+                Each system includes templates, guides, and frameworks designed to be used immediately, the same day you start.
               </p>
             </div>
 
@@ -134,7 +134,10 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">AI-Powered Approach</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Use the tools that scale. Automate, ship faster, earn more.
+                AI is treated as leverage, not novelty. The systems focus on using AI to reduce manual work, increase speed, and scale output across content, services, and products in realistic ways.{' '}
+                <Link href="#compatible-with" className="font-medium text-primary hover:underline">
+                  Compatible with -&gt;
+                </Link>
               </p>
             </div>
 
@@ -144,17 +147,17 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Clear Monetization Pathways</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Modules map to real monetization paths—affiliates, services, digital products—without guarantees.
+                Modules are mapped directly to real monetization models such as affiliates, services, and digital products. The focus is on understanding how value is created and captured, not on promising results.
               </p>
             </div>
 
             <div className="text-center">
               <div className="inline-flex p-2 rounded-lg bg-primary/10 mb-3">
-                <Users className="h-5 w-5 text-primary" />
+                <MessageCircle className="h-5 w-5 text-primary" />
               </div>
               <h3 className="text-xl font-semibold mb-2">Implementation Support</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Platform setup, integrations, and best practices so you actually ship.
+                Execution is built into the system. Use Logbloga® Chat Assistant as an always-on implementation partner, allowing you to ask questions, troubleshoot workflows, and apply the systems correctly as you build.
               </p>
             </div>
 
@@ -162,9 +165,9 @@ export default function AiToUsdPage() {
               <div className="inline-flex p-2 rounded-lg bg-primary/10 mb-3">
                 <BookOpen className="h-5 w-5 text-primary" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">Self-Paced Learning</h3>
+              <h3 className="text-xl font-semibold mb-2">Long-Term Utility</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Lifetime access. Learn at your pace, revisit as you grow.
+                Lifetime access. Revisit and apply these frameworks as tools evolve, markets shift, and new opportunities emerge.
               </p>
             </div>
           </div>
@@ -173,7 +176,9 @@ export default function AiToUsdPage() {
 
         {/* Compatible with */}
         <ScrollFadeIn>
-        <CompatibleWithCarousel />
+        <div id="compatible-with">
+          <CompatibleWithCarousel />
+        </div>
         </ScrollFadeIn>
 
         {/* Call-to-Action */}

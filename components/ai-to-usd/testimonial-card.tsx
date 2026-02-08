@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Star } from 'lucide-react';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Card } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 
@@ -12,6 +13,9 @@ export interface Testimonial {
   rating: number;
   text: string;
   date: string;
+  displayName?: string;
+  avatarImage?: string;
+  caseStudyLink?: string;
 }
 
 interface TestimonialCardProps {
@@ -35,6 +39,9 @@ export function TestimonialCard({ testimonial, delay = 0, className }: Testimoni
       <div className="flex items-start gap-3">
         <div className="relative shrink-0">
           <Avatar className="h-10 w-10 rounded-full bg-muted">
+            {testimonial.avatarImage ? (
+              <AvatarImage src={testimonial.avatarImage} alt={testimonial.name} />
+            ) : null}
             <AvatarFallback className="text-sm font-medium text-foreground">
               {testimonial.initials}
             </AvatarFallback>
@@ -47,7 +54,7 @@ export function TestimonialCard({ testimonial, delay = 0, className }: Testimoni
           </div>
         </div>
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-foreground text-sm">{testimonial.name}</p>
+          <p className="font-semibold text-foreground text-sm">{testimonial.displayName ?? testimonial.name}</p>
           <div className="flex gap-0.5 mt-0.5">
             {[1, 2, 3, 4, 5].map((i) => (
               <Star
@@ -77,6 +84,14 @@ export function TestimonialCard({ testimonial, delay = 0, className }: Testimoni
         >
           {expanded ? 'Show less' : 'Read more'}
         </button>
+      )}
+      {testimonial.caseStudyLink && (
+        <Link
+          href={testimonial.caseStudyLink}
+          className="text-sm font-medium text-green-600 dark:text-green-400 hover:underline"
+        >
+          View case study -&gt;
+        </Link>
       )}
       <p className="text-xs text-muted-foreground mt-auto">{testimonial.date}</p>
     </Card>
