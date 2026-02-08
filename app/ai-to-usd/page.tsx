@@ -14,6 +14,9 @@ export default function AiToUsdPage() {
   return (
     <main className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        {/* Compatible with platform carousel */}
+        <CompatibleWithCarousel />
+
         {/* Hero / What is AI to USD */}
         <section className="mb-12 text-center">
           <div className="mb-8">
@@ -25,68 +28,6 @@ export default function AiToUsdPage() {
             </p>
           </div>
         </section>
-
-        {/* Example application: Social Media system walkthrough */}
-        <section className="mb-12 text-center">
-          <Badge variant="outline" className="mb-4">
-            Example application: Social Media system
-          </Badge>
-          <h2 className="text-2xl md:text-3xl font-bold mb-3">
-            One way you might apply these systems
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
-            A concise walkthrough — not a promise. How someone could use the Social Media package step by step:
-          </p>
-          <ol className="list-decimal list-inside space-y-3 text-base text-muted-foreground max-w-xl mx-auto mb-4">
-            <li>
-              <span className="font-semibold text-foreground">AI content planning</span> — Define niche and content pillars; use AI for captions and visuals.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Consistent distribution</span> — Schedule with Buffer; maintain a content calendar and posting cadence.
-            </li>
-            <li>
-              <span className="font-semibold text-foreground">Route attention</span> — Direct followers into affiliates, client services, or digital products.
-            </li>
-          </ol>
-          <p className="text-sm text-muted-foreground italic max-w-xl mx-auto">
-            This is one example of how you might apply the systems. Results depend on your execution.
-          </p>
-        </section>
-
-        {/* Above-the-fold: DOER teaser */}
-        {doerCaseStudy && (
-          <section className="mb-12 text-center">
-            <div className="flex flex-col items-center gap-3">
-              {doerCaseStudy.featuredImage && (
-                <div className="w-14 h-14 rounded-lg overflow-hidden bg-muted flex items-center justify-center">
-                  <Image
-                    src={doerCaseStudy.featuredImage}
-                    alt={doerCaseStudy.company ?? doerCaseStudy.title}
-                    width={56}
-                    height={56}
-                    className="object-contain"
-                  />
-                </div>
-              )}
-              <p className="text-sm font-medium text-muted-foreground">Real-world application</p>
-              <h3 className="text-xl font-semibold">
-                {doerCaseStudy.company} — a production-ready app built with these systems
-              </h3>
-              <p className="text-base text-muted-foreground max-w-xl mx-auto">
-                {doerCaseStudy.outcome}
-              </p>
-              <Link href={`/resources/case-studies/${doerCaseStudy.slug}`}>
-                <Button variant="link" className="h-auto p-0 text-primary">
-                  Read full story
-                  <ArrowRight className="h-3 w-3 ml-1 inline" />
-                </Button>
-              </Link>
-            </div>
-          </section>
-        )}
-
-        {/* Compatible with platform carousel */}
-        <CompatibleWithCarousel />
 
         {/* Explore Our Packages */}
         <div id="explore-packages" className="mb-10 md:mb-16 text-center">
@@ -211,30 +152,20 @@ export default function AiToUsdPage() {
           </div>
         </section>
 
-        {/* What AI to USD Is — and Isn't */}
-        <section className="mb-16 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold mb-8">
-            What AI to USD Is — and Isn&apos;t
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto">
-            <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2">Is</h3>
-              <p className="text-base text-muted-foreground">
-                Education and systems. Templates, guides, applied workflows. Requires your execution.
-              </p>
-            </div>
-            <div className="text-center">
-              <h3 className="text-xl font-semibold mb-2">Isn&apos;t</h3>
-              <p className="text-base text-muted-foreground">
-                An automated income machine. No guarantees of any outcome.
-              </p>
-            </div>
-          </div>
-        </section>
-
         {/* Case Studies Showcase Section */}
         {doerCaseStudy && (
           <section className="mb-16 text-center">
+            {doerCaseStudy.featuredImage && (
+              <div className="flex justify-center mb-4">
+                <Image
+                  src={doerCaseStudy.featuredImage}
+                  alt={doerCaseStudy.company ?? doerCaseStudy.title}
+                  width={56}
+                  height={56}
+                  className="object-contain"
+                />
+              </div>
+            )}
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
               Real-world application
             </h2>
@@ -282,6 +213,16 @@ export default function AiToUsdPage() {
             </div>
           </section>
         )}
+
+        {/* Testimonials placeholder */}
+        <section className="mb-16 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4">
+            Testimonials
+          </h2>
+          <p className="text-base text-muted-foreground max-w-xl mx-auto">
+            Coming soon.
+          </p>
+        </section>
 
         {/* Call-to-Action Section */}
         <section className="py-12 text-center">
