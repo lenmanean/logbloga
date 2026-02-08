@@ -11,6 +11,14 @@ export const TESTIMONIALS: Testimonial[] = [
     caseStudyLink: '/resources/case-studies/doer-ai-goal-achievement-platform',
   },
   {
+    name: 'Priya',
+    initials: 'P',
+    rating: 5,
+    text: 'I was skeptical at first but the Agency package actually delivered. The service framework and client onboarding templates saved me weeks. Still early but already landed one retainer. No fluff, just structure.',
+    date: 'Jan 2025',
+    displayName: 'Priya',
+  },
+  {
     name: 'Marcus Chen',
     initials: 'MC',
     rating: 5,
@@ -32,7 +40,7 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 4,
     text: 'Agency package got me my first two clients. Clear frameworks, no hype. Still figuring out scaling but the foundation is solid.',
     date: 'Nov 2024',
-    displayName: 'James Rivera',
+    displayName: 'James',
   },
   {
     name: 'Elena Kostova',
@@ -64,6 +72,6 @@ export const TESTIMONIALS: Testimonial[] = [
     rating: 5,
     text: "The execution focus is what sold me. I've bought plenty of courses that never got used. This one actually helped me build systems I run every week. Social + freelancing combo is working.",
     date: 'Jan 2025',
-    displayName: 'Alex Kim',
+    displayName: 'Alex',
   },
 ];

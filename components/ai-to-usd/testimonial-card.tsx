@@ -46,12 +46,6 @@ export function TestimonialCard({ testimonial, delay = 0, className }: Testimoni
               {testimonial.initials}
             </AvatarFallback>
           </Avatar>
-          <div
-            className="absolute -bottom-0.5 -left-0.5 rounded-full bg-background p-0.5"
-            aria-hidden
-          >
-            <Star className="h-3 w-3 fill-green-500 text-green-500" />
-          </div>
         </div>
         <div className="min-w-0 flex-1">
           <p className="font-semibold text-foreground text-sm">{testimonial.displayName ?? testimonial.name}</p>

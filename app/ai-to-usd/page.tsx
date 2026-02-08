@@ -48,13 +48,13 @@ export default function AiToUsdPage() {
           <MasterBundleCard href="/ai-to-usd/packages/master-bundle" className="mb-6 md:mb-8">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 md:gap-6">
               <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-6 flex-1 min-w-0">
-                <div className="relative w-28 h-28 md:w-24 md:h-24 lg:w-32 lg:h-32 flex-shrink-0 rounded-lg overflow-hidden mx-auto md:mx-0">
+                <div className="relative w-40 h-40 md:w-24 md:h-24 lg:w-32 lg:h-32 flex-shrink-0 rounded-lg overflow-hidden mx-auto md:mx-0">
                   <Image
                     src="/package-master.png"
                     alt="Master Bundle - All four AI to USD packages"
                     fill
-                    className="object-contain p-2"
-                    sizes="(max-width: 768px) 112px, (max-width: 1024px) 96px, 128px"
+                    className="object-contain p-1 md:p-2"
+                    sizes="(max-width: 768px) 160px, (max-width: 1024px) 96px, 128px"
                   />
                 </div>
                 <div className="min-w-0 text-center md:text-left">
@@ -86,7 +86,7 @@ export default function AiToUsdPage() {
         {/* Testimonials */}
         <ScrollFadeIn>
         <section className="mb-16 text-center">
-          <p className="text-sm text-muted-foreground mb-2">Testimonials</p>
+          <p className="text-lg text-muted-foreground mb-2">Testimonials</p>
           <h2 className="text-2xl md:text-3xl font-bold mb-8">
             Don&apos;t take our word for it
           </h2>
@@ -116,7 +116,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Structured Monetization Paths</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Each package is designed around a specific monetization lane: Social Media, Freelancing, Web Apps, and Agencies, so you aren&apos;t left guessing how skills translate into real revenue. Every system has a defined application context.
+                Each package targets a specific monetization lane: Social Media, Freelancing, Web Apps, or Agencies. You always know how effort maps to revenue.
               </p>
             </div>
 
@@ -126,7 +126,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Comprehensive Resources</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Each system includes templates, guides, and frameworks designed to be used immediately, the same day you start.
+                Templates, guides, and frameworks built for immediate use. Apply them the day you start.
               </p>
             </div>
 
@@ -136,14 +136,8 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">AI-Powered Approach</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                AI is treated as leverage, not novelty. The systems focus on using AI to reduce manual work, increase speed, and scale output across content, services, and products in realistic ways.
+                AI is used to create leverage, not novelty. Move faster and scale output across content, services, and products.
               </p>
-              <Link
-                href="#compatible-with"
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-muted-foreground/80 transition-colors"
-              >
-                Compatible with <span aria-hidden>→</span>
-              </Link>
             </div>
 
             <div className="text-center">
@@ -152,7 +146,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Clear Monetization Pathways</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Modules are mapped directly to real monetization models such as affiliates, services, and digital products. The focus is on understanding how value is created and captured, not on promising results.
+                Modules map directly to real monetization models. The focus is on how value is created and captured.
               </p>
             </div>
 
@@ -162,7 +156,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Implementation Support</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Execution is built into the system. Use Logbloga® Chat Assistant as an always-on implementation partner, allowing you to ask questions, troubleshoot workflows, and apply the systems correctly as you build.
+                Execution is built in. The Logbloga® Chat Assistant acts as an always-on implementation partner.
               </p>
             </div>
 
@@ -172,7 +166,7 @@ export default function AiToUsdPage() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Long-Term Utility</h3>
               <p className="text-base text-muted-foreground max-w-sm mx-auto">
-                Lifetime access. Revisit and apply these frameworks as tools evolve, markets shift, and new opportunities emerge.
+                This is not one-time access. Reuse the systems as tools, markets, and opportunities evolve.
               </p>
             </div>
           </div>
@@ -183,7 +177,6 @@ export default function AiToUsdPage() {
         <ScrollFadeIn>
         <div id="compatible-with">
           <CompatibleWithCarousel />
-          <p className="text-xs text-muted-foreground text-center mt-3">Swipe me!</p>
         </div>
         </ScrollFadeIn>
 
